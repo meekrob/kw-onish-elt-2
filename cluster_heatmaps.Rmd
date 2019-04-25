@@ -1,7 +1,7 @@
 ---
 title: "Proper read normalization"
 author: "DC King - Onish lab"
-date: "4/16/2019"
+date: "4/25/2019"
 output: html_document
 ---
 
@@ -25,7 +25,6 @@ library(stringr)
 library(ggplot2)
 library(ggExtra)
 
-setwd('~/work/next_iteration_of_valerie_data')
 pth="allStagesUNION.IDR_0.05.sorted.bed_s.df"
 df = read.table(pth, header=T, sep="\t")
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
@@ -112,5 +111,5 @@ big_df = cbind(df, new_df)
 # add the comment char to the first column
 colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
 # write data file
-write.table(big_df, "~/work/next_iteration_of_valerie_data/valerie_peaks_processed.bedlike", quote=F, sep="\t", row.names=F)
+write.table(big_df, "./valerie_peaks_processed.bedlike", quote=F, sep="\t", row.names=F)
 
