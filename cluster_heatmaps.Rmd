@@ -1,0 +1,116 @@
+---
+title: "Proper read normalization"
+author: "DC King - Onish lab"
+date: "4/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Log(signal) - Log(input) Reinke data**
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r import, pre-process data}
+R.version
+library(pheatmap)
+library(stringr)
+library(ggplot2)
+library(ggExtra)
+
+setwd('~/work/next_iteration_of_valerie_data')
+pth="allStagesUNION.IDR_0.05.sorted.bed_s.df"
+df = read.table(pth, header=T, sep="\t")
+all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
+df_max = df[,all_max_col_ix]
+all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))})
+df_max = df_max[!all_nan_rows,]
+df_max[is.na(df_max)] <- 0
+colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input", "max_log_L1_2_minus_log_L1_input", "max_log_L3_1_minus_log_L3_input", "max_log_L3_2_minus_log_L3_input", "max_log_LE_1_minus_log_LE_input",  "max_log_LE_2_minus_log_LE_input")
+# make numeric, with 
+data = as.matrix(df_max[,c(5,6,1:4)])
+
+# perform normalization
+peaks_sd = apply(data, 1, sd)
+peaks_mu = apply(data, 1, mean)
+# normalize by row
+row_scaled_x = (data - peaks_mu) /  peaks_sd
+
+# changing versus not-changing
+q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
+THRESHOLD = .75 # exclude this fraction of dataset
+threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
+threshold_ix = peaks_sd > threshold_q
+threshold_x = row_scaled_x[ threshold_ix,]
+
+nclust=4
+set.seed(31415)
+pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F)
+kclusters = pobj$kmeans$cluster
+
+
+
+korder = order(kclusters, peaks_sd[threshold_ix])
+
+pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, show_rownames=F)
+
+patterns = rbind((pobj$kmeans$centers[,1] + pobj$kmeans$centers[,2])/2, (pobj$kmeans$centers[,3] + pobj$kmeans$centers[,4])/2, (pobj$kmeans$centers[,5] + pobj$kmeans$centers[,6])/2)
+rownames(patterns) <- c("LE","L1","L3")
+plot(c(1,3), c(min(patterns),2), type='n', axes=F, main="Cluster centers",xlab = "Stage", ylab="Normalized value")
+
+legend_text=c(); for (clustn in 1:nclust) { legend_text=c(legend_text,str_c("clust",clustn, sep=" "))}
+color_thing = RColorBrewer::brewer.pal(name="Dark2",n=nclust)
+legend(1,2, legend_text,lwd=2, col=color_thing,horiz=T,bty='n')
+axis(1, at=1:3, c('LE','L1','L3'))
+axis(2, at=axTicks(2, c(-1,1.5,5), c(-1,1)))
+abline(h=0, lwd=.5,lty=2)
+for (wd in 1:nclust) {
+  lines(patterns[,wd],col=color_thing[wd], lwd=2)
+}
+rect(par('usr')[1], par('usr')[3], par('usr')[2], 1.51)
+
+## recoup the original file, the normalized data, and the cluster assignment
+# Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
+# cluster assignment
+
+# normalized data
+norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
+norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
+norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
+norm_L1_2 = rep(NA, nrow(df)); norm_L1_2[!all_nan_rows] = row_scaled_x[,4]
+norm_L3_1 = rep(NA, nrow(df)); norm_L3_1[!all_nan_rows] = row_scaled_x[,5]
+norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
+
+# kmeans cluster assignment
+vec1 = rep(NA, nrow(row_scaled_x))
+vec1[threshold_ix] = kclusters
+kclust_mapping = rep(NA, nrow(df))
+kclust_mapping[! all_nan_rows] = vec1
+
+# sd and mean
+sd_mapping = rep(NA, nrow(df))
+sd_mapping[!all_nan_rows] = peaks_sd
+mean_mapping = rep(NA, nrow(df))
+mean_mapping[!all_nan_rows] = peaks_mu
+ecdf_sd = ecdf(peaks_sd)
+
+# peaks_quantile: this row is changing more (via sd) than peaks_quantile fraction of the dataset
+peaks_quantile = rep(NA, nrow(df))
+peaks_quantile[!all_nan_rows] = ecdf_sd(peaks_sd)
+# combine new columns
+new_df = data.frame(norm_LE_1,norm_LE_2,norm_L1_1,norm_L1_2,norm_L3_1,norm_L3_2,mean_mapping, sd_mapping, peaks_quantile,kclust_mapping)
+
+# paste new columns onto original file
+big_df = cbind(df, new_df)
+# add the comment char to the first column
+colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
+# write data file
+write.table(big_df, "~/work/next_iteration_of_valerie_data/valerie_peaks_processed.bedlike", quote=F, sep="\t", row.names=F)
+
