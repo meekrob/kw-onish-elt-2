@@ -44,7 +44,7 @@ row_scaled_x = (data - peaks_mu) /  peaks_sd
 
 # changing versus not-changing
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
-THRESHOLD = .75 # exclude this fraction of dataset
+THRESHOLD = .66 # exclude this fraction of dataset
 threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
 threshold_ix = peaks_sd > threshold_q
 threshold_x = row_scaled_x[ threshold_ix,]
@@ -110,6 +110,13 @@ new_df = data.frame(norm_LE_1,norm_LE_2,norm_L1_1,norm_L1_2,norm_L3_1,norm_L3_2,
 big_df = cbind(df, new_df)
 # add the comment char to the first column
 colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
+
+## add gene ids, processed as in the repository
+gene_ids = read.table("only.gene_ids")
+new_colnames = c(colnames(big_df), "WBID")
+big_df = cbind(big_df, gene_ids)
+colnames(big_df) <- new_colnames
+
 # write data file
 write.table(big_df, "./valerie_peaks_processed.bedlike", quote=F, sep="\t", row.names=F)
 
