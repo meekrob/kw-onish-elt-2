@@ -1,19 +1,16 @@
 ---
-title: "Proper read normalization"
+title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
-date: "4/25/2019"
-output: html_document
+date: "Spring 2019"
+output: pdf_document
 ---
-
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(root.dir='~/work/onish_ChIP_R_Analysis')
 ```
 
-## Script versioning
+## Script version
 ```{bash version, echo=FALSE}
 cd ~/work/onish_ChIP_R_Analysis
 git remote -v
@@ -21,23 +18,18 @@ git log -n 1
 git status -s
 ```
 
-
-**Log(signal) - Log(input) Reinke data**
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r import, pre-process data}
-getwd()
+## R version, libraries
+```{r import}
 R.version
 library(pheatmap)
 library(stringr)
 library(ggplot2)
 library(ggExtra)
+```
 
+## Process data
+```{r get-data}
+getwd()
 pth="allStagesUNION.IDR_0.05.sorted.bed_s.df"
 df = read.table(pth, header=T, sep="\t")
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
