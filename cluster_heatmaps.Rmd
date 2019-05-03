@@ -11,6 +11,10 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(root.dir='~/work/onish_ChIP_R_Analysis')
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+if(!requireNamespace("ggExtra")) {
+  install.packages("ggExtra");
+}
 ```
 
 ## Script versioning
