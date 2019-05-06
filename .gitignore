@@ -1,3 +1,6 @@
+# Data you might not want to track
+*.bedlike
+
 # History files
 .Rhistory
 .Rapp.history
