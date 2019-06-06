@@ -11,6 +11,10 @@ threshold=0.05
 # normalized by differential analysis
 bNormed=T
 
+if (! "VD" %in% ls()) {
+    dba.load("VD.RData")
+}
+
 # contrast 1: LE versus L1
 counts_1 = dba.report(VD, contrast = 1, th=threshold, bCalled=T, bNormalized=FALSE)
 normed_1 = dba.report(VD, contrast = 1, th=threshold, bCalled=T, bNormalized=bNormed)
