@@ -102,5 +102,4 @@ embryo_business = business[business$FDR_LE_L3 < 0.01 & business$FDR_LE_L1 < 0.01
 
 business_df = as.data.frame(mcols(business[, c('Conc_Embryo','Conc_Larval_1','Conc_Larval_3')]))
 business_df[is.na(business_df)] <- 0
-log_business_df = log(business_df + 1)
-phk = pheatmap(log_business_df, cluster_rows=T, cluster_cols = F, scale="row")
+phk = pheatmap(business_df, cluster_rows=T, cluster_cols = F, scale="row")
