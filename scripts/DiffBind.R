@@ -12,7 +12,7 @@ threshold=0.05
 bNormed=T
 
 if (! "VD" %in% ls()) {
-    dba.load("VD.RData")
+    dba.load('VD',pre='')
 }
 
 # contrast 1: LE versus L1
@@ -83,23 +83,24 @@ normed_3$`Conc` = NULL
 # merge
 (counts_all = merge(counts_1, counts_2, counts_3, all=TRUE))
 
-business = counts_all[, c('FDR_LE_L1', 'FDR_LE_L3','FDR_L1_L3','Fold_LE_L1', 'Fold_LE_L3','Fold_L1_L3', 'Conc_Embryo','Conc_Larval_1','Conc_Larval_3', 'Called_LE','Called_L1','Called_L3')]
+peaks = counts_all[, c('FDR_LE_L1', 'FDR_LE_L3','FDR_L1_L3','Fold_LE_L1', 'Fold_LE_L3','Fold_L1_L3', 'Conc_Embryo','Conc_Larval_1','Conc_Larval_3', 'Called_LE','Called_L1','Called_L3')]
 # apply the normalization factors by subtraction
-business$Conc_Embryo = business$Conc_Embryo - embryo_factor
-business$Conc_Larval_1 = business$Conc_Larval_1 - larval_1_factor
-business$Conc_Larval_3 = business$Conc_Larval_3 - larval_3_factor
+peaks$Conc_Embryo = peaks$Conc_Embryo - embryo_factor
+peaks$Conc_Larval_1 = peaks$Conc_Larval_1 - larval_1_factor
+peaks$Conc_Larval_3 = peaks$Conc_Larval_3 - larval_3_factor
 # update the Fold changes by subtracting the 'Conc' columns
-business$Fold_LE_L3 = business$Conc_Embryo - business$Conc_Larval_3
-business$Fold_L1_L3 = business$Conc_Larval_1 - business$Conc_Larval_3
-business$Fold_LE_L1 = business$Conc_Embryo - business$Conc_Larval_1
+peaks$Fold_LE_L3 = peaks$Conc_Embryo - peaks$Conc_Larval_3
+peaks$Fold_L1_L3 = peaks$Conc_Larval_1 - peaks$Conc_Larval_3
+peaks$Fold_LE_L1 = peaks$Conc_Embryo - peaks$Conc_Larval_1
 # Consider FDRs of NA to be 1
-business$FDR_LE_L1[ is.na(business$FDR_LE_L1)] <- 1
-business$FDR_LE_L3[ is.na(business$FDR_LE_L3)] <- 1
-business$FDR_L1_L3[ is.na(business$FDR_L1_L3)] <- 1
+peaks$FDR_LE_L1[ is.na(peaks$FDR_LE_L1)] <- 1
+peaks$FDR_LE_L3[ is.na(peaks$FDR_LE_L3)] <- 1
+peaks$FDR_L1_L3[ is.na(peaks$FDR_L1_L3)] <- 1
 
 # a class of Embryo Specific/High
-embryo_business = business[business$FDR_LE_L3 < 0.01 & business$FDR_LE_L1 < 0.01 & business$Fold_LE_L1 > 0 & business$Fold_LE_L3 > 0]
+embryo_peaks = peaks[peaks$FDR_LE_L3 < 0.01 & peaks$FDR_LE_L1 < 0.01 & peaks$Fold_LE_L1 > 0 & peaks$Fold_LE_L3 > 0]
 
-business_df = as.data.frame(mcols(business[, c('Conc_Embryo','Conc_Larval_1','Conc_Larval_3')]))
-business_df[is.na(business_df)] <- 0
-phk = pheatmap(business_df, cluster_rows=T, cluster_cols = F, scale="row")
+
+peaks_df = as.data.frame(mcols(peaks[, c('Conc_Embryo','Conc_Larval_1','Conc_Larval_3')]))
+peaks_df[is.na(peaks_df)] <- 0
+phk = pheatmap(peaks_df, cluster_rows=T, cluster_cols = F, scale="row", show_rownames=F)
