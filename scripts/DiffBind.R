@@ -104,3 +104,17 @@ embryo_peaks = peaks[peaks$FDR_LE_L3 < 0.01 & peaks$FDR_LE_L1 < 0.01 & peaks$Fol
 peaks_df = as.data.frame(mcols(peaks[, c('Conc_Embryo','Conc_Larval_1','Conc_Larval_3')]))
 peaks_df[is.na(peaks_df)] <- 0
 phk = pheatmap(peaks_df, cluster_rows=T, cluster_cols = F, scale="row", show_rownames=F)
+
+source('scripts/readIDR.R');
+LE_IDR
+L1_IDR
+L3_IDR
+
+# map IDR status onto peaks object
+peaks$IDR_LE = 0
+peaks$IDR_L1 = 0
+peaks$IDR_L3 = 0
+peaks$IDR_LE[ from(findOverlaps(peaks, LE_IDR)) ] = 1
+peaks$IDR_L1[ from(findOverlaps(peaks, L1_IDR)) ] = 1
+peaks$IDR_L3[ from(findOverlaps(peaks, L3_IDR)) ] = 1
+peaks$IDR = apply(cbind(peaks$IDR_LE,peaks$IDR_L1,peaks$IDR_L3), 1,sum)
