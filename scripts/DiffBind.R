@@ -114,6 +114,61 @@ vpp_05_gr_in_peaks = vpp_05_gr[to(hits)]
 peaks_in_gr$other_range = ranges(vpp_05_gr_in_peaks)
 mcols(peaks_in_gr) <- cbind(mcols(peaks_in_gr), mcols(vpp_05_gr_in_peaks))
 
+sum_L1_1 = peaks_in_gr$mean_log_L1_1*peaks_in_gr$N_log_L1_1
+sum_L1_2 = peaks_in_gr$mean_log_L1_2*peaks_in_gr$N_log_L1_2
+sum_LE_1 = peaks_in_gr$mean_log_LE_1*peaks_in_gr$N_log_LE_1
+sum_LE_2 = peaks_in_gr$mean_log_LE_2*peaks_in_gr$N_log_LE_2
+sum_L3_1 = peaks_in_gr$mean_log_L3_1*peaks_in_gr$N_log_L3_1
+sum_L3_2 = peaks_in_gr$mean_log_L3_2*peaks_in_gr$N_log_L3_2
+
+sum_LE = apply(cbind(sum_LE_1, sum_LE_2), 1, mean)
+sum_L1 = apply(cbind(sum_L1_1, sum_L1_2), 1, mean)
+sum_L3 = apply(cbind(sum_L3_1, sum_L3_2), 1, mean)
+mean_LE = apply(cbind(peaks_in_gr$mean_log_LE_1,peaks_in_gr$mean_log_LE_2), 1, mean)
+mean_L1 = apply(cbind(peaks_in_gr$mean_log_L1_1,peaks_in_gr$mean_log_L1_2), 1, mean)
+mean_L3 = apply(cbind(peaks_in_gr$mean_log_L3_1,peaks_in_gr$mean_log_L3_2), 1, mean)
+max_LE = apply(cbind(peaks_in_gr$max_log_LE_1,peaks_in_gr$max_log_LE_2), 1, mean)
+max_L1 = apply(cbind(peaks_in_gr$max_log_L1_1,peaks_in_gr$max_log_L1_2), 1, mean)
+max_L3 = apply(cbind(peaks_in_gr$max_log_L3_1,peaks_in_gr$max_log_L3_2), 1, mean)
+
+# correlation with the Conc_... vectors is higher with sum than max
+cor(data.frame(sum_LE, mean_LE, max_LE, peaks_in_gr$Conc_Embryo),use="complete.obs")
+cor(data.frame(sum_L1, mean_L1, max_L1, peaks_in_gr$Conc_Larval_1),use="complete.obs")
+cor(data.frame(sum_L3, mean_L3, max_L3, peaks_in_gr$Conc_Larval_3),use="complete.obs")
+
+peaks_in_gr$sum_LE = sum_LE
+peaks_in_gr$sum_L1 = sum_L1
+peaks_in_gr$sum_L3 = sum_L3
+peaks_in_gr$max_LE = max_LE
+peaks_in_gr$max_L1 = max_L1
+peaks_in_gr$max_L3 = max_L3
+
+THRESHOLD = .2
+action = peaks_in_gr[peaks_in_gr$peaks_quantile >= THRESHOLD, c('max_LE','max_L1','max_L3', 'kclust_mapping', 'Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]
+action$kclust_mapping[is.na(action$kclust_mapping) ] <- 0
+Embryo_min = min(0, min(action$Conc_Embryo, na.rm = T))
+Larval_1_min = min(0, min(action$Conc_Larval_1, na.rm = T))
+Larval_3_min = min(0, min(action$Conc_Larval_3, na.rm = T))
+action$Conc_Embryo[is.na(action$Conc_Embryo)] <- Embryo_min
+action$Conc_Larval_1[is.na(action$Conc_Larval_1)] <- Larval_1_min
+action$Conc_Larval_3[is.na(action$Conc_Larval_3)] <- Larval_3_min
+
+# add secondary clusters
+action$kclust_mapping_2 = 0
+#k = 0
+#action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
+k = 1
+action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
+k = 2
+action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
+k = 3
+action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
+k = 4
+action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
+
+# plot
+pheatmap(as.data.frame(mcols(action[order(action$kclust_mapping, action$kclust_mapping_2)])), cluster_cols = F,  cluster_rows=F, show_rownames=F)
+
 if (FALSE) {
     stopifnot(file.exists('spp_peaks'))
     source('scripts/readIDR.R');
