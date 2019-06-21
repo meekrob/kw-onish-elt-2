@@ -5,7 +5,7 @@ if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
     BiocManager::install("GenomicRanges")
 }
 library(GenomicRanges)
-IDRNarrowPeakColumns=c("seqname","start","end","name", "score", "strand", "signalValue","ignored1","ignored2", "peakSummitOffset", "-logPValue","-logQValue", "start1", "end1", "signalVal1", "peakSummitOffset1", "start2","end2", "signalVal2", "peakSummitOffset2")
+IDRNarrowPeakColumns=c("seqname","start","end","name", "score", "strand", "signalValue","ignored1","ignored2", "peakSummitOffset", "minusLogPValue","minusLogQValue", "start1", "end1", "signalVal1", "peakSummitOffset1", "start2","end2", "signalVal2", "peakSummitOffset2")
 
 
 # NAS must be connected
