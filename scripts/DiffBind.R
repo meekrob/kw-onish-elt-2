@@ -7,6 +7,11 @@ if (!requireNamespace("DiffBind", quietly = TRUE)) {
 }
 library(DiffBind)
 
+if (!requireNamespace("pheatmap", quietly = TRUE)) {
+    BiocManager::install("pheatmap")
+}
+library(pheatmap)
+
 threshold=0.05
 # normalized by differential analysis
 bNormed=T
@@ -113,6 +118,10 @@ peaks_in_gr = peaks[from(hits)]
 vpp_05_gr_in_peaks = vpp_05_gr[to(hits)]
 peaks_in_gr$other_range = ranges(vpp_05_gr_in_peaks)
 mcols(peaks_in_gr) <- cbind(mcols(peaks_in_gr), mcols(vpp_05_gr_in_peaks))
+
+hit_vec = findOverlaps(peaks, vpp_05_gr, select="arbitrary")
+peaks_not_overlapping_ix = is.na(hit_vec)
+peaks_not_overlapping = peaks[peaks_not_overlapping_ix]
 
 sum_L1_1 = peaks_in_gr$mean_log_L1_1*peaks_in_gr$N_log_L1_1
 sum_L1_2 = peaks_in_gr$mean_log_L1_2*peaks_in_gr$N_log_L1_2
