@@ -89,6 +89,11 @@ normed_3$`Conc` = NULL
 (counts_all = merge(counts_1, counts_2, counts_3, all=TRUE))
 
 peaks = counts_all[, c('FDR_LE_L1', 'FDR_LE_L3','FDR_L1_L3','Fold_LE_L1', 'Fold_LE_L3','Fold_L1_L3', 'Conc_Embryo','Conc_Larval_1','Conc_Larval_3', 'Called_LE','Called_L1','Called_L3')]
+
+# order correctly by chrmosome
+seqlevels(peaks) <- sort(seqlevels(peaks))
+peaks = sort(peaks)
+
 # apply the normalization factors by subtraction
 peaks$Conc_Embryo = peaks$Conc_Embryo - embryo_factor
 peaks$Conc_Larval_1 = peaks$Conc_Larval_1 - larval_1_factor
