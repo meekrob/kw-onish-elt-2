@@ -11,6 +11,10 @@ if (!requireNamespace("pheatmap", quietly = TRUE)) {
     BiocManager::install("pheatmap")
 }
 library(pheatmap)
+if (!requireNamespace("rtracklayer", quietly = TRUE)) {
+    BiocManager::install("rtracklayer")
+}
+library(rtracklayer)
 
 threshold=0.05
 # normalized by differential analysis
@@ -181,7 +185,7 @@ k = 4
 action$kclust_mapping_2[ action$kclust_mapping == k] = kmeans(mcols(action[action$kclust_mapping==k,c('Conc_Embryo', 'Conc_Larval_1', 'Conc_Larval_3')]),4)$cluster
 
 # plot
-pheatmap(as.data.frame(mcols(action[order(action$kclust_mapping, action$kclust_mapping_2)])), cluster_cols = F,  cluster_rows=F, show_rownames=F)
+#pheatmap(as.data.frame(mcols(action[order(action$kclust_mapping, action$kclust_mapping_2)])), cluster_cols = F,  cluster_rows=F, show_rownames=F)
 
 if (FALSE) {
     stopifnot(file.exists('spp_peaks'))
@@ -202,3 +206,35 @@ if (FALSE) {
     prev_df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header = T, sep="\t")
     prev_gr = makeGRangesFromDataFrame(prev_df, keep.extra.columns = T, starts.in.df.are.0based = T)
 }
+
+# make FDR/Fold tracks
+FDR_LE_L1_05 = peaks[peaks$FDR_LE_L1 < 0.05]
+FDR_LE_L3_05 = peaks[peaks$FDR_LE_L3 < 0.05]
+FDR_L1_L3_05 = peaks[peaks$FDR_L1_L3 < 0.05]
+#### LE/L1
+# make score column for bedgraph
+NEG_LOG_FDR_FOLD_SIGN  = -log(FDR_LE_L1_05$FDR_LE_L1) * sign(FDR_LE_L1_05$Fold_LE_L1)
+mcols(FDR_LE_L1_05) <- list(score=NEG_LOG_FDR_FOLD_SIGN)
+# make 1-based for rtracklayer (will be output as original)
+start(FDR_LE_L1_05) = start(FDR_LE_L1_05) + 1
+rtracklayer::export.bedGraph(FDR_LE_L1_05, "FDR_LE_L1_05.bedGraph")
+
+#### LE/L3 ****
+# make score column for bedgraph
+NEG_LOG_FDR_FOLD_SIGN  = -log(FDR_LE_L3_05$FDR_LE_L3) * sign(FDR_LE_L3_05$Fold_LE_L3)
+mcols(FDR_LE_L3_05) <- list(score=NEG_LOG_FDR_FOLD_SIGN)
+# make 1-based for rtracklayer (will be output as original)
+start(FDR_LE_L3_05) = start(FDR_LE_L3_05) + 1
+rtracklayer::export.bedGraph(FDR_LE_L3_05, "FDR_LE_L3_05.bedGraph")
+
+#### L1/L3 ####
+# make score column for bedgraph
+NEG_LOG_FDR_FOLD_SIGN  = -log(FDR_L1_L3_05$FDR_L1_L3) * sign(FDR_L1_L3_05$Fold_L1_L3)
+mcols(FDR_L1_L3_05) <- list(score=NEG_LOG_FDR_FOLD_SIGN)
+# make 1-based for rtracklayer (will be output as original)
+start(FDR_L1_L3_05) = start(FDR_L1_L3_05) + 1
+rtracklayer::export.bedGraph(FDR_L1_L3_05, "FDR_L1_L3_05.bedGraph")
+
+# tracks are ready to be made with
+# bedGraphToBigWig FDR_LE_L3_05.bedGraph <(print_ce11_chrom_sizes) FDR_LE_L3_05.bigWig
+
