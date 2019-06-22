@@ -23,3 +23,9 @@ L1_IDR$ignored1 = NULL
 L1_IDR$ignored2 = NULL
 L3_IDR$ignored1 = NULL
 L3_IDR$ignored2 = NULL
+# add stage ID
+LE_IDR$stage="LE"
+L1_IDR$stage="L1"
+L3_IDR$stage="L3"
+# merge all
+ALL_IDR = sort(c(LE_IDR, L1_IDR, L3_IDR))
