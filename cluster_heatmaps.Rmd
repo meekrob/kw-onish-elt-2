@@ -31,6 +31,7 @@ library(stringr)
 library(reshape2)
 library(ggplot2)
 library(ggExtra)
+library(RColorBrewer) # for pheatmap
 ```
 
 ## Process data
@@ -55,12 +56,15 @@ peaks_mu = apply(data, 1, mean)
 # normalize by row
 row_scaled_x = (data - peaks_mu) /  peaks_sd
 
+# change filenames to shorter labels
+colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
+
 # changing versus not-changing
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
 
 THRESHOLDS = c(.05,.1,.15,.25,.33,.50,.66,.75)
 #THRESHOLDS=seq(.1,.8,length.out=16)
-
+THRESHOLDS = c(.05)
 for (THRESHOLD in THRESHOLDS) {
   # make the text conversions consistent
   TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
@@ -75,13 +79,14 @@ for (THRESHOLD in THRESHOLDS) {
   # add the comment char to the first column
   colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
   # write data file of excluded regions
-  write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
+  # write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
   
   print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
   
   nclust=4
   set.seed(31415)
-  pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
+  label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
   kclusters = pobj$kmeans$cluster
   
   
@@ -102,8 +107,8 @@ for (THRESHOLD in THRESHOLDS) {
   trends_ordered_long = melt(trends_ordered)
   colnames(trends_ordered_long) <- c("description", "stage", "center")
   
-  label=paste("threshold=",TXT_THRESHOLD)
-  print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line() + labs(title=label, y = "cluster center"))
+  label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
   
   ## apply the new numbering to the data
   reassigned_ks = rep(0,length(kclusters))
@@ -133,7 +138,10 @@ for (THRESHOLD in THRESHOLDS) {
   #korder = order(kclusters)
   #pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
   korder = order(reassigned_ks, decreasing=T)
-  pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
+  
+  # colorMap
+  color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
+  pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
   #patterns = rbind((pobj$kmeans$centers[,1] + pobj$kmeans$centers[,2])/2, (pobj$kmeans$centers[,3] + pobj$kmeans$centers[,4])/2, (pobj$kmeans$centers[,5] + pobj$kmeans$centers[,6])/2)
   #rownames(patterns) <- c("LE","L1","L3")
   
