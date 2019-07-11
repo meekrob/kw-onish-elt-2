@@ -85,7 +85,7 @@ for (THRESHOLD in THRESHOLDS) {
   
   nclust=4
   set.seed(31415)
-  label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
   pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
   kclusters = pobj$kmeans$cluster
   
@@ -107,7 +107,7 @@ for (THRESHOLD in THRESHOLDS) {
   trends_ordered_long = melt(trends_ordered)
   colnames(trends_ordered_long) <- c("description", "stage", "center")
   
-  label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
   print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
   
   ## apply the new numbering to the data
@@ -135,9 +135,25 @@ for (THRESHOLD in THRESHOLDS) {
   
   # colorMap, needed to state explictly to agree with Deeptools plots
   color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
-  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
   pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
   
+  # combine replicates to just get a single value per stage per peak
+  LE = (threshold_x[,'LE_1'] + threshold_x[,'LE_2'])/2
+  L1 = (threshold_x[,'L1_1'] + threshold_x[,'L1_2'])/2
+  L3 = (threshold_x[,'L3_1'] + threshold_x[,'L3_2'])/2
+  # make a value representing only the cluster
+  klabel = rep(-2, length(LE))
+  klabel[kclusters == 2] <-  -1
+  klabel[kclusters == 3] <-  1
+  klabel[kclusters == 4] <-  2
+  
+  combined_x = data.frame(LE,L1,L3,k=klabel)
+  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  
+  pheatmap(combined_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
+  
+
   ## recoup the original file, the normalized data, and the cluster assignment
   # Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
   # cluster assignment
