@@ -122,26 +122,21 @@ for (THRESHOLD in THRESHOLDS) {
   included_set = df[threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
   split_non_normalized=split(included_set, kclusters)
   sorted_k_remapping = k_remapping[order(k_remapping[[1]]),]
+  
+  # Have the cluster numbers mean the same thing every time
   for (k_i in names(split_non_normalized)) { 
     k_subset = split_non_normalized[[k_i]]
     trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
-    #message(k_i, trend_name)
     kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
     print(kcluster_filename)
     write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
   }
-  
-  
-  
-  
-  #korder = order(kclusters, peaks_sd[threshold_ix])
-  #korder = order(kclusters)
-  #pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
   korder = order(reassigned_ks, decreasing=T)
   
-  # colorMap
+  # colorMap, needed to state explictly to agree with Deeptools plots
   color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
-  pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
+  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excluding lower ", sprintf("%.1f%%)", THRESHOLD*100))
+  pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
   
   ## recoup the original file, the normalized data, and the cluster assignment
   # Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
