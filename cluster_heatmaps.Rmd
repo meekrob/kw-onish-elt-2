@@ -142,23 +142,7 @@ for (THRESHOLD in THRESHOLDS) {
   # colorMap
   color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
   pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=paste("excluding lower",TXT_THRESHOLD, "sd", sep=" "))
-  #patterns = rbind((pobj$kmeans$centers[,1] + pobj$kmeans$centers[,2])/2, (pobj$kmeans$centers[,3] + pobj$kmeans$centers[,4])/2, (pobj$kmeans$centers[,5] + pobj$kmeans$centers[,6])/2)
-  #rownames(patterns) <- c("LE","L1","L3")
   
-  if (FALSE) {
-    plot(c(1,3), c(min(patterns),2), type='n', axes=F, main=paste("Cluster centers, excluding lower",TXT_THRESHOLD, "sd", sep=" "),xlab = "Stage", ylab="Normalized value")
-    
-    legend_text=c(); for (clustn in 1:nclust) { legend_text=c(legend_text,str_c("clust",clustn, sep=" "))}
-    color_thing = RColorBrewer::brewer.pal(name="Dark2",n=nclust)
-    legend(1,2, legend_text,lwd=2, col=color_thing,horiz=T,bty='n')
-    axis(1, at=1:3, c('LE','L1','L3'))
-    axis(2, at=axTicks(2, c(-1,1.5,5), c(-1,1)))
-    abline(h=0, lwd=.5,lty=2)
-    for (wd in 1:nclust) {
-      lines(patterns[,wd],col=color_thing[wd], lwd=2)
-    }
-    rect(par('usr')[1], par('usr')[3], par('usr')[2], 1.51)
-  }
   ## recoup the original file, the normalized data, and the cluster assignment
   # Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
   # cluster assignment
