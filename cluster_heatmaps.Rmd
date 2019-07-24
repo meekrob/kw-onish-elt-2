@@ -187,8 +187,22 @@ for (THRESHOLD in THRESHOLDS) {
   
   # paste new columns onto original file
   big_df = cbind(df, new_df)
+  big_df$kclust_mapping[is.na(big_df$kclust_mapping)] <- 0
   # add the comment char to the first column
   colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
+  
+  # switch from DF to GRanges object
+  peaks = makeGRangesFromDataFrame(big_df, keep.extra.columns = T, starts.in.df.are.0based=T, seqnames.field = '#chrom')
+  ce11_info = Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
+  seqinfo(peaks) <- ce11_info
+  
+  # get gene assignment annotations
+  mart = useMart(biomart = "ENSEMBL_MART_ENSEMBL", host="grch37.ensembl.org", path="/biomart/martservice", dataset = "celegans_gene_ensembl")
+  ce_TSS = getAnnotation(mart, featureType = "TSS")
+  annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
+  wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
+  annotated_peaks$WBID = wbid
+  
   
   ## add gene ids, processed as in the repository
   gene_ids = read.table("only.gene_ids")
