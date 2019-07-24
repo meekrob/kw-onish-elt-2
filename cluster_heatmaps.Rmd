@@ -3,6 +3,7 @@ title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
 date: "Spring 2019"
 output: html_document
+
 ---
 
 ```{r setup, include=FALSE}
@@ -32,6 +33,9 @@ library(reshape2)
 library(ggplot2)
 library(ggExtra)
 library(RColorBrewer) # for pheatmap
+library(GenomicRanges)
+library(biomaRt)
+library(ChIPpeakAnno)
 ```
 
 ## Process data
@@ -49,7 +53,6 @@ colnames_in_stage_order = colnames(df_max)[c(5,6,1:4)]
 position_columns = c("chrom","chromStart","chromEnd","ID")
 # make numeric, with 
 data = as.matrix(df_max[,colnames_in_stage_order])
-
 # perform normalization
 peaks_sd = apply(data, 1, sd)
 peaks_mu = apply(data, 1, mean)
@@ -62,156 +65,153 @@ colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
 # changing versus not-changing
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
 
-THRESHOLDS = c(.05,.1,.15,.25,.33,.50,.66,.75)
-#THRESHOLDS=seq(.1,.8,length.out=16)
-THRESHOLDS = c(.05)
-for (THRESHOLD in THRESHOLDS) {
-  # make the text conversions consistent
-  TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
-  threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
-  threshold_ix = peaks_sd > threshold_q
-  threshold_x = row_scaled_x[ threshold_ix,]
-  
-  # df colnames differ from manual ones on line 44
-  excluded_set = df[! threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
-  excluded_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_0.bedlike", sep="")
-  
-  # add the comment char to the first column
-  colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
-  # write data file of excluded regions
-  # write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
-  
-  print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
-  
-  nclust=4
-  set.seed(31415)
-  label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-  pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
-  kclusters = pobj$kmeans$cluster
-  
-  
-  ### reorganize based on 4 meaningful trends
-  LEs = apply(pobj$kmeans$centers[,1:2],1, mean)#pobj$kmeans$centers[,1:2] 
-  L1s = apply(pobj$kmeans$centers[,3:4],1, mean)#pobj$kmeans$centers[,3:4] # 
-  L3s = apply(pobj$kmeans$centers[,5:6],1, mean)#pobj$kmeans$centers[,5:6] # 
-  
-  sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
-  trend_labels = c("LE_specific", "L3_specific", "Dev_increasing",  "Post_embryonic")
-  k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
-  
-  trends = cbind(LE=LEs,L1=L1s,L3=L3s)
-  trends_ordered = trends[order(LEs,L1s,L3s,decreasing=TRUE),]
-  rownames(trends_ordered) <- c("LE-specific", "L3-specific", "Increasing",  "Post embryonic")
-  
-  
-  trends_ordered_long = melt(trends_ordered)
-  colnames(trends_ordered_long) <- c("description", "stage", "center")
-  
-  label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-  print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
-  
-  ## apply the new numbering to the data
-  reassigned_ks = rep(0,length(kclusters))
-  for (i in 1:4) {
-    reassigned_ks[ kclusters == i] = k_remapping[i,2]
-  }
-  
-  
-  # prepare non-normalized output
-  # df colnames differ from manual ones on line 44
-  included_set = df[threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
-  split_non_normalized=split(included_set, kclusters)
-  sorted_k_remapping = k_remapping[order(k_remapping[[1]]),]
-  
-  # Have the cluster numbers mean the same thing every time
-  for (k_i in names(split_non_normalized)) { 
-    k_subset = split_non_normalized[[k_i]]
-    trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
-    kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
-    print(kcluster_filename)
-    write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
-  }
-  korder = order(reassigned_ks, decreasing=T)
-  
-  # colorMap, needed to state explictly to agree with Deeptools plots
-  color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
-  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-  pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
-  
-  # combine replicates to just get a single value per stage per peak
-  LE = (threshold_x[,'LE_1'] + threshold_x[,'LE_2'])/2
-  L1 = (threshold_x[,'L1_1'] + threshold_x[,'L1_2'])/2
-  L3 = (threshold_x[,'L3_1'] + threshold_x[,'L3_2'])/2
-  # make a value representing only the cluster
-  klabel = rep(-2, length(LE))
-  klabel[kclusters == 2] <-  -1
-  klabel[kclusters == 3] <-  1
-  klabel[kclusters == 4] <-  2
-  
-  combined_x = data.frame(LE,L1,L3,k=klabel)
-  label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-  
-  pheatmap(combined_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
-  
+THRESHOLD = .05
 
-  ## recoup the original file, the normalized data, and the cluster assignment
-  # Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
-  # cluster assignment
-  
-  # normalized data
-  norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
-  norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
-  norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
-  norm_L1_2 = rep(NA, nrow(df)); norm_L1_2[!all_nan_rows] = row_scaled_x[,4]
-  norm_L3_1 = rep(NA, nrow(df)); norm_L3_1[!all_nan_rows] = row_scaled_x[,5]
-  norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
-  
-  # kmeans cluster assignment
-  vec1 = rep(NA, nrow(row_scaled_x))
-  vec1[threshold_ix] = kclusters
-  kclust_mapping = rep(NA, nrow(df))
-  kclust_mapping[! all_nan_rows] = vec1
-  
-  # sd and mean
-  sd_mapping = rep(NA, nrow(df))
-  sd_mapping[!all_nan_rows] = peaks_sd
-  mean_mapping = rep(NA, nrow(df))
-  mean_mapping[!all_nan_rows] = peaks_mu
-  ecdf_sd = ecdf(peaks_sd)
-  
-  # peaks_quantile: this row is changing more (via sd) than peaks_quantile fraction of the dataset
-  peaks_quantile = rep(NA, nrow(df))
-  peaks_quantile[!all_nan_rows] = ecdf_sd(peaks_sd)
-  # combine new columns
-  new_df = data.frame(norm_LE_1,norm_LE_2,norm_L1_1,norm_L1_2,norm_L3_1,norm_L3_2,mean_mapping, sd_mapping, peaks_quantile,kclust_mapping)
-  
-  # paste new columns onto original file
-  big_df = cbind(df, new_df)
-  big_df$kclust_mapping[is.na(big_df$kclust_mapping)] <- 0
-  # add the comment char to the first column
-  colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
-  
-  # switch from DF to GRanges object
-  peaks = makeGRangesFromDataFrame(big_df, keep.extra.columns = T, starts.in.df.are.0based=T, seqnames.field = '#chrom')
-  ce11_info = Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
-  seqinfo(peaks) <- ce11_info
-  
-  # get gene assignment annotations
-  mart = useMart(biomart = "ENSEMBL_MART_ENSEMBL", host="grch37.ensembl.org", path="/biomart/martservice", dataset = "celegans_gene_ensembl")
-  ce_TSS = getAnnotation(mart, featureType = "TSS")
-  annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
-  wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
-  annotated_peaks$WBID = wbid
-  
-  
-  ## add gene ids, processed as in the repository
-  gene_ids = read.table("only.gene_ids")
-  new_colnames = c(colnames(big_df), "WBID")
-  big_df = cbind(big_df, gene_ids)
-  colnames(big_df) <- new_colnames
-  
-  # write data file
-  output_filename = paste("./valerie_peaks_processed_", TXT_THRESHOLD, ".bedlike",sep="")
-  write.table(big_df, output_filename, quote=F, sep="\t", row.names=F)
+# make the text conversions consistent
+TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
+threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
+threshold_ix = peaks_sd > threshold_q
+threshold_x = row_scaled_x[ threshold_ix,]
 
+# df colnames differ from manual ones on line 44
+excluded_set = df[! threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
+excluded_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_0.bedlike", sep="")
+
+# add the comment char to the first column
+colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
+# write data file of excluded regions
+# write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
+
+print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
+
+nclust=4
+set.seed(31415)
+label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
+kclusters = pobj$kmeans$cluster
+
+
+
+### reorganize based on 4 meaningful trends
+LEs = apply(pobj$kmeans$centers[,1:2],1, mean)#pobj$kmeans$centers[,1:2] 
+L1s = apply(pobj$kmeans$centers[,3:4],1, mean)#pobj$kmeans$centers[,3:4] # 
+L3s = apply(pobj$kmeans$centers[,5:6],1, mean)#pobj$kmeans$centers[,5:6] # 
+
+sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
+trend_labels = c("LE_specific", "L3_specific", "Dev_increasing",  "Post_embryonic")
+k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
+
+trends = cbind(LE=LEs,L1=L1s,L3=L3s)
+trends_ordered = trends[order(LEs,L1s,L3s,decreasing=TRUE),]
+rownames(trends_ordered) <- c("LE-specific", "L3-specific", "Increasing",  "Post embryonic")
+
+
+trends_ordered_long = melt(trends_ordered)
+colnames(trends_ordered_long) <- c("description", "stage", "center")
+
+label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
+
+## apply the new numbering to the data
+reassigned_ks = rep(0,length(kclusters))
+for (i in 1:4) {
+  reassigned_ks[ kclusters == i] = k_remapping[i,2]
 }
+
+
+# prepare non-normalized output
+# df colnames differ from manual ones on line 44
+included_set = df[threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
+split_non_normalized=split(included_set, kclusters)
+sorted_k_remapping = k_remapping[order(k_remapping[[1]]),]
+
+
+# Have the cluster numbers mean the same thing every time
+for (k_i in names(split_non_normalized)) { 
+  k_subset = split_non_normalized[[k_i]]
+  trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
+  kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
+  print(kcluster_filename)
+  write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
+}
+korder = order(reassigned_ks, decreasing=T)
+
+# colorMap, needed to state explictly to agree with Deeptools plots
+color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
+label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+pheatmap(threshold_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
+
+# combine replicates to just get a single value per stage per peak
+LE = (threshold_x[,'LE_1'] + threshold_x[,'LE_2'])/2
+L1 = (threshold_x[,'L1_1'] + threshold_x[,'L1_2'])/2
+L3 = (threshold_x[,'L3_1'] + threshold_x[,'L3_2'])/2
+# make a value representing only the cluster
+klabel = rep(-2, length(LE))
+klabel[kclusters == 2] <-  -1
+klabel[kclusters == 3] <-  1
+klabel[kclusters == 4] <-  2
+
+combined_x = data.frame(LE,L1,L3,k=klabel)
+label=paste(sprintf("Clustered peaks, selecting std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+
+pheatmap(combined_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_rownames=F, main=label)
+
+## recoup the original file, the normalized data, and the cluster assignment
+# Going to add 7 columns: the normalized value for each stage (times 2 reps) plus the 
+# cluster assignment
+
+# normalized data
+norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
+norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
+norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
+norm_L1_2 = rep(NA, nrow(df)); norm_L1_2[!all_nan_rows] = row_scaled_x[,4]
+norm_L3_1 = rep(NA, nrow(df)); norm_L3_1[!all_nan_rows] = row_scaled_x[,5]
+norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
+
+# kmeans cluster assignment
+vec1 = rep(NA, nrow(row_scaled_x))
+vec1[threshold_ix] = kclusters
+kclust_mapping = rep(NA, nrow(df))
+kclust_mapping[! all_nan_rows] = vec1
+
+# sd and mean
+sd_mapping = rep(NA, nrow(df))
+sd_mapping[!all_nan_rows] = peaks_sd
+mean_mapping = rep(NA, nrow(df))
+mean_mapping[!all_nan_rows] = peaks_mu
+ecdf_sd = ecdf(peaks_sd)
+
+# peaks_quantile: this row is changing more (via sd) than peaks_quantile fraction of the dataset
+peaks_quantile = rep(NA, nrow(df))
+peaks_quantile[!all_nan_rows] = ecdf_sd(peaks_sd)
+# combine new columns
+new_df = data.frame(norm_LE_1,norm_LE_2,norm_L1_1,norm_L1_2,norm_L3_1,norm_L3_2,mean_mapping, sd_mapping, peaks_quantile,kclust_mapping)
+
+# paste new columns onto original file
+big_df = cbind(df, new_df)
+big_df$kclust_mapping[is.na(big_df$kclust_mapping)] <- 0
+# add the comment char to the first column
+colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
+
+# switch from DF to GRanges object
+peaks = makeGRangesFromDataFrame(big_df, keep.extra.columns = T, starts.in.df.are.0based=T, seqnames.field = '#chrom')
+ce11_info = Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
+seqinfo(peaks) <- ce11_info
+# get gene assignment annotations
+mart = useMart(biomart = "ENSEMBL_MART_ENSEMBL", host="grch37.ensembl.org", path="/biomart/martservice", dataset = "celegans_gene_ensembl")
+ce_TSS = getAnnotation(mart, featureType = "TSS")
+annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
+wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
+annotated_peaks$WBID = wbid
+
+clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
+# some bool vectors
+
+clustersPerGene_rowSums = rowSums(clustersPerGene)
+multiple_peaks = clustersPerGene_rowSums > 1
+sum(multiple_peaks) # 1740
+rowMaxes = function(x) apply(x, 1, max)
+clustersPerGene_rowMaxes = rowMaxes(clustersPerGene)
+multiple_clusters = multiple_peaks & clustersPerGene_rowMaxes != clustersPerGene_rowSums
+sum(multiple_clusters) # 1177
+```
