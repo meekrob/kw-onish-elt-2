@@ -36,6 +36,7 @@ library(RColorBrewer) # for pheatmap
 library(GenomicRanges)
 library(biomaRt)
 library(ChIPpeakAnno)
+library(topGO)
 ```
 
 ## Process data
