@@ -204,6 +204,7 @@ ce_TSS = getAnnotation(mart, featureType = "TSS")
 annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
 wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
 annotated_peaks$WBID = wbid
+unique.wbid = unique(wbid)
 
 clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
 # some bool vectors
@@ -223,6 +224,12 @@ clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3
 ```
 
 ``` {r GO term analysis}
+# get the annotations from PARASITE
+WORMGO=biomaRt::getBM(attributes = c( "wbps_gene_id", "go_accession", "go_name_1006", "go_linkage_type"), mart = paramart, filters='wbps_gene_id', value=unique.wbid)
+unannotated_genes = WORMGO[WORMGO$go_accession == '',]
+WORMGO = WORMGO[WORMGO$go_accession != '',]
+
+
 # Get ensembl gene ids and GO terms
 GTOGO <- biomaRt::getBM(attributes = c( "ensembl_gene_id", "go_id"), mart = mart)
 #Remove blank entries
@@ -240,6 +247,26 @@ BP.go = new("topGOdata", ontology='BP'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-results <- runTest(BP.go, algorithm = "elim", statistic = "fisher")
-results.tab <- GenTable(object = BP.go, elimFisher = results)
+BP.results <- runTest(BP.go, algorithm = "elim", statistic = "fisher")
+BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results)
+
+MF.go = new("topGOdata", ontology='MF'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+MF.results <- runTest(MF.go, algorithm = "elim", statistic = "fisher")
+MF.results.tab <- GenTable(object = MF.go, elimFisher = MF.results)
+
+
+CC.go = new("topGOdata", ontology='CC'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+CC.results <- runTest(CC.go, algorithm = "elim", statistic = "fisher")
+CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
+
+
+
 ```
