@@ -220,3 +220,25 @@ clustersPerGene_canberra_hclust = hclust(clustersPerGene_canberra)
 clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3],clustersPerGene[,4],clustersPerGene[,5])
 #plot(clustersPerGene_canberra_hclust, labels=clust_labels,cex=.33)
 ```
+
+``` {r GO term analysis}
+# Get ensembl gene ids and GO terms
+GTOGO <- biomaRt::getBM(attributes = c( "ensembl_gene_id", "go_id"), mart = mart)
+#Remove blank entries
+GTOGO <- GTOGO[GTOGO$go_id != '',]
+# convert from table format to list format
+geneID2GO <- by(GTOGO$go_id, GTOGO$ensembl_gene_id, function(x) as.character(x))
+
+# All possible genes
+all.genes <- unique(as.character(GTOGO$ensembl_gene_id))
+geneList = factor(as.integer(all.genes %in% wbid))
+names(geneList) = all.genes
+
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+results <- runTest(BP.go, algorithm = "elim", statistic = "fisher")
+results.tab <- GenTable(object = BP.go, elimFisher = results)
+```
