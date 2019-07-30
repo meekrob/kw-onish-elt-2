@@ -261,8 +261,10 @@ BP.go = new("topGOdata", ontology='BP'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-BP.results <- runTest(BP.go, algorithm = "elim", statistic = "fisher")
-BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results)
+# algo weight01 performs a conditional traversal of the DAG
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f)
+showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes =10)
 
 MF.go = new("topGOdata", ontology='MF'
 , allGenes = geneList
