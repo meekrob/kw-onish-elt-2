@@ -238,15 +238,6 @@ if (! "WORMGO" %in% ls()) {
 }
 unannotated_genes = WORMGO[WORMGO$go_accession == '',]
 WORMGO = WORMGO[WORMGO$go_accession != '',]
-
-
-# Get ensembl gene ids and GO terms
-GTOGO <- biomaRt::getBM(attributes = c( "ensembl_gene_id", "go_id"), mart = mart)
-#Remove blank entries
-GTOGO <- GTOGO[GTOGO$go_id != '',]
-# convert from table format to list format
-geneID2GO <- by(GTOGO$go_id, GTOGO$ensembl_gene_id, function(x) as.character(x))
-
 geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
 
 
@@ -271,7 +262,7 @@ MF.go = new("topGOdata", ontology='MF'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-MF.results <- runTest(MF.go, algorithm = "elim", statistic = "fisher")
+MF.results <- runTest(MF.go, algorithm = "weight01", statistic = "fisher")
 MF.results.tab <- GenTable(object = MF.go, elimFisher = MF.results)
 
 
@@ -280,7 +271,7 @@ CC.go = new("topGOdata", ontology='CC'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-CC.results <- runTest(CC.go, algorithm = "elim", statistic = "fisher")
+CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
 CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
 
 
