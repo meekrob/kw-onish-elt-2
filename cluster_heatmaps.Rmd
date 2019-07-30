@@ -200,6 +200,7 @@ ce11_info = Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), c(150
 seqinfo(peaks) <- ce11_info
 # get gene assignment annotations
 mart = useMart(biomart = "ENSEMBL_MART_ENSEMBL", host="grch37.ensembl.org", path="/biomart/martservice", dataset = "celegans_gene_ensembl")
+
 ce_TSS = getAnnotation(mart, featureType = "TSS")
 annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
 wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
@@ -225,7 +226,16 @@ clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3
 
 ``` {r GO term analysis}
 # get the annotations from PARASITE
-WORMGO=biomaRt::getBM(attributes = c( "wbps_gene_id", "go_accession", "go_name_1006", "go_linkage_type"), mart = paramart, filters='wbps_gene_id', value=unique.wbid)
+if (! "paramart" %in% ls()) {paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
+if (! "WORMGO" %in% ls()) {
+  # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
+  WORMGO=biomaRt::getBM(mart = paramart, filter="species_id_1010", value="elegaprjna13758",
+       attributes = c( "wbps_gene_id", 
+            "external_gene_id", 
+            "go_accession", 
+            "go_name_1006", 
+            "go_linkage_type")) 
+}
 unannotated_genes = WORMGO[WORMGO$go_accession == '',]
 WORMGO = WORMGO[WORMGO$go_accession != '',]
 
@@ -237,8 +247,12 @@ GTOGO <- GTOGO[GTOGO$go_id != '',]
 # convert from table format to list format
 geneID2GO <- by(GTOGO$go_id, GTOGO$ensembl_gene_id, function(x) as.character(x))
 
+geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
+
+
 # All possible genes
-all.genes <- unique(as.character(GTOGO$ensembl_gene_id))
+#all.genes <- unique(as.character(GTOGO$ensembl_gene_id))
+all.genes <- unique(as.character(WORMGO$wbps_gene_id))
 geneList = factor(as.integer(all.genes %in% wbid))
 names(geneList) = all.genes
 
