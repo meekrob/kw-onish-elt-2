@@ -207,6 +207,32 @@ wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_pe
 annotated_peaks$WBID = wbid
 unique.wbid = unique(wbid)
 
+# genes per cluster
+peaks_k0 = peaks[peaks$kclust_mapping == 0,]
+clust_0_genes = annotatePeakInBatch(peaks_k0, mart, featureType = "TSS", AnnotationData = ce_TSS)
+clust_0_wbid = unlist(strsplit(names(clust_0_genes), "[.]"))[seq(2,2*length(clust_0_genes),by=2)]
+unique.clust_0_wbid = unique(clust_0_wbid)
+
+peaks_k1 = peaks[peaks$kclust_mapping == 1,]
+clust_1_genes = annotatePeakInBatch(peaks_k1, mart, featureType = "TSS", AnnotationData = ce_TSS)
+clust_1_wbid = unlist(strsplit(names(clust_1_genes), "[.]"))[seq(2,2*length(clust_1_genes),by=2)]
+unique.clust_1_wbid = unique(clust_1_wbid)
+
+peaks_k2 = peaks[peaks$kclust_mapping == 2,]
+clust_2_genes = annotatePeakInBatch(peaks_k2, mart, featureType = "TSS", AnnotationData = ce_TSS)
+clust_2_wbid = unlist(strsplit(names(clust_2_genes), "[.]"))[seq(2,2*length(clust_2_genes),by=2)]
+unique.clust_2_wbid = unique(clust_2_wbid)
+
+peaks_k3 = peaks[peaks$kclust_mapping == 3,]
+clust_3_genes = annotatePeakInBatch(peaks_k3, mart, featureType = "TSS", AnnotationData = ce_TSS)
+clust_3_wbid = unlist(strsplit(names(clust_3_genes), "[.]"))[seq(2,2*length(clust_3_genes),by=2)]
+unique.clust_3_wbid = unique(clust_3_wbid)
+
+peaks_k4 = peaks[peaks$kclust_mapping == 4,]
+clust_4_genes = annotatePeakInBatch(peaks_k4, mart, featureType = "TSS", AnnotationData = ce_TSS)
+clust_4_wbid = unlist(strsplit(names(clust_4_genes), "[.]"))[seq(2,2*length(clust_4_genes),by=2)]
+unique.clust_4_wbid = unique(clust_4_wbid)
+
 clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
 # some bool vectors
 
@@ -226,7 +252,8 @@ clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3
 
 ``` {r GO term analysis}
 # get the annotations from PARASITE
-if (! "paramart" %in% ls()) {paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
+if (! "paramart" %in% ls()) {
+  paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
 if (! "WORMGO" %in% ls()) {
   # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
   WORMGO=biomaRt::getBM(mart = paramart, filter="species_id_1010", value="elegaprjna13758",
@@ -242,7 +269,6 @@ geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.charact
 
 
 # All possible genes
-#all.genes <- unique(as.character(GTOGO$ensembl_gene_id))
 all.genes <- unique(as.character(WORMGO$wbps_gene_id))
 geneList = factor(as.integer(all.genes %in% wbid))
 names(geneList) = all.genes
@@ -255,7 +281,7 @@ BP.go = new("topGOdata", ontology='BP'
 # algo weight01 performs a conditional traversal of the DAG
 BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
 BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f)
-showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes =10)
+showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes = 10)
 
 MF.go = new("topGOdata", ontology='MF'
 , allGenes = geneList
@@ -274,6 +300,63 @@ CC.go = new("topGOdata", ontology='CC'
 CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
 CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
 
+# Sub clusters vs all peaks
+#0
+geneList = factor(as.integer(wbid %in% unique.clust_0_wbid))
+names(geneList) = wbid
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
 
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.k0.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 
+#1
+geneList = factor(as.integer(wbid %in% unique.clust_1_wbid))
+names(geneList) = wbid
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+# algo weight01 performs a conditional traversal of the DAG
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.k1.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+
+#2
+geneList = factor(as.integer(wbid %in% unique.clust_2_wbid))
+names(geneList) = wbid
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+# algo weight01 performs a conditional traversal of the DAG
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.k2.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+
+#3
+geneList = factor(as.integer(wbid %in% unique.clust_3_wbid))
+names(geneList) = wbid
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+# algo weight01 performs a conditional traversal of the DAG
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.k3.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+
+#3
+geneList = factor(as.integer(wbid %in% unique.clust_4_wbid))
+names(geneList) = wbid
+BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+# algo weight01 performs a conditional traversal of the DAG
+BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+BP.results.k4.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 ```
