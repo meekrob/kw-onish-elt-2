@@ -278,27 +278,40 @@ BP.go = new("topGOdata", ontology='BP'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-# algo weight01 performs a conditional traversal of the DAG
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f)
-showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes = 10)
+GOSummary<- function(GOdata) {
+  test.stat <- new("classicCount", testStatistic = GOFisherTest, name = "Fisher test")
+  resultFis <- getSigGroups(GOdata, test.stat)
+  test.stat <- new("classicScore", testStatistic = GOKSTest, name = "KS tests")
+  resultKS <- getSigGroups(GOdata, test.stat)
+  test.stat <- new("elimCount", testStatistic = GOFisherTest, name = "Fisher test",cutOff = 0.01)
+  resultElim <- getSigGroups(GOdata, test.stat)
+  test.stat <- new("weightCount", testStatistic = GOFisherTest, name = "Fisher test", sigRatio = "ratio")
+  resultWeight <- getSigGroups(GOdata, test.stat)
+  l <- list(classic = resultFis, KS = resultKS, elim = resultElim,weight = resultWeight)
+  return(GenTable(object=GOdata, weight=l$weight, classic=l$classic, elim=l$elim, KS=l$KS, orderBy="weight",ranksOf = "classic", topNodes = 50))
+}
 
-MF.go = new("topGOdata", ontology='MF'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-MF.results <- runTest(MF.go, algorithm = "weight01", statistic = "fisher")
-MF.results.tab <- GenTable(object = MF.go, elimFisher = MF.results)
-
-
-CC.go = new("topGOdata", ontology='CC'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
-CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
+## algorithm weight01 performs a traversal of the DAG 
+# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+# peakset.BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f)
+# showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes = 10)
+# 
+# MF.go = new("topGOdata", ontology='MF'
+# , allGenes = geneList
+# , annot = annFUN.gene2GO
+# , gene2GO = geneID2GO)
+# GOdata=MF.go
+# MF.results <- runTest(MF.go, algorithm = "weight01", statistic = "fisher")
+# MF.results.tab <- GenTable(object = MF.go, elimFisher = MF.results)
+# 
+# 
+# CC.go = new("topGOdata", ontology='CC'
+# , allGenes = geneList
+# , annot = annFUN.gene2GO
+# , gene2GO = geneID2GO)
+# GOdata = CC.go
+# CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
+# CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
 
 # Sub clusters vs all peaks
 #0
@@ -309,8 +322,9 @@ BP.go = new("topGOdata", ontology='BP'
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)
 
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.k0.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+#BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+#BP.results.k0.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+K0_allBPRes = GOSummary(BP.go)
 
 #1
 geneList = factor(as.integer(wbid %in% unique.clust_1_wbid))
@@ -321,8 +335,9 @@ BP.go = new("topGOdata", ontology='BP'
 , gene2GO = geneID2GO)
 
 # algo weight01 performs a conditional traversal of the DAG
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.k1.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+#BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+#BP.results.k1.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+K1_allBPRes = GOSummary(BP.go)
 
 #2
 geneList = factor(as.integer(wbid %in% unique.clust_2_wbid))
@@ -333,8 +348,9 @@ BP.go = new("topGOdata", ontology='BP'
 , gene2GO = geneID2GO)
 
 # algo weight01 performs a conditional traversal of the DAG
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.k2.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+# BP.results.k2.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+K2_allBPRes = GOSummary(BP.go)
 
 #3
 geneList = factor(as.integer(wbid %in% unique.clust_3_wbid))
@@ -345,10 +361,11 @@ BP.go = new("topGOdata", ontology='BP'
 , gene2GO = geneID2GO)
 
 # algo weight01 performs a conditional traversal of the DAG
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.k3.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+# BP.results.k3.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+K3_allBPRes = GOSummary(BP.go)
 
-#3
+#4
 geneList = factor(as.integer(wbid %in% unique.clust_4_wbid))
 names(geneList) = wbid
 BP.go = new("topGOdata", ontology='BP'
@@ -357,6 +374,7 @@ BP.go = new("topGOdata", ontology='BP'
 , gene2GO = geneID2GO)
 
 # algo weight01 performs a conditional traversal of the DAG
-BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-BP.results.k4.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
+# BP.results.k4.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
+K4_allBPRes = GOSummary(BP.go)
 ```
