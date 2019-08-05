@@ -206,32 +206,38 @@ annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", Annotatio
 wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
 annotated_peaks$WBID = wbid
 unique.wbid = unique(wbid)
+write.table(sort(unique.wbid), file="unique.wbid.txt", row.names=F,col.names=F,quote=F)
 
 # genes per cluster
 peaks_k0 = peaks[peaks$kclust_mapping == 0,]
 clust_0_genes = annotatePeakInBatch(peaks_k0, mart, featureType = "TSS", AnnotationData = ce_TSS)
 clust_0_wbid = unlist(strsplit(names(clust_0_genes), "[.]"))[seq(2,2*length(clust_0_genes),by=2)]
 unique.clust_0_wbid = unique(clust_0_wbid)
+write.table(sort(unique.clust_0_wbid), file="unique.clust_0_wbid.txt", row.names=F,col.names=F,quote=F)
 
 peaks_k1 = peaks[peaks$kclust_mapping == 1,]
 clust_1_genes = annotatePeakInBatch(peaks_k1, mart, featureType = "TSS", AnnotationData = ce_TSS)
 clust_1_wbid = unlist(strsplit(names(clust_1_genes), "[.]"))[seq(2,2*length(clust_1_genes),by=2)]
 unique.clust_1_wbid = unique(clust_1_wbid)
+write.table(sort(unique.clust_1_wbid), file="unique.clust_1_wbid.txt", row.names=F,col.names=F,quote=F)
 
 peaks_k2 = peaks[peaks$kclust_mapping == 2,]
 clust_2_genes = annotatePeakInBatch(peaks_k2, mart, featureType = "TSS", AnnotationData = ce_TSS)
 clust_2_wbid = unlist(strsplit(names(clust_2_genes), "[.]"))[seq(2,2*length(clust_2_genes),by=2)]
 unique.clust_2_wbid = unique(clust_2_wbid)
+write.table(sort(unique.clust_2_wbid), file="unique.clust_2_wbid.txt", row.names=F,col.names=F,quote=F)
 
 peaks_k3 = peaks[peaks$kclust_mapping == 3,]
 clust_3_genes = annotatePeakInBatch(peaks_k3, mart, featureType = "TSS", AnnotationData = ce_TSS)
 clust_3_wbid = unlist(strsplit(names(clust_3_genes), "[.]"))[seq(2,2*length(clust_3_genes),by=2)]
 unique.clust_3_wbid = unique(clust_3_wbid)
+write.table(sort(unique.clust_3_wbid), file="unique.clust_3_wbid.txt", row.names=F,col.names=F,quote=F)
 
 peaks_k4 = peaks[peaks$kclust_mapping == 4,]
 clust_4_genes = annotatePeakInBatch(peaks_k4, mart, featureType = "TSS", AnnotationData = ce_TSS)
 clust_4_wbid = unlist(strsplit(names(clust_4_genes), "[.]"))[seq(2,2*length(clust_4_genes),by=2)]
 unique.clust_4_wbid = unique(clust_4_wbid)
+write.table(sort(unique.clust_4_wbid), file="unique.clust_4_wbid.txt", row.names=F,col.names=F,quote=F)
 
 clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
 # some bool vectors
