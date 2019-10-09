@@ -10,6 +10,10 @@ if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
 }
 library(GenomicRanges)
 
+PKG="ChIPpeakAnno"
+if (!requireNamespace(PKG, quietly = TRUE)) { BiocManager::install(PKG) }
+library(PKG, character.only=T)
+
 # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
 paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
 genes_coding = getBM(mart = paramart, 
@@ -37,3 +41,16 @@ all_CDS_genes = makeGRangesFromDataFrame(genes_coding_noMT,
                                         seqnames.field='chromosome_name', 
                                         start.field="start_position", 
                                         end.field="end_position")
+
+names(all_CDS_genes) <- all_CDS_genes$wbps_gene_id
+ap=annotatePeakInBatch(peaks, AnnotationData=all_CDS_genes)
+
+# a pie chart with the breakdown of how the annotation happened
+pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
+pie(table(ap$insideFeature), labels=pie_labels, main="ChIPpeakAnno::annotatePeakInBatch: \"nearestLocation\"", sub="paramart: wbps_gene_id, biotype= protein_coding")
+# does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
+round(table(ap$kclust_mapping, ap$insideFeature)/apply(table(ap$kclust_mapping, ap$insideFeature), 1, sum),3)*100
+
+
+ap.wbid=unlist(strsplit(names(ap), "[.]"))[seq(2,2*length(ap),by=2)]
+unique.ap.wbid = unique(ap.wbid)
