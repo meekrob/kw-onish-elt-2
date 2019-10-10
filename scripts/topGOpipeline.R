@@ -79,3 +79,87 @@ annotated_CC = GOSummary(CC.go)
 View(annotated_BP)
 # and maybe filter via a threshold
 annotated_BP_sig = annotated_BP[annotated_BP$elim <= .1]
+
+
+###
+### subclasses versus the main class
+###
+length(ap_0)
+length(ap_1)
+length(ap_2)
+length(ap_3)
+length(ap_4)
+
+ap_0_unique_wbid = unique(ap_0$feature)
+ap_1_unique_wbid = unique(ap_1$feature)
+ap_2_unique_wbid = unique(ap_2$feature)
+ap_3_unique_wbid = unique(ap_3$feature)
+ap_4_unique_wbid = unique(ap_4$feature)
+
+# now the master set is the previous argument set: only the genes mapped to peaks instead of the whole genome
+allpeaks.genes = argument_ids
+k0_geneList = factor(as.integer(allpeaks.genes %in% ap_0_unique_wbid))
+names(k0_geneList) <- allpeaks.genes
+
+BP_0.go = new("topGOdata", ontology='BP'
+, allGenes = k0_geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+k0_annotated_BP = GOSummary(BP_0.go)
+k0_annotated_BP$elim = as.numeric(k0_annotated_BP$elim)
+
+View(k0_annotated_BP)
+
+k1_geneList = factor(as.integer(allpeaks.genes %in% ap_1_unique_wbid))
+names(k1_geneList) <- allpeaks.genes
+
+BP_1.go = new("topGOdata", ontology='BP'
+, allGenes = k1_geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+k1_annotated_BP = GOSummary(BP_1.go)
+k1_annotated_BP$elim = as.numeric(k1_annotated_BP$elim)
+
+View(k1_annotated_BP)
+
+k2_geneList = factor(as.integer(allpeaks.genes %in% ap_2_unique_wbid))
+names(k2_geneList) <- allpeaks.genes
+
+BP_2.go = new("topGOdata", ontology='BP'
+, allGenes = k2_geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+k2_annotated_BP = GOSummary(BP_2.go)
+k2_annotated_BP$elim = as.numeric(k2_annotated_BP$elim)
+
+View(k2_annotated_BP)
+
+
+k3_geneList = factor(as.integer(allpeaks.genes %in% ap_3_unique_wbid))
+names(k3_geneList) <- allpeaks.genes
+
+BP_3.go = new("topGOdata", ontology='BP'
+, allGenes = k3_geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+k3_annotated_BP = GOSummary(BP_3.go)
+k3_annotated_BP$elim = as.numeric(k3_annotated_BP$elim)
+
+View(k3_annotated_BP)
+
+k4_geneList = factor(as.integer(allpeaks.genes %in% ap_4_unique_wbid))
+names(k4_geneList) <- allpeaks.genes
+
+BP_4.go = new("topGOdata", ontology='BP'
+, allGenes = k4_geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+k4_annotated_BP = GOSummary(BP_4.go)
+k4_annotated_BP$elim = as.numeric(k4_annotated_BP$elim)
+
+View(k4_annotated_BP)

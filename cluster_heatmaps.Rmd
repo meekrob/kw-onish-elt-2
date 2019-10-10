@@ -262,24 +262,33 @@ if (! "paramart" %in% ls()) {
   paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
 if (! "WORMGO" %in% ls()) {
   # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
-  WORMGO=biomaRt::getBM(mart = paramart, filter="species_id_1010", value="elegaprjna13758",
+  WORMGO=biomaRt::getBM(mart = paramart, filter="species_id_1010", value="caelegprjna13758",
        attributes = c( "wbps_gene_id", 
             "external_gene_id", 
             "go_accession", 
             "go_name_1006", 
             "go_linkage_type")) 
 }
-unannotated_genes = WORMGO[WORMGO$go_accession == '',]
-WORMGO = WORMGO[WORMGO$go_accession != '',]
-geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
+
+
 
 
 # All possible genes
 all.genes <- unique(as.character(WORMGO$wbps_gene_id))
-geneList = factor(as.integer(all.genes %in% wbid))
+geneList = factor(as.integer(all.genes %in% ap_wbid))
 names(geneList) = all.genes
 
 BP.go = new("topGOdata", ontology='BP'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+MF.go = new("topGOdata", ontology='MF'
+, allGenes = geneList
+, annot = annFUN.gene2GO
+, gene2GO = geneID2GO)
+
+CC.go = new("topGOdata", ontology='CC'
 , allGenes = geneList
 , annot = annFUN.gene2GO
 , gene2GO = geneID2GO)

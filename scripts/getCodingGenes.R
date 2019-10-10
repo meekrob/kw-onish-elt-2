@@ -54,3 +54,11 @@ round(table(ap$kclust_mapping, ap$insideFeature)/apply(table(ap$kclust_mapping, 
 
 ap.wbid=unlist(strsplit(names(ap), "[.]"))[seq(2,2*length(ap),by=2)]
 unique.ap.wbid = unique(ap.wbid)
+
+# ap broken down by kclust number
+ap_0 = ap[ap$kclust_mapping ==0]
+ap_1 = ap[ap$kclust_mapping ==1]
+ap_2 = ap[ap$kclust_mapping ==2]
+ap_3 = ap[ap$kclust_mapping ==3]
+ap_4 = ap[ap$kclust_mapping ==4]
+
