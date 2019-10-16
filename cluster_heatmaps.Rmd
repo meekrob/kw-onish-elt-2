@@ -239,8 +239,21 @@ clust_4_wbid = unlist(strsplit(names(clust_4_genes), "[.]"))[seq(2,2*length(clus
 unique.clust_4_wbid = unique(clust_4_wbid)
 write.table(sort(unique.clust_4_wbid), file="unique.clust_4_wbid.txt", row.names=F,col.names=F,quote=F)
 
+# upset plot: identify set overlap by assigned value of k
+
 clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
+wbid_rownames = rownames(clustersPerGene)
 # some bool vectors
+wbid_names_k0_bool = clustersPerGene[,'0'] > 0
+wbid_names_k1_bool = clustersPerGene[,'1'] > 0
+wbid_names_k2_bool = clustersPerGene[,'2'] > 0
+wbid_names_k3_bool = clustersPerGene[,'3'] > 0
+wbid_names_k4_bool = clustersPerGene[,'4'] > 0
+
+wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],k1=wbid_rownames[wbid_names_k1_bool],k3=wbid_rownames[wbid_names_k3_bool], k4=wbid_rownames[wbid_names_k4_bool])
+
+
+upset(fromList(wbid_clusters),sets=c("k0","k1","k2","k3","k4"), order.by = "freq", mainbar.y.label = "Geneset intersections", sets.x.label="# of genes in cluster", set_size.show=T,group.by="sets",text.scale=1.5,keep.order = T,query.legend = "top", nintersects=100)
 
 clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
