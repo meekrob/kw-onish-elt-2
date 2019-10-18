@@ -103,8 +103,7 @@ L3s = apply(pobj$kmeans$centers[,5:6],1, mean)#pobj$kmeans$centers[,5:6] #
 #k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
 
 kremap = data.frame( `k`=1:4, `class`=4:1, `class_roman`=c('IV','III','II','I'), label=c('L3_high','Dev_increasing', 'Larval', 'Embryonic'))
-kremap=kremap[order(kremap$class),]
-kremap$factor = factor(kremap$label, kremap$label)
+
 
 trends = cbind(LE=LEs,L1=L1s,L3=L3s)
 trends_ordered = trends[order(LEs,L1s,L3s,decreasing=TRUE),]
@@ -176,7 +175,7 @@ norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
 
 # kmeans cluster assignment
 vec1 = rep(NA, nrow(row_scaled_x))
-vec1[threshold_ix] = kclusters
+vec1[threshold_ix] = reassigned_ks
 kclust_mapping = rep(NA, nrow(df))
 kclust_mapping[! all_nan_rows] = vec1
 
@@ -218,11 +217,9 @@ source('scripts/getCodingGenes.R',echo=T)
 #  ap_3 - annotatedPeaks k3
 #  ap_4 - annotatedPeaks k4
 
- 
-
 # upset plot: identify set overlap by assigned value of k
 if(F) {
-clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
+clustersPerGene = table(ap$feature, annotated_peaks$kclust_mapping)
 wbid_rownames = rownames(clustersPerGene)
 # some bool vectors
 wbid_names_k0_bool = clustersPerGene[,'0'] > 0
