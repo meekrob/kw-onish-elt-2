@@ -196,51 +196,27 @@ colnames(big_df) <- c("#chrom", colnames(big_df)[2:38])
 
 # switch from DF to GRanges object
 peaks = makeGRangesFromDataFrame(big_df, keep.extra.columns = T, starts.in.df.are.0based=T, seqnames.field = '#chrom')
-ce11_info = Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
-seqinfo(peaks) <- ce11_info
-# get gene assignment annotations
-mart = useMart(biomart = "ENSEMBL_MART_ENSEMBL", host="grch37.ensembl.org", path="/biomart/martservice", dataset = "celegans_gene_ensembl")
+seqinfo(peaks) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), 
+                    c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), 
+                    c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
+                    c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
 
-ce_TSS = getAnnotation(mart, featureType = "TSS")
-annotated_peaks = annotatePeakInBatch(peaks,mart, featureType = "TSS", AnnotationData = ce_TSS)
-wbid=unlist(strsplit(names(annotated_peaks), "[.]"))[seq(2,2*length(annotated_peaks),by=2)]
-annotated_peaks$WBID = wbid
-unique.wbid = unique(wbid)
-write.table(sort(unique.wbid), file="unique.wbid.txt", row.names=F,col.names=F,quote=F)
+source('scripts/getCodingGenes.R',echo=T)
+# Defines:
+#  all_CDS_genes - GRanges object of all CDS genes, non-MT
+#  ap - annotatedPeaks
+#  ap.wbid - only the WB IDs 
+#  unique.wbid - unique WB IDs
+#  ap_0 - annotatedPeaks k0
+#  ap_1 - annotatedPeaks k1
+#  ap_2 - annotatedPeaks k2
+#  ap_3 - annotatedPeaks k3
+#  ap_4 - annotatedPeaks k4
 
-# genes per cluster
-peaks_k0 = peaks[peaks$kclust_mapping == 0,]
-clust_0_genes = annotatePeakInBatch(peaks_k0, mart, featureType = "TSS", AnnotationData = ce_TSS)
-clust_0_wbid = unlist(strsplit(names(clust_0_genes), "[.]"))[seq(2,2*length(clust_0_genes),by=2)]
-unique.clust_0_wbid = unique(clust_0_wbid)
-write.table(sort(unique.clust_0_wbid), file="unique.clust_0_wbid.txt", row.names=F,col.names=F,quote=F)
-
-peaks_k1 = peaks[peaks$kclust_mapping == 1,]
-clust_1_genes = annotatePeakInBatch(peaks_k1, mart, featureType = "TSS", AnnotationData = ce_TSS)
-clust_1_wbid = unlist(strsplit(names(clust_1_genes), "[.]"))[seq(2,2*length(clust_1_genes),by=2)]
-unique.clust_1_wbid = unique(clust_1_wbid)
-write.table(sort(unique.clust_1_wbid), file="unique.clust_1_wbid.txt", row.names=F,col.names=F,quote=F)
-
-peaks_k2 = peaks[peaks$kclust_mapping == 2,]
-clust_2_genes = annotatePeakInBatch(peaks_k2, mart, featureType = "TSS", AnnotationData = ce_TSS)
-clust_2_wbid = unlist(strsplit(names(clust_2_genes), "[.]"))[seq(2,2*length(clust_2_genes),by=2)]
-unique.clust_2_wbid = unique(clust_2_wbid)
-write.table(sort(unique.clust_2_wbid), file="unique.clust_2_wbid.txt", row.names=F,col.names=F,quote=F)
-
-peaks_k3 = peaks[peaks$kclust_mapping == 3,]
-clust_3_genes = annotatePeakInBatch(peaks_k3, mart, featureType = "TSS", AnnotationData = ce_TSS)
-clust_3_wbid = unlist(strsplit(names(clust_3_genes), "[.]"))[seq(2,2*length(clust_3_genes),by=2)]
-unique.clust_3_wbid = unique(clust_3_wbid)
-write.table(sort(unique.clust_3_wbid), file="unique.clust_3_wbid.txt", row.names=F,col.names=F,quote=F)
-
-peaks_k4 = peaks[peaks$kclust_mapping == 4,]
-clust_4_genes = annotatePeakInBatch(peaks_k4, mart, featureType = "TSS", AnnotationData = ce_TSS)
-clust_4_wbid = unlist(strsplit(names(clust_4_genes), "[.]"))[seq(2,2*length(clust_4_genes),by=2)]
-unique.clust_4_wbid = unique(clust_4_wbid)
-write.table(sort(unique.clust_4_wbid), file="unique.clust_4_wbid.txt", row.names=F,col.names=F,quote=F)
+ 
 
 # upset plot: identify set overlap by assigned value of k
-
+if(F) {
 clustersPerGene = table(annotated_peaks$WBID, annotated_peaks$kclust_mapping)
 wbid_rownames = rownames(clustersPerGene)
 # some bool vectors
@@ -267,6 +243,7 @@ clustersPerGene_canberra = dist(clustersPerGene, method = "can")
 clustersPerGene_canberra_hclust = hclust(clustersPerGene_canberra)
 clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3],clustersPerGene[,4],clustersPerGene[,5])
 #plot(clustersPerGene_canberra_hclust, labels=clust_labels,cex=.33)
+}
 ```
 
 ``` {r GO term analysis}
