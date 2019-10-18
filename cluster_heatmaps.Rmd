@@ -98,14 +98,17 @@ LEs = apply(pobj$kmeans$centers[,1:2],1, mean)#pobj$kmeans$centers[,1:2]
 L1s = apply(pobj$kmeans$centers[,3:4],1, mean)#pobj$kmeans$centers[,3:4] # 
 L3s = apply(pobj$kmeans$centers[,5:6],1, mean)#pobj$kmeans$centers[,5:6] # 
 
-sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
-trend_labels = c("LE_specific", "L3_specific", "Dev_increasing",  "Post_embryonic")
-k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
+#sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
+#trend_labels = c("LE_specific", "Post_embryonic", "Dev_increasing",  "L3_specific")
+#k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
+
+kremap = data.frame( `k`=1:4, `class`=4:1, `class_roman`=c('IV','III','II','I'), label=c('L3_high','Dev_increasing', 'Larval', 'Embryonic'))
+kremap=kremap[order(kremap$class),]
+kremap$factor = factor(kremap$label, kremap$label)
 
 trends = cbind(LE=LEs,L1=L1s,L3=L3s)
 trends_ordered = trends[order(LEs,L1s,L3s,decreasing=TRUE),]
 rownames(trends_ordered) <- c("LE-specific", "L3-specific", "Increasing",  "Post embryonic")
-
 
 trends_ordered_long = melt(trends_ordered)
 colnames(trends_ordered_long) <- c("description", "stage", "center")
@@ -114,28 +117,30 @@ label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(exclu
 print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
 
 ## apply the new numbering to the data
-reassigned_ks = rep(0,length(kclusters))
+reassigned_ks = kclusters
 for (i in 1:4) {
-  reassigned_ks[ kclusters == i] = k_remapping[i,2]
+ reassigned_ks = replace( reassigned_ks, kclusters == i, kremap[i, 'class'])
 }
+
 
 
 # prepare non-normalized output
 # df colnames differ from manual ones on line 44
 included_set = df[threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
-split_non_normalized=split(included_set, kclusters)
-sorted_k_remapping = k_remapping[order(k_remapping[[1]]),]
+included_set$class = reassigned_ks
+split_non_normalized=split(included_set, included_set$class)
 
 
-# Have the cluster numbers mean the same thing every time
-for (k_i in names(split_non_normalized)) { 
-  k_subset = split_non_normalized[[k_i]]
-  trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
-  kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
-  print(kcluster_filename)
-  write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
-}
-korder = order(reassigned_ks, decreasing=T)
+
+# Write a file for each class
+# for (k_i in names(split_non_normalized)) { 
+#   k_subset = split_non_normalized[[k_i]]
+#   trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
+#   kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
+#   print(kcluster_filename)
+#   write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
+# }
+korder = order(reassigned_ks, decreasing=F)
 
 # colorMap, needed to state explictly to agree with Deeptools plots
 color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
