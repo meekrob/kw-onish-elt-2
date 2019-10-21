@@ -218,8 +218,8 @@ source('scripts/getCodingGenes.R',echo=T)
 #  ap_4 - annotatedPeaks k4
 
 # upset plot: identify set overlap by assigned value of k
-if(F) {
-clustersPerGene = table(ap$feature, annotated_peaks$kclust_mapping)
+
+clustersPerGene = table(ap$feature, ap$kclust_mapping)
 wbid_rownames = rownames(clustersPerGene)
 # some bool vectors
 wbid_names_k0_bool = clustersPerGene[,'0'] > 0
@@ -238,6 +238,7 @@ wbid_clusters_fromlist = fromList(wbid_clusters)
 
 upset(wbid_clusters_fromlist, sets=rev(c("k1", "k2", "k3", "k4","k0")), mainbar.y.label = "Geneset intersections", sets.x.label="# of genes in cluster", set_size.show=T,group.by="degree",text.scale=1.5,keep.order = T,query.legend = "top", nintersects=100, order.by = "degree", decreasing=F)
 
+if(F) {
 clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
 sum(multiple_peaks) # 1740
