@@ -218,8 +218,7 @@ source('scripts/getCodingGenes.R',echo=T)
 #  ap_4 - annotatedPeaks k4
 
 # upset plot: identify set overlap by assigned value of k
-if(F) {
-clustersPerGene = table(ap$feature, annotated_peaks$kclust_mapping)
+clustersPerGene = table(ap$feature, ap$kclust_mapping)
 wbid_rownames = rownames(clustersPerGene)
 # some bool vectors
 wbid_names_k0_bool = clustersPerGene[,'0'] > 0
@@ -237,20 +236,16 @@ wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],
 wbid_clusters_fromlist = fromList(wbid_clusters)
 
 upset(wbid_clusters_fromlist, sets=rev(c("k1", "k2", "k3", "k4","k0")), mainbar.y.label = "Geneset intersections", sets.x.label="# of genes in cluster", set_size.show=T,group.by="degree",text.scale=1.5,keep.order = T,query.legend = "top", nintersects=100, order.by = "degree", decreasing=F)
-
+# breakdown of genes with multiple peaks
 clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
-sum(multiple_peaks) # 1740
-rowMaxes = function(x) apply(x, 1, max)
-clustersPerGene_rowMaxes = rowMaxes(clustersPerGene)
-multiple_clusters = multiple_peaks & clustersPerGene_rowMaxes != clustersPerGene_rowSums
-sum(multiple_clusters) # 1177
+sum(multiple_peaks) # 2158
+breakdown=table(clustersPerGene_rowSums)
+barplot(table(clustersPerGene_rowSums), xlab="number of peaks mapped to a gene", ylab="number of genes", main="Genes tend to have a single peak mapped to them")
+i=1; y=breakdown[i]; text(bp[i,1],y - strheight(y,srt=90)*1.9,srt=90, labels = y)
+for (i in 2:10) { y=breakdown[i]; text(bp[i,1],y + strheight(y,srt=90)*1.66,srt=90, labels = y) }
 
-clustersPerGene_canberra = dist(clustersPerGene, method = "can")
-clustersPerGene_canberra_hclust = hclust(clustersPerGene_canberra)
-clust_labels = paste0(clustersPerGene[,1],clustersPerGene[,2],clustersPerGene[,3],clustersPerGene[,4],clustersPerGene[,5])
-#plot(clustersPerGene_canberra_hclust, labels=clust_labels,cex=.33)
-}
+# see previous commits for attempts to characterize the cluster patterns
 ```
 
 ``` {r GO term analysis}
