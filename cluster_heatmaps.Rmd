@@ -236,6 +236,7 @@ wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],
 wbid_clusters_fromlist = fromList(wbid_clusters)
 
 upset(wbid_clusters_fromlist, sets=rev(c("k1", "k2", "k3", "k4","k0")), mainbar.y.label = "Geneset intersections", sets.x.label="# of genes in cluster", set_size.show=T,group.by="degree",text.scale=1.5,keep.order = T,query.legend = "top", nintersects=100, order.by = "degree", decreasing=F)
+
 # breakdown of genes with multiple peaks
 clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
