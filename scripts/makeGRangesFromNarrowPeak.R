@@ -10,11 +10,11 @@ makeGRangesFromNarrowPeak <- function(filename) {
         col.names=c('chrom', 
                  'comprehensive_start', 
                  'comprehensive_end',   
-                 'strand', 'score', 'name',  
+                 'name', 'score', 'strand',  
                  'signal', 'skip1', 'skip2', 
                  'overall_summit_off', 
-                 'minus_log_q',     
                  'minus_log_p',     
+                 'minus_log_q',     
                  'peak_1_start',    
                  'peak_1_end',      
                  'peak_1_signal',   
@@ -28,6 +28,7 @@ makeGRangesFromNarrowPeak <- function(filename) {
     narrowPeak_df$skip1 = NULL;
     narrowPeak_df$skip2 = NULL;
     narrowPeak_df$strand = NULL;
+    narrowPeak_df$name = NULL;
 
     narrowPeak_gr = makeGRangesFromDataFrame(narrowPeak_df, starts.in.df.are.0based=T, 
                                                 keep.extra.columns=T, 
