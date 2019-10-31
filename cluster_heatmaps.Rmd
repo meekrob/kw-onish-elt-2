@@ -42,6 +42,14 @@ library(topGO)
 ## Process data
 ```{r get-data}
 getwd()
+
+# actual IDR results
+source('scripts/makeGRangesFromNarrowPeak.R')
+L1_IDR.np = makeGRangesFromNarrowPeak('L1_1_L1_2.IDR_0.05.narrowPeak')
+LE_IDR.np = makeGRangesFromNarrowPeak('LE_1_LE_2.IDR_0.05.narrowPeak')
+L3_IDR.np = makeGRangesFromNarrowPeak('L3_1_L3_2.IDR_0.05.narrowPeak')
+
+
 pth="allStagesUNION.IDR_0.05.sorted.bed_s.df"
 df = read.table(pth, header=T, sep="\t")
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
