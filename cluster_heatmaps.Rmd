@@ -24,7 +24,7 @@ git log -n 1
 git status -s
 ```
 
-## R version, libraries
+## R version, libraries and scripts
 ```{r import}
 R.version
 library(pheatmap)
@@ -37,23 +37,32 @@ library(GenomicRanges)
 library(biomaRt)
 library(ChIPpeakAnno)
 library(topGO)
+
+source('scripts/makeGRangesFromNarrowPeak.R')
 ```
 
 ## Process data
 ```{r get-data}
 getwd()
-
 # actual IDR results
-source('scripts/makeGRangesFromNarrowPeak.R')
-L1_IDR.np = makeGRangesFromNarrowPeak('L1_1_L1_2.IDR_0.05.narrowPeak')
-LE_IDR.np = makeGRangesFromNarrowPeak('LE_1_LE_2.IDR_0.05.narrowPeak')
-L3_IDR.np = makeGRangesFromNarrowPeak('L3_1_L3_2.IDR_0.05.narrowPeak')
+L1_IDR = makeGRangesFromNarrowPeak('L1_1_L1_2.IDR_0.05.narrowPeak')
+LE_IDR = makeGRangesFromNarrowPeak('LE_1_LE_2.IDR_0.05.narrowPeak')
+L3_IDR = makeGRangesFromNarrowPeak('L3_1_L3_2.IDR_0.05.narrowPeak')
+# merged results that have the peak maxes assigned via my modification of javaGenomicsToolkit
+df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
+# need a GRanges object here 
+dfG = makeGRangesFromDataFrame(df, keep.extra.columns = T, ignore.strand = T, starts.in.df.are.0based = T)
 
+#### Re map stage-specific peaks onto the big dataframe
+LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, "within")
+L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, "within")
+L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, "within")
+####
 
-pth="allStagesUNION.IDR_0.05.sorted.bed_s.df"
-df = read.table(pth, header=T, sep="\t")
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
 df_max = df[,all_max_col_ix]
+
+# check to see if this is still necessary
 all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))})
 df_max = df_max[!all_nan_rows,]
 df_max[is.na(df_max)] <- 0
@@ -84,6 +93,10 @@ threshold_x = row_scaled_x[ threshold_ix,]
 
 # df colnames differ from manual ones on line 44
 excluded_set = df[! threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
+
+# "excluded" means "constant during development", and needs an additional constraint of having IDR at all points
+# the peakfiles retain the component peaks from replicates, but the comprehensive range is used
+
 excluded_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_0.bedlike", sep="")
 
 # add the comment char to the first column
