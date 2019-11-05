@@ -69,14 +69,13 @@ dfG$L3_IDR[ to(L3_verify) ] <- T
 ####
 
 
-
+# dataframe
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
 df_max = df[,all_max_col_ix]
+# GRanges with IDR cols
+dfG_max_ix = which(! is.na(str_match(colnames(mcols(dfG)),"max")))
+dfG_max = dfG[,c(dfG_max_ix,26:28)]
 
-# check to see if this is still necessary
-all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))})
-df_max = df_max[!all_nan_rows,]
-df_max[is.na(df_max)] <- 0
 colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input", "max_log_L1_2_minus_log_L1_input", "max_log_L3_1_minus_log_L3_input", "max_log_L3_2_minus_log_L3_input", "max_log_LE_1_minus_log_LE_input",  "max_log_LE_2_minus_log_LE_input")
 colnames_in_stage_order = colnames(df_max)[c(5,6,1:4)]
 position_columns = c("chrom","chromStart","chromEnd","ID")
