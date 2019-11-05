@@ -53,11 +53,22 @@ df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
 # need a GRanges object here 
 dfG = makeGRangesFromDataFrame(df, keep.extra.columns = T, ignore.strand = T, starts.in.df.are.0based = T)
 
-#### Re map stage-specific peaks onto the big dataframe
-LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="within")
-L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, type="within")
-L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="within")
+#### Re-map stage-specific peaks onto the big dataframe
+dfG$LE_IDR = rep(FALSE, length(dfG))
+dfG$L1_IDR = rep(FALSE, length(dfG))
+dfG$L3_IDR = rep(FALSE, length(dfG))
+
+LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="any")
+L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, type="any")
+L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="any")
+
+dfG$LE_IDR[ to(LE_verify) ] <- T
+dfG$L1_IDR[ to(L1_verify) ] <- T
+dfG$L3_IDR[ to(L3_verify) ] <- T
+
 ####
+
+
 
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
 df_max = df[,all_max_col_ix]
