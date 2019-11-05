@@ -8,7 +8,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(root.dir='~/work/onish_ChIP_R_Analysis')
+#knitr::opts_chunk$set(root.dir='~/work/onish_ChIP_R_Analysis')
 knitr::include_graphics
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 if(!requireNamespace("ggExtra")) {
@@ -18,7 +18,7 @@ if(!requireNamespace("ggExtra")) {
 
 ## Script version
 ```{bash version, echo=FALSE}
-cd ~/work/onish_ChIP_R_Analysis
+#cd ~/work/
 git remote -v
 git log -n 1
 git status -s
@@ -54,9 +54,9 @@ df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
 dfG = makeGRangesFromDataFrame(df, keep.extra.columns = T, ignore.strand = T, starts.in.df.are.0based = T)
 
 #### Re map stage-specific peaks onto the big dataframe
-LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, "within")
-L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, "within")
-L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, "within")
+LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="within")
+L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, type="within")
+L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="within")
 ####
 
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
