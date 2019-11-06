@@ -113,7 +113,7 @@ include_ix = ! exclude_ix
 include_x = row_scaled_x[ include_ix,]
 
 # df colnames differ from manual ones on line 44
-excluded_set = df[excluded_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
+excluded_set = df[exclude_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
 #excluded_filename = paste("allStagesUNION_max_0.bedlike", sep="")
 
 # add the comment char to the first column
