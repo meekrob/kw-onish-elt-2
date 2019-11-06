@@ -106,6 +106,8 @@ excluded_set = df[! threshold_ix,c(position_columns, str_c(colnames_in_stage_ord
 
 # "excluded" means "constant during development", and needs an additional constraint of having IDR at all points
 # the peakfiles retain the component peaks from replicates, but the comprehensive range is used
+called_in_all = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR
+threshold_ix_idr = threshold_ix & called_in_all
 
 excluded_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_0.bedlike", sep="")
 
