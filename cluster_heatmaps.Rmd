@@ -105,7 +105,7 @@ threshold_x = row_scaled_x[ threshold_ix,]
 # the peakfiles retain the component peaks from replicates, but the comprehensive range is used
 called_in_all = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR
 threshold_ix_idr = !threshold_ix & called_in_all
-two_of_three_idr = (dfG$LE_IDR & dfG$L1_IDR) | (dfG$LE_IDR & dfG&L3_IDR) | (dfG&L1_IDR & dfG$L3_IDR)
+two_of_three_idr = (dfG$LE_IDR & dfG$L1_IDR) | (dfG$LE_IDR & dfG$L3_IDR) | (dfG$L1_IDR & dfG$L3_IDR)
 called_in_two_or_three_not_changing = dfG[! threshold_ix & two_of_three_idr]
 exclude_ix = ! threshold_ix & called_in_all
 include_ix = ! exclude_ix
