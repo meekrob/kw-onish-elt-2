@@ -101,27 +101,31 @@ threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
 threshold_ix = peaks_sd > threshold_q
 threshold_x = row_scaled_x[ threshold_ix,]
 
-# df colnames differ from manual ones on line 44
-excluded_set = df[! threshold_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
-
 # "excluded" means "constant during development", and needs an additional constraint of having IDR at all points
 # the peakfiles retain the component peaks from replicates, but the comprehensive range is used
 called_in_all = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR
-threshold_ix_idr = threshold_ix & called_in_all
+threshold_ix_idr = !threshold_ix & called_in_all
+two_of_three_idr = (dfG$LE_IDR & dfG$L1_IDR) | (dfG$LE_IDR & dfG&L3_IDR) | (dfG&L1_IDR & dfG$L3_IDR)
+called_in_two_or_three_not_changing = dfG[! threshold_ix & two_of_three_idr]
+exclude_ix = ! threshold_ix & called_in_all
+include_ix = ! exclude_ix
 
-excluded_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_0.bedlike", sep="")
+include_x = row_scaled_x[ include_ix,]
+
+# df colnames differ from manual ones on line 44
+excluded_set = df[excluded_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
+#excluded_filename = paste("allStagesUNION_max_0.bedlike", sep="")
 
 # add the comment char to the first column
-colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
+#colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
 # write data file of excluded regions
 # write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
-
-print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
+#print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
 
 nclust=4
 set.seed(31415)
 label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-pobj = pheatmap(threshold_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
+pobj = pheatmap(include_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
 kclusters = pobj$kmeans$cluster
 
 
