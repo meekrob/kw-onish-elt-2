@@ -5,6 +5,15 @@ length(argument_ids)
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
+if (!requireNamespace("ensembldb", quietly = TRUE)) {
+    BiocManager::install("ensembldb")
+}
+library(ensembldb)
+
+if (!requireNamespace("biomaRt", quietly = TRUE)) {
+    BiocManager::install("biomaRt")
+}
+library(biomaRt)
 if (!requireNamespace("topGO", quietly = TRUE)) {
     BiocManager::install("topGO")
 }
