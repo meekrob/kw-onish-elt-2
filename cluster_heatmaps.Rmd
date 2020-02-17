@@ -2,8 +2,9 @@
 title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
 date: "Spring 2019"
-output: html_document
-
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -307,12 +308,13 @@ if (! "WORMGO" %in% ls()) {
             "go_linkage_type")) 
 }
 
-
+# create an object where you can access all the GO terms that are assigned to a specific gene
+geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
 
 
 # All possible genes
 all.genes <- unique(as.character(WORMGO$wbps_gene_id))
-geneList = factor(as.integer(all.genes %in% ap_wbid))
+geneList = factor(as.integer(all.genes %in% ap.wbid))
 names(geneList) = all.genes
 
 BP.go = new("topGOdata", ontology='BP'
@@ -366,9 +368,11 @@ GOSummary<- function(GOdata) {
 # CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
 
 # Sub clusters vs all peaks
+
 #0
-geneList = factor(as.integer(wbid %in% unique.clust_0_wbid))
-names(geneList) = wbid
+unique.clust_0_wbid = unique(ap_0$feature);
+geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_0_wbid))
+names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
 , annot = annFUN.gene2GO
@@ -379,8 +383,9 @@ BP.go = new("topGOdata", ontology='BP'
 K0_allBPRes = GOSummary(BP.go)
 
 #1
-geneList = factor(as.integer(wbid %in% unique.clust_1_wbid))
-names(geneList) = wbid
+unique.clust_1_wbid = unique(ap_1$feature);
+geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_1_wbid))
+names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
 , annot = annFUN.gene2GO
@@ -392,8 +397,9 @@ BP.go = new("topGOdata", ontology='BP'
 K1_allBPRes = GOSummary(BP.go)
 
 #2
-geneList = factor(as.integer(wbid %in% unique.clust_2_wbid))
-names(geneList) = wbid
+unique.clust_2_wbid = unique(ap_2$feature);
+geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_2_wbid))
+names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
 , annot = annFUN.gene2GO
@@ -405,8 +411,9 @@ BP.go = new("topGOdata", ontology='BP'
 K2_allBPRes = GOSummary(BP.go)
 
 #3
-geneList = factor(as.integer(wbid %in% unique.clust_3_wbid))
-names(geneList) = wbid
+unique.clust_3_wbid = unique(ap_3$feature);
+geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_3_wbid))
+names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
 , annot = annFUN.gene2GO
@@ -418,8 +425,9 @@ BP.go = new("topGOdata", ontology='BP'
 K3_allBPRes = GOSummary(BP.go)
 
 #4
-geneList = factor(as.integer(wbid %in% unique.clust_4_wbid))
-names(geneList) = wbid
+unique.clust_4_wbid = unique(ap_4$feature);
+geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_4_wbid))
+names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
 , annot = annFUN.gene2GO
