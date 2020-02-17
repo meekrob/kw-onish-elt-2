@@ -207,6 +207,8 @@ pheatmap(combined_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_
 # cluster assignment
 
 # normalized data
+all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))}); # this vector is now all FALSE, but needed
+                                                                    # for downstream formulas
 norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
 norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
 norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
@@ -274,6 +276,7 @@ wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],
                     k3=wbid_rownames[wbid_names_k3_bool], 
                     k4=wbid_rownames[wbid_names_k4_bool])
 
+library(UpSetR);
 wbid_clusters_fromlist = fromList(wbid_clusters)
 
 upset(wbid_clusters_fromlist, sets=rev(c("k1", "k2", "k3", "k4","k0")), mainbar.y.label = "Geneset intersections", sets.x.label="# of genes in cluster", set_size.show=T,group.by="degree",text.scale=1.5,keep.order = T,query.legend = "top", nintersects=100, order.by = "degree", decreasing=F)
@@ -283,7 +286,7 @@ clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
 sum(multiple_peaks) # 2158
 breakdown=table(clustersPerGene_rowSums)
-barplot(table(clustersPerGene_rowSums), xlab="number of peaks mapped to a gene", ylab="number of genes", main="Genes tend to have a single peak mapped to them")
+bp=barplot(table(clustersPerGene_rowSums), xlab="number of peaks mapped to a gene", ylab="number of genes", main="Genes tend to have a single peak mapped to them")
 i=1; y=breakdown[i]; text(bp[i,1],y - strheight(y,srt=90)*1.9,srt=90, labels = y)
 for (i in 2:10) { y=breakdown[i]; text(bp[i,1],y + strheight(y,srt=90)*1.66,srt=90, labels = y) }
 
