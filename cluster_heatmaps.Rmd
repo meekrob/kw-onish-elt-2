@@ -291,6 +291,13 @@ bp=barplot(table(clustersPerGene_rowSums), xlab="number of peaks mapped to a gen
 i=1; y=breakdown[i]; text(bp[i,1],y - strheight(y,srt=90)*1.9,srt=90, labels = y)
 for (i in 2:10) { y=breakdown[i]; text(bp[i,1],y + strheight(y,srt=90)*1.66,srt=90, labels = y) }
 
+# to create this plot in a separate file:
+if (FALSE)
+{
+  pdf(file="fig1.pdf")
+  print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
+  dev.off()
+}
 # see previous commits for attempts to characterize the cluster patterns
 ```
 
