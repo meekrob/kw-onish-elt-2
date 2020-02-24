@@ -7,8 +7,9 @@ k=c(0.7738, 0.750221, 0.913165, 0.756966, 0.667626, 0.648481, 0.638949, 0.823581
 kmx = matrix(1, 9,9)
 kmx[upper.tri(kmx, diag = F)] <- k
 kmx = kmx * t(kmx) # use the identity in the lower triangle to reflect the upper triangle
-rcnames=str_split("LE_input.bw LE_1.bw LE_2.bw L1_input.bw L1_1.bw L1_2.bw L3_input.bw L3_1.bw L3_2.bw", ' ')[[1]]
+#rcnames=str_split("LE_input.bw LE_1.bw LE_2.bw L1_input.bw L1_1.bw L1_2.bw L3_input.bw L3_1.bw L3_2.bw", ' ')[[1]]
+rcnames=c("LE (input)","LE (rep. 1)","LE (rep. 2)","L1 (input)", "L1 (rep. 1)", "L1 (rep. 2)","L3 (input)","L3 (rep. 1)", "L3 (rep. 2)")
 rownames(kmx)<-rcnames
 colnames(kmx)<-rcnames
-pheatmap(kmx)
+pheatmap(kmx,main="modENCODE")
 ###### END R SCRIPT #######
