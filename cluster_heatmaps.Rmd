@@ -66,8 +66,7 @@ L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="any")
 dfG$LE_IDR[ to(LE_verify) ] <- T
 dfG$L1_IDR[ to(L1_verify) ] <- T
 dfG$L3_IDR[ to(L3_verify) ] <- T
-
-####
+#### heh eh ehhe e
 
 
 # dataframe
@@ -249,6 +248,10 @@ seqinfo(peaks) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'),
                     c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
                     c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
 
+# retain IDR calls by stage
+peaks$LE_IDR = dfG$LE_IDR
+peaks$L1_IDR = dfG$L1_IDR
+peaks$L3_IDR = dfG$L3_IDR
 source('scripts/getCodingGenes.R',echo=T)
 # Defines:
 #  all_CDS_genes - GRanges object of all CDS genes, non-MT
