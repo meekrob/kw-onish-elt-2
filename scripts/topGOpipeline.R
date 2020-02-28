@@ -66,7 +66,7 @@ GOSummary<- function(GOdata) {
 
 BP.go = new("topGOdata", ontology='BP'
 , allGenes = geneList
-, annot = annFUN.gene2GO
+, annot = annFUN.gene2GO # YES!
 , gene2GO = geneID2GO)
 
 MF.go = new("topGOdata", ontology='MF'
