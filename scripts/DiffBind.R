@@ -66,7 +66,7 @@ counts_3$Called_L3 = counts_3$Called2
 counts_3$Called2 = NULL
 
 larval_1_factor_3 = counts_3$Conc_Larval_3 - normed_3$Conc_Larval_3
-larval_3_factor_3 = counts_3$Conc_Larval_3 - normed_3$Conc_Larval_3
+larval_3_factor_3 = counts_3$Conc_Larval_3 - normed_3$Conc_Larval_3 # 69
 
 # take the means of the pairwise normalization factors
 embryo_factor = mean(c(embryo_factor_1, embryo_factor_2))
