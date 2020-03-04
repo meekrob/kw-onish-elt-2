@@ -94,7 +94,7 @@ colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
 
 THRESHOLD = .05
-
+THRESHOLD = .01
 # make the text conversions consistent
 TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
 threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
@@ -111,16 +111,6 @@ exclude_ix = ! threshold_ix & called_in_all
 include_ix = ! exclude_ix
 
 include_x = row_scaled_x[ include_ix,]
-
-# df colnames differ from manual ones on line 44
-excluded_set = df[exclude_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
-#excluded_filename = paste("allStagesUNION_max_0.bedlike", sep="")
-
-# add the comment char to the first column
-#colnames(excluded_set) <- c("#chrom", colnames(excluded_set)[2:ncol(excluded_set)])
-# write data file of excluded regions
-# write.table(excluded_set, excluded_filename, quote=F, sep="\t", row.names=F)
-#print(paste("clustering with threshold", TXT_THRESHOLD, sep=" "))
 
 nclust=4
 set.seed(31415)
@@ -153,7 +143,7 @@ trends_ordered_long = melt(trends_ordered)
 colnames(trends_ordered_long) <- c("description", "stage", "center")
 
 label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
+print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))
 
 ## apply the new numbering to the data
 reassigned_ks = kclusters
