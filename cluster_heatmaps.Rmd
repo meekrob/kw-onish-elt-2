@@ -101,6 +101,13 @@ threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
 threshold_ix = peaks_sd > threshold_q
 threshold_x = row_scaled_x[ threshold_ix,]
 
+# steady class
+steady_set_means = colMeans(row_scaled_x[ !threshold_ix, ])
+steady_set_means = cbind(steady_set_means[1:2],steady_set_means[3:4],steady_set_means[5:6])
+colnames(steady_set_means) <- c('LE','L1','L3')
+rownames(steady_set_means) <- c('rep1','rep2')
+steady_set_means = colMeans(steady_set_means)
+
 # "excluded" means "constant during development", and needs an additional constraint of having IDR at all points
 # the peakfiles retain the component peaks from replicates, but the comprehensive range is used
 called_in_all = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR
@@ -119,10 +126,12 @@ pobj = pheatmap(include_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main
 kclusters = pobj$kmeans$cluster
 
 ### reorganize based on 4 meaningful trends
-LEs = apply(pobj$kmeans$centers[,1:2],1, mean)#pobj$kmeans$centers[,1:2] 
-L1s = apply(pobj$kmeans$centers[,3:4],1, mean)#pobj$kmeans$centers[,3:4] # 
-L3s = apply(pobj$kmeans$centers[,5:6],1, mean)#pobj$kmeans$centers[,5:6] # 
-
+LEs = c( steady_set_means['LE'], apply(pobj$kmeans$centers[,1:2],1, mean)) #pobj$kmeans$centers[,1:2] 
+L1s = c( steady_set_means['L1'], apply(pobj$kmeans$centers[,3:4],1, mean)) #pobj$kmeans$centers[,3:4] # 
+L3s = c( steady_set_means['L3'], apply(pobj$kmeans$centers[,5:6],1, mean)) #pobj$kmeans$centers[,5:6] # 
+names(LEs) <- 0:4
+names(L1s) <- 0:4
+names(L3s) <- 0:4
 #sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
 #trend_labels = c("LE_specific", "Post_embryonic", "Dev_increasing",  "L3_specific")
 #k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
@@ -136,14 +145,27 @@ kremap = data.frame( `k`= 1:4,
 
 
 trends = cbind(LE=LEs,L1=L1s,L3=L3s)
-trends_ordered = trends[order(L3s),]
-rownames(trends_ordered) <- c("LE-specific", "Post embryonic", "Increasing", "L3-specific"  )
+# try using the slope of the dev-trends as a consistent way to order the LE,L1,L3 patterns
+slopes = c( 
+  lm(trends[1,] ~ k)$coef[2],
+  lm(trends[2,] ~ k)$coef[2],
+  lm(trends[3,] ~ k)$coef[2],
+  lm(trends[4,] ~ k)$coef[2],
+  lm(trends[5,] ~ k)$coef[2] )
+trends_ordered = trends[order(slopes),]
+
+# make a trend signature '+--' for LE-specific, etc.
+plus_minus_symbols = as.data.frame(ifelse(trends > 0, '+', '-'))
+trend_symbols = do.call(paste, c(plus_minus_symbols, sep=''))
+# Sorting on the trend line seems to consistently yield the following order
+rownames(trends_ordered) <- c("LE-specific", "Not changing", "Post embryonic", "L3-high","Increasing")
 
 trends_ordered_long = melt(trends_ordered)
 colnames(trends_ordered_long) <- c("description", "stage", "center")
 
 label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))
+figure_colors = scale_colour_manual(values=c("#7570B3","#666666","#1B9E77","#D95F02","#E7298A"))
+print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage") + figure_colors)
 
 ## apply the new numbering to the data
 reassigned_ks = kclusters
