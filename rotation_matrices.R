@@ -63,3 +63,11 @@ ring = function(offset, thickness, startTheta, endTheta, n=10) {
   outerPoints = getArcSeries(offset+thickness, endTheta,startTheta,n); # in reverse order
   return(rbind(innerPoints,outerPoints));
 }
+
+radToDegrees = function(radians) {
+  return((180*radians/pi ) %% 360)
+}
+
+degreesToRadians = function(degrees) {
+   return(((degrees %% 360)/360) * (2*pi))
+}
