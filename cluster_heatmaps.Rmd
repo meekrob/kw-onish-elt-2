@@ -94,7 +94,7 @@ colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
 
 THRESHOLD = .05
-THRESHOLD = .01
+
 # make the text conversions consistent
 TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
 threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
@@ -118,12 +118,53 @@ exclude_ix = ! threshold_ix & called_in_all
 include_ix = ! exclude_ix
 
 include_x = row_scaled_x[ include_ix,]
+# go back to the THRESHOLD set to clean up the clustering
+include_x = threshold_x
+# average replicates 
+data3d = data.frame( LE=rowMeans(include_x[,c(1,2)]),
+                     L1=rowMeans(include_x[,c(3,4)]),
+                     L3=rowMeans(include_x[,c(5,6)]))
+
+
+
 
 nclust=4
 set.seed(31415)
 label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
 pobj = pheatmap(include_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
 kclusters = pobj$kmeans$cluster
+
+
+### compare cluster assignments of 6D data versus 3D data
+# this table will allow you to translate the assigned cluster number
+# to a rank that reflects the number of data points in each cluster.
+# The rank is comparable across different runs, different data varieties 
+# of this dataset, as long as the compared datasets are of the same row number:
+# e.g.: kclusters based on LE,L1,L3 matrix versus [LE,L1,L3]*[replicates]
+# or different seeds of the same run
+build_trans_table <-function(knumbers) { 
+  count = table(knumbers); 
+  count = sort(count); 
+  k = as.numeric(names(count)); 
+  rank=length(k):1; 
+  trans=cbind(k,rank,count); 
+  trans = trans[order(k),]; 
+  return(trans);
+}
+translator <- function(x, translate) 
+{ 
+  td = translate[x,2]; names(td) <- NULL; return(td);
+}
+
+k4data3d = kmeans(data3d,4)
+k_3d_k4 = k4data3d$cluster
+k_6d_k4 = kclusters
+
+t3d = build_trans_table(k_3d_k4)
+t6d = build_trans_table(k_6d_k4)
+cor( translator(k_3d_k4,t3d), translator(k_6d_k4,t6d))
+stopifnot(cor( translator(k_3d_k4,t3d), translator(k_6d_k4,t6d)) > .99) 
+########## correlation between cluster assigments must be at least this high or the script will stop ####
 
 ### reorganize based on 4 meaningful trends
 LEs = c( steady_set_means['LE'], apply(pobj$kmeans$centers[,1:2],1, mean)) #pobj$kmeans$centers[,1:2] 
