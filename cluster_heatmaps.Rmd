@@ -81,7 +81,15 @@ colnames_in_stage_order = colnames(df_max)[c(5,6,1:4)]
 position_columns = c("chrom","chromStart","chromEnd","ID")
 # make numeric, with 
 data = as.matrix(df_max[,colnames_in_stage_order])
-# perform normalization
+data3d = data.frame( LE=rowMeans(data[,c(1,2)]),
+                     L1=rowMeans(data[,c(3,4)]),
+                     L3=rowMeans(data[,c(5,6)]))
+# perform normalization on 3d
+peaks3d_sd = apply(data3d, 1, sd)
+peaks3d_mu = apply(data3d, 1, mean)
+peaks3d_std = (data3d - peaks3d_mu) /  peaks3d_sd
+
+# perform normalization on 6d (data)
 peaks_sd = apply(data, 1, sd)
 peaks_mu = apply(data, 1, mean)
 # normalize by row
@@ -120,10 +128,7 @@ include_ix = ! exclude_ix
 include_x = row_scaled_x[ include_ix,]
 # go back to the THRESHOLD set to clean up the clustering
 include_x = threshold_x
-# average replicates 
-data3d = data.frame( LE=rowMeans(include_x[,c(1,2)]),
-                     L1=rowMeans(include_x[,c(3,4)]),
-                     L3=rowMeans(include_x[,c(5,6)]))
+
 
 
 
@@ -165,6 +170,13 @@ t6d = build_trans_table(k_6d_k4)
 cor( translator(k_3d_k4,t3d), translator(k_6d_k4,t6d))
 stopifnot(cor( translator(k_3d_k4,t3d), translator(k_6d_k4,t6d)) > .99) 
 ########## correlation between cluster assigments must be at least this high or the script will stop ####
+
+#### work with the 3d matrix as a circle in 2D
+source('~/work/onish_ChIP_R_Analysis/rotation_matrices.R')
+data2d = flatten_std( as.matrix( cbind(peaks3d_std,1)) ) # this seems not to be right, but since it's for vis. purposes, 
+# xy coordinates range between -1,1, and polar coordinates all have radius=1, so I'm sticking with it for now.
+data2d = data2d[,1:3]
+k11data3d = kmeans(data3d,11)
 
 ### reorganize based on 4 meaningful trends
 LEs = c( steady_set_means['LE'], apply(pobj$kmeans$centers[,1:2],1, mean)) #pobj$kmeans$centers[,1:2] 
