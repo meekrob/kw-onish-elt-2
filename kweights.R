@@ -26,3 +26,21 @@ weight_f = function(c,v,ck,m=2) {
 euclid = function(u,v) {
   return(c(dist(rbind(u,v))));
 }
+
+random_kmeans = function(n, data, k) {
+ # you should set.seed before calling this function
+  nrows = nrow(data);
+  centers = data.frame()
+  xserial = 1:ncol(data)
+  for (draw in 1:n) {
+     clustering = kmeans( data[sample(1:nrows),],k)
+     slopes = c()
+     for (j in 1:k) {
+        slopes = c(slopes,lm(clustering$centers[j,] ~ xserial)$coef[2])
+     }
+     clustering$centers = cbind(clustering$centers, slopes)
+     trial=data.frame(clustering$centers, trial=draw,k=1:k );
+     centers = rbind(centers,trial);
+  }
+  return(centers);
+}
