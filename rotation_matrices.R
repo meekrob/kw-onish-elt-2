@@ -71,3 +71,15 @@ radToDegrees = function(radians) {
 degreesToRadians = function(degrees) {
    return(((degrees %% 360)/360) * (2*pi))
 }
+
+polar_segments = function(r0,t0,r1,t1=t0,...) {
+  maxn = max(length(r0), length(t0), length(r1),length(t1))
+  r0 = rep_len(r0,maxn)
+  t0 = rep_len(t0,maxn)
+  r1 = rep_len(r1,maxn)
+  t1 = rep_len(t1,maxn)
+  starts = polar_to_xy(r0,t0);
+  ends = polar_to_xy(r1,t1);
+  segments(starts[,1],starts[,2],ends[,1],ends[,2],...);
+  
+}
