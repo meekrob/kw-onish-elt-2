@@ -39,44 +39,53 @@ library(biomaRt)
 library(ChIPpeakAnno)
 library(topGO)
 
-source('scripts/makeGRangesFromNarrowPeak.R')
 ```
 
 ## Process data
 ```{r get-data}
 getwd()
-# actual IDR results
+# IDR peaks
+
+# narrowPeak is bedlike. Each line contains - 
+# The comprehensive range of two overlapping peaks.
+# The comprehensive peak summit.
+# The summit and ranges of the individual peaks.
+# Score information.
+source('scripts/makeGRangesFromNarrowPeak.R') # this script retains the extra columns and drops unused ones
 L1_IDR = makeGRangesFromNarrowPeak('L1_1_L1_2.IDR_0.05.narrowPeak')
 LE_IDR = makeGRangesFromNarrowPeak('LE_1_LE_2.IDR_0.05.narrowPeak')
 L3_IDR = makeGRangesFromNarrowPeak('L3_1_L3_2.IDR_0.05.narrowPeak')
-# merged results that have the peak maxes assigned via my modification of javaGenomicsToolkit
+# Union of all IDR output, with peak maxes assigned via my modification of javaGenomicsToolkit https://github.com/meekrob/java-genomics-toolkit
 df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
-# need a GRanges object here 
-dfG = makeGRangesFromDataFrame(df, keep.extra.columns = T, ignore.strand = T, starts.in.df.are.0based = T)
+dfG = makeGRangesFromDataFrame(df, 
+                               keep.extra.columns = T, 
+                               ignore.strand = T, 
+                               starts.in.df.are.0based = T)
+dfG$LE_IDR = FALSE
+dfG$L1_IDR = FALSE
+dfG$L3_IDR = FALSE
 
-#### Re-map stage-specific peaks onto the big dataframe
-dfG$LE_IDR = rep(FALSE, length(dfG))
-dfG$L1_IDR = rep(FALSE, length(dfG))
-dfG$L3_IDR = rep(FALSE, length(dfG))
-
+#### Mark which IDR peaks contributed to the union
 LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="any")
 L1_verify = GenomicRanges::findOverlaps(L1_IDR, dfG, type="any")
 L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="any")
+dfG$LE_IDR[ to(LE_verify) ] <- TRUE
+dfG$L1_IDR[ to(L1_verify) ] <- TRUE
+dfG$L3_IDR[ to(L3_verify) ] <- TRUE
 
-dfG$LE_IDR[ to(LE_verify) ] <- T
-dfG$L1_IDR[ to(L1_verify) ] <- T
-dfG$L3_IDR[ to(L3_verify) ] <- T
-#### heh eh ehhe e
-
-
-# dataframe
+# Remove the unused javaGenomicsToolkit columns (min,mean,etc.)
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
 df_max = df[,all_max_col_ix]
-# GRanges with IDR cols
 dfG_max_ix = which(! is.na(str_match(colnames(mcols(dfG)),"max")))
 dfG_max = dfG[,c(dfG_max_ix,26:28)]
 
-colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input", "max_log_L1_2_minus_log_L1_input", "max_log_L3_1_minus_log_L3_input", "max_log_L3_2_minus_log_L3_input", "max_log_LE_1_minus_log_LE_input",  "max_log_LE_2_minus_log_LE_input")
+colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input", 
+                    "max_log_L1_2_minus_log_L1_input", 
+                    "max_log_L3_1_minus_log_L3_input", 
+                    "max_log_L3_2_minus_log_L3_input", 
+                    "max_log_LE_1_minus_log_LE_input",  
+                    "max_log_LE_2_minus_log_LE_input")
+
 colnames_in_stage_order = colnames(df_max)[c(5,6,1:4)]
 position_columns = c("chrom","chromStart","chromEnd","ID")
 # make numeric, with 
@@ -100,15 +109,24 @@ colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
 
 # changing versus not-changing
 q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
+q.peaks3d_zeroed_nans_sd = function(q) { quantile(peaks3d_sd, q)}
 
 THRESHOLD = .05
 
 # make the text conversions consistent
 TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
+# w/reps
 threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
 threshold_ix = peaks_sd > threshold_q
 threshold_x = row_scaled_x[ threshold_ix,]
+# w/reps avg'd
+threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
+threshold3d_ix = peaks3d_sd > threshold3d_q
+threshold3d_x = peaks3d_std[ threshold3d_ix,]
 
+# Develop a higher-confidence reliable set:
+# The following selects the "excluded" peaks that are called in all stages,
+# and puts the others back into the main dataset. It is cleaner to 
 # steady class
 steady_set_means = colMeans(row_scaled_x[ !threshold_ix, ])
 steady_set_means = cbind(steady_set_means[1:2],steady_set_means[3:4],steady_set_means[5:6])
@@ -125,20 +143,20 @@ called_in_two_or_three_not_changing = dfG[! threshold_ix & two_of_three_idr]
 exclude_ix = ! threshold_ix & called_in_all
 include_ix = ! exclude_ix
 
-include_x = row_scaled_x[ include_ix,]
+include_x = row_scaled_x[ include_ix,] # include_x now re-includes any of the filtered peaks that weren't called by IDR in                                        # all 3 stages. This results in a very small number of "not-changing" peaks.
+##############
+
 # go back to the THRESHOLD set to clean up the clustering
 include_x = threshold_x
-
-
-
-
+include3d_x = threshold3d_x
 
 nclust=4
 set.seed(31415)
 label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
 pobj = pheatmap(include_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
 kclusters = pobj$kmeans$cluster
-
+set.seed(31415)
+kmeans_on3d_k4 = kmeans(include3d_x,nclust)
 
 ### compare cluster assignments of 6D data versus 3D data
 # this table will allow you to translate the assigned cluster number
@@ -147,19 +165,7 @@ kclusters = pobj$kmeans$cluster
 # of this dataset, as long as the compared datasets are of the same row number:
 # e.g.: kclusters based on LE,L1,L3 matrix versus [LE,L1,L3]*[replicates]
 # or different seeds of the same run
-build_trans_table <-function(knumbers) { 
-  count = table(knumbers); 
-  count = sort(count); 
-  k = as.numeric(names(count)); 
-  rank=length(k):1; 
-  trans=cbind(k,rank,count); 
-  trans = trans[order(k),]; 
-  return(trans);
-}
-translator <- function(x, translate) 
-{ 
-  td = translate[x,2]; names(td) <- NULL; return(td);
-}
+
 
 k4data3d = kmeans(data3d,4)
 k_3d_k4 = k4data3d$cluster
