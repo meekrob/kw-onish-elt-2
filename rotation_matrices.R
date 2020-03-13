@@ -20,20 +20,46 @@ Rz = function(theta) {
                   0, 0, 0, 1), nrow=4, byrow = T));
 }
 
-flatten_std = function(p) {
-  return(p %*% Rx(pi/2) %*% Rz(pi/6));
+flatten_std = function(o) {
+  p = as.matrix(cbind(o,1))
+  tformed = p %*% Rx(pi/2) %*% Rz(pi/6);
+  colnames(tformed) <- colnames(p);
+  return(as.data.frame(tformed[,1:3]));
 }
 
-polar_to_xy = function(r, theta) {
+polar_to_xy = function(r, theta=NULL) {
+  if (is.null(theta)) {
+    if (is.null(dim(r))) {
+      stop("r must have at least 2 columns if theta is null.")  
+    }
+    else if (ncol(r) > 1) {
+      theta = r[,2]
+      r = r[,1]
+    }
+    else {
+      stop("r must have at least 2 columns if theta is null.")  
+    } 
+  }
   x = r * cos(theta);
   y = r * sin(theta);
   return(cbind(x,y));
 }
 
-xy_to_polar = function(x,y) {
+xy_to_polar = function(x,y=NULL) {
+  if (is.null(y)) {
+    if (is.null(dim(x))) {
+      stop("x must have at least 2 columns if y is null.")  
+    }
+    else if (ncol(x) > 1) {
+    y = x[,2]
+    x = x[,1]
+    }
+    else {
+      stop("x must have at least 2 columns if y is null.")  
+    } 
+  }
   r = sqrt(x^2 + y^2);
-  theta = atan(y/x);
-  theta[theta<0] = theta[theta<0] + pi
+  theta = atan2(y,x);
   return(cbind(r,theta));
 }
 
