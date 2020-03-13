@@ -1,6 +1,6 @@
 # renumber kmeans output by rank of cluster size, low (1) - high (k)
 
-krenumber = function(kobj) {
+reorder_kmeans = function(kobj) {
   n = kobj$size # vector of cluster sizes
   k = length(n) # scalar
   oldnumbers = seq(1,k) # 1 thru k

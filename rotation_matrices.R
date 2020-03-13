@@ -33,6 +33,7 @@ polar_to_xy = function(r, theta) {
 xy_to_polar = function(x,y) {
   r = sqrt(x^2 + y^2);
   theta = atan(y/x);
+  theta[theta<0] = theta[theta<0] + pi
   return(cbind(r,theta));
 }
 
@@ -82,4 +83,10 @@ polar_segments = function(r0,t0,r1,t1=t0,...) {
   ends = polar_to_xy(r1,t1);
   segments(starts[,1],starts[,2],ends[,1],ends[,2],...);
   
+}
+spread_out_by_radius<-function(polar, len, fact)
+{
+  i = 1:nrow(polar)
+  polar[,'r'] = polar[,'r']* fact ^ round(i/len)
+  return(polar);
 }
