@@ -20,13 +20,31 @@ plottable$knames = factor(plottable$knames, levels=c("LE","Larval","L3","Increas
 
 trendcolors=c("#D95F02","#1B9E77","#7570B3","#E7298A")
 trendcolors=c("#7570B3","#1B9E77", "#D95F02","#E7298A")
-plot_ly(plottable, x=~LE, y=~L1, z=~L3, type='scatter3d',
+plot_ly(plottable, x=~LE, y=~L1, z=0, type='scatter3d',
         mode='markers',
         color=~knames, 
         size=~kweights,
-        colors=trendcolors)
+        colors=trendcolors) -> fig
+fig <- fig %>% layout(title = "On diagonal", scene = list(camera=list(eye=list(x=0,y=-1,z=0))))
+fig
 
 source('rotation_matrices.R')
+p = xy_to_polar(include_x)
+#q[,'r'] <- 1
+plottable_flat = data.frame(polar_to_xy(q),z=0)
+colnames(plottable_flat) <- c('LE','L1','L3')
+flattened = flatten_std(include3d_x)
+plottable_flat = data.frame(plottable_flat, k=as.factor(kmeans_on3d_k4$cluster),
+                            knames=knames,kweights=kweights)
+plottable_flat$knames = plottable$knames
+combind = rbind(plottable,plottable_flat)
+plot_ly(combind, x=~LE, y=~L1, z=~L3, type='scatter3d',
+        mode='markers',
+        color=~knames, 
+        size=~kweights,
+        colors=trendcolors) -> fig
+fig <- fig %>% layout(title = "Combined Flattened", scene = list(camera=list(eye=list(x=0,y=-1,z=0))))
+fig
 
 # begin plotting on a 2D plane
 flattened = flatten_std(include3d_x)
