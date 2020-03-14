@@ -66,6 +66,10 @@ L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="any")
 dfG$LE_IDR[ to(LE_verify) ] <- TRUE
 dfG$L1_IDR[ to(L1_verify) ] <- TRUE
 dfG$L3_IDR[ to(L3_verify) ] <- TRUE
+# collect some variables 
+IDR_sets = list(LE_IDR=LE_IDR,L1_IDR=L1_IDR,L3_IDR=L3_IDR,LE_verify=LE_verify,L1_verify=L1_verify,L3_verify=L3_verify)
+rm(LE_IDR,L1_IDR,L3_IDR,LE_verify,L1_verify,L3_verify)
+
 
 # Remove the unused javaGenomicsToolkit columns (min,mean,etc.)
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
