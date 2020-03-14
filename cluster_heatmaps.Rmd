@@ -150,7 +150,7 @@ kmeans_on3d_k4 = reorder_kmeans(kmeans(include3d_x,nclust))
 set.seed(31415)
 kmeans_on3d_k4 =kmeans(include3d_x,nclust)
 #### work with the 3d matrix as a circle in 2D
-source('rotation_matrices.R')
+source('scripts/rotation_matrices.R')
 data2d = flatten_std( as.matrix( cbind(include3d_x,1)) ) # this seems not to be right, but since it's for vis. purposes, 
 # xy coordinates range between -1,1, and polar coordinates all have radius=1, so I'm sticking with it for now.
 data2d = data2d[,1:3]
