@@ -6,23 +6,28 @@ Rx = function(theta) {
 }
 
 Ry = function(theta) {
-  return(matrix(c(cos(theta),0,sin(theta),0,
-                  0, 1, 0, 0,
-                  -sin(theta), 0, cos(theta),0,
-                  0, 0, 0, 1), nrow=4, byrow = T));
+  return(matrix(c( cos(theta),  0, sin(theta),   0,
+                       0     ,  1,     0     ,   0,
+                  -sin(theta),  0, cos(theta),   0,
+                       0     ,  0,      0    ,   1), nrow=4, byrow = T));
 }
 
 Rz = function(theta) {
   return(matrix(c
-                (cos(theta),-sin(theta),0,0,
-                  cos(theta),sin(theta), 0, 0,
-                  0, 0, 1, 0,
-                  0, 0, 0, 1), nrow=4, byrow = T));
+                ( cos(theta),-sin(theta),  0, 0,
+                  sin(theta), cos(theta),  0, 0,
+                      0     ,     0     ,  1, 0,
+                      0     ,     0     ,  0, 1), nrow=4, byrow = T));
 }
+
+ux=-sqrt(1/3)
+uy=ux
+uz=ux
+
 
 flatten_std = function(o) {
   p = as.matrix(cbind(o,1))
-  tformed = p %*% Rx(pi/2) %*% Rz(pi/6);
+  tformed = p %*% Rz(-pi/4)# %*% Ry(-pi/4) %*% Rz(-pi/4);
   colnames(tformed) <- colnames(p);
   return(as.data.frame(tformed[,1:3]));
 }
