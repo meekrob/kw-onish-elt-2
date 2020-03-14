@@ -1,12 +1,16 @@
 # Data you might not want to track
 *.bedlike
 
+hide/
+hide_from_git/
+
 # History files
 .Rhistory
 .Rapp.history
 
 # Session Data files
 .RData
+*.RData
 
 # Example code in package build process
 *-Ex.R
