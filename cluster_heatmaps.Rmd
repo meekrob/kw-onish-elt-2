@@ -9,24 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-#knitr::opts_chunk$set(root.dir='~/work/onish_ChIP_R_Analysis')
 knitr::include_graphics
 options(repos = c(CRAN = "http://cran.rstudio.com"))
-if(!requireNamespace("ggExtra")) {
-  install.packages("ggExtra");
-}
-```
-
-## Script version
-```{bash version, echo=FALSE}
-#cd ~/work/
-git remote -v
-git log -n 1
-git status -s
-```
-
-## R version, libraries and scripts
-```{r import}
 R.version
 library(pheatmap)
 library(stringr)
@@ -38,7 +22,14 @@ library(GenomicRanges)
 library(biomaRt)
 library(ChIPpeakAnno)
 library(topGO)
+```
 
+## Script version
+```{bash version, echo=FALSE}
+#cd ~/work/
+git remote -v
+git log -n 1
+git status -s
 ```
 
 ## Process data
