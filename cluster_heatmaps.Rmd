@@ -132,7 +132,12 @@ threshold3d_x = peaks3d_std[ threshold3d_ix,]
 # go back to the THRESHOLD set to clean up the clustering
 include_x = threshold_x
 include3d_x = threshold3d_x
+cat("Datasets: threshold at:", TXT_THRESHOLD,"\n")
+cat("include_x: reps not merged:", dim(include_x),"\n")
+cat("include3d_x: reps merged:", dim(include3d_x),"\n")
+```
 
+```{cluster}
 source('scripts/reorder_kmeans.R')
 nclust=4
 set.seed(31415)
@@ -151,13 +156,13 @@ data2d = flatten_std( as.matrix( cbind(include3d_x,1)) ) # this seems not to be 
 data2d = data2d[,1:3]
 k11data3d = kmeans(data3d,11)
 
-### reorganize based on 4 meaningful trends
-LEs = c( steady_set_means['LE'], apply(pobj$kmeans$centers[,1:2],1, mean)) #pobj$kmeans$centers[,1:2] 
-L1s = c( steady_set_means['L1'], apply(pobj$kmeans$centers[,3:4],1, mean)) #pobj$kmeans$centers[,3:4] # 
-L3s = c( steady_set_means['L3'], apply(pobj$kmeans$centers[,5:6],1, mean)) #pobj$kmeans$centers[,5:6] # 
-names(LEs) <- 0:4
-names(L1s) <- 0:4
-names(L3s) <- 0:4
+### merge the centers that are within-stage replicates
+LEs = apply(pobj$kmeans$centers[,1:2],1, mean)
+L1s = apply(pobj$kmeans$centers[,3:4],1, mean)
+L3s = apply(pobj$kmeans$centers[,5:6],1, mean)
+names(LEs) <- 1:4
+names(L1s) <- 1:4
+names(L3s) <- 1:4
 #sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
 #trend_labels = c("LE_specific", "Post_embryonic", "Dev_increasing",  "L3_specific")
 #k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
@@ -206,16 +211,6 @@ included_set = df[include_ix,c(position_columns, str_c(colnames_in_stage_order, 
 included_set$class = reassigned_ks
 split_non_normalized=split(included_set, included_set$class)
 
-
-
-# Write a file for each class
-# for (k_i in names(split_non_normalized)) { 
-#   k_subset = split_non_normalized[[k_i]]
-#   trend_name = sorted_k_remapping[as.numeric(k_i), 'trend_label']
-#   kcluster_filename = paste("allStagesUNION_max_sd_", TXT_THRESHOLD, "_", trend_name, ".bedlike", sep="")
-#   print(kcluster_filename)
-#   write.table(k_subset, kcluster_filename, quote=F, sep="\t", row.names=F)
-# }
 korder = order(reassigned_ks, decreasing=F)
 
 # colorMap, needed to state explictly to agree with Deeptools plots
