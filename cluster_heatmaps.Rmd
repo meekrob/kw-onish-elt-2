@@ -25,7 +25,7 @@ library(topGO)
 ```
 
 ## Script version
-```{bash version, echo=FALSE}
+```{bash repo version, echo=FALSE}
 #cd ~/work/
 git remote -v
 git log -n 1
@@ -55,6 +55,11 @@ dfG = makeGRangesFromDataFrame(df,
                                keep.extra.columns = T, 
                                ignore.strand = T, 
                                starts.in.df.are.0based = T)
+
+seqinfo(dfG) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), 
+                    c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), 
+                    c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
+                    c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
 dfG$LE_IDR = FALSE
 dfG$L1_IDR = FALSE
 dfG$L3_IDR = FALSE
@@ -78,6 +83,14 @@ dfG_max_ix = which(! is.na(str_match(colnames(mcols(dfG)),"max")))
 dfG_max = dfG[,c(dfG_max_ix,26:28)]
 # index vars not used further
 rm(all_max_col_ix, dfG_max_ix)
+
+# let's clean this shit up
+dfG_metacolnames = colnames(mcols(dfG_max))
+columns_to_sanitize = which(! is.na(str_match(dfG_metacolnames,'input_z.bw')))
+repnames=str_extract(dfG_metacolnames[columns_to_sanitize], "L[E,1,3]{1}_[1,2]{1}")
+newcolnames = dfG_metacolnames
+newcolnames[columns_to_sanitize] <- repnames
+colnames(mcols(dfG_max)) <- newcolnames
 
 colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input", 
                     "max_log_L1_2_minus_log_L1_input", 
@@ -224,9 +237,109 @@ clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cl
 #   user  system elapsed 
 # 46.197   0.537  49.254
 
+# add clusters and weights to GenomicRanges object
+dfG_max$k4cluster = 0
+dfG_max$k11cluster = 0
+dfG_max$k4weights = 0
+dfG_max$k11weights = 0
+dfG_max$k4cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k4$cluster
+dfG_max$k4weights[reps_avd$threshold3d_ix] = clusters$k4weights
+dfG_max$k11cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k11$cluster
+dfG_max$k11weights[reps_avd$threshold3d_ix] = clusters$k11weights
 
 ```
 
+```{r format prepare BED+}
+dfG_max$LE_nonNormed = (dfG_max$LE_1 + dfG_max$LE_2)/2
+dfG_max$L1_nonNormed = (dfG_max$L1_1 + dfG_max$L1_2)/2
+dfG_max$L3_nonNormed = (dfG_max$L3_1 + dfG_max$L3_2)/2
+dfG_max$LE_std = peaks3d_std[,1]
+dfG_max$L1_std = peaks3d_std[,2]
+dfG_max$L3_std = peaks3d_std[,3]
+# drop the individual rep columns
+dfG_max$LE_1 = NULL
+dfG_max$LE_2 = NULL
+dfG_max$L1_1 = NULL
+dfG_max$L1_2 = NULL
+dfG_max$L3_1 = NULL
+dfG_max$L3_2 = NULL
+#write.table(DataFrame(dfG_max[order(ranges(dfG_max)),]),"dfG_max.df",quote=F,sep="\t", row.names=F,col.names=F)
+
+float_precision_string = "%.3f"
+peaksForBigBed = dfG_max
+peaksForBigBed$LE_IDR = as.integer(dfG_max$LE_IDR)
+peaksForBigBed$L1_IDR = as.integer(dfG_max$L1_IDR)
+peaksForBigBed$L3_IDR = as.integer(dfG_max$L3_IDR)
+peaksForBigBed$name = 1:length(peaksForBigBed)
+peaksForBigBed$k4weights = sprintf(float_precision_string, peaksForBigBed$k4weights)
+peaksForBigBed$k11weights = sprintf(float_precision_string, peaksForBigBed$k11weights)
+peaksForBigBed$LE_nonNormed = sprintf(float_precision_string, peaksForBigBed$LE_nonNormed)
+peaksForBigBed$L1_nonNormed = sprintf(float_precision_string, peaksForBigBed$L1_nonNormed)
+peaksForBigBed$L3_nonNormed = sprintf(float_precision_string, peaksForBigBed$L3_nonNormed)
+peaksForBigBed$LE_std = sprintf(float_precision_string, peaksForBigBed$LE_std)
+peaksForBigBed$L1_std = sprintf(float_precision_string, peaksForBigBed$L1_std)
+peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
+
+peakSchema = "
+table ELT2DynamicPeaks
+\"ELT-2 Dynamic Peaks\"
+(
+string  chrom;		\"Reference sequence chromosome or scaffold\"
+uint    chromStart;	\"Start position of feature on chromosome\"
+uint    chromEnd;	\"End position of feature on chromosome\"
+string  name;		\"Index of peak\"
+uint    LE_IDR;	\"0/1 - IDR in LE\"
+uint    L1_IDR;	\"0/1 - IDR in L1\"
+uint  	L3_IDR;	\"0/1 - IDR in L3\"
+string  LE_nonNormed;	\"non-row normalized signal in LE\"
+string  L1_nonNormed;	\"non-row normalized signal in L1\"
+string  L3_nonNormed;	\"non-row normalized signal in L3\"
+string  LE_rowNormed;	\"row normalized signal in LE\"
+string  L1_rowNormed;	\"row normalized signal in L1\"
+string  L3_rowNormed;	\"row normalized signal in L3\"
+uint  k4cluster;  \"Cluster assignment in kmeans = 4, 0 for not-changing\"
+string  k4weight;   \"Weight assigned to kmeans = 4 cluster assignment [0-1]\"
+uint  k11cluster; \"Cluster assignment in kmeans = 4, 0 for not-changing\"
+string  k11weight;  \"Weight assigned to kmeans = 11 cluster assignment [0-1]\"
+)"
+write(peakSchema, "peaks.as")
+
+# make a dataframe that is in the same order as above
+write.table(data.frame(as.character(seqnames(peaksForBigBed)),
+                       start(peaksForBigBed),
+                       end(peaksForBigBed),
+                       peaksForBigBed$name,
+                       peaksForBigBed$LE_IDR,
+                       peaksForBigBed$L1_IDR,
+                       peaksForBigBed$L3_IDR,
+                       peaksForBigBed$LE_nonNormed,
+                       peaksForBigBed$L1_nonNormed,
+                       peaksForBigBed$L3_nonNormed,
+                       peaksForBigBed$LE_std,
+                       peaksForBigBed$L1_std,
+                       peaksForBigBed$L3_std,
+                       peaksForBigBed$k4cluster,
+                       peaksForBigBed$k4weights,
+                       peaksForBigBed$k11cluster,
+                       peaksForBigBed$k11weights
+                       ), "peaksForBigBed.bed",quote=F,row.names=F,col.names=F,sep="\t")
+chrom.sizes = "chrV	20924180
+chrX	17718942
+chrIV	17493829
+chrII	15279421
+chrI	15072434
+chrIII	13783801
+chrM	13794"
+write(chrom.sizes,"chrom.sizes")
+```
+
+```{bash make bigBed}
+# you must execute the above chunks first
+# better figure out the PATH on your system
+PATH=$PATH:/Users/david/bin/UCSC_userApps 
+bedSort peaksForBigBed.bed peaksForBigBed.bed
+bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+15 -as=peaks.as
+```
 
 ```{r other_shit}
 # prepare non-normalized output
