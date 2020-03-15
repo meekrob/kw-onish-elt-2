@@ -212,8 +212,11 @@ rownames(clusters$k11_trends) <- as.character(clusters$kmeans_on3d_k11$size)
 
 clusters$k11_trends_long = melt(clusters$k11_trends)
 colnames(clusters$k11_trends_long) <- c("cluster size", "stage", "center")
+clusters$k11_trends_long$`cluster size` = clusters$k11_trends_long$`cluster size`
+clusters$k11_trends_long$`size < 700` = clusters$k11_trends_long$`cluster size` 
+clusters$k11_trends_long$`size < 700`[clusters$k11_trends_long$`cluster size` < 700] = 'cluster size < 700'
+clusters$k11_trends_long$`size < 700`[clusters$k11_trends_long$`cluster size` >700] = 'cluster size > 700'
 clusters$k11_trends_long$`cluster size` = as.factor(clusters$k11_trends_long$`cluster size`)
-
 label=paste(sprintf("%d cluster trends at std. dev. > %.3f,", nrow(clusters$k11_trends), reps_avd$threshold3d_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
 figure_colors = scale_colour_manual(values=brewer.pal(11,"Paired"))
 print(
@@ -222,10 +225,10 @@ print(
              group=`cluster size`,
              colour=`cluster size`)) + 
     geom_line(size = 1.5) + 
-    labs(title=label, 
+    labs(title="Kmeans cluster centers (k=11)", 
          y = "cluster center (Z)", 
          x = "developmental stage") + 
-    figure_colors)
+    figure_colors + facet_grid(~ `size < 700`))
 
 source('scripts/kweights.R')
 clusters$k4weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k4$cluster, clusters$kmeans_on3d_k4$centers)
