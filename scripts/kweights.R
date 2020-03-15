@@ -4,7 +4,14 @@
 # normed_weights = apply(normedk, 1, row_func)
 # plot_ly(rbind(unnormed,rep(1,3),rep(-1,3),rep(0,3),centers), x=~x,y=~y,z=~z,type="scatter3d", mode='markers',color=as.factor(c(k$cluster,0,0,0,4,5,6)), colors=c('#666666',   '#0000FF','#00FF00','#FF0000','#000088','#008800','#880000'), size= 5*c(normed_weights,rep(1,6)))
 
-row_func = function(r) {
+kweights = function(data, cluster_assignments, centers) {
+  d = cbind(data,cluster_assignments)
+  
+  weights = apply(d, 1, row_func,C=centers);
+  return(weights);
+}
+
+row_func = function(r,C) {
   # cluster matrix C must exist outside scope of this function
   # k must be the last element of vector r
   n = length(r);

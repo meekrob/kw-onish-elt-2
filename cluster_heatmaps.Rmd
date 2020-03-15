@@ -213,6 +213,18 @@ print(
          y = "cluster center (Z)", 
          x = "developmental stage") + 
     figure_colors)
+
+source('scripts/kweights.R')
+clusters$k4weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k4$cluster, clusters$kmeans_on3d_k4$centers)
+# laptop:
+#    user  system elapsed 
+#   17.295   0.227  18.562 
+clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cluster, clusters$kmeans_on3d_k11$centers)
+# laptop:
+#   user  system elapsed 
+# 46.197   0.537  49.254
+
+
 ```
 
 
