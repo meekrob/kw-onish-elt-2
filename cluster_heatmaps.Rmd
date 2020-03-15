@@ -89,26 +89,26 @@ colnames(df_max)<-c("max_log_L1_1_minus_log_L1_input",
 colnames_in_stage_order = colnames(df_max)[c(5,6,1:4)]
 position_columns = c("chrom","chromStart","chromEnd","ID")
 # make numeric, with 
-data = as.matrix(df_max[,colnames_in_stage_order])
-data3d = data.frame( LE=rowMeans(data[,c(1,2)]),
-                     L1=rowMeans(data[,c(3,4)]),
-                     L3=rowMeans(data[,c(5,6)]))
+data6d = as.matrix(df_max[,colnames_in_stage_order])
+data3d = data.frame( LE=rowMeans(data6d[,c(1,2)]),
+                     L1=rowMeans(data6d[,c(3,4)]),
+                     L3=rowMeans(data6d[,c(5,6)]))
 # perform normalization on 3d
 peaks3d_sd = apply(data3d, 1, sd)
 peaks3d_mu = apply(data3d, 1, mean)
 peaks3d_std = (data3d - peaks3d_mu) /  peaks3d_sd
 
 # perform normalization on 6d (data)
-peaks_sd = apply(data, 1, sd)
-peaks_mu = apply(data, 1, mean)
+peaks6d_sd = apply(data6d, 1, sd)
+peaks6d_mu = apply(data6d, 1, mean)
 # normalize by row
-row_scaled_x = (data - peaks_mu) /  peaks_sd
+peaks6d_std = (data6d- peaks6d_mu) /  peaks6d_sd
 
 # change filenames to shorter labels
-colnames(row_scaled_x) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
+colnames(peaks6d_std) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
 
 # changing versus not-changing
-q.peaks_zeroed_nans_sd = function(q) { quantile(peaks_sd, q)}
+q.peaks6d_zeroed_nans_sd = function(q) { quantile(peaks6d_sd, q)}
 q.peaks3d_zeroed_nans_sd = function(q) { quantile(peaks3d_sd, q)}
 
 THRESHOLD = .05
@@ -116,90 +116,107 @@ THRESHOLD = .05
 # make the text conversions consistent
 TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
 # w/reps
-threshold_q = q.peaks_zeroed_nans_sd(THRESHOLD)
-threshold_ix = peaks_sd > threshold_q
-threshold_x = row_scaled_x[ threshold_ix,]
+threshold6d_q = q.peaks6d_zeroed_nans_sd(THRESHOLD)
+threshold6d_ix = peaks6d_sd > threshold6d_q
+threshold6d_x = peaks6d_std[ threshold6d_ix,]
 # w/reps avg'd
 threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
 threshold3d_ix = peaks3d_sd > threshold3d_q
 threshold3d_x = peaks3d_std[ threshold3d_ix,]
 
 # go back to the THRESHOLD set to clean up the clustering
-include_x = threshold_x
+include6d_x = threshold6d_x
 include3d_x = threshold3d_x
-cat("Datasets: threshold at:", TXT_THRESHOLD,"\n")
-cat("include_x: reps not merged:", dim(include_x),"\n")
-cat("include3d_x: reps merged:", dim(include3d_x),"\n")
+
+# clean up the environment some more
+thresholded_data = list( w_reps = list(threshold6d_q=threshold6d_q,
+                                       threshold6d_ix=threshold6d_ix,
+                                       threshold6d_x=threshold6d_x,
+                                       include6d_x=include6d_x),
+                         reps_avd = list(threshold3d_q=threshold3d_q,
+                                         threshold3d_ix=threshold3d_ix,
+                                         threshold3d_x=threshold3d_x,
+                                         include3d_x=include3d_x),
+                         THRESHOLD=THRESHOLD,
+                         TXT_THRESHOLD = sprintf("%.3f", THRESHOLD))
+
+rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
+   threshold3d_q,threshold3d_ix,threshold3d_x,include3d_x,
+   THRESHOLD,TXT_THRESHOLD)
+
+cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
+cat("include_x: reps not merged:", dim(thresholded_data$w_reps$include6d_x),"\n")
+cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
 ```
 
-```{cluster}
+```{r cluster}
+attach(thresholded_data)
 source('scripts/reorder_kmeans.R')
 nclust=4
+
+
+label=paste(
+  sprintf("kmeans clusters at std. dev. > %.3f,", 
+          reps_avd$threshold3d_q), 
+          "(excludes lower ", sprintf("%.1f%%)", 
+          THRESHOLD*100))
+clusters = list()
+
 set.seed(31415)
-label=paste(sprintf("kmeans clusters at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-pobj = pheatmap(include_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
-pobj$kmeans = reorder_kmeans(pobj$kmeans)
-kclusters = pobj$kmeans$cluster
+pobj = pheatmap(reps_avd$include3d_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
+clusters$kmeans_on3d_k4 = reorder_kmeans(pobj$kmeans)
+
 set.seed(31415)
-kmeans_on3d_k4 = reorder_kmeans(kmeans(include3d_x,nclust))
-set.seed(31415)
-kmeans_on3d_k4 =kmeans(include3d_x,nclust)
+clusters$kmeans_on3d_k11 = reorder_kmeans(kmeans(reps_avd$include3d_x,11))
 #### work with the 3d matrix as a circle in 2D
 source('scripts/rotation_matrices.R')
-data2d = flatten_std( as.matrix( cbind(include3d_x,1)) ) # this seems not to be right, but since it's for vis. purposes, 
+circular_data3d = flatten_std( reps_avd$include3d_x ) # this seems not to be right, but since it's for vis. purposes, 
 # xy coordinates range between -1,1, and polar coordinates all have radius=1, so I'm sticking with it for now.
-data2d = data2d[,1:3]
-k11data3d = kmeans(data3d,11)
 
-### merge the centers that are within-stage replicates
-LEs = apply(pobj$kmeans$centers[,1:2],1, mean)
-L1s = apply(pobj$kmeans$centers[,3:4],1, mean)
-L3s = apply(pobj$kmeans$centers[,5:6],1, mean)
-names(LEs) <- 1:4
-names(L1s) <- 1:4
-names(L3s) <- 1:4
-#sorted_k_order = order(LEs,L1s,L3s,decreasing=TRUE)
-#trend_labels = c("LE_specific", "Post_embryonic", "Dev_increasing",  "L3_specific")
-#k_remapping = data.frame(old=sorted_k_order,new=1:nclust,trend_label=trend_labels)
+# trend plot with 4 clusters
+clusters$k4_trends = clusters$kmeans_on3d_k4$centers
+rownames(clusters$k4_trends) <- c("LE-specific", "Post embryonic", "L3-high","Increasing")
 
-kremap = data.frame( `k`= 1:4, 
-                     #`class`= 4:1, 
-                     `class`= c(3,2,1,4), 
-                     #`class_roman`=c('IV','III','II','I'), 
-                     `class_roman`=c('III','II','I','IV'), 
-                     `label`= c('Dev_increasing','Larval','Embryonic','L3_high'))
+clusters$k4_trends_long = melt(clusters$k4_trends)
+colnames(clusters$k4_trends_long) <- c("description", "stage", "center")
 
+label=paste(sprintf("%d cluster trends at std. dev. > %.3f,", nrow(clusters$k4_trends), reps_avd$threshold3d_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+figure_colors = scale_colour_manual(values=c("#7570B3","#1B9E77","#D95F02","#E7298A"))
+print(
+  ggplot(clusters$k4_trends_long, 
+         aes(x=stage,y=center, 
+             group=description,
+             colour=description)) + 
+    geom_line(size = 1.5) + 
+    labs(title=label, 
+         y = "cluster center (Z)", 
+         x = "developmental stage") + 
+    figure_colors)
 
-trends = cbind(LE=LEs,L1=L1s,L3=L3s)
-# try using the slope of the dev-trends as a consistent way to order the LE,L1,L3 patterns
-slopes = c( 
-  lm(trends[1,] ~ k)$coef[2],
-  lm(trends[2,] ~ k)$coef[2],
-  lm(trends[3,] ~ k)$coef[2],
-  lm(trends[4,] ~ k)$coef[2],
-  lm(trends[5,] ~ k)$coef[2] )
-trends_ordered = trends[order(slopes),]
+# trend plot with 11 clusters
+clusters$k11_trends = clusters$kmeans_on3d_k11$centers
+rownames(clusters$k11_trends) <- as.character(clusters$kmeans_on3d_k11$size)
 
-# make a trend signature '+--' for LE-specific, etc.
-plus_minus_symbols = as.data.frame(ifelse(trends > 0, '+', '-'))
-trend_symbols = do.call(paste, c(plus_minus_symbols, sep=''))
-# Sorting on the trend line seems to consistently yield the following order
-rownames(trends_ordered) <- c("LE-specific", "Not changing", "Post embryonic", "L3-high","Increasing")
+clusters$k11_trends_long = melt(clusters$k11_trends)
+colnames(clusters$k11_trends_long) <- c("cluster size", "stage", "center")
+clusters$k11_trends_long$`cluster size` = as.factor(clusters$k11_trends_long$`cluster size`)
 
-trends_ordered_long = melt(trends_ordered)
-colnames(trends_ordered_long) <- c("description", "stage", "center")
-
-label=paste(sprintf("Cluster trends at std. dev. > %.3f,", threshold_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
-figure_colors = scale_colour_manual(values=c("#7570B3","#666666","#1B9E77","#D95F02","#E7298A"))
-print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage") + figure_colors)
-
-## apply the new numbering to the data
-reassigned_ks = kclusters
-for (i in 1:4) {
- reassigned_ks = replace( reassigned_ks, kclusters == i, kremap[i, 'class'])
-}
+label=paste(sprintf("%d cluster trends at std. dev. > %.3f,", nrow(clusters$k11_trends), reps_avd$threshold3d_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
+figure_colors = scale_colour_manual(values=brewer.pal(11,"Paired"))
+print(
+  ggplot(clusters$k11_trends_long, 
+         aes(x=stage,y=center, 
+             group=`cluster size`,
+             colour=`cluster size`)) + 
+    geom_line(size = 1.5) + 
+    labs(title=label, 
+         y = "cluster center (Z)", 
+         x = "developmental stage") + 
+    figure_colors)
+```
 
 
+```{r other_shit}
 # prepare non-normalized output
 # df colnames differ from manual ones on line 44
 included_set = df[include_ix,c(position_columns, str_c(colnames_in_stage_order, "_z.bw"))]
@@ -235,14 +252,21 @@ pheatmap(combined_x[korder,], cluster_rows=F, cluster_cols=F, color=color, show_
 # cluster assignment
 
 # normalized data
-all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))}); # this vector is now all FALSE, but needed
-                                                                    # for downstream formulas
-norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
-norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
-norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
-norm_L1_2 = rep(NA, nrow(df)); norm_L1_2[!all_nan_rows] = row_scaled_x[,4]
-norm_L3_1 = rep(NA, nrow(df)); norm_L3_1[!all_nan_rows] = row_scaled_x[,5]
-norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
+all_nan_rows = apply(df_max, 1, function(x) { all(!is.finite(x))}); # this vector is now all FALSE due to upstream filtering
+stopifnot(all(! all_nan_rows)) # but check here
+
+# norm_LE_1 = rep(NA, nrow(df)); norm_LE_1[!all_nan_rows] = row_scaled_x[,1]
+# norm_LE_2 = rep(NA, nrow(df)); norm_LE_2[!all_nan_rows] = row_scaled_x[,2]
+# norm_L1_1 = rep(NA, nrow(df)); norm_L1_1[!all_nan_rows] = row_scaled_x[,3]
+# norm_L1_2 = rep(NA, nrow(df)); norm_L1_2[!all_nan_rows] = row_scaled_x[,4]
+# norm_L3_1 = rep(NA, nrow(df)); norm_L3_1[!all_nan_rows] = row_scaled_x[,5]
+# norm_L3_2 = rep(NA, nrow(df)); norm_L3_2[!all_nan_rows] = row_scaled_x[,6]
+norm_LE_1 = row_scaled_x[,1]
+norm_LE_2 = row_scaled_x[,2]
+norm_L1_1 = row_scaled_x[,3]
+norm_L1_2 = row_scaled_x[,4]
+norm_L3_1 = row_scaled_x[,5]
+norm_L3_2 = row_scaled_x[,6]
 
 # kmeans cluster assignment
 vec1 = rep(NA, nrow(row_scaled_x))
@@ -280,6 +304,9 @@ seqinfo(peaks) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'),
 peaks$LE_IDR = dfG$LE_IDR
 peaks$L1_IDR = dfG$L1_IDR
 peaks$L3_IDR = dfG$L3_IDR
+```
+
+```{r Get Coding Genes}
 source('scripts/getCodingGenes.R',echo=T)
 # Defines:
 #  all_CDS_genes - GRanges object of all CDS genes, non-MT
