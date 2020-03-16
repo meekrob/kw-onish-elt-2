@@ -201,21 +201,24 @@ print(
              group=description,
              colour=description)) + 
     geom_line(size = 1.5) + 
-    labs(title=label, 
+    labs(title="Kmeans cluster centers (k=4)", 
          y = "cluster center (Z)", 
          x = "developmental stage") + 
     figure_colors)
 
+rgb_colors = c("80,80,80",apply(t(col2rgb(c("#7570B3","#1B9E77","#D95F02","#E7298A"))),1, str_flatten, collapse = ',')) # includes grey for the 0 cluster
+
 # trend plot with 11 clusters
 clusters$k11_trends = clusters$kmeans_on3d_k11$centers
 rownames(clusters$k11_trends) <- as.character(clusters$kmeans_on3d_k11$size)
-
+clusters$k11_trends$label = paste(1:11,': ', rownames(clusters$k11_trends),sep='')
 clusters$k11_trends_long = melt(clusters$k11_trends)
-colnames(clusters$k11_trends_long) <- c("cluster size", "stage", "center")
+colnames(clusters$k11_trends_long) <- c("label","cluster size", "stage", "center")
 clusters$k11_trends_long$`cluster size` = clusters$k11_trends_long$`cluster size`
 clusters$k11_trends_long$`size < 700` = clusters$k11_trends_long$`cluster size` 
 clusters$k11_trends_long$`size < 700`[clusters$k11_trends_long$`cluster size` < 700] = 'cluster size < 700'
 clusters$k11_trends_long$`size < 700`[clusters$k11_trends_long$`cluster size` >700] = 'cluster size > 700'
+
 clusters$k11_trends_long$`cluster size` = as.factor(clusters$k11_trends_long$`cluster size`)
 label=paste(sprintf("%d cluster trends at std. dev. > %.3f,", nrow(clusters$k11_trends), reps_avd$threshold3d_q), "(excludes lower ", sprintf("%.1f%%)", THRESHOLD*100))
 figure_colors = scale_colour_manual(values=brewer.pal(11,"Paired"))
@@ -275,6 +278,7 @@ peaksForBigBed$L1_IDR = as.integer(dfG_max$L1_IDR)
 peaksForBigBed$L3_IDR = as.integer(dfG_max$L3_IDR)
 peaksForBigBed$name = 1:length(peaksForBigBed)
 peaksForBigBed$k4weights = sprintf(float_precision_string, peaksForBigBed$k4weights)
+peaksForBigBed$k4labels = c("Not-changing","LE-specific", "Post-embryonic", "L3-high","Increasing")[peaksForBigBed$k4cluster + 1]
 peaksForBigBed$k11weights = sprintf(float_precision_string, peaksForBigBed$k11weights)
 peaksForBigBed$LE_nonNormed = sprintf(float_precision_string, peaksForBigBed$LE_nonNormed)
 peaksForBigBed$L1_nonNormed = sprintf(float_precision_string, peaksForBigBed$L1_nonNormed)
@@ -301,8 +305,9 @@ string  LE_rowNormed;	\"row normalized signal in LE\"
 string  L1_rowNormed;	\"row normalized signal in L1\"
 string  L3_rowNormed;	\"row normalized signal in L3\"
 uint  k4cluster;  \"Cluster assignment in kmeans = 4, 0 for not-changing\"
+string  k4label; \"Description of the trend for cluster\"
 string  k4weight;   \"Weight assigned to kmeans = 4 cluster assignment [0-1]\"
-uint  k11cluster; \"Cluster assignment in kmeans = 4, 0 for not-changing\"
+uint  k11cluster; \"Cluster assignment in kmeans = 11, 0 for not-changing\"
 string  k11weight;  \"Weight assigned to kmeans = 11 cluster assignment [0-1]\"
 )"
 write(peakSchema, "peaks.as")
@@ -322,6 +327,7 @@ write.table(data.frame(as.character(seqnames(peaksForBigBed)),
                        peaksForBigBed$L1_std,
                        peaksForBigBed$L3_std,
                        peaksForBigBed$k4cluster,
+                       peaksForBigBed$k4labels,
                        peaksForBigBed$k4weights,
                        peaksForBigBed$k11cluster,
                        peaksForBigBed$k11weights
@@ -341,7 +347,7 @@ write(chrom.sizes,"chrom.sizes")
 # better figure out the PATH on your system
 PATH=$PATH:/Users/david/bin/UCSC_userApps 
 bedSort peaksForBigBed.bed peaksForBigBed.bed
-bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+15 -as=peaks.as
+bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+16 -as=peaks.as
 ```
 
 ```{r other_shit}
