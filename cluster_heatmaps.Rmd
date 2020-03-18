@@ -210,12 +210,12 @@ rgb_colors = c("80,80,80",apply(t(col2rgb(c("#7570B3","#1B9E77","#D95F02","#E729
 
 # trend plot with 11 clusters
 clusters$k11_trends = as.data.frame(clusters$k11_trends)
-clusters$k11_trends$label <- sprintf("%d: %d", 1:11, clusters$kmeans_on3d_k11$size)
+clusters$k11_trends$label <- sprintf("%d (%d)", 1:11, clusters$kmeans_on3d_k11$size)
 clusters$k11_trends$lt700 = ifelse(clusters$kmeans_on3d_k11$size < 700, "< 700", "> 700")
 k11_trends_long = melt(clusters$k11_trends)
 k11_trends_long$label = factor(k11_trends_long$label, levels = clusters$k11_trends$label)
 colnames(k11_trends_long) <- c("cluster","lt700","stage","center")
-figure_colors = scale_colour_manual(values=brewer.pal(11,"Paired"))
+figure_colors = scale_colour_manual(name="cluster Id (size)", values=brewer.pal(11,"Paired"))
 print(
   ggplot(k11_trends_long, 
          aes(x=stage,y=center, 
