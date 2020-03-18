@@ -200,7 +200,7 @@ print(
          aes(x=stage,y=center, 
              group=description,
              colour=description)) + 
-    geom_line(size = 1.5) + 
+    geom_line(size = 2) + 
     labs(title="Kmeans cluster centers (k=4)", 
          y = "cluster center (Z)", 
          x = "developmental stage") + 
@@ -213,7 +213,7 @@ print(
              aes(x=stage,y=center, 
                  group=description,
                  colour=description)) + 
-          geom_line(size = 1.5) + 
+          geom_line(size = 2) + 
           labs(title="Kmeans cluster centers (k=4)", 
                y = "cluster center (Z)", 
                x = "developmental stage") + 
