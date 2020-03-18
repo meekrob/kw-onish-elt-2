@@ -208,16 +208,27 @@ print(
 
 # for the figure, separate out the groups into a separate plot, lay them out vertically,
 # and prevent the domain from expanding
-print(
-      ggplot(clusters$k4_trends_long, 
-             aes(x=stage,y=center, 
-                 group=description,
-                 colour=description)) + 
-          geom_line(size = 2) + 
-          labs(title="Kmeans cluster centers (k=4)", 
-               y = "cluster center (Z)", 
-               x = "developmental stage") + 
-          figure_colors + facet_grid(description ~ .) + theme_bw() + scale_x_discrete(expand=rep(0,4)))
+print( # k4stacked.pdf, scrunch the "Plots" display in the right panel all the way down to real dimensions you expect in the 
+       # Illustrator file.
+    ggplot(clusters$k4_trends_long, 
+           aes(x=stage,y=center, 
+               group=description,
+               colour=description)) + 
+        geom_line(size = 2) + 
+        labs(title="Kmeans cluster centers (k=4)", 
+             y = "cluster center (Z)", 
+             x = "developmental stage") + 
+      figure_colors + facet_grid(description ~ .) +  
+      theme(legend.position = "none",
+            panel.background=element_rect(fill='white'),
+            panel.grid.minor.y=element_line(colour='black',linetype = 'dashed',size=.5),
+            panel.grid.major.y=element_line(colour='black',linetype = 'solid',size=.75), 
+            panel.grid.major.x=element_line(colour='grey',linetype = 'solid',size=.5)) +
+      scale_x_discrete(expand=rep(0,4)) + 
+      scale_y_continuous(breaks = c(-1,0,1),
+                         minor_breaks=c(-.5,.5)
+                         )
+)
 
 
 
