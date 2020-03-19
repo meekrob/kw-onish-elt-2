@@ -179,8 +179,12 @@ set.seed(31415)
 pobj = pheatmap(reps_avd$include3d_x, kmeans=nclust, cluster_rows=F, cluster_cols = F, main=label)
 clusters$kmeans_on3d_k4 = reorder_kmeans(pobj$kmeans)
 
+heatmap_color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
+pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
+
 set.seed(31415)
 clusters$kmeans_on3d_k11 = reorder_kmeans(kmeans(reps_avd$include3d_x,11))
+
 #### work with the 3d matrix as a circle in 2D
 source('scripts/rotation_matrices.R')
 circular_data3d = flatten_std( reps_avd$include3d_x ) # this seems not to be right, but since it's for vis. purposes, 
@@ -268,6 +272,12 @@ clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cl
 # laptop:
 #   user  system elapsed 
 # 46.197   0.537  49.254
+
+# The standard heatmaps. See https://stackoverflow.com/questions/36852101/r-legend-title-or-units-when-using-pheatmap for 
+# getting the data out manually.
+pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster,-clusters$k4weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
+pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k11$cluster,-clusters$k11weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
+
 
 # add clusters and weights to GenomicRanges object
 dfG_max$k4cluster = 0
