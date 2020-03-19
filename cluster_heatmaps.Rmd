@@ -235,7 +235,7 @@ print( # k4stacked.pdf, scrunch the "Plots" display in the right panel all the w
 rgb_colors = c("80,80,80",apply(t(col2rgb(c("#7570B3","#1B9E77","#D95F02","#E7298A"))),1, str_flatten, collapse = ',')) # includes grey for the 0 cluster
 
 # trend plot with 11 clusters
-clusters$k11_trends = as.data.frame(clusters$k11_trends)
+clusters$k11_trends = as.data.frame(clusters$kmeans_on3d_k11$centers)
 clusters$k11_trends$label <- sprintf("%d (%d)", 1:11, clusters$kmeans_on3d_k11$size)
 clusters$k11_trends$lt700 = ifelse(clusters$kmeans_on3d_k11$size < 700, "cluster size < 700", "cluster size > 700")
 k11_trends_long = melt(clusters$k11_trends)
