@@ -220,6 +220,9 @@ print( # k4stacked.pdf, scrunch the "Plots" display in the right panel all the w
              x = "developmental stage") + 
       figure_colors + facet_grid(description ~ .) +  
       theme(legend.position = "none",
+            strip.text.y = element_blank(), # omit facet label
+            aspect.ratio=1.4787/3,
+            panel.spacing=unit(.7,"cm"),
             panel.background=element_rect(fill='white'),
             panel.grid.minor.y=element_line(colour='black',linetype = 'dashed',size=.5),
             panel.grid.major.y=element_line(colour='black',linetype = 'solid',size=.75), 
@@ -229,8 +232,6 @@ print( # k4stacked.pdf, scrunch the "Plots" display in the right panel all the w
                          minor_breaks=c(-.5,.5)
                          )
 )
-
-
 
 rgb_colors = c("80,80,80",apply(t(col2rgb(c("#7570B3","#1B9E77","#D95F02","#E7298A"))),1, str_flatten, collapse = ',')) # includes grey for the 0 cluster
 
