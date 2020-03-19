@@ -255,6 +255,11 @@ print(
     figure_colors + facet_grid(~ lt700))
 
 source('scripts/kweights.R')
+# The profiler points to rbind in the euclid/dist call as the main time sync.
+# Maybe this can be avoided by pasting the cluster centers onto the data (a single call to rbind),
+# then running dist() on the resulting table. The euclid function would then access the appropriate
+# rows of the resultant output, called by weight_f(), which is applied over each center for each row
+# of data, and summed inside row_func, which returns the reciprocal as the value of w[i][j].
 clusters$k4weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k4$cluster, clusters$kmeans_on3d_k4$centers)
 # laptop:
 #    user  system elapsed 
