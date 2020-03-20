@@ -429,7 +429,7 @@ upset(wbid_clusters_fromlist,
       text.scale=1.5, 
       keep.order = T,
       query.legend = "top", 
-      nintersects=100, 
+      nintersects=NA, 
       order.by = "degree", decreasing=F)
 
 # breakdown of genes with multiple peaks
