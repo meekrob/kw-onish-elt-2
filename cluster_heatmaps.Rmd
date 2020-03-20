@@ -416,6 +416,9 @@ bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+16 -as=p
 source('scripts/getCodingGenes.R',echo=T)
 annotatedPeaks = getCodingGenes(peaksForBigBed)
 attach(annotatedPeaks)
+ # a pie chart with the breakdown of how the annotation happened
+pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
+pie(table(ap$insideFeature), labels=pie_labels, main="ChIPpeakAnno::annotatePeakInBatch: \"nearestLocation\"", sub="paramart: wbps_gene_id, biotype= protein_coding")
 # Defines:
 #  all_CDS_genes - GRanges object of all CDS genes, non-MT
 #  ap - annotatedPeaks
