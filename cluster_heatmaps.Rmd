@@ -246,7 +246,7 @@ clusters$k11_trends$lt700 = ifelse(clusters$kmeans_on3d_k11$size < 700, "cluster
 k11_trends_long = melt(clusters$k11_trends)
 k11_trends_long$label = factor(k11_trends_long$label, levels = clusters$k11_trends$label)
 colnames(k11_trends_long) <- c("cluster","lt700","stage","center")
-col11hueSorted = brewer.pal(11,"Paired")[order(rgb2hsv(col2rgb(brewer.pal(11,"Paired")))[1,])]
+# the following list is a reorder of brewer.pal(11,"Paired")
 almostHueSorted = c("#FFFF99","#FF7F00","#FB9A99","#E31A1C","#FDBF6F","#33A02C","#B2DF8A","#1F78B4","#A6CEE3", "#6A3D9A","#CAB2D6")
 figure_colors = scale_colour_manual(name="cluster Id (size)", values=almostHueSorted)
 print(
