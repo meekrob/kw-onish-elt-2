@@ -258,7 +258,10 @@ print(
     labs(title="Kmeans cluster centers (k=11)", 
          y = "cluster center (Z)", 
          x = "developmental stage") + 
-    figure_colors + facet_grid(~ lt700))
+    figure_colors + facet_grid(~ lt700) + 
+    theme(panel.background=element_rect(fill='#E6E6E6'))
+    
+  )
 
 source('scripts/kweights.R')
 # The profiler points to rbind in the euclid/dist call as the main time sync.
