@@ -15,6 +15,7 @@ if (!requireNamespace(PKG, quietly = TRUE)) { BiocManager::install(PKG) }
 library(PKG, character.only=T)
 getCodingGenes = function(peaks){
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
+  # Get the specs from https://parasite.wormbase.org/biomart/martview/ 
   paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
   genes_coding = getBM(mart = paramart, 
                        filter=c("species_id_1010", 
@@ -27,6 +28,7 @@ getCodingGenes = function(peaks){
                                       'end_position', 
                                       'strand',
                                       'wormbase_gseq'))
+  
   # exclude mitochondria
   genes_coding_noMT = genes_coding[genes_coding$chromosome_name != 'MtDNA',]
   
@@ -50,9 +52,6 @@ getCodingGenes = function(peaks){
   names(all_CDS_genes) <- all_CDS_genes$wbps_gene_id
   ap=annotatePeakInBatch(peaks, AnnotationData=all_CDS_genes)
   
-  # a pie chart with the breakdown of how the annotation happened
-  pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
-  pie(table(ap$insideFeature), labels=pie_labels, main="ChIPpeakAnno::annotatePeakInBatch: \"nearestLocation\"", sub="paramart: wbps_gene_id, biotype= protein_coding")
   # does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
   round(table(ap$k4cluster, ap$insideFeature)/apply(table(ap$k4cluster, ap$insideFeature), 1, sum),3)*100
   
