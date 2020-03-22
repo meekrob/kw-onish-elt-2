@@ -4,7 +4,7 @@ table WS271_plus_xref
 string  chrom;		"1: Reference sequence chromosome or scaffold"
 uint    chromStart;	"2: Start position of feature on chromosome"
 uint    chromEnd;	"3: End position of feature on chromosome"
-string  name;		"4: Wormbase transcript ID"
+string  name;		"4: wormbase_locus or Wormbase transcript ID"
 uint    score;		"5: Score[unused]"
 char[1] strand;		"6: + or - for strand"
 uint    thickStart;	"7: Coding region start"
