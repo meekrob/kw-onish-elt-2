@@ -74,7 +74,7 @@ cat("colors = {",
 #   'piRNA': '255,127,0',
 #   'antisense_RNA': '202,178,214'}
 
-# paste this into the html detail page
+# paste the output of this command into the html detail page
 cat("<table>", 
     sprintf("<tr><td style='background-color:rgb(%d,%d,%d)'>%s</td><td>%s</td></tr>\n", 
             gene_colors[,1],
@@ -85,8 +85,21 @@ cat("<table>",
             "</table>",
             sep='')
 
+# <table><tr><td style='background-color:rgb(0,0,0)'>protein_coding</td><td>protein_coding</td></tr>
+#   <tr><td style='background-color:rgb(128,128,128)'>pseudogene</td><td>pseudogene</td></tr>
+#   <tr><td style='background-color:rgb(166,206,227)'>tRNA</td><td>tRNA</td></tr>
+#   <tr><td style='background-color:rgb(31,120,180)'>miRNA</td><td>miRNA</td></tr>
+#   <tr><td style='background-color:rgb(178,223,138)'>ncRNA</td><td>ncRNA</td></tr>
+#   <tr><td style='background-color:rgb(51,160,44)'>rRNA</td><td>rRNA</td></tr>
+#   <tr><td style='background-color:rgb(251,154,153)'>snRNA</td><td>snRNA</td></tr>
+#   <tr><td style='background-color:rgb(227,26,28)'>snoRNA</td><td>snoRNA</td></tr>
+#   <tr><td style='background-color:rgb(253,191,111)'>lincRNA</td><td>lincRNA</td></tr>
+#   <tr><td style='background-color:rgb(255,127,0)'>piRNA</td><td>piRNA</td></tr>
+#   <tr><td style='background-color:rgb(202,178,214)'>antisense_RNA</td><td>antisense_RNA</td></tr>
+#   </table>
+
 write.table(all_transcripts[all_transcripts$blockSize > 0,], "all_exons.table", sep="\t", col.names=T, row.names=F,quote=F)
 system("python3 collapse_exons.py all_exons.table wbps_transcript_id> everything.collapsed")
 system("python3 process_collapsed.py everything.collapsed > everything.bedPlus")
 system("/Users/david/bin/UCSC_userApps/bedSort everything.bedPlus everything.bedPlus")
-system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -as=WS271plus.as")
+system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -extraIndex=wbps_gene_id -as=WS271plus.as")
