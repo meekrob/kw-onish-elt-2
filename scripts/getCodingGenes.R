@@ -35,7 +35,7 @@ getCodingGenes = function(peaks){
   bedformat = genes_coding_noMT[,c('chromosome_name','start_position','end_position','strand','wbps_gene_id')]
   bedformat$strand = with(bedformat, ifelse(strand==1, '+','-'))
   bedformat = bedformat[with(bedformat, order(chromosome_name, start_position)), ] # WS271 as of this writing
-  write.table(bedformat, "celegans_genes.WS271.bed",col.names = F,row.names = F,quote=F, sep="\t")
+  
   # add 'chr'
   genes_coding_noMT$chromosome_name = paste('chr', genes_coding_noMT$chromosome_name, sep='')
   # strands must be '+/-', but paramart returns 1/-1
