@@ -481,6 +481,9 @@ if (FALSE)
 ```
 
 ``` {r GO term analysis}
+attach(annotatedPeaks)
+
+
 # get the annotations from PARASITE
 if (! "paramart" %in% ls()) {
   paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
@@ -500,7 +503,7 @@ geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.charact
 
 # All possible genes
 all.genes <- unique(as.character(WORMGO$wbps_gene_id))
-geneList = factor(as.integer(all.genes %in% ap.wbid))
+geneList = factor(as.integer(all.genes %in% all_CDS_genes$wbps_gene_id))
 names(geneList) = all.genes
 
 BP.go = new("topGOdata", ontology='BP'
@@ -552,11 +555,11 @@ GOSummary<- function(GOdata) {
 # GOdata = CC.go
 # CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
 # CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
-
+unique.ap.wbid=all.genes
 # Sub clusters vs all peaks
 
 #0
-unique.clust_0_wbid = unique(ap_0$feature);
+unique.clust_0_wbid = unique(bycluster$ap_0$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_0_wbid))
 names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
@@ -569,7 +572,7 @@ BP.go = new("topGOdata", ontology='BP'
 K0_allBPRes = GOSummary(BP.go)
 
 #1
-unique.clust_1_wbid = unique(ap_1$feature);
+unique.clust_1_wbid = unique(bycluster$ap_1$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_1_wbid))
 names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
@@ -583,7 +586,7 @@ BP.go = new("topGOdata", ontology='BP'
 K1_allBPRes = GOSummary(BP.go)
 
 #2
-unique.clust_2_wbid = unique(ap_2$feature);
+unique.clust_2_wbid = unique(bycluster$ap_2$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_2_wbid))
 names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
@@ -597,7 +600,7 @@ BP.go = new("topGOdata", ontology='BP'
 K2_allBPRes = GOSummary(BP.go)
 
 #3
-unique.clust_3_wbid = unique(ap_3$feature);
+unique.clust_3_wbid = unique(bycluster$ap_3$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_3_wbid))
 names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
@@ -611,7 +614,7 @@ BP.go = new("topGOdata", ontology='BP'
 K3_allBPRes = GOSummary(BP.go)
 
 #4
-unique.clust_4_wbid = unique(ap_4$feature);
+unique.clust_4_wbid = unique(bycluster$ap_4$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_4_wbid))
 names(geneList) = unique.ap.wbid
 BP.go = new("topGOdata", ontology='BP'
