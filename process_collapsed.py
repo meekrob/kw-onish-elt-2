@@ -73,5 +73,9 @@ for line in open( sys.argv[1] ):
     fields[3] = fields[18]
     # color code the biotype
     fields[8] = colors[ fields[17] ]
+    # get the bracket info out of the description field
+    if fields[14].find('[') > -1:
+        fields[14] = fields[14].split('[')[0]
+    
 
     print("\t".join(map(str, fields[:-2])))

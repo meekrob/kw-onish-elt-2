@@ -102,4 +102,4 @@ write.table(all_transcripts[all_transcripts$blockSize > 0,], "all_exons.table", 
 system("python3 collapse_exons.py all_exons.table wbps_transcript_id> everything.collapsed")
 system("python3 process_collapsed.py everything.collapsed > everything.bedPlus")
 system("/Users/david/bin/UCSC_userApps/bedSort everything.bedPlus everything.bedPlus")
-system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -extraIndex=wbps_gene_id -as=WS271plus.as")
+system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -extraIndex=name,wbps_gene_id -as=WS271plus.as")
