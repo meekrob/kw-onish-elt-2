@@ -8,8 +8,9 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::include_graphics
+library(knitr)
+opts_chunk$set(echo = TRUE)
+include_graphics
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 R.version
 library(pheatmap)
@@ -584,7 +585,7 @@ BP.go = new("topGOdata", ontology='BP'
 #BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
 #BP.results.k1.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 K1_allBPRes = GOSummary(BP.go)
-
+kable(K1_allBPRes[order(K1_allBPRes$elim),][K1_allBPRes$Significant > 2,])
 #2
 unique.clust_2_wbid = unique(bycluster$ap_2$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_2_wbid))
@@ -598,7 +599,7 @@ BP.go = new("topGOdata", ontology='BP'
 # BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
 # BP.results.k2.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 K2_allBPRes = GOSummary(BP.go)
-
+kable(K2_allBPRes[order(K2_allBPRes$elim),][K2_allBPRes$Significant > 2,])
 #3
 unique.clust_3_wbid = unique(bycluster$ap_3$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_3_wbid))
@@ -612,7 +613,7 @@ BP.go = new("topGOdata", ontology='BP'
 # BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
 # BP.results.k3.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 K3_allBPRes = GOSummary(BP.go)
-
+kable(K3_allBPRes[order(K3_allBPRes$elim),][K3_allBPRes$Significant > 2,])
 #4
 unique.clust_4_wbid = unique(bycluster$ap_4$feature);
 geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_4_wbid))
@@ -626,4 +627,11 @@ BP.go = new("topGOdata", ontology='BP'
 # BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
 # BP.results.k4.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
 K4_allBPRes = GOSummary(BP.go)
+
+
+K3_allBPRes[order(K3_allBPRes$elim),][K3_allBPRes$Significant > 2,] -> bestK3terms; View(bestK3terms)
+K4_allBPRes[order(K4_allBPRes$elim),][K4_allBPRes$Significant > 2,] -> bestK4terms; View(bestK4terms)
+K2_allBPRes[order(K2_allBPRes$elim),][K2_allBPRes$Significant > 2,] -> bestK2terms; View(bestK2terms)
+K1_allBPRes[order(K1_allBPRes$elim),][K1_allBPRes$Significant > 2,] -> bestK1terms; View(bestK1terms)
+K0_allBPRes[order(K0_allBPRes$elim),][K0_allBPRes$Significant > 2,] -> bestK0terms; View(bestK0terms)
 ```
