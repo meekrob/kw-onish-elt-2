@@ -16,19 +16,33 @@ library(PKG, character.only=T)
 getCodingGenes = function(peaks){
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
   # Get the specs from https://parasite.wormbase.org/biomart/martview/ 
-  paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
-  genes_coding = getBM(mart = paramart, 
-                       filter=c("species_id_1010", 
-                                "biotype"), 
-                       value=list(species_id_1010="caelegprjna13758", 
-                                  biotype="protein_coding"), 
-                       attributes = c('wbps_gene_id',
-                                      'chromosome_name', 
-                                      'start_position', 
-                                      'end_position', 
-                                      'strand',
-                                      'wormbase_gseq'))
-  
+  if (file.exists('genes_coding.RData')) {
+    load('genes_coding.RData')
+  }
+  else {
+    paramart <-
+    useMart("parasite_mart",
+            dataset = "wbps_gene",
+            host = "https://parasite.wormbase.org",
+            port = 443)
+    genes_coding = getBM(
+      mart = paramart,
+      filter = c("species_id_1010",
+                 "biotype"),
+      value = list(species_id_1010 = "caelegprjna13758",
+                   biotype = "protein_coding"),
+      attributes = c(
+        'wbps_gene_id',
+        'chromosome_name',
+        'start_position',
+        'end_position',
+        'strand',
+        'wormbase_gseq',
+        "wormbase_locus"
+      )
+    )
+    save(genes_coding, file="genes_coding.RData")
+  }
   # exclude mitochondria
   genes_coding_noMT = genes_coding[genes_coding$chromosome_name != 'MtDNA',]
   
@@ -50,7 +64,22 @@ getCodingGenes = function(peaks){
                                            end.field="end_position")
   
   names(all_CDS_genes) <- all_CDS_genes$wbps_gene_id
-  ap=annotatePeakInBatch(peaks, AnnotationData=all_CDS_genes)
+  all_CDS_genes$name = ifelse(all_CDS_genes$wormbase_locus == '', all_CDS_genes$wormbase_gseq, all_CDS_genes$wormbase_locus)
+  ap = annotatePeakInBatch(
+    peaks,
+    AnnotationData = all_CDS_genes,
+    PeakLocForDistance = "middle",
+    output = "overlapping",
+    FeatureLocForDistance = c("middle")
+  )
+  # unmapped +/- 5Kb
+  nappy = ap[is.na(ap$feature)]
+  # mapped
+  ap = ap[!is.na(ap$feature)]
+  # reduce list down to the minumum absolute value of distancetoFeature
+  ap = ap[ order(ap$feature, abs(ap$distancetoFeature) )]
+  ap.unique = ap[ match(unique(ap$feature), ap$feature)]
+  
   
   # does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
   round(table(ap$k4cluster, ap$insideFeature)/apply(table(ap$k4cluster, ap$insideFeature), 1, sum),3)*100
