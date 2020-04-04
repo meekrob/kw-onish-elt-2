@@ -35,6 +35,7 @@ all_transcripts = getBM(mart = paramart,
                                    "refseq_mrna"
                                    )
               )
+na_CDS = is.na(all_transcripts$genomic_coding_end) & is.na(all_transcripts$genomic_coding_start)
 all_transcripts$strand = ifelse(all_transcripts$strand==1,'+','-')
 all_transcripts$blockSize = all_transcripts$exon_chrom_end - all_transcripts$exon_chrom_start
 all_transcripts$blockStart = all_transcripts$exon_chrom_start - all_transcripts$start_position
@@ -102,4 +103,4 @@ write.table(all_transcripts[all_transcripts$blockSize > 0,], "all_exons.table", 
 system("python3 collapse_exons.py all_exons.table wbps_transcript_id> everything.collapsed")
 system("python3 process_collapsed.py everything.collapsed > everything.bedPlus")
 system("/Users/david/bin/UCSC_userApps/bedSort everything.bedPlus everything.bedPlus")
-system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -extraIndex=name,wbps_gene_id -as=WS271plus.as")
+system("/Users/david/bin/UCSC_userApps/bedToBigBed everything.bedPlus chrom.sizes WS271.bb -type=bed12+10 -tab -extraIndex=name,wbps_gene_id,wormbase_locus -as=WS271plus.as")
