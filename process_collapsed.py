@@ -70,12 +70,16 @@ for line in open( sys.argv[1] ):
     fields[11] = ",".join( map(str,blockStarts) )
 
     # use the wormbase locus ID as the name, I have put the wbps_transcript_id in place when not set
-    fields[3] = fields[18]
+    fields[3] = fields[18] + ":" + fields[12]
     # color code the biotype
     fields[8] = colors[ fields[17] ]
     # get the bracket info out of the description field
     if fields[14].find('[') > -1:
         fields[14] = fields[14].split('[')[0]
     
-
+    # don't want these
+    del fields[-1]
+    del fields[-1]
+    
+    # fields.append
     print("\t".join(map(str, fields[:-2])))
