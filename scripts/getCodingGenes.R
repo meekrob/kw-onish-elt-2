@@ -13,7 +13,7 @@ library(GenomicRanges)
 PKG="ChIPpeakAnno"
 if (!requireNamespace(PKG, quietly = TRUE)) { BiocManager::install(PKG) }
 library(PKG, character.only=T)
-getCodingGenes = function(peaks){
+getCodingGenes = function(peaks, within_genes_kb = 5){
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
   # Get the specs from https://parasite.wormbase.org/biomart/martview/ 
   if (file.exists('genes_coding.RData')) {
@@ -65,22 +65,30 @@ getCodingGenes = function(peaks){
   
   names(all_CDS_genes) <- all_CDS_genes$wbps_gene_id
   all_CDS_genes$name = ifelse(all_CDS_genes$wormbase_locus == '', all_CDS_genes$wormbase_gseq, all_CDS_genes$wormbase_locus)
+  
   ap = annotatePeakInBatch(
     peaks,
     AnnotationData = all_CDS_genes,
     PeakLocForDistance = "middle",
-    output = "overlapping",
-    FeatureLocForDistance = c("middle")
+    output = "nearestLocation",
+    FeatureLocForDistance = c("middle"),
+    bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
   )
   # unmapped +/- 5Kb
   nappy = ap[is.na(ap$feature)]
   # mapped
   ap = ap[!is.na(ap$feature)]
   # reduce list down to the minumum absolute value of distancetoFeature
-  ap = ap[ order(ap$feature, abs(ap$distancetoFeature) )]
-  ap.unique = ap[ match(unique(ap$feature), ap$feature)]
+  ap.ordered = ap[ order(ap$name, abs(ap$distancetoFeature) )]
+  ap.unique = ap[ match(unique(ap.ordered$name), ap.ordered$name)]
+  ap.rejoined = c(ap.unique, nappy)
+  ap.rejoined = ap.rejoined[ order(ap.rejoined$name)]
   
-  
+  ap = ap.rejoined
+  insideFeatureLabels = as.character(ap$insideFeature)
+  insideFeatureLabels[is.na(ap$feature)] <- sprintf("unmapped ± %dKb",within_genes_kb) 
+  insideFeatureLabels[ap$shortestDistance > within_genes_kb * 1000] <- sprintf("unmapped ± %dKb",5) 
+  ap$insideFeature <- as.factor(insideFeatureLabels)
   # does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
   round(table(ap$k4cluster, ap$insideFeature)/apply(table(ap$k4cluster, ap$insideFeature), 1, sum),3)*100
   

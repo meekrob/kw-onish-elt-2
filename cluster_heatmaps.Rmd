@@ -27,10 +27,11 @@ library(topGO)
 
 ## Script version
 ```{bash repo version, echo=FALSE}
-#cd ~/work/
+
 git remote -v
 git log -n 1
-git status -s
+git status -s | grep -v '^?'
+git diff cluster_heatmaps.Rmd
 ```
 
 ## Process data
@@ -72,16 +73,23 @@ L3_verify = GenomicRanges::findOverlaps(L3_IDR, dfG, type="any")
 dfG$LE_IDR[ to(LE_verify) ] <- TRUE
 dfG$L1_IDR[ to(L1_verify) ] <- TRUE
 dfG$L3_IDR[ to(L3_verify) ] <- TRUE
+
+source('scripts/r_isect_union.R')
+dfG$summit_agreement = score_peak_summit_agreement(dfG, LE_IDR, L1_IDR, L3_IDR)$summit_agreement
+
 # collect some variables 
 IDR_sets = list(LE_IDR=LE_IDR,L1_IDR=L1_IDR,L3_IDR=L3_IDR,LE_verify=LE_verify,L1_verify=L1_verify,L3_verify=L3_verify)
 rm(LE_IDR,L1_IDR,L3_IDR,LE_verify,L1_verify,L3_verify)
 
 
 # Remove the unused javaGenomicsToolkit columns (min,mean,etc.)
+
 all_max_col_ix = which(! is.na(str_match(colnames(df),"max")))
 df_max = df[,all_max_col_ix]
-dfG_max_ix = which(! is.na(str_match(colnames(mcols(dfG)),"max")))
-dfG_max = dfG[,c(dfG_max_ix,26:28)]
+dfG_metacolnames = colnames(mcols(dfG))
+dfG_max_ix = which(! is.na(str_match(dfG_metacolnames,"max")))
+max_colnames = dfG_metacolnames[ dfG_max_ix ]
+dfG_max = dfG[,c(max_colnames, 'LE_IDR','L1_IDR','L3_IDR','summit_agreement')]
 # index vars not used further
 rm(all_max_col_ix, dfG_max_ix)
 
@@ -107,6 +115,7 @@ data6d = as.matrix(df_max[,colnames_in_stage_order])
 data3d = data.frame( LE=rowMeans(data6d[,c(1,2)]),
                      L1=rowMeans(data6d[,c(3,4)]),
                      L3=rowMeans(data6d[,c(5,6)]))
+
 # perform normalization on 3d
 peaks3d_sd = apply(data3d, 1, sd)
 peaks3d_mu = apply(data3d, 1, mean)
@@ -129,16 +138,19 @@ THRESHOLD = .05
 
 # make the text conversions consistent
 TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
+
+# Enforce stdev-passing peaks and "all IDR" as part of the threshold
 # w/reps
 threshold6d_q = q.peaks6d_zeroed_nans_sd(THRESHOLD)
 threshold6d_ix = peaks6d_sd > threshold6d_q
-threshold6d_x = peaks6d_std[ threshold6d_ix,]
+threshold6d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold6d_ix
+threshold6d_x = peaks6d_std[threshold6d_ix,]
 # w/reps avg'd
 threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
 threshold3d_ix = peaks3d_sd > threshold3d_q
-threshold3d_x = peaks3d_std[ threshold3d_ix,]
+threshold3d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold3d_ix
+threshold3d_x = peaks3d_std[threshold3d_ix,]
 
-# go back to the THRESHOLD set to clean up the clustering
 include6d_x = threshold6d_x
 include3d_x = threshold3d_x
 
@@ -296,27 +308,6 @@ dfG_max$k11cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k11$cluster
 dfG_max$k11weights[reps_avd$threshold3d_ix] = clusters$k11weights
 
 ```
-WARM COLORS                           COOL COLORS
-(cluster size < 700)               (cluster size > 700)
------------                             -----------
-           |         
-           |              G              |
-   R       |               B             |   darker (uppercase) = concave
-    O      |                V            |
-------y--- | ---------------------------------
-    o ^    |                v<           |
-   r  |    |               b |           |   lighter (lowercase) = convex
-      |    |              g  |           |                                                                              
-   strictly                  |
-  decreasing              strictly
-     (y)                 increasing
-                      (least eccentric)
-                            (v)
-----------------------------------------------------------------------------
-Colors converge in ROYGBiV (indigo is a lie) 
-in outer to inner (eccentric to smoothest).
-smoothest: -1 slope in warm/small cluster sizes,
-smoothest: +1 slope in cool/large cluster sizes.
 
 ```{r format prepare BED+}
 dfG_max$LE_nonNormed = (dfG_max$LE_1 + dfG_max$LE_2)/2
@@ -332,16 +323,21 @@ dfG_max$L1_1 = NULL
 dfG_max$L1_2 = NULL
 dfG_max$L3_1 = NULL
 dfG_max$L3_2 = NULL
-#write.table(DataFrame(dfG_max[order(ranges(dfG_max)),]),"dfG_max.df",quote=F,sep="\t", row.names=F,col.names=F)
 
 float_precision_string = "%.3f"
 peaksForBigBed = dfG_max
 peaksForBigBed$LE_IDR = as.integer(dfG_max$LE_IDR)
 peaksForBigBed$L1_IDR = as.integer(dfG_max$L1_IDR)
 peaksForBigBed$L3_IDR = as.integer(dfG_max$L3_IDR)
-peaksForBigBed$name = 1:length(peaksForBigBed)
+peaksForBigBed$name = sprintf("ELT2peak%05d", 1:length(peaksForBigBed))
 peaksForBigBed$k4weights = sprintf(float_precision_string, peaksForBigBed$k4weights)
-peaksForBigBed$k4labels = c("Not-changing","LE-specific", "Post-embryonic", "L3-high","Increasing")[peaksForBigBed$k4cluster + 1]
+peaksForBigBed$k4labels = c(
+  "Not-changing or not IDR-passing",
+  "LE-specific",
+  "Post-embryonic",
+  "L3-high",
+  "Increasing"
+)[peaksForBigBed$k4cluster + 1]
 peaksForBigBed$k11weights = sprintf(float_precision_string, peaksForBigBed$k11weights)
 peaksForBigBed$LE_nonNormed = sprintf(float_precision_string, peaksForBigBed$LE_nonNormed)
 peaksForBigBed$L1_nonNormed = sprintf(float_precision_string, peaksForBigBed$L1_nonNormed)
@@ -349,6 +345,13 @@ peaksForBigBed$L3_nonNormed = sprintf(float_precision_string, peaksForBigBed$L3_
 peaksForBigBed$LE_std = sprintf(float_precision_string, peaksForBigBed$LE_std)
 peaksForBigBed$L1_std = sprintf(float_precision_string, peaksForBigBed$L1_std)
 peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
+
+
+source('scripts/getCodingGenes.R',echo=F)
+system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
+attach(annotatedPeaks)
+pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
+pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
 
 peakSchema = "
 table ELT2DynamicPeaks
@@ -358,42 +361,36 @@ string  chrom;		\"Reference sequence chromosome or scaffold\"
 uint    chromStart;	\"Start position of feature on chromosome\"
 uint    chromEnd;	\"End position of feature on chromosome\"
 string  name;		\"Index of peak\"
-uint    LE_IDR;	\"0/1 - IDR in LE\"
-uint    L1_IDR;	\"0/1 - IDR in L1\"
-uint  	L3_IDR;	\"0/1 - IDR in L3\"
-string  LE_nonNormed;	\"non-row normalized signal in LE\"
-string  L1_nonNormed;	\"non-row normalized signal in L1\"
-string  L3_nonNormed;	\"non-row normalized signal in L3\"
-string  LE_rowNormed;	\"row normalized signal in LE\"
-string  L1_rowNormed;	\"row normalized signal in L1\"
-string  L3_rowNormed;	\"row normalized signal in L3\"
+string  WBID;   \"Wormbase ID\"
+string mapping; \"How did it map to the gene?\"
 uint  k4cluster;  \"Cluster assignment in kmeans = 4, 0 for not-changing\"
 string  k4label; \"Description of the trend for cluster\"
 string  k4weight;   \"Weight assigned to kmeans = 4 cluster assignment [0-1]\"
-uint  k11cluster; \"Cluster assignment in kmeans = 11, 0 for not-changing\"
-string  k11weight;  \"Weight assigned to kmeans = 11 cluster assignment [0-1]\"
+char[1] LE_IDR; \"0/1 IDR peak in Late embryo\"
+char[1] L1_IDR; \"0/1 IDR peak in Stage 1 Larvae\"
+char[1] L3_IDR; \"0/1 IDR peak in Stage 3 Larvae\"
+string summit_agreement; \"Average bp difference in summit calls to mean\"
 )"
 write(peakSchema, "peaks.as")
 
+
+
+
 # make a dataframe that is in the same order as above
-write.table(data.frame(as.character(seqnames(peaksForBigBed)),
-                       start(peaksForBigBed),
-                       end(peaksForBigBed),
-                       peaksForBigBed$name,
-                       peaksForBigBed$LE_IDR,
-                       peaksForBigBed$L1_IDR,
-                       peaksForBigBed$L3_IDR,
-                       peaksForBigBed$LE_nonNormed,
-                       peaksForBigBed$L1_nonNormed,
-                       peaksForBigBed$L3_nonNormed,
-                       peaksForBigBed$LE_std,
-                       peaksForBigBed$L1_std,
-                       peaksForBigBed$L3_std,
-                       peaksForBigBed$k4cluster,
-                       peaksForBigBed$k4labels,
-                       peaksForBigBed$k4weights,
-                       peaksForBigBed$k11cluster,
-                       peaksForBigBed$k11weights
+write.table(data.frame(as.character(seqnames(annotatedPeaks$ap)),
+                       start(annotatedPeaks$ap),
+                       end(annotatedPeaks$ap),
+                       annotatedPeaks$ap$name,
+                       annotatedPeaks$ap$feature,
+                       annotatedPeaks$ap$insideFeature,
+                       annotatedPeaks$ap$k4cluster,
+                       annotatedPeaks$ap$k4labels,
+                       annotatedPeaks$ap$k4weights,
+                       annotatedPeaks$ap$LE_IDR,
+                       annotatedPeaks$ap$L1_IDR,
+                       annotatedPeaks$ap$L3_IDR,
+                       annotatedPeaks$ap$summit_agreement
+                    
                        ), "peaksForBigBed.bed",quote=F,row.names=F,col.names=F,sep="\t")
 chrom.sizes = "chrV	20924180
 chrX	17718942
@@ -410,16 +407,15 @@ write(chrom.sizes,"chrom.sizes")
 # better figure out the PATH on your system
 PATH=$PATH:/Users/david/bin/UCSC_userApps 
 bedSort peaksForBigBed.bed peaksForBigBed.bed
-bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+16 -as=peaks.as
+bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as
 ```
 
 ```{r Get Coding Genes}
-source('scripts/getCodingGenes.R',echo=T)
-annotatedPeaks = getCodingGenes(peaksForBigBed)
+# annotatedPeaks assigned in previous chunk
 attach(annotatedPeaks)
  # a pie chart with the breakdown of how the annotation happened
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
-pie(table(ap$insideFeature), labels=pie_labels, main="ChIPpeakAnno::annotatePeakInBatch: \"nearestLocation\"", sub="paramart: wbps_gene_id, biotype= protein_coding")
+pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
 # Defines:
 #  all_CDS_genes - GRanges object of all CDS genes, non-MT
 #  ap - annotatedPeaks
@@ -487,15 +483,21 @@ attach(annotatedPeaks)
 
 # get the annotations from PARASITE
 if (! "paramart" %in% ls()) {
-  paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)}
+  system.time({paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)})}
 if (! "WORMGO" %in% ls()) {
   # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
-  WORMGO=biomaRt::getBM(mart = paramart, filter="species_id_1010", value="caelegprjna13758",
-       attributes = c( "wbps_gene_id", 
-            "external_gene_id", 
-            "go_accession", 
-            "go_name_1006", 
-            "go_linkage_type")) 
+  system.time({WORMGO = biomaRt::getBM(
+    mart = paramart,
+    filter = "species_id_1010",
+    value = "caelegprjna13758",
+    attributes = c(
+      "wbps_gene_id",
+      "external_gene_id",
+      "go_accession",
+      "go_name_1006",
+      "go_linkage_type"
+    )
+  )}) 
 }
 
 # create an object where you can access all the GO terms that are assigned to a specific gene
