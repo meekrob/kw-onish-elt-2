@@ -143,12 +143,12 @@ TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
 # w/reps
 threshold6d_q = q.peaks6d_zeroed_nans_sd(THRESHOLD)
 threshold6d_ix = peaks6d_sd > threshold6d_q
-threshold6d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold6d_ix
+#threshold6d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold6d_ix
 threshold6d_x = peaks6d_std[threshold6d_ix,]
 # w/reps avg'd
 threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
 threshold3d_ix = peaks3d_sd > threshold3d_q
-threshold3d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold3d_ix
+#threshold3d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold3d_ix
 threshold3d_x = peaks3d_std[threshold3d_ix,]
 
 include6d_x = threshold6d_x
