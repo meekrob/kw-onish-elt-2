@@ -13,6 +13,7 @@ opts_chunk$set(echo = TRUE)
 include_graphics
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 R.version
+RStudio.Version()
 library(pheatmap)
 library(stringr)
 library(reshape2)
@@ -350,6 +351,8 @@ peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
 source('scripts/getCodingGenes.R',echo=F)
 system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
+kinases = read.table('kinases.bm',header=T,sep="\t")
+mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
 pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
 
@@ -414,18 +417,18 @@ bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -
 # annotatedPeaks assigned in previous chunk
 attach(annotatedPeaks)
  # a pie chart with the breakdown of how the annotation happened
-pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
-pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
-# Defines:
-#  all_CDS_genes - GRanges object of all CDS genes, non-MT
-#  ap - annotatedPeaks
-#  ap.wbid - only the WB IDs 
-#  unique.wbid - unique WB IDs
-#  ap_0 - annotatedPeaks k0
-#  ap_1 - annotatedPeaks k1
-#  ap_2 - annotatedPeaks k2
-#  ap_3 - annotatedPeaks k3
-#  ap_4 - annotatedPeaks k4
+mapping_breakdown = table(ap$insideFeature)
+breakdown = list(`upstream` = mapping_breakdown['upstream'] +
+                              mapping_breakdown['overlapStart'],
+                 `inside` = mapping_breakdown['inside'] + 
+                            mapping_breakdown['includeFeature'],
+                 `downstream` = mapping_breakdown['downstream'] + 
+                                mapping_breakdown['overlapEnd'],
+                 `unmapped` = mapping_breakdown['unmapped ± 5Kb']
+                 )
+
+pie_labels = paste0(names(breakdown), rep(" (",4), unlist(breakdown), rep(")",4))
+pie(unlist(breakdown), labels=pie_labels, main="Peaks mapping nearest to a gene", clockwise=T, init.angle=-90)
 
 # upset plot: identify set overlap by assigned value of k
 clustersPerGene = table(ap$feature, ap$k4cluster)
@@ -458,10 +461,12 @@ upset(wbid_clusters_fromlist,
       nintersects=NA, 
       order.by = "degree", decreasing=F)
 
+#  sum(311, 270, 876, 1544, 2153)
+
 # breakdown of genes with multiple peaks
 clustersPerGene_rowSums = rowSums(clustersPerGene)
 multiple_peaks = clustersPerGene_rowSums > 1
-sum(multiple_peaks) # 2158
+sum(multiple_peaks) # 2280
 breakdown=table(clustersPerGene_rowSums)
 bp=barplot(table(clustersPerGene_rowSums), xlab="number of peaks mapped to a gene", ylab="number of genes", main="Genes tend to have a single peak mapped to them")
 i=1; y=breakdown[i]; text(bp[i,1],y - strheight(y,srt=90)*1.9,srt=90, labels = y)

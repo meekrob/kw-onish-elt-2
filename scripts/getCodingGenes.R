@@ -74,6 +74,17 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     FeatureLocForDistance = c("middle"),
     bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
   )
+  # somehow these fields get converted to character
+  ap$k4weights = as.numeric(ap$k4weights)
+  ap$k11weights = as.numeric(ap$k11weights)
+  ap$LE_nonNormed = as.numeric(ap$LE_nonNormed)
+  ap$L1_nonNormed = as.numeric(ap$L1_nonNormed)
+  ap$L3_nonNormed = as.numeric(ap$L3_nonNormed)
+  ap$L3_std = as.numeric(ap$L3_std)
+  ap$L1_std = as.numeric(ap$L1_std)
+  ap$LE_std = as.numeric(ap$LE_std)
+  ap$peak = as.integer(ap$peak)
+  
   # unmapped +/- 5Kb
   nappy = ap[is.na(ap$feature)]
   # mapped
