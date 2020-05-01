@@ -113,7 +113,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   ap_2 = ap[ap$k4cluster ==2]
   ap_3 = ap[ap$k4cluster ==3]
   ap_4 = ap[ap$k4cluster ==4]
-  
+  saveRDS(ap, "annotatedPeaks.rds")
   return(
     list(ap=ap, 
          bycluster=list(

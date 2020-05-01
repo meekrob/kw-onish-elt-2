@@ -4,7 +4,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
     BiocManager::install("GenomicRanges")
 }
-library(GenomicRanges);
+library(GenomicRanges, warn.conflicts=F);
 makeGRangesFromNarrowPeak <- function(filename) {
     narrowPeak_df = read.table(filename, 
         col.names=c('chrom', 
