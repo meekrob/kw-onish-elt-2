@@ -28,7 +28,22 @@ ggplot(totals, aes(x=reorder(hexamer,-total.hex),y=total.hex)) + geom_col() +the
 ```
 As expected, TGATAA is the most common motif overall. Others, especially AGATAA, have been studied as secondary targets.
 
-### Contribution of secondary GATA variants
+
+How does the occurance of GATA variants compare with those counted in randomly permuted regions?
+
+```{r permuted regions}
+permuted_NGATAN.tab = readRDS("permuted_NGATAN.tab.rds")
+permuted_10.counts = colSums(permuted_NGATAN.tab)
+ave_hexamer_count = round(sum(permuted_10.counts)/10)
+ELT2_binding_counts = colSums(ngatan.by.peak)
+# scale the permuted counts to the average hexamer count size
+permuted_10.prop = permuted_10.counts/sum(permuted_10.counts)
+permuted_10.sim = round(permuted_10.prop * ave_hexamer_count)
+ELT2_hexamers_vs_random_regions = rbind(ELT2_binding_counts, permuted_10.sim)
+mosaicplot(ELT2_hexamers_vs_random_regions, shade=T, las=1, type="pearson", cex.axis=.7)
+```
+
+### PCA analysis: Contribution of secondary GATA variants
 ```{r thresholding}
 variance.by.peak = apply(ngatan.by.peak, 1, var)
 for (upper_quantile in c(.25,.05,.01))
@@ -44,6 +59,9 @@ for (upper_quantile in c(.25,.05,.01))
 Variance thresholds do not appear do select for changes in relative occurance of the motifs.
 
 ---
+
+
+
 
 ```{r PCA}
 ngatan.pca = princomp(ngatan.by.peak)
@@ -68,6 +86,11 @@ fviz_pca_biplot(nonTGATAA.pca, label="var") + ggtitle("TGATAA excluded")
 
 fviz_pca_biplot(nonTGATAA.pca, axes=c(1,3), label="var") + ggtitle("TGATAA excluded")
 ```
+
+
+
+
+
 ``` {r co-occurance}
 
 library(ymse)
