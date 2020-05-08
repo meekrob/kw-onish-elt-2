@@ -340,12 +340,14 @@ peaksForBigBed$k4labels = c(
   "Increasing"
 )[peaksForBigBed$k4cluster + 1]
 peaksForBigBed$k11weights = sprintf(float_precision_string, peaksForBigBed$k11weights)
+peaksForBigBed$variance = apply(mcols(peaksForBigBed)[,c('LE_nonNormed','L1_nonNormed','L3_nonNormed')], 1, var)
 peaksForBigBed$LE_nonNormed = sprintf(float_precision_string, peaksForBigBed$LE_nonNormed)
 peaksForBigBed$L1_nonNormed = sprintf(float_precision_string, peaksForBigBed$L1_nonNormed)
 peaksForBigBed$L3_nonNormed = sprintf(float_precision_string, peaksForBigBed$L3_nonNormed)
 peaksForBigBed$LE_std = sprintf(float_precision_string, peaksForBigBed$LE_std)
 peaksForBigBed$L1_std = sprintf(float_precision_string, peaksForBigBed$L1_std)
 peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
+
 
 
 source('scripts/getCodingGenes.R',echo=F)
@@ -479,6 +481,19 @@ if (FALSE)
   print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
   dev.off()
 }
+
+ap.0 = ap[ap$k4cluster == 0]
+ap.1 = ap[ap$k4cluster == 1]
+ap.2 = ap[ap$k4cluster == 2]
+ap.3 = ap[ap$k4cluster == 3]
+ap.4 = ap[ap$k4cluster == 4]
+
+ap.0 = ap.0[order(-ap.0$variance)]
+ap.1 = ap.1[order(-ap.1$variance)]
+ap.2 = ap.2[order(-ap.2$variance)]
+ap.3 = ap.3[order(-ap.3$variance)]
+ap.4 = ap.4[order(-ap.4$variance)]
+
 # see previous commits for attempts to characterize the cluster patterns
 ```
 
