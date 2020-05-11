@@ -20,6 +20,74 @@ Here is an analysis of roughly 10,000 DNA sequences that ELT-2 binds in any of t
 ```{r show data}
 ngatan.by.peak = readRDS("ngatan.by.peak.rds") # a "peak" is the entity identified by ChIP-seq analysis.  A peak is d
 dim(ngatan.by.peak)
+mappings = as.integer(unlist(str_split(rownames(ngatan.by.peak),":"))[(1:10185)*3]) + 1
+
+# Contingency tables on # of peaks with X number of givenmotif
+newtab = table(ngatan.by.peak[,'TGATAA'],mcols(ap[mappings])$k4cluster)[1:4,]
+nPeaks_w_nTGATAA = rbind(newtab, colSums(table(ngatan.by.peak[,'TGATAA'], mcols(ap[mappings])$k4cluster)[5:11,]))
+rownames(nPeaks_w_nTGATAA) <- c("0","1","2","3","≥4")
+mosaicplot(nPeaks_w_nTGATAA, shade=T,
+           main="TGATAA occurance among peaks\nbroken down by developmental class",
+           xlab="peaks with specified # of TGATAAs",
+           ylab="developmental class")
+
+nPeaks_w_nTGATAT=rbind(table(ngatan.by.peak[,'TGATAT'],mcols(ap[mappings])$k4cluster)[1:3,], colSums(table(ngatan.by.peak[,'TGATAT'],mcols(ap[mappings])$k4cluster)[4:10,]))
+rownames(nPeaks_w_nTGATAT) <- c("0","1","2","≥3")
+mosaicplot(nPeaks_w_nTGATAT, shade=T,
+           main="TGATAT occurance among peaks\nbroken down by developmental class",
+           xlab="peaks with specified # of TGATATs",
+           ylab="developmental class")
+
+nPeaks_w_nAGATAA=rbind(table(ngatan.by.peak[,'AGATAA'],mcols(ap[mappings])$k4cluster)[1:3,], colSums(table(ngatan.by.peak[,'AGATAA'],mcols(ap[mappings])$k4cluster)[4:8,]))
+rownames(nPeaks_w_nAGATAA) <- c("0","1","2","≥3")
+mosaicplot(nPeaks_w_nAGATAA, shade=T,
+           main="AGATAA occurance among peaks\nbroken down by developmental class",
+           xlab="peaks with specified # of AGATAAs",
+           ylab="developmental class")
+
+nPeaks_w_nAGATAT=rbind(table(ngatan.by.peak[,'AGATAT'],mcols(ap[mappings])$k4cluster)[1:3,], colSums(table(ngatan.by.peak[,'AGATAT'],mcols(ap[mappings])$k4cluster)[4:8,]))
+rownames(nPeaks_w_nAGATAT) <- c("0","1","2","≥3")
+mosaicplot(nPeaks_w_nAGATAT, shade=T,
+           main="AGATAT occurance among peaks\nbroken down by developmental class",
+           xlab="peaks with specified # of AGATATs",
+           ylab="developmental class")
+
+nPeaks_w_nAGATAG=rbind(table(ngatan.by.peak[,'AGATAG'],mcols(ap[mappings])$k4cluster)[1:3,], colSums(table(ngatan.by.peak[,'AGATAG'],mcols(ap[mappings])$k4cluster)[4:6,]))
+rownames(nPeaks_w_nAGATAG) <- c("0","1","2","≥3")
+mosaicplot(nPeaks_w_nAGATAG, shade=T,
+           main="AGATAG occurance among peaks\nbroken down by developmental class",
+           xlab="peaks with specified # of AGATAGs",
+           ylab="developmental class")
+
+
+# Do the non-TGATAA regions have greater/less than expected usage
+# of secondary motifs?
+zeroTGATAA.ix = ngatan.by.peak[,'TGATAA'] == 0 
+
+# 0 TGATAA; breakdown of TGATAT (need to aggregrate counts ≥ 3)
+submotif = 'TGATAT' 
+TGATAT_zero_TGATAA = table(ngatan.by.peak[zeroTGATAA.ix, 'TGATAT'],
+                           mcols(ap[mappings][zeroTGATAA.ix])$k4cluster)
+TGATAT_zero_TGATAA = rbind(TGATAT_zero_TGATAA[1:2,],colSums(TGATAT_zero_TGATAA[3:7,]))
+rownames(TGATAT_zero_TGATAA) <- c("0","1","≥2")
+
+mosaicplot(TGATAT_zero_TGATAA,
+           shade=T,
+           main="TGATAT occurance among peaks\nthat have 0 TGATAAs",
+           sub="Larval-high has slightly more peaks with 2 TGATATs than expected\nand fewer peaks with no TGATATs than expected.\nL3-high has more peaks with 0 TGATAAs than expected.",
+           ylab="kcluster")
+
+# 0 TGATAA; breakdown of AGATAA (need to aggregrate counts ≥ 3)
+AGATAA_zero_TGATAA = table(ngatan.by.peak[zeroTGATAA.ix, 'AGATAA'],
+                           mcols(ap[mappings][zeroTGATAA.ix])$k4cluster)
+AGATAA_zero_TGATAA = rbind(AGATAA_zero_TGATAA[1:3,],colSums(AGATAA_zero_TGATAA[4:6,]))
+rownames(AGATAA_zero_TGATAA) <- c("0","1","2","≥3")
+mosaicplot(AGATAA_zero_TGATAA, 
+           shade=T,
+           main="AGATAA occurance among peaks\nthat have 0 TGATAAs",
+           xlab="peaks with specified # of AGATAAs",
+           sub="AGATAA occurance in TGATAA-0 peaks is not different between dev. classes",
+           ylab="developmental class")
 ngatan.by.peak[1:3,]
 ngatan.tbl = as.data.frame(ngatan.by.peak)
 colnames(ngatan.tbl) <- c('region','hexamer','count')
