@@ -74,7 +74,10 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     FeatureLocForDistance = c("middle"),
     bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
   )
-  # somehow these fields get converted to character
+  # The output is X00001.WBID. The peak ID (in the name column) is more useful.
+  names(ap) <- ap$names
+  # these fields got converted to character during bigbed output
+  # TODO- just do that conversion during the export
   ap$k4weights = as.numeric(ap$k4weights)
   ap$k11weights = as.numeric(ap$k11weights)
   ap$LE_nonNormed = as.numeric(ap$LE_nonNormed)
@@ -102,10 +105,6 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   ap$insideFeature <- as.factor(insideFeatureLabels)
   # does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
   round(table(ap$k4cluster, ap$insideFeature)/apply(table(ap$k4cluster, ap$insideFeature), 1, sum),3)*100
-  
-  
-  ap.wbid=unlist(strsplit(names(ap), "[.]"))[seq(2,2*length(ap),by=2)]
-  unique.ap.wbid = unique(ap.wbid)
   
   # ap broken down by kclust number
   ap_0 = ap[ap$k4cluster ==0]

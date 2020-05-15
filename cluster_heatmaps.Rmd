@@ -287,7 +287,8 @@ clusters$k4weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k4$clus
 # laptop:
 #    user  system elapsed 
 #   17.295   0.227  18.562 
-clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cluster, clusters$kmeans_on3d_k11$centers)
+#clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cluster, clusters$kmeans_on3d_k11$centers)
+clusters$k11weights = rep(1,length(clusters$kmeans_on3d_k11$cluster)) # this takes too long, and we don't use it currently
 # laptop:
 #   user  system elapsed 
 # 46.197   0.537  49.254
@@ -482,17 +483,36 @@ if (FALSE)
   dev.off()
 }
 
+ap$weightedVariance = ap$variance * ap$k4weights
+
 ap.0 = ap[ap$k4cluster == 0]
 ap.1 = ap[ap$k4cluster == 1]
 ap.2 = ap[ap$k4cluster == 2]
 ap.3 = ap[ap$k4cluster == 3]
 ap.4 = ap[ap$k4cluster == 4]
 
-ap.0 = ap.0[order(-ap.0$variance)]
-ap.1 = ap.1[order(-ap.1$variance)]
-ap.2 = ap.2[order(-ap.2$variance)]
-ap.3 = ap.3[order(-ap.3$variance)]
-ap.4 = ap.4[order(-ap.4$variance)]
+ap.0.IDR = ap.0[ap.0$LE_IDR == 1 & ap.0$L1_IDR == 1 & ap.0$L3_IDR == 1]
+ap.1.IDR = ap.1[ap.1$LE_IDR==1]
+ap.2.IDR = ap.2[ap.2$L1_IDR == 1 & ap.2$L3_IDR == 1]
+ap.3.IDR = ap.3[ap.1$L3_IDR == 1]
+ap.4.IDR = ap.4[ap.4$L3_IDR & (ap.4$L1_IDR | ap.4$LE_IDR)] 
+
+
+
+ap.0 = ap.0[order(ap.0$variance)] # weighted score is always 0, since this group is not clustered
+ap.1 = ap.1[order(-ap.1$weightedVariance)]
+ap.2 = ap.2[order(-ap.2$weightedVariance)]
+ap.3 = ap.3[order(-ap.3$weightedVariance)]
+ap.4 = ap.4[order(-ap.4$weightedVariance)]
+
+top=50
+
+grformat = function(granges) {
+  df = as.data.frame(granges)
+  df$strand <- NULL
+  return(df)
+}
+
 
 # see previous commits for attempts to characterize the cluster patterns
 ```
