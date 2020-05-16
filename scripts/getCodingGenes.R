@@ -75,7 +75,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
   )
   # The output is X00001.WBID. The peak ID (in the name column) is more useful.
-  names(ap) <- ap$names
+  names(ap) <- ap$name
   # these fields got converted to character during bigbed output
   # TODO- just do that conversion during the export
   ap$k4weights = as.numeric(ap$k4weights)
