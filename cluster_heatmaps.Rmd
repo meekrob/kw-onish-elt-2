@@ -483,25 +483,64 @@ if (FALSE)
   dev.off()
 }
 
-ap$weightedVariance = ap$variance * ap$k4weights
+as_tibble(ap) ->ap.tbl
+# some scoring metrics
+ap.tbl %>% mutate(meanOccupancy=(LE_nonNormed+L1_nonNormed+L3_nonNormed)/3) -> ap.tbl
+ap.tbl %>% mutate(weightedVariance=variance*k4weights) -> ap.tbl
+ap.tbl %>% mutate(coeffVariation=sqrt(variance)/meanOccupancy) -> ap.tbl
+# selection criterium "score" is coefficient of variation for class 0, weightedVariance
+# for classes 1-4.
 
+ap.tbl %>% mutate(selectionScore=ifelse(k4cluster==0, coeffVariation, weightedVariance)) -> ap.tbl
+
+# apply IDR rules
+ap.tbl %>% filter(k4cluster==0) %>% filter(LE_IDR == 1 & L1_IDR == 1 & L3_IDR == 1) -> ap.tbl.0
+ap.tbl %>% filter(k4cluster==1) %>% filter(LE_IDR==1)                               -> ap.tbl.1
+ap.tbl %>% filter(k4cluster==2) %>% filter(L1_IDR == 1 & L3_IDR == 1)               -> ap.tbl.2
+ap.tbl %>% filter(k4cluster==3) %>% filter(L3_IDR == 1)                             -> ap.tbl.3
+ap.tbl %>% filter(k4cluster==4) %>% filter(L3_IDR & (L1_IDR | LE_IDR))              -> ap.tbl.4
+
+# Map the coefficient of variation to (lowest->1, hightest->0)
+inverseScale = function(x, minVal, rangeVal) { y = (x-minVal)/rangeVal; return(1-y);}
+ap.tbl.0 %>% select(coeffVariation) %>% min() -> min_cov.0
+ap.tbl.0 %>% select(coeffVariation) %>% range() %>% diff() -> range_cov.0
+ap.tbl.0 %>% mutate(selectionScore=inverseScale(coeffVariation, min_cov.0, range_cov.0))
+
+ap.tbl.0 %>% arrange(desc(selectionScore)) -> ap.tbl.scored
+ap.tbl.1 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.2 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.3 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.4 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
+
+
+ap$weightedVariance = ap$variance * ap$k4weights
 ap.0 = ap[ap$k4cluster == 0]
 ap.1 = ap[ap$k4cluster == 1]
 ap.2 = ap[ap$k4cluster == 2]
 ap.3 = ap[ap$k4cluster == 3]
 ap.4 = ap[ap$k4cluster == 4]
 
-ap.0 = ap.0[order(ap.0$variance)] # weighted score is always 0, since this group is not clustered
-ap.1 = ap.1[order(-ap.1$weightedVariance)]
-ap.2 = ap.2[order(-ap.2$weightedVariance)]
-ap.3 = ap.3[order(-ap.3$weightedVariance)]
-ap.4 = ap.4[order(-ap.4$weightedVariance)]
-
+# enforce meaningful constraint on called, reproducible peaks for given pattern
 ap.0.IDR = ap.0[ap.0$LE_IDR == 1 & ap.0$L1_IDR == 1 & ap.0$L3_IDR == 1]
 ap.1.IDR = ap.1[ap.1$LE_IDR==1]
 ap.2.IDR = ap.2[ap.2$L1_IDR == 1 & ap.2$L3_IDR == 1]
 ap.3.IDR = ap.3[ap.1$L3_IDR == 1]
 ap.4.IDR = ap.4[ap.4$L3_IDR & (ap.4$L1_IDR | ap.4$LE_IDR)] 
+
+
+# coeffecient of variation for Non-changing class
+coefVar = function(x) {sd(x) / mean(x)}
+cov.0.IDR = apply(
+  as.matrix(mcols(ap.0.IDR)[, c('LE_nonNormed', 'L1_nonNormed', 'L3_nonNormed')]), 
+  1, coefVar)
+
+ap.0.IDR = ap.0.IDR[order(-cov.0.IDR)] 
+ap.1.IDR = ap.1.IDR[order(-ap.1.IDR$weightedVariance)]
+ap.2.IDR = ap.2.IDR[order(-ap.2.IDR$weightedVariance)]
+ap.3.IDR = ap.3.IDR[order(-ap.3.IDR$weightedVariance)]
+ap.4.IDR = ap.4.IDR[order(-ap.4.IDR$weightedVariance)]
+
+ap.0.IDR[1:20]
 
 
 top=50
