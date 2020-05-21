@@ -507,14 +507,22 @@ ap.tbl.0 %>% select(coeffVariation) %>% range() %>% diff() -> range_cov.0
 ap.tbl.0 %>% mutate(selectionScore=inverseScale(coeffVariation, min_cov.0, range_cov.0))
 
 # sort each class, attach rank, and merge
-ap.tbl.0 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.0)) -> ap.tbl.scored
-ap.tbl.1 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>%
+# sorting least sig. to most sig. to affect how the points
+# are plotted on top of each other below. 
+# To select regions, re-sort, within k4cluster, on rankInCluster
+ap.tbl.0 %>% arrange((selectionScore)) %>% 
+  mutate(rankInCluster = nrow(ap.tbl.0):1) -> ap.tbl.scored
+ap.tbl.1 %>% arrange((selectionScore)) %>%
+  mutate(rankInCluster = nrow(ap.tbl.1):1) %>%
   bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.2 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>%
+ap.tbl.2 %>% arrange((selectionScore)) %>% 
+  mutate(rankInCluster = nrow(ap.tbl.2):1) %>%
   bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.3 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>%
+ap.tbl.3 %>% arrange((selectionScore)) %>% 
+  mutate(rankInCluster = nrow(ap.tbl.3):1) %>%
   bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.4 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.4)) %>%
+ap.tbl.4 %>% arrange((selectionScore)) %>% 
+  mutate(rankInCluster = nrow(ap.tbl.4):1) %>%
   bind_rows(ap.tbl.scored) -> ap.tbl.scored
 
 factorRanks = function(x) {
