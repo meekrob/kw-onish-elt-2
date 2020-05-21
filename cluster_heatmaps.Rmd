@@ -506,12 +506,39 @@ ap.tbl.0 %>% select(coeffVariation) %>% min() -> min_cov.0
 ap.tbl.0 %>% select(coeffVariation) %>% range() %>% diff() -> range_cov.0
 ap.tbl.0 %>% mutate(selectionScore=inverseScale(coeffVariation, min_cov.0, range_cov.0))
 
-ap.tbl.0 %>% arrange(desc(selectionScore)) -> ap.tbl.scored
-ap.tbl.1 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.2 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.3 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.4 %>% arrange(desc(selectionScore)) %>% bind_rows(ap.tbl.scored) -> ap.tbl.scored
+# sort each class, attach rank, and merge
+ap.tbl.0 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.0)) -> ap.tbl.scored
+ap.tbl.1 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>%
+  bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.2 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>%
+  bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.3 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>%
+  bind_rows(ap.tbl.scored) -> ap.tbl.scored
+ap.tbl.4 %>% arrange(desc(selectionScore)) %>% mutate(rankInCluster = 1:nrow(ap.tbl.4)) %>%
+  bind_rows(ap.tbl.scored) -> ap.tbl.scored
 
+factorRanks = function(x) {
+  strats=ifelse(x <= 10, "top 10", ifelse(x<=20, "top 20", ifelse(x<=50, "top 50", "remainder")))
+  return(factor(strats, levels=rev(c("top 10","top 20","top 50","remainder"))))
+}
+
+ap.tbl.scored %>% mutate(rankLevels = factorRanks(ap.tbl.scored$rankInCluster)) -> ap.tbl.scored
+
+ggplot(
+  ap.tbl.scored %>% filter(k4cluster > 0),
+  aes(
+    x = variance,
+    y = k4weights,
+    alpha=rankLevels,
+    color=rankLevels
+  )
+) + geom_point() + facet_wrap( ~ k4cluster) + scale_color_manual(values=c("top 10" = "dark blue","top 20"="blue", "top 50" = "light blue", "remainder" = "grey")) +
+  scale_alpha_manual(values=c("top 10" = 1,"top 20" = 1, "top 50" = 1, "remainder" = .2))
+
+ggplot(
+  ap.tbl.scored %>% filter(k4cluster == 0),
+  aes(y = sqrt(variance), x = coeffVariation, color = rankInCluster <= 20)
+) + geom_point() + scale_color_manual(values=c('grey','blue'))
 
 ap$weightedVariance = ap$variance * ap$k4weights
 ap.0 = ap[ap$k4cluster == 0]
