@@ -1,0 +1,47 @@
+## Rscript thisfile.Rscript outfileroot infile1.bed infile2.bed ...
+library(stringr)
+CODEPATH='/projects/dcking@colostate.edu/dev/onish_ChIP_R_Analysis/scripts/getCodingGenes.R'
+source(CODEPATH) # getCodingGenes( GenomeRangesObject )
+
+readBedOrRds <- function(filepath) {
+    basepath = dirname(filepath)
+    bedfilename <- filepath
+    rdsfilename <- str_replace(bedfilename, '.bed', '.rds')
+    if (file.exists(rdsfilename)) {
+        # load serialized data file
+        cat("Loading RDS File")
+        peaks = readRDS(rdsfilename)
+    }
+    else {
+        # process BED file
+        cat("Reading BED File")
+        peak_df = read.table(bedfilename, col.names=c("seqname","start","end"))
+        peaks = GenomicRanges::makeGRangesFromDataFrame(peak_df, starts.in.df.are.0based = T)
+        # save RDS file
+        cat("Saving RDS File")
+        saveRDS(peaks, rdsfilename)
+    }
+    return(peaks)
+}
+
+args = commandArgs(trailingOnly = T)
+outputFileRoot = args[1]
+
+bigtab = c()
+
+for (filepath in args[2:length(args)]) {
+    
+    peaks = readBedOrRds(filepath)
+    annotatedPeaks = getCodingGenes(peaks)
+    attach(annotatedPeaks)
+    mappingBreakdown = table(ap$insideFeature)
+    for feature in c('unmapped ± 5Kb', 'upstream', 'overlapStart', 
+                     'inside', 'includeFeature', 'downstream', 'overlapEnd') {
+        mapping_breakdown[feature] = ifelse(feature %in% names(mapping_breakdown), mapping_breakdown[feature], 0)
+    }
+    bigtab = rbind(bigtab, mapping_breakdown)
+
+}
+
+outRDSfile = paste(outputFileRoot, ".rds")
+saveRDS(bigtab, outRDSfile)
