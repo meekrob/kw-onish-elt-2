@@ -527,7 +527,7 @@ ap.tbl.4 %>% arrange((selectionScore)) %>%
 
 factorRanks = function(x) {
   strats=ifelse(x <= 10, "top 10", ifelse(x<=20, "top 20", ifelse(x<=50, "top 50", "remainder")))
-  return(factor(strats, levels=rev(c("top 10","top 20","top 50","remainder"))))
+  return(factor(strats, levels=c("top 10","top 20","top 50","remainder")))
 }
 
 ap.tbl.scored %>% mutate(rankLevels = factorRanks(ap.tbl.scored$rankInCluster)) -> ap.tbl.scored
@@ -541,7 +541,8 @@ ggplot(
     color=rankLevels
   )
 ) + geom_point() + facet_wrap( ~ k4cluster) + scale_color_manual(values=c("top 10" = "dark blue","top 20"="blue", "top 50" = "light blue", "remainder" = "grey")) +
-  scale_alpha_manual(values=c("top 10" = 1,"top 20" = 1, "top 50" = 1, "remainder" = .2))
+  scale_alpha_manual(values=c("top 10" = 1,"top 20" = 1, "top 50" = 1, "remainder" = .2)) +
+  ggtitle("Peaks most representative of each developmental trend", subtitle = "Ranked by variance*cluster score [0-1]") + scale_
 
 ggplot(
   ap.tbl.scored %>% filter(k4cluster == 0),
