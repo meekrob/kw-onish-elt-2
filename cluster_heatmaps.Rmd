@@ -377,6 +377,21 @@ ecdf_downstream( features_observed['downstream'] )
 ecdf_inside(features_observed['inside'])
 ecdf_unmapped(features_observed['unmapped ± 5Kb'])
 
+features_observed %>% melt() -> feat_obs_tbl
+colnames(feat_obs_tbl) <- c("variable","value")
+
+ggplot(as_tibble(feature_table) %>% melt(), aes(x = value)) + 
+  scale_x_continuous(name = "Frequency of feature mappings in randomized intervals", labels = scales::comma) +
+  scale_y_continuous(name = "# of simulations (out of 9,000)", labels=scales::comma) +
+  geom_histogram(binwidth = 10) + 
+  facet_wrap( ~ variable) + 
+  geom_vline(
+       data = feat_obs_tbl,
+       aes(xintercept = value),
+       color = "red",
+       size = .5) +
+labs(title = expression(paste("Gene features at or near ELT-2 occupied peaks compared to randomizations across the genome")),
+       caption = "Red line shows the frequency observed for the labelled feature in the ELT-2 occupied peaks")
 
 features_expected = colMeans(feature_table)
 emp_chisq = function(n) { sum(((n-features_expected)^2)/features_expected)}
