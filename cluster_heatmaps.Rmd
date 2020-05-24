@@ -415,7 +415,38 @@ ggplot(as_tibble(var_stat) %>% filter(value < 400), aes(x = value)) +
     fill = "white",
     color = "tan",
     alpha = 0.5
-  ) + theme_classic() 
+  ) + theme_classic() +
+  labs(title = "Variability from empirical values",
+      x = "Value of variability statistic", 
+      y = "Number of permutations with given value",
+      caption = "The shaded yellow area shows the lower 99% of\nstatistic values for the 9,000 permutations across the genome.\n7 extrema exhibited a statistic between 1000-1400.  The observed feature statistic is 2923; therefore, the empirical p-value is 0.")
+
+ggplot(as_tibble(var_stat) %>% mutate(value = log(value)), aes(x = value)) + 
+  geom_rect(
+    data=as_tibble(var_stat) %>% mutate(value = log(value)),
+    aes(
+      xmin = quantile(value, prob = 0),
+      xmax = quantile(value, prob = .999),
+      ymin = 0,
+      ymax = Inf
+    ),
+    fill = 'beige',
+    alpha = .5
+  ) +
+  geom_histogram(
+    bins = 30,
+    fill = "white",
+    color = "tan",
+    alpha = 0.5
+  ) + theme_classic() +
+  geom_vline(aes(xintercept=log(obs_var_stat)),
+       color = "red",
+       size = .5) +
+  labs(title = "Variability from empirical values",
+      x = "log(value) of variability statistic", 
+      y = "Number of permutations with given log(value)",
+      caption = "The shaded yellow area shows the lower 99.9% of statistic values for the 9,000 \npermutations across the genome. 7 extrema yield a high variability statistic (log), \nranging between 7.37-7.42. However, the variability statistic for the ELT-2 occupied \npeaks is log(2923)=7.98 (red line), greater than observed in 9000 random permutations.\nTherefore, the empirical p-value is 0.")
+
 
 peakSchema = "
 table ELT2DynamicPeaks
