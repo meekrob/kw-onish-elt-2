@@ -359,6 +359,49 @@ mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
 pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
 
+features_observed = table(ap$insideFeature)
+# empirical data
+feature_table = readRDS("feature_mapping_empirical.tbl")
+ecdf_downstream = ecdf(feature_table[,'downstream'])
+ecdf_includeFeature = ecdf(feature_table[,'includeFeature'])
+ecdf_inside = ecdf(feature_table[,'inside'])
+ecdf_overlapEnd = ecdf(feature_table[,'overlapEnd'])
+ecdf_overlapStart = ecdf(feature_table[,'overlapStart'])
+ecdf_unmapped = ecdf(feature_table[,'unmapped - 5Kb'])
+
+# empirical p-values of Obs < Emp
+ecdf_includeFeature(features_observed['includeFeature'])
+ecdf_overlapStart(features_observed['overlapStart'])
+ecdf_overlapEnd(features_observed['overlapEnd'])
+ecdf_downstream( features_observed['downstream'] )
+ecdf_inside(features_observed['inside'])
+ecdf_unmapped(features_observed['unmapped ± 5Kb'])
+
+
+features_expected = colMeans(feature_table)
+emp_chisq = function(n) { sum(((n-features_expected)^2)/features_expected)}
+var_stat = apply(feature_table, 1, emp_chisq)
+obs_var_stat = emp_chisq(features_observed)
+
+ggplot(as_tibble(var_stat) %>% filter(value < 400), aes(x = value)) + 
+  geom_rect(
+    data=as_tibble(var_stat) %>% filter(value < 400),
+    aes(
+      xmin = quantile(value, prob = 0),
+      xmax = quantile(value, prob = .99),
+      ymin = 0,
+      ymax = Inf
+    ),
+    fill = 'beige',
+    alpha = .5
+  ) +
+  geom_histogram(
+    bins = 30,
+    fill = "white",
+    color = "tan",
+    alpha = 0.5
+  ) + theme_classic() 
+
 peakSchema = "
 table ELT2DynamicPeaks
 \"ELT-2 Dynamic Peaks\"
