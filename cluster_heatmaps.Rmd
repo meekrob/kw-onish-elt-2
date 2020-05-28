@@ -131,11 +131,16 @@ mcols(dfG_max) <- dfG_metadata_max
 
 position_columns = c("chrom","chromStart","chromEnd","ID")
 # make numeric, with 
-#data6d = as.matrix(df_max[,colnames_in_stage_order])
+
 df_max %>% as.matrix() -> data6d
-data3d = data.frame( LE=rowMeans(data6d[,c(1,2)]),
-                     L1=rowMeans(data6d[,c(3,4)]),
-                     L3=rowMeans(data6d[,c(5,6)]))
+
+df_max %>% mutate(
+  LE=(max_log_LE_1_minus_log_LE_input+max_log_LE_2_minus_log_LE_input)/2,
+  L1=(max_log_L1_1_minus_log_L1_input+max_log_L1_2_minus_log_L1_input)/2,
+  L3=(max_log_L3_1_minus_log_L3_input+max_log_L3_2_minus_log_L3_input)/2
+  ) %>% select(LE,L1,L3) -> data3d
+
+
 
 # perform normalization on 3d
 peaks3d_sd = apply(data3d, 1, sd)
