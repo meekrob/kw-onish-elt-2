@@ -23,6 +23,7 @@ library(biomaRt, quietly=T, warn.conflicts = F)
 library(ChIPpeakAnno, quietly=T, warn.conflicts = F)
 library(topGO, quietly=T, warn.conflicts = F)
 library(dplyr, quietly=T, warn.conflicts = F)
+library(UpSetR)
 ```
 
 ## Script version
@@ -198,6 +199,22 @@ rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
    threshold3d_q,threshold3d_ix,threshold3d_x,include3d_x,
    THRESHOLD,TXT_THRESHOLD)
 
+LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
+upset(as.data.frame(LEL1L3))
+
+area1 = sum(LEL1L3[,1] == 1)
+area2 = sum(LEL1L3[,2] == 1)
+area3 = sum(LEL1L3[,3] == 1)
+
+n23 = sum( LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
+n12 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 )
+n13 = sum(LEL1L3[,1] == 1  & LEL1L3[,3] == 1)
+
+n123 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
+#grid.newpage()
+#grid.draw(draw.triple.venn(area1, area2, area3, n12, n23, n13, n123, scale=F,euler.d=F))
+
+
 cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
 cat("include_x: reps not merged:", dim(thresholded_data$w_reps$include6d_x),"\n")
 cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
@@ -345,13 +362,17 @@ dfG_max$L3_nonNormed = (dfG_max$L3_1 + dfG_max$L3_2)/2
 dfG_max$LE_std = peaks3d_std[,1]
 dfG_max$L1_std = peaks3d_std[,2]
 dfG_max$L3_std = peaks3d_std[,3]
-# drop the individual rep columns
-dfG_max$LE_1 = NULL
-dfG_max$LE_2 = NULL
-dfG_max$L1_1 = NULL
-dfG_max$L1_2 = NULL
-dfG_max$L3_1 = NULL
-dfG_max$L3_2 = NULL
+
+# if you do this, you can't rerun the chunk.
+if (FALSE) {
+  # drop the individual rep columns
+  dfG_max$LE_1 = NULL
+  dfG_max$LE_2 = NULL
+  dfG_max$L1_1 = NULL
+  dfG_max$L1_2 = NULL
+  dfG_max$L3_1 = NULL
+  dfG_max$L3_2 = NULL
+}
 
 float_precision_string = "%.3f"
 peaksForBigBed = dfG_max
@@ -384,11 +405,11 @@ attach(annotatedPeaks)
 kinases = read.table('kinases.bm',header=T,sep="\t")
 mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
-pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a gene start or end", sub="paramart: wbps_gene_id, biotype= protein_coding")
+pie(table(ap$insideFeature), labels=pie_labels, main="Gene features at or near ELT-2 occupied peaks", sub='The closest feature to a peak is mapped unless farther than 5KB.\n "insideFeature" means the peak completely encompasses the gene (might be a consequence of the merge).')
 
 features_observed = table(ap$insideFeature)
 # empirical data
-feature_table = readRDS("feature_mapping_empirical.tbl") %>% as_tibble() %>% rename('unmapped ± 5Kb'='unmapped - 5Kb') %>% as.matrix()
+feature_table = readRDS("feature_mapping_empirical.tbl") %>% as_tibble() %>% dplyr::rename('unmapped ± 5Kb'='unmapped - 5Kb') %>% as.matrix()
 ecdf_downstream = ecdf(feature_table[,'downstream'])
 ecdf_includeFeature = ecdf(feature_table[,'includeFeature'])
 ecdf_inside = ecdf(feature_table[,'inside'])
@@ -404,7 +425,7 @@ ecdf_downstream( features_observed['downstream'] )
 ecdf_inside(features_observed['inside'])
 ecdf_unmapped(features_observed['unmapped ± 5Kb'])
 
-features_observed %>% melt() %>% rename(feature=Var1,count=value) -> feat_obs_tbl
+features_observed %>% melt() %>% dplyr::rename(feature=Var1,count=value) -> feat_obs_tbl
 
 feature_tibble <-
   as_tibble(feature_table) %>% melt(
@@ -438,7 +459,7 @@ melt(
   measure.vars = 1:7,
   variable.name = "feature",
   value.name = "count"
-) %>% as_tibble() %>% rename(feature = Var1) %>% mutate(feature = factor(feature, levels = fiveToThree))
+) %>% as_tibble() %>% dplyr::rename(feature = Var1) %>% mutate(feature = factor(feature, levels = fiveToThree))
 
 features_expected = colMeans(feature_table)
 emp_chisq = function(n) { sum(((n-features_expected)^2)/features_expected)}
@@ -724,7 +745,12 @@ grformat = function(granges) {
 }
 
 
-# see previous commits for attempts to characterize the cluster patterns
+# You must connect to the NAS first to get these genes.
+source('SpencerGenes.R')
+upset(matchtable(genes_w_ELT2_EmbryoHigh_peak=ap.tbl.1$feature,matchObj = LEL2))
+upset(matchtable(genes_w_ELT2_LarvaHigh_peak=ap.tbl.2$feature,matchObj = LEL2))
+upset(matchtable(genes_w_ELT2_L3High_peak=ap.tbl.3$feature,matchObj = LEL2))
+upset(matchtable(genes_w_ELT2_DevIncreasing_peak=ap.tbl.4$feature,matchObj = LEL2))
 ```
 
 ``` {r GO term analysis}
