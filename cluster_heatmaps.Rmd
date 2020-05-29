@@ -107,19 +107,19 @@ df %>% select(starts_with('max')) %>%
 dfG_metadata <- mcols(dfG)
 dfG_metadata %>% as.data.frame() %>% select(-starts_with('min'), -starts_with('mean'), -starts_with('N')) %>%
   rename(
-         max_log_L1_1_minus_log_L1_input=max_log_L1_1_minus_log_L1_input_z.bw, 
-         max_log_L1_2_minus_log_L1_input=max_log_L1_2_minus_log_L1_input_z.bw, 
-         max_log_L3_1_minus_log_L3_input=max_log_L3_1_minus_log_L3_input_z.bw, 
-         max_log_L3_2_minus_log_L3_input=max_log_L3_2_minus_log_L3_input_z.bw, 
-         max_log_LE_1_minus_log_LE_input=max_log_LE_1_minus_log_LE_input_z.bw,  
-         max_log_LE_2_minus_log_LE_input=max_log_LE_2_minus_log_LE_input_z.bw) %>%
+         L1_1=max_log_L1_1_minus_log_L1_input_z.bw, 
+         L1_2=max_log_L1_2_minus_log_L1_input_z.bw, 
+         L3_1=max_log_L3_1_minus_log_L3_input_z.bw, 
+         L3_2=max_log_L3_2_minus_log_L3_input_z.bw, 
+         LE_1=max_log_LE_1_minus_log_LE_input_z.bw,  
+         LE_2=max_log_LE_2_minus_log_LE_input_z.bw) %>%
   select( # to reorder them
-    max_log_LE_1_minus_log_LE_input,
-    max_log_LE_2_minus_log_LE_input,
-    max_log_L1_1_minus_log_L1_input,
-    max_log_L1_2_minus_log_L1_input,
-    max_log_L3_1_minus_log_L3_input,
-    max_log_L3_2_minus_log_L3_input,
+    LE_1,
+    LE_2,
+    L1_1,
+    L1_2,
+    L3_1,
+    L3_2,
     ends_with("IDR"),
     summit_agreement
   ) -> 
@@ -388,13 +388,13 @@ pie(table(ap$insideFeature), labels=pie_labels, main="Peaks mapping nearest to a
 
 features_observed = table(ap$insideFeature)
 # empirical data
-feature_table = readRDS("feature_mapping_empirical.tbl")
+feature_table = readRDS("feature_mapping_empirical.tbl") %>% as_tibble() %>% rename('unmapped ± 5Kb'='unmapped - 5Kb') %>% as.matrix()
 ecdf_downstream = ecdf(feature_table[,'downstream'])
 ecdf_includeFeature = ecdf(feature_table[,'includeFeature'])
 ecdf_inside = ecdf(feature_table[,'inside'])
 ecdf_overlapEnd = ecdf(feature_table[,'overlapEnd'])
 ecdf_overlapStart = ecdf(feature_table[,'overlapStart'])
-ecdf_unmapped = ecdf(feature_table[,'unmapped - 5Kb'])
+ecdf_unmapped = ecdf(feature_table[,'unmapped ± 5Kb'])
 
 # empirical p-values of Obs < Emp
 ecdf_includeFeature(features_observed['includeFeature'])
@@ -404,21 +404,41 @@ ecdf_downstream( features_observed['downstream'] )
 ecdf_inside(features_observed['inside'])
 ecdf_unmapped(features_observed['unmapped ± 5Kb'])
 
-features_observed %>% melt() -> feat_obs_tbl
-colnames(feat_obs_tbl) <- c("variable","value")
+features_observed %>% melt() %>% rename(feature=Var1,count=value) -> feat_obs_tbl
 
-ggplot(as_tibble(feature_table) %>% melt(), aes(x = value)) + 
+feature_tibble <-
+  as_tibble(feature_table) %>% melt(
+    measure.vars = 1:7,
+    variable.name = "feature",
+    value.name = "count"
+  )
+# arrange (relevel) in a 5' to 3' order, but put includeFeature all the way to the right
+fiveToThree = levels(feature_tibble$feature)[c(7, 5, 3, 4, 1, 6, 2)]
+feature_tibble %>% 
+  mutate(feature = factor(feature, levels = fiveToThree)) -> refeature_tibble
+
+ggplot(refeature_tibble, aes(x = count)) + 
   scale_x_continuous(name = "Frequency of feature mappings in randomized intervals", labels = scales::comma) +
   scale_y_continuous(name = "# of simulations (out of 9,000)", labels=scales::comma) +
   geom_histogram(binwidth = 10) + 
-  facet_wrap( ~ variable) + 
+  facet_wrap( ~ feature) + 
   geom_vline(
        data = feat_obs_tbl,
-       aes(xintercept = value),
+       aes(xintercept = count),
        color = "red",
        size = .5) +
 labs(title = expression(paste("Gene features at or near ELT-2 occupied peaks compared to randomizations across the genome")),
        caption = "Red line shows the frequency observed for the labelled feature in the ELT-2 occupied peaks")
+
+
+ggplot(refeature_tibble, aes(x=feature,y=count)) + geom_boxplot() +geom_col(data = feat_obs_tbl,aes(x=feature,y=count),fill='red') + theme_classic()
+
+melt(
+  features_observed,
+  measure.vars = 1:7,
+  variable.name = "feature",
+  value.name = "count"
+) %>% as_tibble() %>% rename(feature = Var1) %>% mutate(feature = factor(feature, levels = fiveToThree))
 
 features_expected = colMeans(feature_table)
 emp_chisq = function(n) { sum(((n-features_expected)^2)/features_expected)}
