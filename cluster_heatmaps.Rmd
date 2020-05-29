@@ -83,8 +83,8 @@ rm(LE_IDR,L1_IDR,L3_IDR,LE_verify,L1_verify,L3_verify)
 
 # Remove the unused javaGenomicsToolkit columns (min,mean,etc.), and cut out the filename portions
 # df -> df_max
-df %>% select(starts_with('max')) %>%
-  rename(
+df %>% dplyr::select(starts_with('max')) %>%
+  dplyr::rename(
     max_log_LE_1_minus_log_LE_input=max_log_LE_1_minus_log_LE_input_z.bw,  
          max_log_LE_2_minus_log_LE_input=max_log_LE_2_minus_log_LE_input_z.bw,
          max_log_L1_1_minus_log_L1_input=max_log_L1_1_minus_log_L1_input_z.bw, 
@@ -93,7 +93,7 @@ df %>% select(starts_with('max')) %>%
          max_log_L3_2_minus_log_L3_input=max_log_L3_2_minus_log_L3_input_z.bw 
 
          )  %>%
-  select( # to reorder them
+  dplyr::select( # to reorder them
     max_log_LE_1_minus_log_LE_input,
     max_log_LE_2_minus_log_LE_input,
     max_log_L1_1_minus_log_L1_input,
@@ -105,15 +105,15 @@ df %>% select(starts_with('max')) %>%
 # The same operation for Genomic Ranges metadata
 # dfG -> dfG_max
 dfG_metadata <- mcols(dfG)
-dfG_metadata %>% as.data.frame() %>% select(-starts_with('min'), -starts_with('mean'), -starts_with('N')) %>%
-  rename(
+dfG_metadata %>% as.data.frame() %>% dplyr::select(-starts_with('min'), -starts_with('mean'), -starts_with('N')) %>%
+  dplyr::rename(
          L1_1=max_log_L1_1_minus_log_L1_input_z.bw, 
          L1_2=max_log_L1_2_minus_log_L1_input_z.bw, 
          L3_1=max_log_L3_1_minus_log_L3_input_z.bw, 
          L3_2=max_log_L3_2_minus_log_L3_input_z.bw, 
          LE_1=max_log_LE_1_minus_log_LE_input_z.bw,  
          LE_2=max_log_LE_2_minus_log_LE_input_z.bw) %>%
-  select( # to reorder them
+  dplyr::select( # to reorder them
     LE_1,
     LE_2,
     L1_1,
@@ -134,11 +134,11 @@ position_columns = c("chrom","chromStart","chromEnd","ID")
 
 df_max %>% as.matrix() -> data6d
 
-df_max %>% mutate(
+df_max %>% dplyr::mutate(
   LE=(max_log_LE_1_minus_log_LE_input+max_log_LE_2_minus_log_LE_input)/2,
   L1=(max_log_L1_1_minus_log_L1_input+max_log_L1_2_minus_log_L1_input)/2,
   L3=(max_log_L3_1_minus_log_L3_input+max_log_L3_2_minus_log_L3_input)/2
-  ) %>% select(LE,L1,L3) -> data3d
+  ) %>% dplyr::select(LE,L1,L3) -> data3d
 
 
 
