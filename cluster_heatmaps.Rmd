@@ -650,6 +650,9 @@ ap.tbl %>% mutate(coeffVariation=sqrt(variance)/meanOccupancy) -> ap.tbl
 
 ap.tbl %>% mutate(selectionScore=ifelse(k4cluster==0, coeffVariation, weightedVariance)) -> ap.tbl
 
+ap.tbl %>% mutate(spenc_LE=feature %in% rownames(LEL2)[LEL2[,'spenc_LE']==1],
+                  spenc_L2=feature %in% rownames(LEL2)[LEL2[,'spenc_L2']==1]) -> ap.tbl
+
 # apply IDR rules
 ap.tbl %>% filter(k4cluster==0) %>% filter(LE_IDR == 1 & L1_IDR == 1 & L3_IDR == 1) -> ap.tbl.0
 ap.tbl %>% filter(k4cluster==1) %>% filter(LE_IDR==1)                               -> ap.tbl.1
@@ -682,6 +685,57 @@ ap.tbl.4 %>% arrange((selectionScore)) %>%
   mutate(rankInCluster = nrow(ap.tbl.4):1) %>%
   bind_rows(ap.tbl.scored) -> ap.tbl.scored
 
+# write an Excel spreadsheet
+##
+xlsFilename="topScorers.xlsx"
+topScorersXLS = loadWorkbook(xlsFilename, create=T)
+
+sheetname = format(Sys.time(), "K1 %y-%m-%d-%H-%M")
+createSheet(topScorersXLS, sheetname)
+ap.tbl.1 %>% arrange(desc(selectionScore)) %>%
+  mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
+  head(20) -> wrkSheet
+  writeWorksheet(topScorersXLS, sht, sheetname)
+
+# ap.tbl.1 %>% arrange(desc(selectionScore)) %>%
+#     mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
+#     filter(spenc_LE | spenc_L2) %>% head(5) %>%
+#     write.table(file ="k1_top5spencer.txt",quote=F,sep="\t",row.names=F)
+
+sheetname = format(Sys.time(), "K2 %y-%m-%d-%H-%M")
+createSheet(topScorersXLS, sheetname)
+ap.tbl.2 %>% arrange(desc(selectionScore)) %>%
+  mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
+  head(20) ->wrkSht 
+  writeWorksheet(topScorersXLS, wrkSht, sheetname)
+
+# ap.tbl.2 %>% arrange(desc(selectionScore)) %>%
+#     mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
+#     filter(spenc_LE | spenc_L2) %>% head(5) %>%
+#     write.table(file ="k2_top5spencer.txt",quote=F,sep="\t",row.names=F)
+
+sheetname = format(Sys.time(), "K3 %y-%m-%d-%H-%M")
+createSheet(topScorersXLS, sheetname)
+ap.tbl.3 %>% arrange(desc(selectionScore)) %>%
+  mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
+  head(20) ->wrkSht
+  writeWorksheet(topScorersXLS, sht, sheetname)
+  
+# ap.tbl.3 %>% arrange(desc(selectionScore)) %>%
+#     mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
+#     filter(spenc_LE | spenc_L2) %>% head(5) %>% 
+#     write.table(file ="k3_top5spencer.txt",quote=F,sep="\t",row.names=F)
+
+sheetname = format(Sys.time(), "K4 %y-%m-%d-%H-%M")
+createSheet(topScorersXLS, sheetname)  
+ap.tbl.4 %>% arrange(desc(selectionScore)) %>%
+  mutate(rankInCluster = 1:nrow(ap.tbl.4)) %>% 
+  head(20) -> wrkSht
+  writeWorksheet(topScorersXLS, sht, sheetname)
+  
+saveWorkbook(topScorersXLS)
+
+# for the plot
 factorRanks = function(x) {
   strats=ifelse(x <= 10, "top 10", ifelse(x<=20, "top 20", ifelse(x<=50, "top 50", "remainder")))
   return(factor(strats, levels=c("top 10","top 20","top 50","remainder")))
@@ -746,7 +800,7 @@ grformat = function(granges) {
 
 
 # You must connect to the NAS first to get these genes.
-source('SpencerGenes.R')
+if (!('LEL2' %in% ls())) {source('SpencerGenes.R')}
 upset(matchtable(genes_w_ELT2_EmbryoHigh_peak=ap.tbl.1$feature,matchObj = LEL2))
 upset(matchtable(genes_w_ELT2_LarvaHigh_peak=ap.tbl.2$feature,matchObj = LEL2))
 upset(matchtable(genes_w_ELT2_L3High_peak=ap.tbl.3$feature,matchObj = LEL2))
