@@ -10,9 +10,8 @@ if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
 }
 library(GenomicRanges)
 
-PKG="ChIPpeakAnno"
-if (!requireNamespace(PKG, quietly = TRUE)) { BiocManager::install(PKG) }
-library(PKG, character.only=T)
+
+
 getCodingGenes = function(peaks, within_genes_kb = 5){
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
   # Get the specs from https://parasite.wormbase.org/biomart/martview/ 
@@ -65,6 +64,51 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   
   names(all_CDS_genes) <- all_CDS_genes$wbps_gene_id
   all_CDS_genes$name = ifelse(all_CDS_genes$wormbase_locus == '', all_CDS_genes$wormbase_gseq, all_CDS_genes$wormbase_locus)
+  
+  # do 'overlapping' as an unambiguous criterion first
+  overlapping_ap = annotatePeakInBatch(
+    peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
+    featureType = "Exon",
+    PeakLocForDistance = "middle",
+    FeatureLocForDistance = "middle",
+    output = "overlapping")
+  peaks[overlapping_ap$peak[is.na(overlapping_ap$feature) ]] -> no_overlap_peaks
+ 
+  unique_indexes = function(vec) {
+    return(match(unique(vec), vec))
+  }
+  
+  upstream_of_peak_togene_end_ap = annotatePeakInBatch(
+    no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
+    featureType = "Exon",
+    PeakLocForDistance = "start",
+    FeatureLocForDistance = "end",
+    output = "nearestLocation") 
+  upstream_of_peak_togene_end_ap = upstream_of_peak_togene_end_ap[ unique_indexes(upstream_of_peak_togene_end_ap$peak)]
+  
+  upstream_of_peak_togene_start_ap = annotatePeakInBatch(
+    no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
+    featureType = "Exon",
+    PeakLocForDistance = "start",
+    FeatureLocForDistance = "start",
+    output = "nearestLocation")  
+  upstream_of_peak_togene_start_ap = upstream_of_peak_togene_start_ap[ unique_indexes(upstream_of_peak_togene_start_ap$peak)]
+  
+  downstream_of_peak_togene_end_ap = annotatePeakInBatch(
+    no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
+    featureType = "Exon",
+    PeakLocForDistance = "end",
+    FeatureLocForDistance = "end",
+    output = "nearestLocation") 
+  downstream_of_peak_togene_end_ap = downstream_of_peak_togene_end_ap[ unique_indexes(downstream_of_peak_togene_end_ap$peak)]
+  
+  downstream_of_peak_togene_start_ap = annotatePeakInBatch(
+    no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
+    featureType = "Exon",
+    PeakLocForDistance = "end",
+    FeatureLocForDistance = "start",
+    output = "nearestLocation")  
+  downstream_of_peak_togene_start_ap = downstream_of_peak_togene_start_ap[ unique_indexes(downstream_of_peak_togene_start_ap$peak)]
   
   ap = annotatePeakInBatch(
     peaks,
