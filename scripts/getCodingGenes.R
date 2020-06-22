@@ -13,6 +13,9 @@ library(GenomicRanges)
 
 
 getCodingGenes = function(peaks, within_genes_kb = 5){
+  names(peaks) <- peaks$name
+  
+  
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
   # Get the specs from https://parasite.wormbase.org/biomart/martview/ 
   if (file.exists('genes_coding.RData')) {
@@ -74,6 +77,9 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     output = "overlapping")
   peaks[overlapping_ap$peak[is.na(overlapping_ap$feature) ]] -> no_overlap_peaks
  
+  # sort by shortest distance within each peak
+  overlapping_ap = overlapping_ap[ order(overlapping_ap$peak,overlapping_ap$shortestDistance)]
+  
   unique_indexes = function(vec) {
     return(match(unique(vec), vec))
   }
@@ -84,7 +90,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "start",
     FeatureLocForDistance = "end",
     output = "nearestLocation") 
-  upstream_of_peak_togene_end_ap = upstream_of_peak_togene_end_ap[ unique_indexes(upstream_of_peak_togene_end_ap$peak)]
+  #upstream_of_peak_togene_end_ap = upstream_of_peak_togene_end_ap[ unique_indexes(upstream_of_peak_togene_end_ap$peak)]
   
   upstream_of_peak_togene_start_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -92,7 +98,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "start",
     FeatureLocForDistance = "start",
     output = "nearestLocation")  
-  upstream_of_peak_togene_start_ap = upstream_of_peak_togene_start_ap[ unique_indexes(upstream_of_peak_togene_start_ap$peak)]
+  #upstream_of_peak_togene_start_ap = upstream_of_peak_togene_start_ap[ unique_indexes(upstream_of_peak_togene_start_ap$peak)]
   
   downstream_of_peak_togene_end_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -100,7 +106,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "end",
     FeatureLocForDistance = "end",
     output = "nearestLocation") 
-  downstream_of_peak_togene_end_ap = downstream_of_peak_togene_end_ap[ unique_indexes(downstream_of_peak_togene_end_ap$peak)]
+  #downstream_of_peak_togene_end_ap = downstream_of_peak_togene_end_ap[ unique_indexes(downstream_of_peak_togene_end_ap$peak)]
   
   downstream_of_peak_togene_start_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -108,8 +114,16 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "end",
     FeatureLocForDistance = "start",
     output = "nearestLocation")  
-  downstream_of_peak_togene_start_ap = downstream_of_peak_togene_start_ap[ unique_indexes(downstream_of_peak_togene_start_ap$peak)]
+  #downstream_of_peak_togene_start_ap = downstream_of_peak_togene_start_ap[ unique_indexes(downstream_of_peak_togene_start_ap$peak)]
   
+
+  stacked = c(overlapping_ap,upstream_of_peak_togene_start_ap,upstream_of_peak_togene_end_ap,downstream_of_peak_togene_start_ap,downstream_of_peak_togene_end_ap)
+  stacked = stacked[!is.na(stacked$insideFeature)]
+  stacked = stacked[ order(stacked$peak,stacked$shortestDistance)]
+  stacked_nr = stacked[ unique_indexes(stacked$peak)]
+  stacked_nr$insideFeature = as.character(stacked_nr$insideFeature)
+  stacked_nr[stacked_nr$fromOverlappingOrNearest != 'Overlapping' & stacked_nr$shortestDistance > 5000]$insideFeature <- 'unmapped'
+  table(stacked_nr$insideFeature)
   ap = annotatePeakInBatch(
     peaks,
     AnnotationData = all_CDS_genes,
@@ -159,6 +173,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   saveRDS(ap, "annotatedPeaks.rds")
   return(
     list(ap=ap, 
+         stacked_nr=stacked_nr,
          bycluster=list(
            ap_0=ap_0,
            ap_1=ap_1,
