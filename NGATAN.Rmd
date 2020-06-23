@@ -155,7 +155,43 @@ fviz_pca_biplot(nonTGATAA.pca, label="var") + ggtitle("TGATAA excluded")
 fviz_pca_biplot(nonTGATAA.pca, axes=c(1,3), label="var") + ggtitle("TGATAA excluded")
 ```
 
+```{r linear modelling}
 
+ngatan.by.peak[sort(rep(1:nrow(ngatan.by.peak),3)),] -> ngatan.repeated
+ap10185 = ap[mappings]
+bigdat = data.frame(mcols(subset(
+  ap10185,
+  select = c(peak, LE_nonNormed, L1_nonNormed, L3_nonNormed)
+)))
+melt(
+  bigdat,
+  id.vars = 'peak',
+  variable.name = 'stage',
+  value.name = 'signal'
+) -> melted
+
+melted[melted$stage == 'LE_nonNormed','stageVal'] <- 0
+melted[melted$stage == 'L1_nonNormed','stageVal'] <- 1
+melted[melted$stage == 'L3_nonNormed','stageVal'] <- 3
+
+melted[melted$stage == 'LE_nonNormed','stageVal2'] <- 0
+melted[melted$stage == 'L1_nonNormed','stageVal2'] <- 1
+melted[melted$stage == 'L3_nonNormed','stageVal2'] <- 2
+
+
+melted$TGATAA = c(ngatan.by.peak[, 'TGATAA'], ngatan.by.peak[, 'TGATAA'], ngatan.by.peak[, 'TGATAA'])
+melted$TGATAT = c(ngatan.by.peak[, 'TGATAT'], ngatan.by.peak[, 'TGATAT'], ngatan.by.peak[, 'TGATAT'])
+melted$AGATAA = c(ngatan.by.peak[, 'AGATAA'], ngatan.by.peak[, 'AGATAA'], ngatan.by.peak[, 'AGATAA'])
+
+mod1 = lm(signal ~ stageVal, data=melted)
+summary(mod1)
+
+mod2 = lm(signal ~ stageVal*TGATAA, data=melted)
+summary(mod2)
+
+mod3 = lm(signal ~ stageVal*TGATAA + stageVal*AGATAA,data=melted)
+summary(mod3)
+```
 
 
 
