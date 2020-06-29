@@ -412,8 +412,8 @@ xl$old.mapping = ap$feature
 xl$new.mapping = stacked_nr$feature
 xl$old.insideFeature = ap$insideFeature
 xl$new.insideFeature = stacked_nr$insideFeature
-xl$old.distance = ap$shortedDistance
-xl$new.distance = stacked_nr$shortedDistance
+xl$old.distance = ap$shortestDistance
+xl$new.distance = stacked_nr$shortestDistance
 xl = xl %>% mutate(mapping.changed = old.mapping != new.mapping)
 # randomization column
 set.seed(13)
@@ -422,6 +422,12 @@ xl = xl %>% arrange(! mapping.changed, randoms)
 xlsFilename="featureMappingCheck.xlsx"
 mappingXLS = loadWorkbook(xlsFilename, create=T)
 sheetname = format(Sys.time(), "%m-%d")
+sheetversion=1
+sheetnamebase = sheetname
+while(existsSheet(mappingXLS, sheetname)) {
+  sheetversion = sheetversion + 1
+  sheetname = sprintf("%s.%d",sheetnamebase,version)
+}
 createSheet(mappingXLS, sheetname)
 
 writeWorksheet(mappingXLS, xl, sheetname)
