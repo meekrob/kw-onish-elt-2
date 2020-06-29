@@ -213,8 +213,8 @@ n12 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 )
 n13 = sum(LEL1L3[,1] == 1  & LEL1L3[,3] == 1)
 
 n123 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
-#grid.newpage()
-#grid.draw(draw.triple.venn(area1, area2, area3, n12, n23, n13, n123, scale=F,euler.d=F))
+grid.newpage()
+grid.draw(draw.triple.venn(area1, area2, area3, n12, n23, n13, n123, scale=F,euler.d=F,fill=c('red','green','blue')))
 
 
 cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
@@ -404,6 +404,30 @@ peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
 source('scripts/getCodingGenes.R',echo=F)
 system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
+
+## Spread sheet for spot-checks
+xl = data.frame(peak.position = sprintf("%s:%d-%d", seqnames(stacked_nr),start(stacked_nr),end(stacked_nr)))
+xl$peak = stacked_nr$name
+xl$old.mapping = ap$feature
+xl$new.mapping = stacked_nr$feature
+xl$old.insideFeature = ap$insideFeature
+xl$new.insideFeature = stacked_nr$insideFeature
+xl$old.distance = ap$shortedDistance
+xl$new.distance = stacked_nr$shortedDistance
+xl = xl %>% mutate(mapping.changed = old.mapping != new.mapping)
+# randomization column
+set.seed(13)
+xl$randoms=sample(1:nrow(xl),nrow(xl))
+xl = xl %>% arrange(! mapping.changed, randoms)
+xlsFilename="featureMappingCheck.xlsx"
+mappingXLS = loadWorkbook(xlsFilename, create=T)
+sheetname = format(Sys.time(), "%m-%d")
+createSheet(mappingXLS, sheetname)
+
+writeWorksheet(mappingXLS, xl, sheetname)
+saveWorkbook(mappingXLS)
+##
+
 kinases = read.table('kinases.bm',header=T,sep="\t")
 mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
@@ -572,7 +596,7 @@ write(chrom.sizes,"chrom.sizes")
 # better figure out the PATH on your system
 PATH=$PATH:/Users/david/bin/UCSC_userApps 
 bedSort peaksForBigBed.bed peaksForBigBed.bed
-bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as
+bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as -extraIndex=name
 ```
 
 ```{r Get Coding Genes}
@@ -641,164 +665,164 @@ if (FALSE)
   print(ggplot(trends_ordered_long, aes(x=stage,y=center, group=description,colour=description )) + geom_line(size = 1.5) + labs(title=label, y = "cluster center (Z)", x = "developmental stage"))  
   dev.off()
 }
-
-as_tibble(ap) ->ap.tbl
-# some scoring metrics
-ap.tbl %>% mutate(meanOccupancy=(LE_nonNormed+L1_nonNormed+L3_nonNormed)/3) -> ap.tbl
-ap.tbl %>% mutate(weightedVariance=variance*k4weights) -> ap.tbl
-ap.tbl %>% mutate(coeffVariation=sqrt(variance)/meanOccupancy) -> ap.tbl
-# selection criterium "score" is coefficient of variation for class 0, weightedVariance
-# for classes 1-4.
-
-ap.tbl %>% mutate(selectionScore=ifelse(k4cluster==0, coeffVariation, weightedVariance)) -> ap.tbl
-
-ap.tbl %>% mutate(spenc_LE=feature %in% rownames(LEL2)[LEL2[,'spenc_LE']==1],
-                  spenc_L2=feature %in% rownames(LEL2)[LEL2[,'spenc_L2']==1]) -> ap.tbl
-
-# apply IDR rules
-ap.tbl %>% filter(k4cluster==0) %>% filter(LE_IDR == 1 & L1_IDR == 1 & L3_IDR == 1) -> ap.tbl.0
-ap.tbl %>% filter(k4cluster==1) %>% filter(LE_IDR==1)                               -> ap.tbl.1
-ap.tbl %>% filter(k4cluster==2) %>% filter(L1_IDR == 1 & L3_IDR == 1)               -> ap.tbl.2
-ap.tbl %>% filter(k4cluster==3) %>% filter(L3_IDR == 1)                             -> ap.tbl.3
-ap.tbl %>% filter(k4cluster==4) %>% filter(L3_IDR & (L1_IDR | LE_IDR))              -> ap.tbl.4
-
-# Map the coefficient of variation to (lowest->1, hightest->0)
-inverseScale = function(x, minVal, rangeVal) { y = (x-minVal)/rangeVal; return(1-y);}
-ap.tbl.0 %>% select(coeffVariation) %>% min() -> min_cov.0
-ap.tbl.0 %>% select(coeffVariation) %>% range() %>% diff() -> range_cov.0
-ap.tbl.0 %>% mutate(selectionScore=inverseScale(coeffVariation, min_cov.0, range_cov.0))
-
-# sort each class, attach rank, and merge
-# sorting least sig. to most sig. to affect how the points
-# are plotted on top of each other below. 
-# To select regions, re-sort, within k4cluster, on rankInCluster
-ap.tbl.0 %>% arrange((selectionScore)) %>% 
-  mutate(rankInCluster = nrow(ap.tbl.0):1) -> ap.tbl.scored
-ap.tbl.1 %>% arrange((selectionScore)) %>%
-  mutate(rankInCluster = nrow(ap.tbl.1):1) %>%
-  bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.2 %>% arrange((selectionScore)) %>% 
-  mutate(rankInCluster = nrow(ap.tbl.2):1) %>%
-  bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.3 %>% arrange((selectionScore)) %>% 
-  mutate(rankInCluster = nrow(ap.tbl.3):1) %>%
-  bind_rows(ap.tbl.scored) -> ap.tbl.scored
-ap.tbl.4 %>% arrange((selectionScore)) %>% 
-  mutate(rankInCluster = nrow(ap.tbl.4):1) %>%
-  bind_rows(ap.tbl.scored) -> ap.tbl.scored
-
-# write an Excel spreadsheet
-##
-xlsFilename="topScorers.xlsx"
-topScorersXLS = loadWorkbook(xlsFilename, create=T)
-
-sheetname = format(Sys.time(), "K1 %y-%m-%d-%H-%M")
-createSheet(topScorersXLS, sheetname)
-ap.tbl.1 %>% arrange(desc(selectionScore)) %>%
-  mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
-  head(20) -> wrkSheet
-  writeWorksheet(topScorersXLS, sht, sheetname)
-
+# 
+# as_tibble(ap) ->ap.tbl
+# # some scoring metrics
+# ap.tbl %>% mutate(meanOccupancy=(LE_nonNormed+L1_nonNormed+L3_nonNormed)/3) -> ap.tbl
+# ap.tbl %>% mutate(weightedVariance=variance*k4weights) -> ap.tbl
+# ap.tbl %>% mutate(coeffVariation=sqrt(variance)/meanOccupancy) -> ap.tbl
+# # selection criterium "score" is coefficient of variation for class 0, weightedVariance
+# # for classes 1-4.
+# 
+# ap.tbl %>% mutate(selectionScore=ifelse(k4cluster==0, coeffVariation, weightedVariance)) -> ap.tbl
+# 
+# ap.tbl %>% mutate(spenc_LE=feature %in% rownames(LEL2)[LEL2[,'spenc_LE']==1],
+#                   spenc_L2=feature %in% rownames(LEL2)[LEL2[,'spenc_L2']==1]) -> ap.tbl
+# 
+# # apply IDR rules
+# ap.tbl %>% filter(k4cluster==0) %>% filter(LE_IDR == 1 & L1_IDR == 1 & L3_IDR == 1) -> ap.tbl.0
+# ap.tbl %>% filter(k4cluster==1) %>% filter(LE_IDR==1)                               -> ap.tbl.1
+# ap.tbl %>% filter(k4cluster==2) %>% filter(L1_IDR == 1 & L3_IDR == 1)               -> ap.tbl.2
+# ap.tbl %>% filter(k4cluster==3) %>% filter(L3_IDR == 1)                             -> ap.tbl.3
+# ap.tbl %>% filter(k4cluster==4) %>% filter(L3_IDR & (L1_IDR | LE_IDR))              -> ap.tbl.4
+# 
+# # Map the coefficient of variation to (lowest->1, hightest->0)
+# inverseScale = function(x, minVal, rangeVal) { y = (x-minVal)/rangeVal; return(1-y);}
+# ap.tbl.0 %>% select(coeffVariation) %>% min() -> min_cov.0
+# ap.tbl.0 %>% select(coeffVariation) %>% range() %>% diff() -> range_cov.0
+# ap.tbl.0 %>% mutate(selectionScore=inverseScale(coeffVariation, min_cov.0, range_cov.0))
+# 
+# # sort each class, attach rank, and merge
+# # sorting least sig. to most sig. to affect how the points
+# # are plotted on top of each other below. 
+# # To select regions, re-sort, within k4cluster, on rankInCluster
+# ap.tbl.0 %>% arrange((selectionScore)) %>% 
+#   mutate(rankInCluster = nrow(ap.tbl.0):1) -> ap.tbl.scored
+# ap.tbl.1 %>% arrange((selectionScore)) %>%
+#   mutate(rankInCluster = nrow(ap.tbl.1):1) %>%
+#   bind_rows(ap.tbl.scored) -> ap.tbl.scored
+# ap.tbl.2 %>% arrange((selectionScore)) %>% 
+#   mutate(rankInCluster = nrow(ap.tbl.2):1) %>%
+#   bind_rows(ap.tbl.scored) -> ap.tbl.scored
+# ap.tbl.3 %>% arrange((selectionScore)) %>% 
+#   mutate(rankInCluster = nrow(ap.tbl.3):1) %>%
+#   bind_rows(ap.tbl.scored) -> ap.tbl.scored
+# ap.tbl.4 %>% arrange((selectionScore)) %>% 
+#   mutate(rankInCluster = nrow(ap.tbl.4):1) %>%
+#   bind_rows(ap.tbl.scored) -> ap.tbl.scored
+# 
+# # write an Excel spreadsheet
+# ##
+# xlsFilename="topScorers.xlsx"
+# topScorersXLS = loadWorkbook(xlsFilename, create=T)
+# 
+# sheetname = format(Sys.time(), "K1 %y-%m-%d-%H-%M")
+# createSheet(topScorersXLS, sheetname)
 # ap.tbl.1 %>% arrange(desc(selectionScore)) %>%
-#     mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
-#     filter(spenc_LE | spenc_L2) %>% head(5) %>%
-#     write.table(file ="k1_top5spencer.txt",quote=F,sep="\t",row.names=F)
-
-sheetname = format(Sys.time(), "K2 %y-%m-%d-%H-%M")
-createSheet(topScorersXLS, sheetname)
-ap.tbl.2 %>% arrange(desc(selectionScore)) %>%
-  mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
-  head(20) ->wrkSht 
-  writeWorksheet(topScorersXLS, wrkSht, sheetname)
-
+#   mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
+#   head(20) -> wrkSheet
+#   writeWorksheet(topScorersXLS, sht, sheetname)
+# 
+# # ap.tbl.1 %>% arrange(desc(selectionScore)) %>%
+# #     mutate(rankInCluster = 1:nrow(ap.tbl.1)) %>% 
+# #     filter(spenc_LE | spenc_L2) %>% head(5) %>%
+# #     write.table(file ="k1_top5spencer.txt",quote=F,sep="\t",row.names=F)
+# 
+# sheetname = format(Sys.time(), "K2 %y-%m-%d-%H-%M")
+# createSheet(topScorersXLS, sheetname)
 # ap.tbl.2 %>% arrange(desc(selectionScore)) %>%
-#     mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
-#     filter(spenc_LE | spenc_L2) %>% head(5) %>%
-#     write.table(file ="k2_top5spencer.txt",quote=F,sep="\t",row.names=F)
-
-sheetname = format(Sys.time(), "K3 %y-%m-%d-%H-%M")
-createSheet(topScorersXLS, sheetname)
-ap.tbl.3 %>% arrange(desc(selectionScore)) %>%
-  mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
-  head(20) ->wrkSht
-  writeWorksheet(topScorersXLS, sht, sheetname)
-  
+#   mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
+#   head(20) ->wrkSht 
+#   writeWorksheet(topScorersXLS, wrkSht, sheetname)
+# 
+# # ap.tbl.2 %>% arrange(desc(selectionScore)) %>%
+# #     mutate(rankInCluster = 1:nrow(ap.tbl.2)) %>% 
+# #     filter(spenc_LE | spenc_L2) %>% head(5) %>%
+# #     write.table(file ="k2_top5spencer.txt",quote=F,sep="\t",row.names=F)
+# 
+# sheetname = format(Sys.time(), "K3 %y-%m-%d-%H-%M")
+# createSheet(topScorersXLS, sheetname)
 # ap.tbl.3 %>% arrange(desc(selectionScore)) %>%
-#     mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
-#     filter(spenc_LE | spenc_L2) %>% head(5) %>% 
-#     write.table(file ="k3_top5spencer.txt",quote=F,sep="\t",row.names=F)
-
-sheetname = format(Sys.time(), "K4 %y-%m-%d-%H-%M")
-createSheet(topScorersXLS, sheetname)  
-ap.tbl.4 %>% arrange(desc(selectionScore)) %>%
-  mutate(rankInCluster = 1:nrow(ap.tbl.4)) %>% 
-  head(20) -> wrkSht
-  writeWorksheet(topScorersXLS, sht, sheetname)
-  
-saveWorkbook(topScorersXLS)
-
-# for the plot
-factorRanks = function(x) {
-  strats=ifelse(x <= 10, "top 10", ifelse(x<=20, "top 20", ifelse(x<=50, "top 50", "remainder")))
-  return(factor(strats, levels=c("top 10","top 20","top 50","remainder")))
-}
-
-ap.tbl.scored %>% mutate(rankLevels = factorRanks(ap.tbl.scored$rankInCluster)) -> ap.tbl.scored
-
-ggplot(
-  ap.tbl.scored %>% filter(k4cluster > 0),
-  aes(
-    x = variance,
-    y = k4weights,
-    alpha=rankLevels,
-    color=rankLevels
-  )
-) + geom_point() + facet_wrap( ~ k4cluster) + scale_color_manual(values=c("top 10" = "dark blue","top 20"="blue", "top 50" = "light blue", "remainder" = "grey")) +
-  scale_alpha_manual(values=c("top 10" = 1,"top 20" = 1, "top 50" = 1, "remainder" = .2)) +
-  ggtitle("Peaks most representative of each developmental trend", subtitle = "Ranked by variance*cluster score [0-1]") 
-
-ggplot(
-  ap.tbl.scored %>% filter(k4cluster == 0),
-  aes(y = sqrt(variance), x = coeffVariation, color = rankInCluster <= 20)
-) + geom_point() + scale_color_manual(values=c('grey','blue'))
-
-ap$weightedVariance = ap$variance * ap$k4weights
-ap.0 = ap[ap$k4cluster == 0]
-ap.1 = ap[ap$k4cluster == 1]
-ap.2 = ap[ap$k4cluster == 2]
-ap.3 = ap[ap$k4cluster == 3]
-ap.4 = ap[ap$k4cluster == 4]
-
-# enforce meaningful constraint on called, reproducible peaks for given pattern
-ap.0.IDR = ap.0[ap.0$LE_IDR == 1 & ap.0$L1_IDR == 1 & ap.0$L3_IDR == 1]
-ap.1.IDR = ap.1[ap.1$LE_IDR==1]
-ap.2.IDR = ap.2[ap.2$L1_IDR == 1 & ap.2$L3_IDR == 1]
-ap.3.IDR = ap.3[ap.1$L3_IDR == 1]
-ap.4.IDR = ap.4[ap.4$L3_IDR & (ap.4$L1_IDR | ap.4$LE_IDR)] 
-
-
-# coeffecient of variation for Non-changing class
-coefVar = function(x) {sd(x) / mean(x)}
-cov.0.IDR = apply(
-  as.matrix(mcols(ap.0.IDR)[, c('LE_nonNormed', 'L1_nonNormed', 'L3_nonNormed')]), 
-  1, coefVar)
-
-ap.0.IDR = ap.0.IDR[order(-cov.0.IDR)] 
-ap.1.IDR = ap.1.IDR[order(-ap.1.IDR$weightedVariance)]
-ap.2.IDR = ap.2.IDR[order(-ap.2.IDR$weightedVariance)]
-ap.3.IDR = ap.3.IDR[order(-ap.3.IDR$weightedVariance)]
-ap.4.IDR = ap.4.IDR[order(-ap.4.IDR$weightedVariance)]
-
-ap.0.IDR[1:20]
-
-
-top=50
-
-grformat = function(granges) {
-  df = as.data.frame(granges)
-  df$strand <- NULL
-  return(df)
-}
+#   mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
+#   head(20) ->wrkSht
+#   writeWorksheet(topScorersXLS, sht, sheetname)
+#   
+# # ap.tbl.3 %>% arrange(desc(selectionScore)) %>%
+# #     mutate(rankInCluster = 1:nrow(ap.tbl.3)) %>% 
+# #     filter(spenc_LE | spenc_L2) %>% head(5) %>% 
+# #     write.table(file ="k3_top5spencer.txt",quote=F,sep="\t",row.names=F)
+# 
+# sheetname = format(Sys.time(), "K4 %y-%m-%d-%H-%M")
+# createSheet(topScorersXLS, sheetname)  
+# ap.tbl.4 %>% arrange(desc(selectionScore)) %>%
+#   mutate(rankInCluster = 1:nrow(ap.tbl.4)) %>% 
+#   head(20) -> wrkSht
+#   writeWorksheet(topScorersXLS, sht, sheetname)
+#   
+# saveWorkbook(topScorersXLS)
+# 
+# # for the plot
+# factorRanks = function(x) {
+#   strats=ifelse(x <= 10, "top 10", ifelse(x<=20, "top 20", ifelse(x<=50, "top 50", "remainder")))
+#   return(factor(strats, levels=c("top 10","top 20","top 50","remainder")))
+# }
+# 
+# ap.tbl.scored %>% mutate(rankLevels = factorRanks(ap.tbl.scored$rankInCluster)) -> ap.tbl.scored
+# 
+# ggplot(
+#   ap.tbl.scored %>% filter(k4cluster > 0),
+#   aes(
+#     x = variance,
+#     y = k4weights,
+#     alpha=rankLevels,
+#     color=rankLevels
+#   )
+# ) + geom_point() + facet_wrap( ~ k4cluster) + scale_color_manual(values=c("top 10" = "dark blue","top 20"="blue", "top 50" = "light blue", "remainder" = "grey")) +
+#   scale_alpha_manual(values=c("top 10" = 1,"top 20" = 1, "top 50" = 1, "remainder" = .2)) +
+#   ggtitle("Peaks most representative of each developmental trend", subtitle = "Ranked by variance*cluster score [0-1]") 
+# 
+# ggplot(
+#   ap.tbl.scored %>% filter(k4cluster == 0),
+#   aes(y = sqrt(variance), x = coeffVariation, color = rankInCluster <= 20)
+# ) + geom_point() + scale_color_manual(values=c('grey','blue'))
+# 
+# ap$weightedVariance = ap$variance * ap$k4weights
+# ap.0 = ap[ap$k4cluster == 0]
+# ap.1 = ap[ap$k4cluster == 1]
+# ap.2 = ap[ap$k4cluster == 2]
+# ap.3 = ap[ap$k4cluster == 3]
+# ap.4 = ap[ap$k4cluster == 4]
+# 
+# # enforce meaningful constraint on called, reproducible peaks for given pattern
+# ap.0.IDR = ap.0[ap.0$LE_IDR == 1 & ap.0$L1_IDR == 1 & ap.0$L3_IDR == 1]
+# ap.1.IDR = ap.1[ap.1$LE_IDR==1]
+# ap.2.IDR = ap.2[ap.2$L1_IDR == 1 & ap.2$L3_IDR == 1]
+# ap.3.IDR = ap.3[ap.1$L3_IDR == 1]
+# ap.4.IDR = ap.4[ap.4$L3_IDR & (ap.4$L1_IDR | ap.4$LE_IDR)] 
+# 
+# 
+# # coeffecient of variation for Non-changing class
+# coefVar = function(x) {sd(x) / mean(x)}
+# cov.0.IDR = apply(
+#   as.matrix(mcols(ap.0.IDR)[, c('LE_nonNormed', 'L1_nonNormed', 'L3_nonNormed')]), 
+#   1, coefVar)
+# 
+# ap.0.IDR = ap.0.IDR[order(-cov.0.IDR)] 
+# ap.1.IDR = ap.1.IDR[order(-ap.1.IDR$weightedVariance)]
+# ap.2.IDR = ap.2.IDR[order(-ap.2.IDR$weightedVariance)]
+# ap.3.IDR = ap.3.IDR[order(-ap.3.IDR$weightedVariance)]
+# ap.4.IDR = ap.4.IDR[order(-ap.4.IDR$weightedVariance)]
+# 
+# ap.0.IDR[1:20]
+# 
+# 
+# top=50
+# 
+# grformat = function(granges) {
+#   df = as.data.frame(granges)
+#   df$strand <- NULL
+#   return(df)
+# }
 
 
 # You must connect to the NAS first to get these genes.

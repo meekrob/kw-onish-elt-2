@@ -90,6 +90,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "start",
     FeatureLocForDistance = "end",
     output = "nearestLocation") 
+  #upstream_of_peak_togene_end_ap = upstream_of_peak_togene_end_ap[ unique_indexes(upstream_of_peak_togene_end_ap$peak)]
   
   upstream_of_peak_togene_start_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -97,6 +98,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "start",
     FeatureLocForDistance = "start",
     output = "nearestLocation")  
+  #upstream_of_peak_togene_start_ap = upstream_of_peak_togene_start_ap[ unique_indexes(upstream_of_peak_togene_start_ap$peak)]
   
   downstream_of_peak_togene_end_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -104,6 +106,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "end",
     FeatureLocForDistance = "end",
     output = "nearestLocation") 
+  #downstream_of_peak_togene_end_ap = downstream_of_peak_togene_end_ap[ unique_indexes(downstream_of_peak_togene_end_ap$peak)]
   
   downstream_of_peak_togene_start_ap = annotatePeakInBatch(
     no_overlap_peaks, AnnotationData = all_CDS_genes, bindingRegions = c(-within_genes_kb, within_genes_kb),
@@ -111,6 +114,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "end",
     FeatureLocForDistance = "start",
     output = "nearestLocation")  
+  #downstream_of_peak_togene_start_ap = downstream_of_peak_togene_start_ap[ unique_indexes(downstream_of_peak_togene_start_ap$peak)]
   
 
   stacked = c(overlapping_ap,upstream_of_peak_togene_start_ap,upstream_of_peak_togene_end_ap,downstream_of_peak_togene_start_ap,downstream_of_peak_togene_end_ap)
@@ -119,9 +123,15 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   stacked_nr = stacked[ unique_indexes(stacked$peak)]
   stacked_nr$insideFeature = as.character(stacked_nr$insideFeature)
   stacked_nr[stacked_nr$fromOverlappingOrNearest != 'Overlapping' & stacked_nr$shortestDistance > 5000]$insideFeature <- 'unmapped'
-  stacked_nr[stacked_nr$insideFeature == 'unmapped']$feature <- NA
-  ap = stacked_nr
-  
+  table(stacked_nr$insideFeature)
+  ap = annotatePeakInBatch(
+    peaks,
+    AnnotationData = all_CDS_genes,
+    PeakLocForDistance = "middle",
+    output = "nearestLocation",
+    FeatureLocForDistance = c("middle"),
+    bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
+  )
   # The output is X00001.WBID. The peak ID (in the name column) is more useful.
   names(ap) <- ap$name
   # these fields got converted to character during bigbed output
@@ -134,7 +144,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   ap$L3_std = as.numeric(ap$L3_std)
   ap$L1_std = as.numeric(ap$L1_std)
   ap$LE_std = as.numeric(ap$LE_std)
-  #ap$peak = as.integer(ap$peak) # this are the string "ELT2peak..."
+  ap$peak = as.integer(ap$peak)
   
   # unmapped +/- 5Kb
   nappy = ap[is.na(ap$feature)]
