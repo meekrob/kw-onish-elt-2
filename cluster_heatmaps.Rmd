@@ -419,7 +419,7 @@ xl = xl %>% mutate(mapping.changed = old.mapping != new.mapping)
 set.seed(13)
 xl$randoms=sample(1:nrow(xl),nrow(xl))
 xl = xl %>% arrange(! mapping.changed, randoms)
-xlsFilename="featureMappingCheck.xlsx"
+xlsFilename="featureMappingCheck_template.xlsx"
 mappingXLS = loadWorkbook(xlsFilename, create=T)
 sheetname = format(Sys.time(), "%m-%d")
 sheetversion=1
