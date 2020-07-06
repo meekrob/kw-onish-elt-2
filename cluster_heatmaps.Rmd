@@ -25,7 +25,7 @@ library(topGO, quietly=T, warn.conflicts = F)
 library(dplyr, quietly=T, warn.conflicts = F)
 library(UpSetR)
 library(knitr)
-library(XLConnect)
+
 ```
 
 ## Script version
@@ -408,8 +408,8 @@ attach(annotatedPeaks)
 ## Spread sheet for spot-checks
 xl = data.frame(peak.position = sprintf("%s:%d-%d", seqnames(stacked_nr),start(stacked_nr),end(stacked_nr)))
 xl$peak = stacked_nr$name
-xl$old.mapping = ap$feature
-xl$new.mapping = stacked_nr$feature
+xl$old.mapping = sprintf("%s (%s)", ap$gene_name, ap$feature)
+xl$new.mapping = sprintf("%s (%s)", stacked_nr$gene_name, stacked_nr$feature)
 xl$old.insideFeature = ap$insideFeature
 xl$new.insideFeature = stacked_nr$insideFeature
 xl$old.distance = ap$shortestDistance
@@ -419,20 +419,8 @@ xl = xl %>% mutate(mapping.changed = old.mapping != new.mapping)
 set.seed(13)
 xl$randoms=sample(1:nrow(xl),nrow(xl))
 xl = xl %>% arrange(! mapping.changed, randoms)
-xlsFilename="featureMappingCheck_template.xlsx"
-mappingXLS = loadWorkbook(xlsFilename, create=T)
-sheetname = format(Sys.time(), "%m-%d")
-sheetversion=1
-sheetnamebase = sheetname
-while(existsSheet(mappingXLS, sheetname)) {
-  sheetversion = sheetversion + 1
-  sheetname = sprintf("%s.%d",sheetnamebase,version)
-}
-createSheet(mappingXLS, sheetname)
+write.table(xl, "featureMapping.txt",quote = F, row.names=F, sep="\t")
 
-writeWorksheet(mappingXLS, xl, sheetname)
-saveWorkbook(mappingXLS)
-##
 
 kinases = read.table('kinases.bm',header=T,sep="\t")
 mapping_breakdown = table(ap$insideFeature)
