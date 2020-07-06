@@ -164,6 +164,9 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   # does not differ between clusters, with overlapStart and upstream accounting for 60-70% of the annotation types (followed by 'inside', then 'downstream')
   round(table(ap$k4cluster, ap$insideFeature)/apply(table(ap$k4cluster, ap$insideFeature), 1, sum),3)*100
   
+  ap$gene_name = all_CDS_genes[ ap$feature]$name 
+  stacked_nr$gene_name = all_CDS_genes[ stacked_nr$feature]$name 
+  
   # ap broken down by kclust number
   ap_0 = ap[ap$k4cluster ==0]
   ap_1 = ap[ap$k4cluster ==1]
