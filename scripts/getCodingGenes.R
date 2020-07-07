@@ -75,11 +75,14 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
     PeakLocForDistance = "middle",
     FeatureLocForDistance = "middle",
     output = "overlapping")
+  overlapping_ap$insideFeature <- factor(overlapping_ap$insideFeature,levels=c("overlapStart","inside","overlapEnd","includeFeature"))
   peaks[overlapping_ap$peak[is.na(overlapping_ap$feature) ]] -> no_overlap_peaks
  
-  # sort by shortest distance within each peak
-  overlapping_ap = overlapping_ap[ order(overlapping_ap$peak,overlapping_ap$shortestDistance)]
+  # sort by feature type, favoring the levels above, then shortest distance within each peak
+  overlapping_ap = overlapping_ap[ order(overlapping_ap$peak,overlapping_ap$insideFeature, overlapping_ap$shortestDistance)]
   
+  # this function actually chooses the peak for the gene by taking the first occurance,
+  # the sort order outside this function determines which mapping occurs first
   unique_indexes = function(vec) {
     return(match(unique(vec), vec))
   }
@@ -119,7 +122,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
 
   stacked = c(overlapping_ap,upstream_of_peak_togene_start_ap,upstream_of_peak_togene_end_ap,downstream_of_peak_togene_start_ap,downstream_of_peak_togene_end_ap)
   stacked = stacked[!is.na(stacked$insideFeature)]
-  stacked = stacked[ order(stacked$peak,stacked$shortestDistance)]
+  stacked = stacked[ order(stacked$peak,stacked$insideFeature, stacked$shortestDistance)]
   stacked_nr = stacked[ unique_indexes(stacked$peak)]
   stacked_nr$insideFeature = as.character(stacked_nr$insideFeature)
   stacked_nr[stacked_nr$fromOverlappingOrNearest != 'Overlapping' & stacked_nr$shortestDistance > 5000]$insideFeature <- 'unmapped'
