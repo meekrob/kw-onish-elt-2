@@ -19,6 +19,7 @@ pkgs = c("biomaRt",
          "GenomicRanges", 
          "ChIPpeakAnno",
          "topGO", 
+         "plyranges", # tidy the GenomicRanges objects
          "UpSetR")
 
 need.pkgs = pkgs[! (pkgs %in% installed.packages()[,"Package"])]
