@@ -1,3 +1,6 @@
+# Excel swap/lock files
+~$*.xlsx
+
 # Data you might not want to track
 *.bedlike
 
