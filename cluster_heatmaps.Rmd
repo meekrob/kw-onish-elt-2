@@ -11,7 +11,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 R.version
-#RStudio.Version()
+# checks for packages, run install if necessary 
+source("check_for_install_deps.R",echo = T) 
 library(pheatmap, quietly=T, warn.conflicts = F)
 library(stringr, quietly=T, warn.conflicts = F)
 library(reshape2, quietly=T, warn.conflicts = F)
@@ -25,6 +26,8 @@ library(topGO, quietly=T, warn.conflicts = F)
 library(dplyr, quietly=T, warn.conflicts = F)
 library(UpSetR)
 library(knitr)
+library(grid)
+library(VennDiagram)
 
 ```
 
@@ -422,7 +425,7 @@ xl = xl %>% arrange(! mapping.changed, randoms)
 write.table(xl, "featureMapping.txt",quote = F, row.names=F, sep="\t")
 
 
-kinases = read.table('kinases.bm',header=T,sep="\t")
+
 mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
 pie(table(ap$insideFeature), labels=pie_labels, main="Gene features at or near ELT-2 occupied peaks", sub='The closest feature to a peak is mapped unless farther than 5KB.\n "insideFeature" means the peak completely encompasses the gene (might be a consequence of the merge).')
