@@ -408,7 +408,7 @@ peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
 source('scripts/getCodingGenes.R',echo=F)
 system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
-ra = read.table('right.answers')
+ra = read.table('data/genemapping.right.answers')
 cat("The following don't match expected mappings:")
 ra[stacked_nr[ ra[[1]] ]$feature != ra[[3]],]
 
