@@ -408,9 +408,8 @@ peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
 source('scripts/getCodingGenes.R',echo=F)
 system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
-ra = read.table('right.answers')
-cat("The following don't match expected mappings:")
-ra[stacked_nr[ ra[[1]] ]$feature != ra[[3]],]
+ra = read.table('data/genemapping.right.answers')
+cat("Inconsistent gene mappings:", sum(stacked_nr[ ra[[1]] ]$feature != ra[[3]]))
 
 ## Spread sheet for spot-checks
 xl = data.frame(peak.position = sprintf("%s:%d-%d", seqnames(stacked_nr),start(stacked_nr),end(stacked_nr)))
