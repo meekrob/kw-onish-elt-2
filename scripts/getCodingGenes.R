@@ -120,9 +120,10 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   #downstream_of_peak_togene_start_ap = downstream_of_peak_togene_start_ap[ unique_indexes(downstream_of_peak_togene_start_ap$peak)]
   
 
-  stacked = c(overlapping_ap,upstream_of_peak_togene_start_ap,upstream_of_peak_togene_end_ap,downstream_of_peak_togene_start_ap,downstream_of_peak_togene_end_ap)
+  stacked_nonoverlapping = c(upstream_of_peak_togene_start_ap,upstream_of_peak_togene_end_ap,downstream_of_peak_togene_start_ap,downstream_of_peak_togene_end_ap)
+  stacked_nonoverlapping = stacked_nonoverlapping[ order(stacked_nonoverlapping$peak,stacked_nonoverlapping$shortestDistance)]
+  stacked = c(overlapping_ap,stacked_nonoverlapping)
   stacked = stacked[!is.na(stacked$insideFeature)]
-  stacked = stacked[ order(stacked$peak,stacked$insideFeature, stacked$shortestDistance)]
   stacked_nr = stacked[ unique_indexes(stacked$peak)]
   stacked_nr$insideFeature = as.character(stacked_nr$insideFeature)
   stacked_nr[stacked_nr$fromOverlappingOrNearest != 'Overlapping' & stacked_nr$shortestDistance > 5000]$insideFeature <- 'unmapped'
