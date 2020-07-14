@@ -435,6 +435,7 @@ pie(table(ap$insideFeature), labels=pie_labels, main="Gene features at or near E
 
 features_observed = table(ap$insideFeature)
 # empirical data
+if (file.exists('feature_mapping_empirical.tbl')) {
 feature_table = readRDS("feature_mapping_empirical.tbl") %>% as_tibble() %>% dplyr::rename('unmapped ± 5Kb'='unmapped - 5Kb') %>% as.matrix()
 ecdf_downstream = ecdf(feature_table[,'downstream'])
 ecdf_includeFeature = ecdf(feature_table[,'includeFeature'])
@@ -540,7 +541,7 @@ ggplot(as_tibble(var_stat) %>% mutate(value = log(value)), aes(x = value)) +
       x = "log(value) of variability statistic", 
       y = "Number of permutations with given log(value)",
       caption = "The shaded yellow area shows the lower 99.9% of statistic values for the 9,000 \npermutations across the genome. 7 extrema yield a high variability statistic (log), \nranging between 7.37-7.42. However, the variability statistic for the ELT-2 occupied \npeaks is log(2923)=7.98 (red line), greater than observed in 9000 random permutations.\nTherefore, the empirical p-value is 0.")
-
+}
 
 peakSchema = "
 table ELT2DynamicPeaks
