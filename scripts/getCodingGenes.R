@@ -127,15 +127,17 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   stacked_nr = stacked[ unique_indexes(stacked$peak)]
   stacked_nr$insideFeature = as.character(stacked_nr$insideFeature)
   stacked_nr[stacked_nr$fromOverlappingOrNearest != 'Overlapping' & stacked_nr$shortestDistance > 5000]$insideFeature <- 'unmapped'
+  names(stacked_nr) = stacked_nr$peak
   table(stacked_nr$insideFeature)
-  ap = annotatePeakInBatch(
-    peaks,
-    AnnotationData = all_CDS_genes,
-    PeakLocForDistance = "middle",
-    output = "nearestLocation",
-    FeatureLocForDistance = c("middle"),
-    bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
-  )
+  ap = stacked_nr
+  # ap = annotatePeakInBatch(
+  #   peaks,
+  #   AnnotationData = all_CDS_genes,
+  #   PeakLocForDistance = "middle",
+  #   output = "nearestLocation",
+  #   FeatureLocForDistance = c("middle"),
+  #   bindingRegions = c(-within_genes_kb, within_genes_kb) # if you make this assymetric, change the label below
+  # )
   # The output is X00001.WBID. The peak ID (in the name column) is more useful.
   names(ap) <- ap$name
   # these fields got converted to character during bigbed output
