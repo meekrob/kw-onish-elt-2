@@ -408,22 +408,7 @@ system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
 ra = read.table('data/genemapping.right.answers')
 cat("Inconsistent gene mappings:", sum(ap[ ra[[1]] ]$feature != ra[[3]]))
-
-## Spread sheet for spot-checks
-xl = data.frame(peak.position = sprintf("%s:%d-%d", seqnames(stacked_nr),start(stacked_nr),end(stacked_nr)))
-xl$peak = stacked_nr$name
-xl$old.mapping = sprintf("%s (%s)", ap$gene_name, ap$feature)
-xl$new.mapping = sprintf("%s (%s)", stacked_nr$gene_name, stacked_nr$feature)
-xl$old.insideFeature = ap$insideFeature
-xl$new.insideFeature = stacked_nr$insideFeature
-xl$old.distance = ap$shortestDistance
-xl$new.distance = stacked_nr$shortestDistance
-xl = xl %>% mutate(mapping.changed = old.mapping != new.mapping)
-# randomization column
-set.seed(13)
-xl$randoms=sample(1:nrow(xl),nrow(xl))
-xl = xl %>% arrange(! mapping.changed, randoms)
-write.table(xl, "featureMapping.txt",quote = F, row.names=F, sep="\t")
+## See previous commits forspread sheet for spot-checks
 
 mapping_breakdown = table(ap$insideFeature)
 pie_labels = paste0(names(table(ap$insideFeature)), rep(" (",5), table(ap$insideFeature), rep(")",5))
