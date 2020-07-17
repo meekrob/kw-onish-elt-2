@@ -90,7 +90,7 @@ for (filepath in args[2:length(args)]) {
     load('genes_coding.RData')
     ap = getCodingGenes(peaks, genes_coding)
     mapping_breakdown = table(ap$insideFeature)
-    for (feature in c('unmapped - 5Kb', 'upstream', 'overlapStart', 'inside', 'includeFeature', 'downstream', 'overlapEnd')) {
+    for (feature in c('unmapped', 'upstream', 'overlapStart', 'inside', 'includeFeature', 'downstream', 'overlapEnd')) {
         mapping_breakdown[feature] = ifelse(feature %in% names(mapping_breakdown), mapping_breakdown[feature], 0)
     }
     bigtab = rbind(bigtab, mapping_breakdown)
