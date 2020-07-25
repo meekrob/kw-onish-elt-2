@@ -48,7 +48,7 @@ bigtab = c()
 for (filepath in args[2:length(args)]) {
     
     peaks = readBedOrRds(filepath)
-    ap = getCodingGenes(peaks)
+    ap = getCodingGenes(peaks)$ap
     mapping_breakdown = table(ap$insideFeature)
     for (feature in c('unmapped', 'upstream', 'overlapStart', 'inside', 'includeFeature', 'downstream', 'overlapEnd')) {
         mapping_breakdown[feature] = ifelse(feature %in% names(mapping_breakdown), mapping_breakdown[feature], 0)

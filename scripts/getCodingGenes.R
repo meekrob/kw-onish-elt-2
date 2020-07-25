@@ -13,7 +13,10 @@ library(GenomicRanges)
 
 
 getCodingGenes = function(peaks, within_genes_kb = 5){
-  names(peaks) <- peaks$name
+  if (! 'name'  %in% colnames(mcols(peaks))) {
+    peaks$name = sprintf("peak_%d", 1:length(peaks))
+  }
+    names(peaks) <- peaks$name
   
   
   # Get only the protein-coding genes. Ranges are comprehensive across splice variants.
