@@ -52,6 +52,6 @@ attach(spencer_L2_subset)
 # L2 = LEL2_union %in% spencer_L2_ID
 # LEL2 = data.frame(LE=ifelse(LE,1,0),L2=ifelse(L2,1,0))
 
-source('~/work/onish_ChIP_R_Analysis/matchtable.R')
+source('matchtable.R')
 LEL2 = matchtable(spenc_LE=spencer_LE_ID, spenc_L2=spencer_L2_ID)
 upset(LEL2)
