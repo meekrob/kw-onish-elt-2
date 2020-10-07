@@ -275,7 +275,7 @@ print(
              colour=description)) + 
     geom_line(size = 2) + 
     labs(title="Kmeans cluster centers (k=4)",
-         subtitle=sprintf("%.2f variance explained",k4_explained_variance),
+         subtitle=sprintf("%.1f%% variance explained",100*k4_explained_variance),
          y = "cluster center (Z)", 
          x = "developmental stage") + 
     figure_colors)
@@ -326,7 +326,7 @@ print(
              colour=cluster)) + 
     geom_line(size = 1.5) + 
     labs(title="Kmeans cluster centers (k=11)",
-         subtitle=sprintf("%.2f variance explained",k11_explained_variance),
+         subtitle=sprintf("%.1f%% variance explained",100*k11_explained_variance),
          y = "cluster center (Z)", 
          x = "developmental stage") + 
     figure_colors + facet_grid(~ lt700) + 
@@ -620,6 +620,13 @@ wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],
                     k2=wbid_rownames[wbid_names_k2_bool],
                     k3=wbid_rownames[wbid_names_k3_bool], 
                     k4=wbid_rownames[wbid_names_k4_bool])
+
+# print out lists of genes
+for (wbk in names(wbid_clusters)) {
+  print(length(wbid_clusters[[wbk]]))
+  filename=sprintf("%s.Genes.txt",wbk)
+  write.table(wbid_clusters[[wbk]], filename, quote=F, row.names = F, col.names = F)
+}
 
 library(UpSetR);
 wbid_clusters_fromlist = fromList(wbid_clusters)
