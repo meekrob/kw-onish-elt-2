@@ -96,12 +96,12 @@ rm(LE_IDR,L1_IDR,L3_IDR,LE_verify,L1_verify,L3_verify)
 # df -> df_max
 df %>% dplyr::select(starts_with('max')) %>%
   dplyr::rename(
-    max_log_LE_1_minus_log_LE_input=max_log_LE_1_minus_log_LE_input_z.bw,  
-         max_log_LE_2_minus_log_LE_input=max_log_LE_2_minus_log_LE_input_z.bw,
-         max_log_L1_1_minus_log_L1_input=max_log_L1_1_minus_log_L1_input_z.bw, 
-         max_log_L1_2_minus_log_L1_input=max_log_L1_2_minus_log_L1_input_z.bw, 
-         max_log_L3_1_minus_log_L3_input=max_log_L3_1_minus_log_L3_input_z.bw, 
-         max_log_L3_2_minus_log_L3_input=max_log_L3_2_minus_log_L3_input_z.bw 
+    max_log_LE_1_minus_log_LE_input=max_06_SIGNAL.LE_1_minus_input.bw,  
+         max_log_LE_2_minus_log_LE_input=max_06_SIGNAL.LE_2_minus_input.bw,
+         max_log_L1_1_minus_log_L1_input=max_06_SIGNAL.L1_1_minus_input.bw, 
+         max_log_L1_2_minus_log_L1_input=max_06_SIGNAL.L1_2_minus_input.bw, 
+         max_log_L3_1_minus_log_L3_input=max_06_SIGNAL.L3_1_minus_input.bw, 
+         max_log_L3_2_minus_log_L3_input=max_06_SIGNAL.L3_2_minus_input.bw 
 
          )  %>%
   dplyr::select( # to reorder them
@@ -118,12 +118,12 @@ df %>% dplyr::select(starts_with('max')) %>%
 dfG_metadata <- mcols(dfG)
 dfG_metadata %>% as.data.frame() %>% dplyr::select(-starts_with('min'), -starts_with('mean'), -starts_with('N')) %>%
   dplyr::rename(
-         L1_1=max_log_L1_1_minus_log_L1_input_z.bw, 
-         L1_2=max_log_L1_2_minus_log_L1_input_z.bw, 
-         L3_1=max_log_L3_1_minus_log_L3_input_z.bw, 
-         L3_2=max_log_L3_2_minus_log_L3_input_z.bw, 
-         LE_1=max_log_LE_1_minus_log_LE_input_z.bw,  
-         LE_2=max_log_LE_2_minus_log_LE_input_z.bw) %>%
+         L1_1=max_06_SIGNAL.L1_1_minus_input.bw, 
+         L1_2=max_06_SIGNAL.L1_2_minus_input.bw, 
+         L3_1=max_06_SIGNAL.L3_1_minus_input.bw, 
+         L3_2=max_06_SIGNAL.L3_2_minus_input.bw, 
+         LE_1=max_06_SIGNAL.LE_1_minus_input.bw,  
+         LE_2=max_06_SIGNAL.LE_2_minus_input.bw) %>%
   dplyr::select( # to reorder them
     LE_1,
     LE_2,
