@@ -1,5 +1,12 @@
 
 Through conda:
+$ conda install --name ELT-2-ChIP --file ELT-2-ChIP.env.linux-64.txt
+$ conda activate ELT-2-ChIP
+
+Notes:
 
 SPP:
 It is an R package, but the authors have written a wrapper script: run_spp.R from https://github.com/kundajelab/phantompeakqualtools
+
+java:
+conda install -c anaconda openjdk
