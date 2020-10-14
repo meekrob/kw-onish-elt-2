@@ -1,0 +1,5 @@
+
+Through conda:
+
+SPP:
+It is an R package, but the authors have written a wrapper script: run_spp.R from https://github.com/kundajelab/phantompeakqualtools
