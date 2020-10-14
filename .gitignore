@@ -1,3 +1,5 @@
 *.fastq
 *.bam
 *.bai
+*.out
+*.jobs.*
