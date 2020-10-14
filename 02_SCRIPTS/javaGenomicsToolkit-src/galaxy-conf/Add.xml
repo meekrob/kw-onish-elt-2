@@ -1,0 +1,27 @@
+<tool id="WigAdd" name="Add" version="1.1.0">
+  <description>multiple (Big)Wig files</description>
+  <command interpreter="bash">
+    galaxyToolRunner.sh wigmath.Add -o $output
+      #for $input in $inputs
+        ${input.file}
+      #end for
+  </command>
+  <inputs>
+      <repeat name="inputs" title="(Big)Wig file">
+        <param name="file" type="data" format="bigwig,wig" />
+      </repeat>
+  </inputs>
+  <outputs>
+      <data format="wig" name="output" />
+  </outputs>
+  
+<help>
+  
+This tool will add all values in the specified Wig files base pair by base pair.
+  
+.. class:: infomark
+
+**TIP:** If your dataset does not appear in the pulldown menu, it means that it is not in Wig or BigWig format. Use "edit attributes" to set the correct format if it was not detected correctly.
+   
+</help>
+</tool>

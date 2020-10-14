@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Main-Class: edu.unc.genomics.GenomicsToolkit
+Bundle-ManifestVersion: 2
+Bundle-Name: java-genomics-toolkit
+Bundle-SymbolicName: java-genomics-toolkit
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Description: This project provides tools for common genomic data processing.
+Bundle-DocURL: http://github.com/timpalpant/java-genomics-toolkit
