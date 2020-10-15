@@ -599,7 +599,7 @@ breakdown = list(`upstream` = mapping_breakdown['upstream'] +
                             mapping_breakdown['includeFeature'],
                  `downstream` = mapping_breakdown['downstream'] + 
                                 mapping_breakdown['overlapEnd'],
-                 `unmapped` = mapping_breakdown['unmapped ± 5Kb']
+                 `unmapped` = mapping_breakdown['unmapped']
                  )
 
 pie_labels = paste0(names(breakdown), rep(" (",4), unlist(breakdown), rep(")",4))
