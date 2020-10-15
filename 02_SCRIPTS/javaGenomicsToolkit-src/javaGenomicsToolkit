@@ -3,15 +3,15 @@
 # Help
 if [ $# -eq 0 ]
 then
-  echo "USAGE: $(basename $0) APPNAME [ARGS]";
-  echo "To list available tools: $(basename $0) list";
-  exit
+    echo "USAGE: $(basename $0) APPNAME [ARGS]";
+    echo "To list available tools: $(basename $0) list";
+    exit
 fi
 
 # Get the root directory in case this script is being called from elsewhere
 #DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Employ this version if you have created a symbolic link to this file  - DCK
-DIR="$( cd "$( dirname  "$(readlink ${BASH_SOURCE[0]} )" )" && pwd )"
+DIR="$( cd "$( dirname  "$(readlink -f ${BASH_SOURCE[0]} )" )" && pwd )"
 
 # List the available tools (this is a little hacky)
 if [ "$1" = "list" ]
