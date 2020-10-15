@@ -1,7 +1,14 @@
 
-Through conda:
+1) Easiest- clone linux-64 environment:
 $ conda install --name ELT-2-ChIP --file ELT-2-ChIP.env.linux-64.txt
 $ conda activate ELT-2-ChIP
+
+2) Install conda packages manually:
+# put samtools in the create step because of an issue with openssl (https://github.com/bioconda/bioconda-recipes/issues/13958)
+$ conda create --name ELT-2-ChIP python=3.7 r-base=4.0 samtools -c bioconda
+$ conda activate ELT-2-ChIP
+$ conda install -c anaconda openjdk
+$ conda install r-spp idr bedtools bwa deeptools ucsc-bedgraphtobigwig ucsc-wigtobigwig -c bioconda
 
 Notes:
 
