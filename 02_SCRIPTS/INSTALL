@@ -9,6 +9,9 @@ $ conda create --name ELT-2-ChIP python=3.7 r-base=4.0 samtools -c bioconda
 $ conda activate ELT-2-ChIP
 $ conda install -c anaconda openjdk
 $ conda install r-spp idr bedtools bwa deeptools ucsc-bedgraphtobigwig ucsc-wigtobigwig bx-python meme -c bioconda
+# the following are for the R part of the pipeline
+$ conda install r-stringr r-reshape2 r-rcolorbrewer r-ggextra r-venndiagram r-dplyr r-pheatmap r-knitr r-ggplot2 r-upsetr
+$ conda install bioconductor-ChIPpeakAnno bioconductor-topGO bioconductor-plyranges bioconductor-biomart -c bioconda
 
 Notes:
 
