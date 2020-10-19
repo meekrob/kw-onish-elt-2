@@ -9,14 +9,14 @@
 NTHREADS=${SLURM_NTASKS} # passes --ntasks set above
 echo "$SLURM_JOB_NAME[$SLURM_JOB_ID] $@" # log the command line
 SUBMIT=$0
-#JOBSTEPS="BWA BAM SPP IDR UNION"
-JOBSTEPS="SPP IDR LOG"
+JOBSTEPS="BWA BAM SPP IDR BW BW-SUBTRACT UNION AGGREGATE"
 ########################################################
 ##### CONFIGURATION VARIABLES
 FLANK=150 # for bedToBw
 # the BWA indexes 
 BWA_GENOME=/projects/dcking@colostate.edu/support_data/bwa-index/ce11.unmasked.fa
 CHROMLENGTHS=/projects/dcking@colostate.edu/support_data/ce11/ce11.chrom.sizes
+BLACKLIST=/projects/dcking@colostate.edu/support_data/ce11/ce11-blacklist.bed
 ALL_STAGES_UNION=allStagesUnion.bed
 ALL_STAGES_AGGREGATE=${ALL_STAGES_UNION}.df
 # PROJECT ORGANIZATION
@@ -258,7 +258,6 @@ else
     errecho "$jobstep SLURM_JOB_ID=$SLURM_JOB_ID"
     date
 
-    source /projects/dcking@colostate.edu/paths.bashrc
 #BWA ###################################
     if [ $jobstep == "BWA" ]
     then
@@ -308,12 +307,12 @@ else
 
         # bedToBw.sh- pad the chromosome locations according to $FLANK, scale by read depth.
         # creates $outdir/$bamToBw_outfile
-        cmd="bedToBw.sh $outdir/$outbed $FLANK $CHROMLENGTHS -n -bw && rm -v $outdir/$outbed" 
+        cmd="02_SCRIPTS/bedToBw.sh $outdir/$outbed $FLANK $CHROMLENGTHS -n -bw && rm -v $outdir/$outbed" 
         run $cmd
         
         # perform a log transformation
         # creates a wiggle file (ASCII)
-        cmd="meekrob-javaGenomicsToolkit wigmath.LogTransform -p $SLURM_NTASKS -i $outdir/$bamToBw_outfile -o $outdir/$logwig"
+        cmd="02_SCRIPTS/javaGenomicsToolkit wigmath.LogTransform -p $SLURM_NTASKS -i $outdir/$bamToBw_outfile -o $outdir/$logwig"
         run $cmd
 
         # convert to bigWig (binary, compressed)
@@ -329,7 +328,7 @@ else
         wigfilename=${outfilename/bw/wig}
         # perform subtraction
         # creates a wiggle file (ASCII)
-        cmd="meekrob-javaGenomicsToolkit wigmath.Subtract -z -p $SLURM_NTASKS -m $minuend -s $subtrahend -o $wigfilename"
+        cmd="02_SCRIPTS/javaGenomicsToolkit wigmath.Subtract -z -p $SLURM_NTASKS -m $minuend -s $subtrahend -o $wigfilename"
         run $cmd
         
         # convert to bigWig (binary, compressed)
@@ -344,7 +343,7 @@ else
         outfile=$1
         shift
         scorefiles="$@"
-        cmd="meekrob-javaGenomicsToolkit ngs.SplitWigIntervalsToDataFrame -s -l $bedfile -o $outfile $scorefiles"
+        cmd="02_SCRIPTS/javaGenomicsToolkit ngs.SplitWigIntervalsToDataFrame -s -l $bedfile -o $outfile $scorefiles"
         run $cmd
 
 #SPP ###################################
@@ -356,7 +355,7 @@ else
         output=$4
         outdir=${SPP_DIR}
         FRAGLEN=150
-        SPP=spp # loadbx has bin/spp as wrapper to run_spp.R
+        SPP=02_SCRIPTS/run_spp.R # loadbx has bin/spp as wrapper to run_spp.R
         cmd="$SPP -c=$rep   \
              -i=$input \
              -npeak=300000  \
@@ -397,7 +396,7 @@ else
             awk 'BEGIN{OFS="\t"} $12>='"${IDR_THRESH_TRANSFORMED}"' {print $0}' $1
         }
         declare -f idr_filter
-        cmd="idr_filter $outtmp | sort -k1 -k2,2n -u > $outfile"
+        cmd="idr_filter $outtmp | sort -k1 -k2,2n -u | bedtools intersect -v -a stdin -b ${BLACKLIST} > $outfile"
         run $cmd
 
 #BZ ####################################
