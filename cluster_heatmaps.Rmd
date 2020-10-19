@@ -86,7 +86,7 @@ dfG$L1_IDR[ to(L1_verify) ] <- TRUE
 dfG$L3_IDR[ to(L3_verify) ] <- TRUE
 
 source('scripts/r_isect_union.R')
-dfG$summit_agreement = score_peak_summit_agreement(dfG, LE_IDR, L1_IDR, L3_IDR)$summit_agreement
+#dfG$summit_agreement = score_peak_summit_agreement(dfG, LE_IDR, L1_IDR, L3_IDR)$summit_agreement
 
 # collect some variables 
 IDR_sets = list(LE_IDR=LE_IDR,L1_IDR=L1_IDR,L3_IDR=L3_IDR,LE_verify=LE_verify,L1_verify=L1_verify,L3_verify=L3_verify)
@@ -131,8 +131,8 @@ dfG_metadata %>% as.data.frame() %>% dplyr::select(-starts_with('min'), -starts_
     L1_2,
     L3_1,
     L3_2,
-    ends_with("IDR"),
-    summit_agreement
+    ends_with("IDR")
+   # summit_agreement
   ) -> 
   dfG_metadata_max
 # not changing the row count, can map back onto dfG
