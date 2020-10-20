@@ -413,8 +413,9 @@ peaksForBigBed$L3_std = sprintf(float_precision_string, peaksForBigBed$L3_std)
 source('scripts/getCodingGenes.R',echo=F)
 system.time({annotatedPeaks = getCodingGenes(peaksForBigBed)})
 attach(annotatedPeaks)
-ra = read.table('data/genemapping.right.answers')
-cat("Inconsistent gene mappings:", sum(ap[ ra[[1]] ]$feature != ra[[3]]))
+# this is now inaccurate after changing peaks (and their numbering)
+#ra = read.table('data/genemapping.right.answers')
+#cat("Inconsistent gene mappings:", sum(ap[ ra[[1]] ]$feature != ra[[3]]))
 ## See previous commits forspread sheet for spot-checks
 
 mapping_breakdown = table(ap$insideFeature)
@@ -566,8 +567,8 @@ write.table(data.frame(as.character(seqnames(annotatedPeaks$ap)),
                        annotatedPeaks$ap$k4weights,
                        annotatedPeaks$ap$LE_IDR,
                        annotatedPeaks$ap$L1_IDR,
-                       annotatedPeaks$ap$L3_IDR,
-                       annotatedPeaks$ap$summit_agreement
+                       annotatedPeaks$ap$L3_IDR#,
+                       #annotatedPeaks$ap$summit_agreement
                     
                        ), "peaksForBigBed.bed",quote=F,row.names=F,col.names=F,sep="\t")
 chrom.sizes = "chrV	20924180
@@ -822,11 +823,11 @@ if (FALSE)
 
 
 # You must connect to the NAS first to get these genes.
-if (!('LEL2' %in% ls())) {source('SpencerGenes.R')}
-upset(matchtable(genes_w_ELT2_EmbryoHigh_peak=ap.tbl.1$feature,matchObj = LEL2))
-upset(matchtable(genes_w_ELT2_LarvaHigh_peak=ap.tbl.2$feature,matchObj = LEL2))
-upset(matchtable(genes_w_ELT2_L3High_peak=ap.tbl.3$feature,matchObj = LEL2))
-upset(matchtable(genes_w_ELT2_DevIncreasing_peak=ap.tbl.4$feature,matchObj = LEL2))
+# if (!('LEL2' %in% ls())) {source('SpencerGenes.R')}
+# upset(matchtable(genes_w_ELT2_EmbryoHigh_peak=ap.tbl.1$feature,matchObj = LEL2))
+# upset(matchtable(genes_w_ELT2_LarvaHigh_peak=ap.tbl.2$feature,matchObj = LEL2))
+# upset(matchtable(genes_w_ELT2_L3High_peak=ap.tbl.3$feature,matchObj = LEL2))
+# upset(matchtable(genes_w_ELT2_DevIncreasing_peak=ap.tbl.4$feature,matchObj = LEL2))
 ```
 
 ``` {r GO term analysis}
