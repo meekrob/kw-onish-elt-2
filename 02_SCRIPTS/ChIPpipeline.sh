@@ -13,6 +13,8 @@ JOBSTEPS="BWA BAM SPP IDR BW BW-SUBTRACT UNION AGGREGATE"
 ########################################################
 ##### CONFIGURATION VARIABLES
 FLANK=150 # for bedToBw
+# the genome sequence
+GENOME_FASTA_N=/projects/dcking@colostate.edu/support_data/ce11/ce11.NMasked.fa
 # the BWA indexes 
 BWA_GENOME=/projects/dcking@colostate.edu/support_data/bwa-index/ce11.unmasked.fa
 CHROMLENGTHS=/projects/dcking@colostate.edu/support_data/ce11/ce11.chrom.sizes
@@ -25,11 +27,9 @@ ALIGN_DIR=03_ALIGN
 SPP_DIR=04_SPP
 IDR_DIR=05_IDR
 SIG_DIR=06_SIGNAL
+SEQ_DIR=07_SEQUENCES
 
-for dir in $ALIGN_DIR $SPP_DIR $IDR_DIR $SIG_DIR
-do
-    mkdir -pv $dir
-done
+mkdir -pv $ALIGN_DIR $SPP_DIR $IDR_DIR $SIG_DIR $SEQ_DIR
 
 # Helper functions
 errecho()
@@ -236,12 +236,23 @@ then
     then
         D=$(deps $IDR_JOB_IDS)
         union_jid=$(sb $D --ntasks=1 --time=0:05:00 --job-name=union --output=union.%j.out $SUBMIT UNION $ALL_STAGES_UNION  $idr_filenames)
+        all_ids="$all_ids $union_jid"
     fi
     # AGGREGATE
     if [[ " $JOBSTEPS " =~ " AGGREGATE " ]]
     then
-        D=$(deps $SCORE_JOB_IDS)
-        aggregate_jid=$(sb $D  --ntasks=1 --time=0:05:00 --job-name=aggregate $SUBMIT AGGREGATE $ALL_STAGES_UNION $ALL_STAGES_AGGREGATE $SCORE_FILEPATHS)
+        D=$(deps $SCORE_JOB_IDS $union_jid)
+        aggregate_jid=$(sb $D  --ntasks=1 --time=0:05:00 --job-name=aggregate --output=aggregate.%j.out $SUBMIT AGGREGATE $ALL_STAGES_UNION $ALL_STAGES_AGGREGATE $SCORE_FILEPATHS)
+        all_ids="$all_ids $aggregate_jid"
+    fi
+
+    # SEQUENCE
+    sequence_out=$SEQ_DIR/${ALL_STAGES_UNION/.bed/.fa}
+    if [[ " $JOBSTEPS " =~ " SEQUENCE " ]]
+    then
+        D=$(deps $union_jid)
+        sequence_jid=$(sb $D  --ntasks=1 --time=0:01:00 --job-name=sequence --output=sequence.%j.out $SUBMIT SEQUENCE $ALL_STAGES_UNION $sequence_out)
+        all_ids="$all_ids $sequence_jid"
     fi
 
     echo "ALL JOBS SUBMITTED:"
@@ -410,7 +421,22 @@ else
         outfile=$1
         shift
         infiles=$@
-        cmd="cat $infiles | bed_merge_overlapping.py | sort -k1,1 -k2,2n > $outfile"
+        noIds=${outfile/.bed/.bed.tmp}
+        cmd="cat $infiles | bed_merge_overlapping.py | sort -k1,1 -k2,2n > $noIds"
+        run $cmd
+        read nlines fname < <(wc -l $noIds)
+        nplaces=${#nlines} # this will determine the padding of the ELT2Peak000... IDs
+        cmd="awk -v padding=$nplaces '{printf(\"%s\tELT2Peak%0*d\n\", \$0, padding,NR)}' $noIds > $outfile"
+        #cmd="awk '{printf("%s\tELT2Peak%04d\n", $0, NR) }' $noIds > $outfile"
+        run $cmd
+        
+
+#SEQUENCE #################################
+    elif [ $jobstep == "SEQUENCE" ]
+    then
+        infile=$1
+        outfile=$2
+        cmd="bedtools getfasta -fi $GENOME_FASTA_N -bed $infile > $outfile"
         run $cmd
     
 #LOG ###################################
