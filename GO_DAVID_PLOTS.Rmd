@@ -71,7 +71,13 @@ tileplot=plotDavid(k1_anno_cluster,"Disulfide","Embryo")
 pdf(file="k1/disulfide.pdf")
 tileplot
 dev.off()
-
+```
+```{r k1-axon}
+k1_anno_cluster = read.table('k1/axon.txt', header=T,sep="\t",skipNul=T,row.names = 1)
+tileplot=plotDavid(k1_anno_cluster,"Axon","Embryo")
+pdf(file="k1/axon.pdf")
+tileplot
+dev.off()
 ```
 
 
