@@ -1,0 +1,12 @@
+	Immunoglobulin domain	IPR003961:Fibronectin, type III	SM00060:FN3	IPR013098:Immunoglobulin I-set	IPR003598:Immunoglobulin subtype 2	SM00408:IGc2	SM00409:IG	IPR003599:Immunoglobulin subtype	IPR007110:Immunoglobulin-like domain	IPR013783:Immunoglobulin-like fold	
+Protein-tyrosine-phosphatase(ptp-3)	1	1	1	1	1	1	1	1	1	1	
+Protein sax-3(sax-3)	1	1	1	1	1	1	1	1	1	1	
+Sensory AXon guidance(sax-7)	0	1	1	1	1	1	1	1	1	1	
+NCAM (neural cell adhesion molecule) homolog(ncam-1)	0	1	1	1	1	1	1	1	1	1	
+High Incidence of Males (increased X chromosome loss)(him-4)	0	0	0	1	1	1	1	1	1	1	
+Netrin receptor unc-5(unc-5)	1	0	0	0	1	1	1	1	1	1	
+Papilin(mig-6)	1	0	0	0	1	1	1	1	1	1	
+neuRonal IGCAM(rig-3)	1	0	0	0	0	0	1	1	1	1	
+Ephrin receptor 1(vab-1)	0	1	1	0	0	0	0	0	0	1	
+hypothetical protein(madd-2)	0	1	1	0	0	0	0	0	0	1	
+ImmunoGlobulin-like Cell adhesion Molecule family(igcm-3)	0	0	0	0	0	0	0	0	1	1	

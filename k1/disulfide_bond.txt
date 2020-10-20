@@ -1,0 +1,35 @@
+	signal peptide	disulfide bond	glycosylation site:N-linked (GlcNAc...)	Disulfide bond	Glycoprotein	
+QWGYGGY-amide(nlp-31)	1	0	0	0	0	
+FlaMIngo (cadherin plus 7TM domain) homolog(fmi-1)	0	0	0	1	0	
+TENeurin(ten-1)	0	0	0	1	0	
+INSulin related(ins-8)	0	0	0	1	0	
+Protein sax-3(sax-3)	0	0	0	1	0	
+hypothetical protein(Y71H9A.10)	0	0	0	1	0	
+ADAMTS family(adt-1)	0	0	0	1	0	
+hypothetical protein(unc-129)	0	0	0	1	0	
+hypothetical protein(lin-17)	0	0	0	1	0	
+Endoplasmin homolog(enpl-1)	0	0	0	0	1	
+Glycogenin-1(gyg-1)	0	0	0	0	1	
+Sodium-and chloride-dependent betaine transporter(snf-3)	0	0	0	0	1	
+hypothetical protein(R119.2)	1	0	1	0	0	
+High Incidence of Males (increased X chromosome loss)(him-4)	1	0	0	1	0	
+Mitochondrial import inner membrane translocase subunit tim-8(ddp-1)	0	1	0	1	0	
+Organic Solute Transporter Alpha-like protein(osta-3)	0	0	1	0	1	
+Dual oxidase maturation factor 1(doxa-1)	0	0	1	0	1	
+Discoidin domain-containing receptor tyrosine kinase B(ddr-2)	0	0	0	1	1	
+Protein male abnormal 7(mab-7)	0	0	0	1	1	
+Protein-tyrosine-phosphatase(ptp-3)	0	0	0	1	1	
+hypothetical protein(ZK673.1)	1	1	0	1	0	
+Matrix non-peptidase homolog 1(mnp-1)	1	0	1	0	1	
+Ephrin receptor 1(vab-1)	1	0	1	0	1	
+HERmaphrodization of XO animals(her-1)	1	0	1	0	1	
+Putative protein-tyrosine sulfotransferase(tpst-2)	0	0	1	1	1	
+Putative alpha-1,3-mannosyl-glycoprotein 2-beta-N-acetylglucosaminyltransferase(gly-13)	0	0	1	1	1	
+SERotonin/octopamine receptor family(ser-2)	0	1	1	1	1	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	0	1	1	1	1	
+Mechanosensory abnormality protein 6(mec-6)	0	1	1	1	1	
+Palmitoyl-protein thioesterase 1(ppt-1)	1	1	1	1	1	
+Anterior Pharynx in eXcess(apx-1)	1	1	1	1	1	
+Papilin(mig-6)	1	1	1	1	1	
+Netrin receptor unc-5(unc-5)	1	1	1	1	1	
+Laminin-like protein lam-2(lam-2)	1	1	1	1	1	

@@ -1,0 +1,38 @@
+	GO:0030154~cell differentiation	mutagenesis site	splice variant	GO:0007275~multicellular organism development	Developmental protein	
+Ack-related non-receptor tyrosine kinase(ark-1)	1	0	0	0	0	
+Mechanosensory abnormality protein 6(mec-6)	0	1	0	0	0	
+Mediator of RNA polymerase II transcription subunit 1.1(sop-3)	0	0	1	0	0	
+Cation-transporting ATPase(catp-5)	0	0	1	0	0	
+Phosphodiesterase(pde-4)	0	0	1	0	0	
+Probable cyclin-dependent kinase 9(cdk-9)	0	0	1	0	0	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	0	0	1	0	0	
+Phosphodiesterase(pde-3)	0	0	1	0	0	
+Probable S-adenosylmethionine synthase 5(sams-5)	0	0	1	0	0	
+Peptidyl-prolyl cis-trans isomerase 10(cyn-10)	0	0	1	0	0	
+hypothetical protein(R119.2)	0	0	1	0	0	
+Cyclin-Y(cyy-1)	0	0	1	0	0	
+SERotonin/octopamine receptor family(ser-2)	0	1	1	0	0	
+Homeobox protein engrailed-like ceh-16(ceh-16)	0	0	0	1	1	
+Homeobox protein lin-39(lin-39)	0	0	0	1	1	
+Homeobox protein ceh-40(ceh-40)	0	0	0	1	1	
+TENeurin(ten-1)	0	0	0	1	1	
+Zinc finger BED domain-containing protein 39(mig-39)	0	0	0	1	1	
+Protein male abnormal 7(mab-7)	0	0	0	1	1	
+Probable pre-mRNA-splicing factor ATP-dependent RNA helicase mog-5(mog-5)	0	0	0	1	1	
+Protein pad-1(pad-1)	0	0	0	1	1	
+N-terminal PAX (PAI domain only) protein(npax-2)	0	0	0	1	1	
+hypothetical protein(lin-17)	0	0	0	1	1	
+PAX (Paired box) transcription factor(pax-3)	0	0	0	1	1	
+Anterior Pharynx in eXcess(apx-1)	1	0	0	1	1	
+Lissencephaly-1 homolog(lis-1)	1	0	0	1	1	
+Protein male abnormal 21(mab-21)	1	0	0	1	1	
+Papilin(mig-6)	0	0	1	1	1	
+Nuclear migration protein unc-83(unc-83)	0	0	1	1	1	
+HERmaphrodization of XO animals(her-1)	0	0	1	1	1	
+Sex-determining protein fem-1(fem-1)	0	0	1	1	1	
+Protein lin-32(lin-32)	1	1	0	1	1	
+NUMb related(num-1)	0	1	1	1	1	
+Ephrin receptor 1(vab-1)	0	1	1	1	1	
+Netrin receptor unc-5(unc-5)	0	1	1	1	1	
+Raf homolog serine/threonine-protein kinase(lin-45)	1	1	1	1	1	
+Defective pharyngeal development protein 4(pha-4)	1	1	1	1	1	
