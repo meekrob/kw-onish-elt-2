@@ -1,0 +1,35 @@
+---
+title: "GO DAVID PLOTS"
+author: "Deekrob"
+date: "10/16/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r K2}
+#k2_anno_cluster = read.table('go_david/k2_annotation_clustering.txt',
+k2_anno_cluster = read.table('k1/developmental_protein.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1)
+k2_anno_cluster$X.1 = NULL
+k2_anno_cluster$gene = factor(rownames(k2_anno_cluster), levels=rownames(k2_anno_cluster), ordered=T)
+library(pheatmap)
+library(reshape2)
+library(ggplot2)
+
+k2_anno_cluster.long = melt(k2_anno_cluster)
+#k2_anno_cluster.long = melt(k2_anno_cluster[1:148,])
+tileplot<-ggplot(k2_anno_cluster.long, aes(y=gene, x=variable,)) + 
+  geom_tile(aes(fill=as.factor(value)),color="white") + 
+  scale_fill_manual(values=c("black","green")) + 
+  coord_equal() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+    axis.ticks.y = element_blank(),
+    axis.text.y = element_text(size = 6))
+
+pdf(file="tileplot.pdf")
+tileplot
+dev.off()
+```
