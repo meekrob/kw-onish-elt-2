@@ -426,8 +426,9 @@ else
         run $cmd
         read nlines fname < <(wc -l $noIds)
         nplaces=${#nlines} # this will determine the padding of the ELT2Peak000... IDs
+        # awk madness:
+        # escape the internal:" and $         vv                  vv  vv
         cmd="awk -v padding=$nplaces '{printf(\"%s\tELT2Peak%0*d\n\", \$0, padding,NR)}' $noIds > $outfile"
-        #cmd="awk '{printf("%s\tELT2Peak%04d\n", $0, NR) }' $noIds > $outfile"
         run $cmd
         
 
@@ -436,7 +437,7 @@ else
     then
         infile=$1
         outfile=$2
-        cmd="bedtools getfasta -fi $GENOME_FASTA_N -bed $infile > $outfile"
+        cmd="bedtools getfasta -name -fi $GENOME_FASTA_N -bed $infile > $outfile"
         run $cmd
     
 #LOG ###################################
