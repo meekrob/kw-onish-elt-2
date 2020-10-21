@@ -1,0 +1,38 @@
+	GO:0000139~Golgi membrane	Golgi apparatus	GO:0005794~Golgi apparatus	
+hypothetical protein(K02E10.1)	1	0	0	
+UDP-galactose translocator 1(ugtp-1)	1	0	0	
+Intracellular LEctin(ile-1)	1	0	0	
+GALacTosyltransferase(galt-1)	0	1	0	
+FUcosyl Transferase(fut-2)	0	1	0	
+Conserved Oligomeric Golgi (COG) Component(cogc-1)	0	0	1	
+Suppressor of gpa-3QL dye-filling defect(sql-1)	0	0	1	
+hypothetical protein(R05H5.5)	0	0	1	
+hypothetical protein(Y41E3.8)	0	0	1	
+PhosphatidylInositol SYnthase(pisy-1)	0	0	1	
+hypothetical protein(unc-108)	0	0	1	
+TBC (Tre-2/Bub2/Cdc16) domain family(tbc-3)	0	0	1	
+BICaudal D (Drosophila) homolog(bicd-1)	0	0	1	
+Grip (GRIP) and Coiled-Coil domain containing protein related(gcc-1)	0	0	1	
+hypothetical protein(plr-1)	0	0	1	
+GTP-binding protein SAR1(sar-1)	0	1	1	
+Alpha-(1,6)-fucosyltransferase(fut-8)	0	1	1	
+ADP-ribosylation factor 1-like 2(arf-1.2)	0	1	1	
+Leucine-rich repeat serine/threonine-protein kinase 1(lrk-1)	0	1	1	
+Membrane-associated tyrosine-and threonine-specific cdc2-inhibitory kinase wee-1.3(wee-1.3)	1	1	1	
+Conserved oligomeric Golgi complex subunit 2(cogc-2)	1	1	1	
+Probable coatomer subunit delta(copd-1)	1	1	1	
+GDP-fucose transporter(nstp-10)	1	1	1	
+Suppressor/enhancer of lin-12 protein 9(sel-9)	1	1	1	
+Ras-related protein rab-11.1(rab-11.1)	1	1	1	
+Phosphatidylcholine:ceramide cholinephosphotransferase 1(sms-1)	1	1	1	
+Hexosyltransferase(F21C10.3)	1	1	1	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	1	1	1	
+GLYcosylation related(gly-7)	1	1	1	
+Probable N-acetylgalactosaminyltransferase 9(gly-9)	1	1	1	
+Probable coatomer subunit beta'(copb-2)	1	1	1	
+Hexosyltransferase(F14B6.6)	1	1	1	
+Protein unc-50(unc-50)	1	1	1	
+Sugar transporter SWEET1(swt-1)	1	1	1	
+Beta-1,3-galactosyltransferase bre-2(bre-2)	1	1	1	
+Caveolin-2(cav-2)	1	1	1	
+UDP-galactose/UDP-N-acetylglucosamine transporter srf-3(srf-3)	1	1	1	

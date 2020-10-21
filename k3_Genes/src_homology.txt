@@ -1,0 +1,23 @@
+	SH3 domain	SM00326:SH3	IPR001452:Src homology-3 domain	
+GTPase Activating Protein family(gap-3)	0	0	1	
+AMPHiphysin homolog(amph-1)	0	1	1	
+EPS (human endocytosis) related(eps-8)	0	1	1	
+EPHeXin (Eph-interacting GEF) homolog(ephx-1)	0	1	1	
+DreBriN 1/DreBriN-like (where Drebrin is from Developmentally REgulated BRaIN protein) family homolog(dbn-1)	0	1	1	
+SMAll(sma-1)	0	1	1	
+Endophilin-Related Protein(erp-1)	0	1	1	
+hypothetical protein(Y44E3A.4)	0	1	1	
+SynDaPiN (synaptic dynamin binding protein) homolog(sdpn-1)	1	1	1	
+Protein vav-1(vav-1)	1	1	1	
+Signal transducing adapter molecule 1(stam-1)	1	1	1	
+Alpha-(1,6)-fucosyltransferase(fut-8)	1	1	1	
+hypothetical protein(C36E8.4)	1	1	1	
+TOCA (Transducer Of Cdc42-dependent Actin assembly) homolog(toca-1)	1	1	1	
+Tyrosine-protein kinase abl-1(abl-1)	1	1	1	
+Drosophila Discs LarGe homolog(dlg-1)	1	1	1	
+MAGUK family(magu-2)	1	1	1	
+APoptosis Enhancer(ape-1)	1	1	1	
+SPeCtrin(spc-1)	1	1	1	
+hypothetical protein(Y37A1B.17)	1	1	1	
+hypothetical protein(B0303.7)	1	1	1	
+Tyrosine-protein kinase sid-3(sid-3)	1	1	1	

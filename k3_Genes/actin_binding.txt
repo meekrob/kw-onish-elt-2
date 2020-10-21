@@ -1,0 +1,25 @@
+	GO:0051015~actin filament binding	Actin-binding	GO:0003779~actin binding	
+EPS (human endocytosis) related(eps-8)	1	0	0	
+Alpha-catenin-like protein hmp-1(hmp-1)	1	0	0	
+Ezrin/Radixin/Moesin(erm-1)	0	0	1	
+hypothetical protein(F38E9.5)	0	0	1	
+DreBriN 1/DreBriN-like (where Drebrin is from Developmentally REgulated BRaIN protein) family homolog(dbn-1)	0	0	1	
+FERM domain (protein4.1-ezrin-radixin-moesin) family(frm-1)	0	0	1	
+Protein flightless-1 homolog(fli-1)	0	0	1	
+NeuroFibroMatosis homolog(nfm-1)	0	0	1	
+Wiskott-Aldrich syndrome protein (WASP)-Interacting Protein and gene assignment(wip-1)	1	0	1	
+Nuclear anchorage protein 1(anc-1)	0	1	1	
+hypothetical protein(spe-15)	0	1	1	
+Heavy chain, Unconventional Myosin(hum-5)	0	1	1	
+Non-muscle MYosin(nmy-1)	0	1	1	
+hypothetical protein(unc-70)	0	1	1	
+SMAll(sma-1)	0	1	1	
+Actin-related protein 3(arx-1)	0	1	1	
+Probable actin-related protein 2/3 complex subunit 4(arx-6)	0	1	1	
+hypothetical protein(vab-10)	1	1	1	
+Tropomyosin isoforms a/b/d/f(lev-11)	1	1	1	
+DEnse Body(deb-1)	1	1	1	
+Tropomodulin(unc-94)	1	1	1	
+F-actin-capping protein subunit beta(cap-2)	1	1	1	
+Actin-interacting protein 1(unc-78)	1	1	1	
+PLaSTin (actin bundling protein) homolog(plst-1)	1	1	1	

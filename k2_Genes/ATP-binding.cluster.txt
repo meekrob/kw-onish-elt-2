@@ -1,0 +1,147 @@
+	GO:0016310~phosphorylation	ATP-binding	Nucleotide-binding	GO:0005524~ATP binding	GO:0000166~nucleotide binding	
+Phosphoenolypyruvate CarboxyKinase(pck-2)	1	0	0	0	0	
+AMP-Activated protein Kinase Gamma subunit(aakg-4)	1	0	0	0	0	
+hypothetical protein(ZC8.6)	1	0	0	0	0	
+Choline Kinase B(ckb-4)	1	0	0	0	0	
+AMP-Activated protein Kinase Gamma subunit(aakg-3)	1	0	0	0	0	
+CKI family (Cyclin-dependent Kinase Inhibitor)(cki-2)	1	0	0	0	0	
+NCK (Non-Catalytic region of tyrosine Kinase) adaptor protein family(nck-1)	1	0	0	0	0	
+PIX (PAK (p21-activated kinase) Interacting eXchange factor) homolog(pix-1)	1	0	0	0	0	
+hypothetical protein(T20F7.3)	1	0	0	0	0	
+DNaJ domain (prokaryotic heat shock protein)(dnj-19)	0	0	0	1	0	
+DNaJ domain (prokaryotic heat shock protein)(dnj-12)	0	0	0	1	0	
+hypothetical protein(C25F9.5)	0	0	0	1	0	
+Synthetic MUTator(smut-1)	0	0	0	1	0	
+hypothetical protein(K07E3.4)	0	0	0	1	0	
+hypothetical protein(F19B2.5)	0	0	0	1	0	
+hypothetical protein(tag-257)	0	0	0	1	0	
+hypothetical protein(H12I13.1)	0	0	0	1	0	
+hypothetical protein(C24H12.4)	0	0	0	1	0	
+hypothetical protein(F54H5.2)	0	0	0	1	0	
+hypothetical protein(Y51B9A.9)	0	0	0	1	0	
+human TORsin related(tor-2)	0	0	0	1	0	
+hypothetical protein(hpo-11)	0	0	0	1	0	
+hypothetical protein(T24D5.4)	0	0	0	1	0	
+Probable V-type proton ATPase subunit B(vha-12)	0	0	0	1	0	
+hypothetical protein(C28A5.6)	0	0	0	1	0	
+hypothetical protein(F35C11.3)	0	0	0	1	0	
+NRD (yeast Nuclear pre-mRNA Down-regulation) homolog(nrd-1)	0	0	0	0	1	
+hypothetical protein(T07F10.3)	0	0	0	0	1	
+Putative RNA-binding protein EEED8.10(EEED8.10)	0	0	0	0	1	
+FUS/TLS RNA binding protein homolog(fust-1)	0	0	0	0	1	
+Cleavage and Polyadenylation Factor(cpf-2)	0	0	0	0	1	
+RNP (RRM RNA binding domain) containing(rnp-8)	0	0	0	0	1	
+hypothetical protein(C44B7.2)	0	0	0	0	1	
+Daf-12-interacting protein 1(din-1)	0	0	0	0	1	
+SUPpressor(sup-26)	0	0	0	0	1	
+hypothetical protein(K07H8.10)	0	0	0	0	1	
+Polyadenylate-binding protein(pab-2)	0	0	0	0	1	
+hypothetical protein(Y57G11C.9)	0	0	0	0	1	
+hypothetical protein(T21C9.6)	1	0	0	1	0	
+PaNtothenate Kinase(pnk-1)	1	0	0	1	0	
+Glycogen Synthase Kinase Alpha subunit(gska-3)	1	0	0	1	0	
+protein KINase(kin-4)	1	0	0	1	0	
+Muscle M-line assembly protein unc-89(unc-89)	1	0	0	1	0	
+yeast DNA helicase/endonuclease family(dna-2)	0	1	1	0	0	
+GTP cyclohydrolase 1(cat-4)	0	0	1	0	1	
+Elongation factor 1-alpha(eef-1A.2)	0	0	1	0	1	
+G Protein, Alpha subunit(gpa-1)	0	0	1	0	1	
+TuBulin, Alpha(tba-4)	0	0	1	0	1	
+Ras and EF-hand domain-containing protein homolog(rsef-1)	0	0	1	0	1	
+cAMP-dependent protein kinase regulatory subunit(kin-2)	0	0	1	0	1	
+Cell division control protein 42 homolog(cdc-42)	0	0	1	0	1	
+Soluble guanylate cyclase gcy-34(gcy-34)	0	0	1	0	1	
+Adenylosuccinate synthetase(adss-1)	0	0	1	0	1	
+NF-kappa-B inhibitor-interacting Ras-like protein(F52A8.6)	0	0	1	0	1	
+5'-nucleotidase(F25B5.3)	0	0	1	0	1	
+Prolyl Amino-acyl tRNA Synthetase(pars-2)	0	0	0	1	1	
+PeRoXisome assembly factor(prx-6)	0	0	0	1	1	
+Let-23 Fertility Effector/regulator(lfe-2)	1	1	1	0	0	
+SAPK/ERK kinase(sek-6)	1	0	0	1	1	
+MeValonate Kinase(mvk-1)	1	0	0	1	1	
+hypothetical protein(F32D8.13)	1	1	1	1	0	
+Acetoacetyl-CoA synthetase(sur-5)	0	1	1	1	1	
+Peroxisomal Membrane Protein related(pmp-3)	0	1	1	1	1	
+ABC transporter, class F(abcf-3)	0	1	1	1	1	
+Cation transporting ATPase(catp-7)	0	1	1	1	1	
+Probable ATP-citrate synthase(acly-1)	0	1	1	1	1	
+P-GlycoProtein related(pgp-13)	0	1	1	1	1	
+Receptor-type guanylate cyclase gcy-28(gcy-28)	0	1	1	1	1	
+Kinesin-Like Protein(klp-11)	0	1	1	1	1	
+Protein let-418(let-418)	0	1	1	1	1	
+STCH (truncated HSP) family(stc-1)	0	1	1	1	1	
+Multidrug resistance protein pgp-1(pgp-1)	0	1	1	1	1	
+DNA ligase 1(lig-1)	0	1	1	1	1	
+ATP synthase subunit alpha, mitochondrial(H28O16.1)	0	1	1	1	1	
+Multidrug resistance protein pgp-3(pgp-3)	0	1	1	1	1	
+Actin-2(act-2)	0	1	1	1	1	
+hypothetical protein(mrp-5)	0	1	1	1	1	
+Discoidin domain-containing receptor A(ddr-1)	0	1	1	1	1	
+ATP-dependent RNA helicase SUV3 homolog, mitochondrial(C08F8.2)	0	1	1	1	1	
+Phospholipid-transporting ATPase(tat-2)	0	1	1	1	1	
+Calcium-transporting ATPase(pmr-1)	0	1	1	1	1	
+ATP-dependent RNA helicase glh-1(glh-1)	0	1	1	1	1	
+Kinesin-like protein(klp-7)	0	1	1	1	1	
+HAlF transporter (PGP related)(haf-2)	0	1	1	1	1	
+Kinesin-like protein(klp-4)	0	1	1	1	1	
+Calcium-transporting ATPase(sca-1)	0	1	1	1	1	
+Kinesin-like protein(klp-13)	0	1	1	1	1	
+hypothetical protein(C25H3.1)	0	1	1	1	1	
+Acetyl-coenzyme A synthetase(acs-19)	0	1	1	1	1	
+FIdGetin-Like (mammalian developmental AAA ATPase) related(figl-1)	0	1	1	1	1	
+WHiTe (Drosophila) related ABC transporter(wht-2)	0	1	1	1	1	
+ACTin(act-5)	0	1	1	1	1	
+Heavy Metal Tolerance factor(hmt-1)	0	1	1	1	1	
+P-GlycoProtein related(pgp-11)	0	1	1	1	1	
+Heavy chain, Unconventional Myosin(hum-5)	0	1	1	1	1	
+Diphthine--ammonia ligase(E01A2.5)	0	1	1	1	1	
+Heat shock 70 kDa protein F, mitochondrial(hsp-6)	0	1	1	1	1	
+Poly(A) RNA polymerase gld-4(gld-4)	0	1	1	1	1	
+hypothetical protein(pod-2)	0	1	1	1	1	
+Putative ATP-dependent RNA helicase T26G10.1(T26G10.1)	0	1	1	1	1	
+Molybdopterin-synthase sulfurtransferase(moc-3)	0	1	1	1	1	
+P-GlycoProtein related(pgp-9)	0	1	1	1	1	
+DEAD boX helicase homolog(ddx-23)	0	1	1	1	1	
+Phosphoribosylaminoimidazole-succinocarboxamide synthase(pacs-1)	0	1	1	1	1	
+hypothetical protein(T24H7.2)	0	1	1	1	1	
+Alanine--tRNA ligase, cytoplasmic(aars-2)	0	1	1	1	1	
+Kinesin-like protein vab-8(vab-8)	0	1	1	1	1	
+P-GlycoProtein related(pgp-2)	0	1	1	1	1	
+Putative pachytene checkpoint protein 2(pch-2)	0	1	1	1	1	
+ABC transporter ATP-binding protein/permease wht-1(wht-1)	0	1	1	1	1	
+Kinesin-like protein(klp-16)	0	1	1	1	1	
+Calcium/calmodulin-dependent protein kinase kinase(ckk-1)	1	1	1	1	1	
+Uridine kinase(F19B6.1)	1	1	1	1	1	
+Tyrosine-protein kinase(Y47G6A.5)	1	1	1	1	1	
+Dual specificity tyrosine-phosphorylation-regulated kinase mbk-2(mbk-2)	1	1	1	1	1	
+Serine/threonine-protein kinase WNK(wnk-1)	1	1	1	1	1	
+Serine/threonine-protein kinase prk-2(prk-2)	1	1	1	1	1	
+Serine/threonine-protein kinase unc-51(unc-51)	1	1	1	1	1	
+Casein kinase I gamma(csnk-1)	1	1	1	1	1	
+Serine/threonine-protein kinase WARTS homolog(wts-1)	1	1	1	1	1	
+Putative ribosomal protein S6 kinase alpha-1(rskn-1)	1	1	1	1	1	
+Serine/threonine-protein kinase flr-4(flr-4)	1	1	1	1	1	
+Pim (mammalian oncogene) Related Kinase(prk-1)	1	1	1	1	1	
+hypothetical protein(F32D8.1)	1	1	1	1	1	
+Casein kinase I isoform delta(kin-20)	1	1	1	1	1	
+Mitogen-activated protein kinase sma-5(sma-5)	1	1	1	1	1	
+Cyclin-dependent-like kinase 5(cdk-5)	1	1	1	1	1	
+Putative tyrosine-protein kinase C03B1.5(C03B1.5)	1	1	1	1	1	
+Serine/threonine kinase NLK(lit-1)	1	1	1	1	1	
+Protein kinase C(pkc-2)	1	1	1	1	1	
+Serine/threonine-protein kinase sax-1(sax-1)	1	1	1	1	1	
+Probable glycerol kinase(R11F4.1)	1	1	1	1	1	
+Putative tyrosine-protein kinase F09A5.2(F09A5.2)	1	1	1	1	1	
+Tyrosine-protein kinase receptor svh-2(svh-2)	1	1	1	1	1	
+Serine/threonine-protein kinase par-1(par-1)	1	1	1	1	1	
+Phosphotransferase(hxk-1)	1	1	1	1	1	
+Mitogen-activated protein kinase kinase kinase mlk-1(mlk-1)	1	1	1	1	1	
+Homeodomain-interacting protein kinase 1(hpk-1)	1	1	1	1	1	
+Thymidylate kinase(dtmk-1)	1	1	1	1	1	
+G protein-coupled receptor kinase 1(grk-1)	1	1	1	1	1	
+Cyclin-dependent kinase 4 homolog(cdk-4)	1	1	1	1	1	
+DiacylGlycerol Kinase(dgk-2)	1	1	1	1	1	
+Serine/threonine-protein kinase tousled-like 1(tlk-1)	1	1	1	1	1	
+Adenylate kinase(let-754)	1	1	1	1	1	
+Protein Kinase, cGMP-dependent(pkg-2)	1	1	1	1	1	
+Serine/threonine-protein kinase RIO3(riok-3)	1	1	1	1	1	

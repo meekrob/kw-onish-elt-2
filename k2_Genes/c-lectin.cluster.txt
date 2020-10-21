@@ -1,0 +1,97 @@
+	SM00042:CUB	IPR000859:CUB domain	GO:0045087~innate immune response	IPR001304:C-type lectin	IPR016186:C-type lectin-like	SM00034:CLECT	IPR016187:C-type lectin fold	Lectin	GO:0030246~carbohydrate binding	
+hypothetical protein(ZK896.4)	0	1	0	0	0	0	0	0	0	
+hypothetical protein(K10D11.3)	0	1	0	0	0	0	0	0	0	
+hypothetical protein(M02D8.5)	0	1	0	0	0	0	0	0	0	
+hypothetical protein(W02G9.4)	1	1	0	0	0	0	0	0	0	
+Zinc metalloproteinase nas-28(nas-28)	1	1	0	0	0	0	0	0	0	
+Zinc metalloproteinase nas-30(nas-30)	1	1	0	0	0	0	0	0	0	
+SaPosin-like Protein family(spp-3)	0	0	1	0	0	0	0	0	0	
+ASpartyl Protease(asp-12)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(C18E9.9)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F08G5.6)	0	0	1	0	0	0	0	0	0	
+bZIP transcription factor family(zip-10)	0	0	1	0	0	0	0	0	0	
+SOX (mammalian SRY box) family(sox-4)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(T19D12.4)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(K05F1.10)	0	0	1	0	0	0	0	0	0	
+Glutathione S-transferase P(gst-1)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F35E12.10)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F53A9.6)	0	0	1	0	0	0	0	0	0	
+Infection Response Gene(irg-3)	0	0	1	0	0	0	0	0	0	
+Multidrug resistance protein pgp-1(pgp-1)	0	0	1	0	0	0	0	0	0	
+Tyrosine-protein kinase(Y47G6A.5)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(T24C4.4)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F46A8.11)	0	0	1	0	0	0	0	0	0	
+F-box A protein(fbxa-105)	0	0	1	0	0	0	0	0	0	
+ASpartyl Protease(asp-14)	0	0	1	0	0	0	0	0	0	
+Forkhead box protein O(daf-16)	0	0	1	0	0	0	0	0	0	
+UPF0057 membrane protein C04G6.5(C04G6.5)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(C34H4.1)	0	0	1	0	0	0	0	0	0	
+Probable inorganic pyrophosphatase 1(pyp-1)	0	0	1	0	0	0	0	0	0	
+Cathepsin B-like cysteine proteinase 3(cpr-3)	0	0	1	0	0	0	0	0	0	
+Acyl CoA DeHydrogenase(acdh-1)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(Y41D4B.17)	0	0	1	0	0	0	0	0	0	
+Downstream Of DAF-16 (regulated by DAF-16)(dod-24)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F01D5.1)	0	0	1	0	0	0	0	0	0	
+Multidrug resistance protein pgp-3(pgp-3)	0	0	1	0	0	0	0	0	0	
+NAD-dependent protein deacylase sir-2.2(sir-2.2)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(R02D3.8)	0	0	1	0	0	0	0	0	0	
+Glutathione S-Transferase(gst-38)	0	0	1	0	0	0	0	0	0	
+Dwarfin sma-3(sma-3)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F18G5.6)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F49H6.3)	0	0	1	0	0	0	0	0	0	
+LYSozyme(lys-7)	0	0	1	0	0	0	0	0	0	
+Tetraspanin-1(tsp-1)	0	0	1	0	0	0	0	0	0	
+Kruppel-Like Factor (zinc finger protein)(klf-3)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(K04A8.1)	0	0	1	0	0	0	0	0	0	
+LYSozyme(lys-2)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F54B11.11)	0	0	1	0	0	0	0	0	0	
+Infection Response Gene(irg-1)	0	0	1	0	0	0	0	0	0	
+AQuaPorin or aquaglyceroporin related(aqp-1)	0	0	1	0	0	0	0	0	0	
+CYtochrome P450 family(cyp-35A5)	0	0	1	0	0	0	0	0	0	
+ParaQuat (Methylviologen) responsive(pqm-1)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F41C3.8)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F10A3.4)	0	0	1	0	0	0	0	0	0	
+B-chain-like peptide(ins-11)	0	0	1	0	0	0	0	0	0	
+ORAI (store-operated calcium channel) homolog(orai-1)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F01D5.5)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F01D5.3)	0	0	1	0	0	0	0	0	0	
+Sterile alpha and TIR motif-containing protein tir-1(tir-1)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(Y46D2A.2)	0	0	1	0	0	0	0	0	0	
+hypothetical protein(F35E12.6)	0	1	1	0	0	0	0	0	0	
+hypothetical protein(F20G2.5)	0	1	1	0	0	0	0	0	0	
+hypothetical protein(Y110A2AL.5)	0	0	0	0	0	0	1	0	0	
+Putative glycerophosphocholine phosphodiesterase GPCPD1 homolog 2(gpcp-2)	0	0	0	0	0	0	0	0	1	
+Acid Alpha Glucosidase Relate(aagr-1)	0	0	0	0	0	0	0	0	1	
+Probable galaptin lec-7(lec-7)	0	0	0	0	0	0	0	1	1	
+32 kDa beta-galactoside-binding lectin lec-3(lec-3)	0	0	0	0	0	0	0	1	1	
+Galectin(lec-2)	0	0	0	0	0	0	0	1	1	
+Galectin(lec-6)	0	0	0	0	0	0	0	1	1	
+hypothetical protein(F28B4.3)	0	0	0	1	1	1	1	0	0	
+C-type LECtin(clec-58)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-228)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-36)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-242)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-49)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-40)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-65)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-265)	0	0	0	1	1	1	1	1	1	
+C-type LECtin(clec-43)	0	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-44)	0	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-54)	1	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-78)	1	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-9)	1	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-57)	1	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-7)	1	1	0	1	1	1	1	1	1	
+C-type LECtin(clec-186)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-210)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-166)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-187)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-258)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-86)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-168)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-165)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-174)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-71)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-76)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-172)	0	0	1	1	1	1	1	1	1	
+C-type LECtin(clec-75)	0	0	1	1	1	1	1	1	1	

@@ -1,0 +1,282 @@
+	Zinc-finger	Zinc	Metal-binding	GO:0046872~metal ion binding	
+GALacTosyltransferase(galt-1)	0	0	1	0	
+Alpha-(1,6)-fucosyltransferase(fut-8)	0	0	1	0	
+CalciNeurin B(cnb-1)	0	0	1	0	
+Serine/threonine-protein phosphatase(let-92)	0	0	1	0	
+SMAll(sma-9)	0	0	0	1	
+hypothetical protein(ZK1240.3)	0	0	0	1	
+Probable succinyl-CoA ligase [ADP-forming] subunit beta, mitochondrial(suca-1)	0	0	0	1	
+SUPpressor(sup-35)	0	0	0	1	
+Mitochondrial Processing Peptidase Beta(mppb-1)	0	0	0	1	
+AT hook Transcription Factor family(attf-3)	0	0	0	1	
+hypothetical protein(lin-38)	0	0	0	1	
+Lateral Signaling Target(lst-5)	0	0	0	1	
+ParaQuat (Methylviologen) responsive(pqm-1)	0	0	0	1	
+hypothetical protein(Y71F9AL.11)	0	0	0	1	
+Suppressor of PAr-Two defect(spat-3)	0	0	0	1	
+Ubiquinol-Cytochrome c oxidoReductase complex(ucr-2.1)	0	0	0	1	
+Zinc Finger and Homeobox(zfh-2)	0	0	0	1	
+hypothetical protein(C26B9.6)	0	0	0	1	
+Zinc finger putative Transcription Factor family(ztf-26)	0	0	0	1	
+T lineage defect, LePtoderan tail(tlp-1)	0	0	0	1	
+Signal Element on Autosome(sea-2)	0	0	0	1	
+MethylCrotonoyl-Coenzyme A Carboxylase (alpha)(mccc-1)	0	0	0	1	
+Suppressor of LIneage defect(sli-1)	0	0	0	1	
+hypothetical protein(Y22D7AL.10)	0	0	0	1	
+hypothetical protein(F43G6.8)	0	0	0	1	
+Palmitoyltransferase(dhhc-3)	0	0	0	1	
+hypothetical protein(lin-29)	0	0	0	1	
+hypothetical protein(Y67H2A.10)	0	0	0	1	
+Purple acid phosphatase(Y105C5B.15)	0	0	0	1	
+hypothetical protein(F44E7.4)	0	0	0	1	
+DNaJ domain (prokaryotic heat shock protein)(dnj-12)	0	0	0	1	
+Propionyl-CoA carboxylase alpha chain, mitochondrial(pcca-1)	0	0	0	1	
+hypothetical protein(C11H1.3)	0	0	0	1	
+hypothetical protein(lsy-2)	0	0	0	1	
+hypothetical protein(Y37F4.6)	0	0	0	1	
+EGR (Early Growth factor Response factor) Homolog(egrh-1)	0	0	0	1	
+Cation transporting ATPase(catp-2)	0	0	0	1	
+PhosphatidylInositol Transfer Protein family(pitp-1)	0	0	0	1	
+hypothetical protein(C18B12.4)	0	0	0	1	
+Palmitoyltransferase(dhhc-1)	0	0	0	1	
+EGR (Early Growth factor Response factor) Homolog(egrh-2)	0	0	0	1	
+Prion-like-(Q/N-rich)-domain-bearing protein(pqn-21)	0	0	0	1	
+hypothetical protein(K10B3.5)	0	0	0	1	
+hypothetical protein(K11D2.4)	0	0	0	1	
+PeRoXisome assembly factor(prx-2)	0	0	0	1	
+hypothetical protein(F21A9.2)	0	0	0	1	
+Zinc finger putative Transcription Factor family(ztf-27)	0	0	0	1	
+hypothetical protein(plr-1)	0	0	0	1	
+Calcium-transporting ATPase(mca-3)	0	0	0	1	
+hypothetical protein(C32D5.11)	0	0	0	1	
+hypothetical protein(T20F7.1)	0	0	0	1	
+hypothetical protein(ZC434.9)	0	1	1	0	
+Pyruvate Dehydrogenase Phosphatase homolog(pdp-1)	0	0	1	1	
+Uncharacterized monothiol glutaredoxin F10D7.3(F10D7.3)	0	0	1	1	
+Receptor-type guanylate cyclase gcy-28(gcy-28)	0	0	1	1	
+SyNapTotagmin(snt-1)	0	0	1	1	
+Probable gamma-butyrobetaine dioxygenase(gbh-1)	0	0	1	1	
+Isocitrate dehydrogenase [NADP](idh-2)	0	0	1	1	
+DNA PRImase homolog(pri-2)	0	0	1	1	
+Cytochrome c oxidase subunit 5A, mitochondrial(cco-2)	0	0	1	1	
+Germinal Center Kinase family(gck-1)	0	0	1	1	
+Dual-Leucine zipper Kinase(dlk-1)	0	0	1	1	
+Lysine--tRNA ligase(kars-1)	0	0	1	1	
+2-oxoisovalerate dehydrogenase subunit alpha, mitochondrial(Y39E4A.3)	0	0	1	1	
+Probable cytoplasmic aconitate hydratase(aco-1)	0	0	1	1	
+Vesicle-fusing ATPase(nsf-1)	0	0	1	1	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	0	0	1	1	
+CYtochrome P450 family(cyp-43A1)	0	0	1	1	
+Probable isocitrate dehydrogenase [NAD] subunit alpha, mitochondrial(idha-1)	0	0	1	1	
+Isocitrate DeHydrogenase(idh-1)	0	0	1	1	
+Probable S-adenosylmethionine synthase 1(sams-1)	0	0	1	1	
+DIS3-like exonuclease 2(disl-2)	0	0	1	1	
+Probable calcium-binding mitochondrial carrier K02F3.2(K02F3.2)	0	0	1	1	
+Probable 3',5'-cyclic phosphodiesterase pde-2(pde-2)	0	0	1	1	
+Probable calcium-binding mitochondrial carrier F17E5.2(F17E5.2)	0	0	1	1	
+DNA N6-methyl adenine demethylase(F09F7.7)	0	0	1	1	
+Cell surface receptor daf-4(daf-4)	0	0	1	1	
+Homogentisate 1,2-dioxygenase(hgo-1)	0	0	1	1	
+CYtochrome P450 family(cyp-14A4)	0	0	1	1	
+Metallothionein-2(mtl-2)	0	0	1	1	
+hypothetical protein(K12C11.1)	0	0	1	1	
+Probable NADH dehydrogenase [ubiquinone] iron-sulfur protein 7, mitochondrial(nduf-7)	0	0	1	1	
+Poly(A) RNA polymerase gld-4(gld-4)	0	0	1	1	
+CYtochrome P450 family(cyp-13B2)	0	0	1	1	
+Nucleoside-diphosphatase uda-1(uda-1)	0	0	1	1	
+Probable S-adenosylmethionine synthase 3(sams-3)	0	0	1	1	
+Serine/threonine-protein kinase par-1(par-1)	0	0	1	1	
+5'-nucleotidase(F25B5.3)	0	0	1	1	
+Cyclin-dependent kinase 4 homolog(cdk-4)	0	0	1	1	
+Serine/threonine-protein kinase akt-1(akt-1)	0	0	1	1	
+Zinc Finger Protein(zfp-3)	0	0	1	1	
+Mitogen-activated protein kinase pmk-1(pmk-1)	0	0	1	1	
+TYRosinase(tyr-6)	0	0	1	1	
+Calcium/calmodulin-dependent protein kinase type II(unc-43)	0	0	1	1	
+CalNeXin(cnx-1)	0	0	1	1	
+YTochrome B(cytb-5.1)	0	0	1	1	
+Dual specificity mitogen-activated protein kinase kinase mek-1(mek-1)	0	0	1	1	
+Protein phosphatase ppm-1(ppm-1)	0	0	1	1	
+hypothetical protein(R05F9.6)	0	0	1	1	
+Serine/threonine-protein kinase akt-2(akt-2)	0	0	1	1	
+Methionine AminoPeptidase(map-2)	0	0	1	1	
+Mitogen-activated protein kinase kinase kinase mom-4(mom-4)	0	0	1	1	
+JHDM (histone demethylase) homolog(jhdm-1)	0	0	1	1	
+Insulin-like receptor subunit beta(daf-2)	0	0	1	1	
+Dual specificity mitogen-activated protein kinase kinase sek-1(sek-1)	0	0	1	1	
+Serine/threonine-protein phosphatase PP1-beta(gsp-2)	0	0	1	1	
+CYtochrome P450 family(cyp-33E2)	0	0	1	1	
+Lipoyl synthase, mitochondrial(M01F1.3)	0	0	1	1	
+Putative protein C31H2.4(C31H2.4)	0	0	1	1	
+Threonylcarbamoyladenosine tRNA methylthiotransferase(Y92H12BL.1)	0	0	1	1	
+hypothetical protein(C34D10.2)	0	0	1	1	
+CYtochrome P450 family(cyp-35A4)	0	0	1	1	
+Glycoprotein-N-acetylgalactosamine 3-beta-galactosyltransferase 1(C38H2.2)	0	0	1	1	
+Serine/threonine-protein kinase pak-2(pak-2)	0	0	1	1	
+Cytosolic Fe-S cluster assembly factor NUBP1 homolog(nubp-1)	0	0	1	1	
+Enolase(enol-1)	0	0	1	1	
+2,3-bisphosphoglycerate-independent phosphoglycerate mutase(ipgm-1)	0	0	1	1	
+Phosphodiesterase(pde-6)	0	0	1	1	
+Putative nudix hydrolase 6(ndx-6)	0	0	1	1	
+Serine/threonine-protein kinase RIO1(riok-1)	0	0	1	1	
+1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase beta egl-8(egl-8)	0	0	1	1	
+Non-specific serine/threonine protein kinase(max-2)	0	0	1	1	
+Serine/threonine-protein kinase smg-1(smg-1)	0	0	1	1	
+hypothetical protein(F33A8.6)	0	0	1	1	
+Trehalose-phosphatase(gob-1)	0	0	1	1	
+Tyrosine-protein kinase receptor cam-1(cam-1)	0	0	1	1	
+Isocitrate dehydrogenase [NAD] subunit, mitochondrial(idhg-2)	0	0	1	1	
+Probable methylmalonyl-CoA mutase, mitochondrial(mmcm-1)	0	0	1	1	
+Probable manganese-transporting ATPase catp-8(catp-8)	0	0	1	1	
+Bifunctional lysine-specific demethylase and histidyl-hydroxylase NO66(jmjc-1)	0	0	1	1	
+Glycogenin-1(gyg-1)	0	0	1	1	
+Ribosomal protein S6 kinase beta(rsks-1)	0	0	1	1	
+Probable N-acetylgalactosaminyltransferase 9(gly-9)	0	0	1	1	
+Mitogen-activated protein kinase kinase kinase nsy-1(nsy-1)	0	0	1	1	
+Anamorsin homolog(T20B12.7)	0	0	1	1	
+Mitogen-activated protein kinase mpk-1(mpk-1)	0	0	1	1	
+Leucine-rich repeat serine/threonine-protein kinase 1(lrk-1)	0	0	1	1	
+Membrane-associated tyrosine-and threonine-specific cdc2-inhibitory kinase wee-1.3(wee-1.3)	0	0	1	1	
+Succinate dehydrogenase cytochrome b560 subunit, mitochondrial(mev-1)	0	0	1	1	
+Choline kinase A2(cka-2)	0	0	1	1	
+GLYcosylation related(gly-7)	0	0	1	1	
+hypothetical protein(T26A8.4)	0	0	1	1	
+Probable protein phosphatase 2C T23F11.1(ppm-2)	0	0	1	1	
+Furin-like protease kpc-1(kpc-1)	0	0	1	1	
+Peroxidasin homolog(pxn-1)	0	0	1	1	
+Zinc metalloproteinase nas-19(nas-19)	0	1	1	1	
+Mitochondrial import inner membrane translocase subunit Tim10B(tin-9.2)	0	1	1	1	
+Sphingomyelin phosphodiesterase 1(asm-1)	0	1	1	1	
+LIM domain-containing protein pin-2(pin-2)	0	1	1	1	
+Zinc metalloproteinase nas-7(nas-7)	0	1	1	1	
+Leishmanolysin-like peptidase(Y43F4A.1)	0	1	1	1	
+Alanine--tRNA ligase, mitochondrial(aars-1)	0	1	1	1	
+Aspartyl aminopeptidase(dnpp-1)	0	1	1	1	
+NAD-dependent protein deacylase sir-2.2(sir-2.2)	0	1	1	1	
+hypothetical protein(R04B5.5)	0	1	1	1	
+NAD-dependent protein deacetylase sir-2.1(sir-2.1)	0	1	1	1	
+Zinc MetalloProtease(zmp-2)	0	1	1	1	
+Drosophila PRicKLe homolog(prkl-1)	0	1	1	1	
+Calreticulin(crt-1)	0	1	1	1	
+Mitochondrial import inner membrane translocase subunit Tim9(tin-9.1)	0	1	1	1	
+LIM domain family(lim-8)	0	1	1	1	
+hypothetical protein(ZK622.4)	0	1	1	1	
+Zinc metalloproteinase nas-27(nas-27)	0	1	1	1	
+Zinc metalloproteinase nas-39(nas-39)	0	1	1	1	
+Aminoacylase-1(C06A6.4)	0	1	1	1	
+PYruvate Carboxylase(pyc-1)	0	1	1	1	
+Zinc metalloproteinase nas-24(nas-24)	0	1	1	1	
+hypothetical protein(W02B8.2)	0	1	1	1	
+Protein male abnormal 3(mab-3)	0	1	1	1	
+Protein yippee-like B0546.4(B0546.4)	0	1	1	1	
+Putative carbonic anhydrase 3(cah-3)	0	1	1	1	
+Probable methylthioribulose-1-phosphate dehydratase(ZC373.5)	0	1	1	1	
+Nuclear Hormone Receptor family(nhr-45)	1	1	1	1	
+Nuclear hormone receptor family member nhr-65(nhr-65)	1	1	1	1	
+Nuclear hormone receptor family member daf-12(daf-12)	1	1	1	1	
+hypothetical protein(Y119C1B.5)	1	1	1	1	
+hypothetical protein(F56F3.4)	1	1	1	1	
+Nuclear hormone receptor family member nhr-150(nhr-150)	1	1	1	1	
+Muscleblind-like protein(mbl-1)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-61)	1	1	1	1	
+Egg-laying defective protein 27(egl-27)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-173)	1	1	1	1	
+Rho-associated protein kinase let-502(let-502)	1	1	1	1	
+Myotubularin-related protein 5(mtm-5)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-137)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-11)	1	1	1	1	
+Nuclear hormone receptor family member nhr-130(nhr-130)	1	1	1	1	
+Probable histone-lysine N-methyltransferase lin-59(lin-59)	1	1	1	1	
+Putative peroxisome assembly protein 12(prx-12)	1	1	1	1	
+JuMonJi (transcription factor) Domain protein(jmjd-1.2)	1	1	1	1	
+hypothetical protein(M110.3)	1	1	1	1	
+Zinc finger Ran-binding domain-containing protein 2(Y25C1A.8)	1	1	1	1	
+hypothetical protein(tag-294)	1	1	1	1	
+Zinc Finger Protein(zfp-1)	1	1	1	1	
+Ubiquitin carboxyl-terminal hydrolase(usp-3)	1	1	1	1	
+MTM (myotubularin) family(mtm-6)	1	1	1	1	
+hypothetical protein(F22G12.4)	1	1	1	1	
+Protein odd-skipped-related 1(odd-1)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-135)	1	1	1	1	
+Nuclear hormone receptor family member nhr-34(nhr-34)	1	1	1	1	
+Nuclear hormone receptor family member nhr-97(nhr-97)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-146)	1	1	1	1	
+hypothetical protein(F26F4.8)	1	1	1	1	
+Histone-lysine N-methyltransferase(set-16)	1	1	1	1	
+Nuclear hormone receptor family member nhr-4(nhr-4)	1	1	1	1	
+PIP Kinase(ppk-3)	1	1	1	1	
+Ubiquitin carboxyl-terminal hydrolase(F07A11.4)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-121)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-46)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-109)	1	1	1	1	
+Nuclear hormone receptor family member nhr-16(nhr-16)	1	1	1	1	
+Protein lin-41(lin-41)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-17)	1	1	1	1	
+Zinc finger protein ZPR1 homolog(W03F9.1)	1	1	1	1	
+BMP Receptor Associated protein family(bra-1)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-78)	1	1	1	1	
+Nuclear hormone receptor family member nhr-71(nhr-71)	1	1	1	1	
+Nuclear hormone receptor family member nhr-47(nhr-47)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-182)	1	1	1	1	
+ARI (ubiquitin ligase Ariadne) homolog(ari-1)	1	1	1	1	
+hypothetical protein(tag-349)	1	1	1	1	
+Hypoxia-inducible factor prolyl hydroxylase(egl-9)	1	1	1	1	
+Ubiquitin carboxyl-terminal hydrolase(usp-5)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-208)	1	1	1	1	
+GEX Interacting protein(nhr-27)	1	1	1	1	
+Zinc finger protein unc-98(unc-98)	1	1	1	1	
+hypothetical protein(lsy-13)	1	1	1	1	
+Nuclear hormone receptor family member nhr-62(nhr-62)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-32)	1	1	1	1	
+Nuclear hormone receptor family member nhr-69(nhr-69)	1	1	1	1	
+Zinc finger protein sdc-3(sdc-3)	1	1	1	1	
+Nuclear hormone receptor family member nhr-3(nhr-3)	1	1	1	1	
+Suppressor of Activated EGL-4(saeg-1)	1	1	1	1	
+Ubiquitin-like protein 1(ubl-1)	1	1	1	1	
+hypothetical protein(T07D1.2)	1	1	1	1	
+Transcription factor unc-3(unc-3)	1	1	1	1	
+Myotonic dystrophy-Related, Cdc42-binding Kinase homolog(mrck-1)	1	1	1	1	
+PHd Finger family(phf-15)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-277)	1	1	1	1	
+Nuclear hormone receptor family member nhr-40(nhr-40)	1	1	1	1	
+BRCA1-associated RING domain protein 1(brd-1)	1	1	1	1	
+hypothetical protein(C17H11.6)	1	1	1	1	
+Protein kinase C-like 3(pkc-3)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-102)	1	1	1	1	
+Nuclear hormone receptor family member nhr-108(nhr-108)	1	1	1	1	
+hypothetical protein(F07F6.4)	1	1	1	1	
+Putative zinc finger protein C02F5.12(C02F5.12)	1	1	1	1	
+Putative transcription elongation factor S-II(T24H10.1)	1	1	1	1	
+B lymphocyte-induced maturation protein 1 homolog(blmp-1)	1	1	1	1	
+Nuclear hormone receptor family member nhr-10(nhr-10)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-184)	1	1	1	1	
+Myotubularin-related protein 3(mtm-3)	1	1	1	1	
+WD repeat and FYVE domain-containing protein 2(wdfy-2)	1	1	1	1	
+Nuclear hormone receptor family member nhr-106(nhr-106)	1	1	1	1	
+NHL (ring finger b-box coiled coil) domain containing(nhl-3)	1	1	1	1	
+Nuclear hormone receptor family member nhr-42(nhr-42)	1	1	1	1	
+hypothetical protein(F08G12.5)	1	1	1	1	
+hypothetical protein(F22D6.2)	1	1	1	1	
+Serine/threonine-protein kinase dkf-2(dkf-2)	1	1	1	1	
+Protein lin-15B(lin-15B)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-255)	1	1	1	1	
+Protein vav-1(vav-1)	1	1	1	1	
+Sex-determining transformer protein 1(tra-1)	1	1	1	1	
+ATP-dependent RNA helicase glh-4(glh-4)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-132)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-256)	1	1	1	1	
+Nuclear hormone receptor family member nhr-31(nhr-31)	1	1	1	1	
+DNA polymerase delta catalytic subunit(F10C2.4)	1	1	1	1	
+PHd Finger family(phf-14)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-119)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-66)	1	1	1	1	
+Zinc finger protein lin-13(lin-13)	1	1	1	1	
+B-box type zinc finger protein ncl-1(ncl-1)	1	1	1	1	
+DPH3 homolog(dph-3)	1	1	1	1	
+Lysine-specific demethylase 4(jmjd-2)	1	1	1	1	
+Nuclear hormone receptor family member nhr-22(nhr-22)	1	1	1	1	
+Transcription elongation factor 1 homolog(Y54G11A.11)	1	1	1	1	
+Zinc finger CCCH domain-containing protein 15 homolog(F27D4.4)	1	1	1	1	
+NURF (nucleosome remodeling factor) complex homolog(nurf-1)	1	1	1	1	
+Nuclear Hormone Receptor family(nhr-86)	1	1	1	1	
+Protein lin-49(lin-49)	1	1	1	1	

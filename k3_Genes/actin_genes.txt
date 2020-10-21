@@ -1,0 +1,10 @@
+	propeptide:Removed in mature form	IPR004001:Actin, conserved site	IPR020902:Actin/actin-like conserved site	IPR004000:Actin-related protein	SM00268:ACTIN	
+Ras-like GTP-binding protein rhoA(rho-1)	1	0	0	0	0	
+Ubiquitin-fold modifier 1(ufm-1)	1	0	0	0	0	
+Actin-Related Proteins(arp-1)	0	0	0	1	1	
+Actin-Related Proteins(arp-11)	0	0	0	1	1	
+Actin-related protein 3(arx-1)	0	0	1	1	1	
+ACTin(act-5)	0	1	1	1	1	
+Actin-2(act-2)	1	1	1	1	1	
+Actin-4(act-4)	1	1	1	1	1	
+Actin-1(act-1)	1	1	1	1	1	

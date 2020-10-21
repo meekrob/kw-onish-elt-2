@@ -1,0 +1,34 @@
+	GO:0006486~protein glycosylation	Glycosyltransferase	GO:0016757~transferase activity, transferring glycosyl groups	
+hypothetical protein(Y47D3A.1)	1	0	0	
+hypothetical protein(F59F4.2)	1	0	0	
+FUcosyl Transferase(fut-2)	0	1	0	
+Glycogenin-1(gyg-1)	0	0	1	
+hypothetical protein(F13G3.6)	0	0	1	
+UDP-Glucose Glycoprotein glucosylTransferase(uggt-1)	1	0	1	
+Hypoxanthine PhosphoRibosylTransferase homolog(hprt-1)	0	1	1	
+UDP-GlucuronosylTransferase(ugt-17)	0	1	1	
+Alpha,alpha-trehalose-phosphate synthase [UDP-forming] 1(tps-1)	0	1	1	
+Purine nucleoside phosphorylase(K02D7.1)	0	1	1	
+Alpha-1,4 glucan phosphorylase(T22F3.3)	0	1	1	
+GALacTosyltransferase(galt-1)	0	1	1	
+UDP-glucuronosyltransferase(ugt-62)	0	1	1	
+Putative UDP-glucuronosyltransferase ugt-50(ugt-50)	0	1	1	
+Putative UDP-glucuronosyltransferase ugt-58(ugt-58)	0	1	1	
+UDP-glucuronosyltransferase(ugt-6)	0	1	1	
+UDP-GlucuronosylTransferase(ugt-5)	0	1	1	
+UDP-glucuronosyltransferase(ugt-49)	0	1	1	
+Putative UDP-glucuronosyltransferase ugt-46(ugt-46)	0	1	1	
+UDP-glucuronosyltransferase(ugt-26)	0	1	1	
+Tankyrase-like protein(tank-1)	0	1	1	
+Beta-1,4-mannosyltransferase bre-3(bre-3)	1	1	1	
+Hexosyltransferase(F21C10.3)	1	1	1	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	1	1	1	
+GLYcosylation related(gly-7)	1	1	1	
+Alpha-(1,6)-fucosyltransferase(fut-8)	1	1	1	
+Probable N-acetylgalactosaminyltransferase 9(gly-9)	1	1	1	
+Dolichyl-diphosphooligosaccharide--protein glycosyltransferase subunit 2(ostd-1)	1	1	1	
+Hexosyltransferase(F14B6.6)	1	1	1	
+Beta-1,3-galactosyltransferase bre-2(bre-2)	1	1	1	
+Dolichyl-diphosphooligosaccharide--protein glycosyltransferase 48 kDa subunit(ostb-1)	1	1	1	
+Glycoprotein-N-acetylgalactosamine 3-beta-galactosyltransferase 1(C38H2.2)	1	1	1	
+O-linked GlcNAc Transferase(ogt-1)	1	1	1	

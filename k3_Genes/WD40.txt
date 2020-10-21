@@ -1,0 +1,51 @@
+	IPR020472:G-protein beta WD-40 repeat	IPR019775:WD40 repeat, conserved site	WD repeat	IPR001680:WD40 repeat	SM00320:WD40	IPR017986:WD40-repeat-containing domain	IPR015943:WD40/YVTN repeat-like-containing domain	
+Eukaryotic translation initiation factor 3 subunit B(eif-3.B)	0	0	1	0	0	0	0	
+Leucine-rich repeat serine/threonine-protein kinase 1(lrk-1)	0	0	0	0	0	1	0	
+hypothetical protein(tag-10)	0	0	0	0	0	0	1	
+hypothetical protein(Y37A1B.5)	0	0	0	0	0	0	1	
+hypothetical protein(F39C12.1)	0	0	0	0	0	1	1	
+hypothetical protein(F56C9.10)	0	0	0	0	0	1	1	
+hypothetical protein(Y54G2A.12)	0	0	0	0	0	1	1	
+hypothetical protein(lgl-1)	0	0	0	0	0	1	1	
+hypothetical protein(Y105E8A.8)	0	0	0	0	0	1	1	
+Uncharacterized WD repeat-containing protein F47D12.9(F47D12.9)	0	0	1	0	0	1	1	
+yeast SEC homolog(sec-31)	0	0	0	1	1	1	1	
+Ectopic P Granules(epg-6)	0	0	0	1	1	1	1	
+hypothetical protein(T23B12.6)	0	0	0	1	1	1	1	
+DYnein Chain, light Intermediate(dyci-1)	0	0	0	1	1	1	1	
+hypothetical protein(Y111B2A.12)	0	0	0	1	1	1	1	
+AuTophaGy (yeast Atg homolog)(atg-18)	0	0	0	1	1	1	1	
+hypothetical protein(F13H8.2)	0	0	0	1	1	1	1	
+hypothetical protein(F47G4.4)	0	0	0	1	1	1	1	
+yeast SEC homolog(sec-12)	0	0	0	1	1	1	1	
+Polyadenylation Factor Subunit homolog(pfs-2)	0	0	0	1	1	1	1	
+Nuclear Pore complex Protein(npp-23)	0	1	0	1	1	1	1	
+hypothetical protein(ZK430.7)	0	1	0	1	1	1	1	
+hypothetical protein(H24G06.1)	0	1	0	1	1	1	1	
+WD Repeat protein(wdr-46)	0	1	0	1	1	1	1	
+Pre-rRNA-processing protein pro-1(pro-1)	0	0	1	1	1	1	1	
+RaBConnectin related(rbc-2)	0	0	1	1	1	1	1	
+Protein SEC13 homolog(npp-20)	0	0	1	1	1	1	1	
+Gastrulation defective protein 1(gad-1)	0	0	1	1	1	1	1	
+Uncharacterized WD repeat-containing protein F52C9.1(sorf-2)	0	0	1	1	1	1	1	
+Ribosome biogenesis protein BOP1 homolog(Y48B6A.1)	0	0	1	1	1	1	1	
+hypothetical protein(Y39H10A.6)	0	0	1	1	1	1	1	
+Polycomb protein mes-6(mes-6)	0	0	1	1	1	1	1	
+Echinoderm microtubule-associated protein-like elp-1(elp-1)	0	0	1	1	1	1	1	
+Cleavage and Polyadenylation Factor(cpf-1)	1	1	0	1	1	1	1	
+PLeiotropic ReGulator (vertebrate) homolog(plrg-1)	1	1	0	1	1	1	1	
+hypothetical protein(F08G12.2)	1	1	0	1	1	1	1	
+hypothetical protein(C18E3.5)	1	1	0	1	1	1	1	
+CKA And Striatin Homolog(cash-1)	1	1	0	1	1	1	1	
+hypothetical protein(Y53C12B.1)	1	1	0	1	1	1	1	
+Probable coatomer subunit beta'(copb-2)	1	0	1	1	1	1	1	
+Suppressor of Mec and Unc defects(smu-1)	1	0	1	1	1	1	1	
+Eukaryotic Initiation Factor(eif-3.I)	0	1	1	1	1	1	1	
+FiZzy Related family(fzr-1)	0	1	1	1	1	1	1	
+WD repeat and FYVE domain-containing protein 2(wdfy-2)	0	1	1	1	1	1	1	
+Actin-interacting protein 1(unc-78)	1	1	1	1	1	1	1	
+WD repeat-containing protein wdr-5.3(wdr-5.3)	1	1	1	1	1	1	1	
+F-box/WD repeat-containing protein sel-10(sel-10)	1	1	1	1	1	1	1	
+Uncharacterized WD repeat-containing protein K04G11.4(wdr-5.2)	1	1	1	1	1	1	1	
+AIP1 (Actin Interacting Protein 1) Like(aipl-1)	1	1	1	1	1	1	1	
+Autophagic-related protein 16.2(atg-16.2)	1	1	1	1	1	1	1	

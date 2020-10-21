@@ -1,0 +1,21 @@
+	IPR002110:Ankyrin repeat	SM00248:ANK	ANK repeat	IPR020683:Ankyrin repeat-containing domain	
+CAMTA (CAlModulin-binding Transcriptional activator)(camt-1)	0	0	0	1	
+Leucine-rich repeat serine/threonine-protein kinase 1(lrk-1)	1	1	1	1	
+hypothetical protein(F40E12.2)	1	1	1	1	
+TRPA cation channel homolog(trpa-1)	1	1	1	1	
+GIT1 (mammalian G protein-coupled receptor kinase InTeractor 1) homolog(git-1)	1	1	1	1	
+CeNTaurin(cnt-2)	1	1	1	1	
+hypothetical protein(M60.7)	1	1	1	1	
+hypothetical protein(C18H2.1)	1	1	1	1	
+APoptosis Enhancer(ape-1)	1	1	1	1	
+hypothetical protein(T28D6.4)	1	1	1	1	
+hypothetical protein(unc-44)	1	1	1	1	
+Sex-determining protein fem-1(fem-1)	1	1	1	1	
+BRCA1-associated RING domain protein 1(brd-1)	1	1	1	1	
+hypothetical protein(mel-11)	1	1	1	1	
+GEI-4 (Four) Interacting protein(gfi-2)	1	1	1	1	
+Nuclear Factor of Kappa light polypeptide gene enhancer in b(B)-cells n(nfki-1)	1	1	1	1	
+hypothetical protein(vab-19)	1	1	1	1	
+Tankyrase-like protein(tank-1)	1	1	1	1	
+hypothetical protein(F22G12.4)	1	1	1	1	
+CeNTaurin(cnt-1)	1	1	1	1	

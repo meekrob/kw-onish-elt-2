@@ -1,0 +1,23 @@
+	Elongation factor	GO:0003746~translation elongation factor activity	GO:0006414~translational elongation	Protein biosynthesis	
+60S acidic ribosomal protein P2(C37A2.7)	0	0	1	0	
+Eukaryotic translation initiation factor 3 subunit G(eif-3.G)	0	0	0	1	
+Lysine--tRNA ligase(kars-1)	0	0	0	1	
+Phenylalanine--tRNA ligase beta subunit(fars-3)	0	0	0	1	
+Glutamyl-tRNA(Gln) amidotransferase subunit A, mitochondrial(Y41D4A.6)	0	0	0	1	
+Eukaryotic translation initiation factor 4E-5(ife-5)	0	0	0	1	
+COP9/Signalosome and eIF3 complex-shared subunit 1(cif-1)	0	0	0	1	
+Asparagine--tRNA ligase, cytoplasmic(nars-1)	0	0	0	1	
+Eukaryotic translation initiation factor 3 subunit E(eif-3.E)	0	0	0	1	
+Probable translation initiation factor eIF-2B subunit alpha(ZK1098.4)	0	0	0	1	
+Alanine--tRNA ligase, mitochondrial(aars-1)	0	0	0	1	
+Eukaryotic Initiation Factor(eif-3.I)	0	0	0	1	
+Threonine--tRNA ligase, cytoplasmic(tars-1)	0	0	0	1	
+Eukaryotic translation initiation factor 3 subunit B(eif-3.B)	0	0	0	1	
+Probable elongation factor 1-gamma(eef-1G)	1	1	1	1	
+Elongation factor 2(eef-2)	1	1	1	1	
+Elongation factor G, mitochondrial(gfm-1)	1	1	1	1	
+Probable elongation factor 1-beta/1-delta 2(eef-1B.2)	1	1	1	1	
+ELL transcription elongation factor homolog(ell-1)	1	1	1	1	
+Probable elongation factor 1-beta/1-delta 1(eef-1B.1)	1	1	1	1	
+Eukaryotic translation initiation factor 5A-2(iff-2)	1	1	1	1	
+TU elongation Factor (EF-Tu), Mitochondrial(tufm-1)	1	1	1	1	

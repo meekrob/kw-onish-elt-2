@@ -1,0 +1,86 @@
+	GO:0022625~cytosolic large ribosomal subunit	GO:0030529~intracellular ribonucleoprotein complex	cel03010:Ribosome	GO:0006412~translation	Ribosomal protein	GO:0005840~ribosome	GO:0003735~structural constituent of ribosome	Ribonucleoprotein	
+C. Elegans Y-box(cey-3)	0	1	0	0	0	0	0	0	
+hypothetical protein(F18H3.4)	0	1	0	0	0	0	0	0	
+Target of rapamycin homolog(let-363)	0	0	0	1	0	0	0	0	
+Eukaryotic translation initiation factor 3 subunit G(eif-3.G)	0	0	0	1	0	0	0	0	
+Phenylalanine--tRNA ligase beta subunit(fars-3)	0	0	0	1	0	0	0	0	
+Phenylalanyl Amino-acyl tRNA Synthetase(fars-1)	0	0	0	1	0	0	0	0	
+Eukaryotic translation initiation factor 4E-5(ife-5)	0	0	0	1	0	0	0	0	
+Asparagine--tRNA ligase, cytoplasmic(nars-1)	0	0	0	1	0	0	0	0	
+Eukaryotic translation initiation factor 3 subunit E(eif-3.E)	0	0	0	1	0	0	0	0	
+Eukaryotic translation initiation factor 5A-2(iff-2)	0	0	0	1	0	0	0	0	
+Alanine--tRNA ligase, mitochondrial(aars-1)	0	0	0	1	0	0	0	0	
+Eukaryotic translation initiation factor 3 subunit B(eif-3.B)	0	0	0	1	0	0	0	0	
+Eukaryotic Initiation Factor(eif-3.I)	0	0	0	1	0	0	0	0	
+hypothetical protein(K10C3.5)	0	0	0	1	0	0	0	0	
+Ribosomal protein S6 kinase beta(rsks-1)	0	0	0	1	0	0	0	0	
+Probable elongation factor 1-gamma(eef-1G)	0	0	0	1	0	0	0	0	
+Threonine--tRNA ligase, cytoplasmic(tars-1)	0	0	0	1	0	0	0	0	
+Elongation factor 2(eef-2)	0	0	0	1	0	0	0	0	
+Lysine--tRNA ligase(kars-1)	0	0	0	1	0	0	0	0	
+Glutamyl-tRNA(Gln) amidotransferase subunit A, mitochondrial(Y41D4A.6)	0	0	0	1	0	0	0	0	
+COP9/Signalosome and eIF3 complex-shared subunit 1(cif-1)	0	0	0	1	0	0	0	0	
+Probable translation initiation factor eIF-2B subunit alpha(ZK1098.4)	0	0	0	1	0	0	0	0	
+Elongation factor G, mitochondrial(gfm-1)	0	0	0	1	0	0	0	0	
+Probable elongation factor 1-beta/1-delta 2(eef-1B.2)	0	0	0	1	0	0	0	0	
+Probable S-adenosylmethionine synthase 1(sams-1)	0	0	0	1	0	0	0	0	
+Probable elongation factor 1-beta/1-delta 1(eef-1B.1)	0	0	0	1	0	0	0	0	
+WRB (human W(tryptophan)-Rich Basic nuclear protein) homolog(wrb-1)	0	0	0	0	0	0	1	0	
+hypothetical protein(R186.8)	0	0	0	0	0	0	1	0	
+U3 small nucleolar ribonucleoprotein protein MPP10(Y75B8A.7)	0	1	0	0	0	0	0	1	
+Pre-mRNA-splicing factor 8 homolog(prp-8)	0	1	0	0	0	0	0	1	
+Probable small nuclear ribonucleoprotein E(snr-6)	0	1	0	0	0	0	0	1	
+Heterogeneous nuclear RibonucleoProtein (HnRNP) K homolog(hrpk-1)	0	1	0	0	0	0	0	1	
+Probable small nuclear ribonucleoprotein Sm D2(snr-4)	0	1	0	0	0	0	0	1	
+Probable signal recognition particle 19 kDa protein(F37F2.2)	0	1	0	0	0	0	0	1	
+ELAV-Type RNA binding-protein family(etr-1)	0	1	0	0	0	0	0	1	
+Probable signal recognition particle subunit SRP68(srpa-68)	0	1	0	0	0	0	0	1	
+Putative H/ACA ribonucleoprotein complex subunit 4(K01G5.5)	0	1	0	0	0	0	0	1	
+Probable calcium-binding mitochondrial carrier K02F3.2(K02F3.2)	0	0	0	1	0	0	1	0	
+Putative tricarboxylate transport protein, mitochondrial(K11H3.3)	0	0	0	1	0	0	1	0	
+Adenine Nucleotide Translocator(ant-1.1)	0	0	0	1	0	0	1	0	
+hypothetical protein(R07B7.10)	0	0	0	1	0	0	1	0	
+Probable calcium-binding mitochondrial carrier F17E5.2(F17E5.2)	0	0	0	1	0	0	1	0	
+Mitochondrial Ribosomal Protein, Small(mrps-28)	0	0	0	0	1	1	0	1	
+Mitochondrial Ribosomal Protein, Small(mrps-26)	0	0	0	0	1	1	0	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-55)	0	0	0	0	1	1	0	1	
+Probable ribosome biogenesis protein RLP24(rpl-24.2)	1	0	1	1	0	0	1	0	
+Mitochondrial Ribosomal Protein, Small(mrps-35)	0	0	0	0	1	1	1	1	
+40S ribosomal protein S25(rps-25)	0	1	1	0	1	1	0	1	
+28S ribosomal protein S31, mitochondrial(mrps-31)	0	1	0	0	1	1	1	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-28)	0	0	1	0	1	1	1	1	
+Ribosomal Protein, Large subunit(rpl-41.2)	0	0	0	1	1	1	1	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-20)	0	0	0	1	1	1	1	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-15)	0	0	1	1	1	1	1	1	
+Ribosomal Protein, Small subunit(rps-30)	0	0	1	1	1	1	1	1	
+Ribosomal Protein, Small subunit(rps-24)	0	0	1	1	1	1	1	1	
+60S ribosomal protein L7(rpl-7)	1	1	1	0	1	1	1	1	
+60S acidic ribosomal protein P2(C37A2.7)	1	1	1	0	1	1	1	1	
+Ribosomal Protein, Large subunit(rpl-14)	1	0	1	1	1	1	1	1	
+Ribosomal Protein, Large subunit(rpl-32)	1	0	1	1	1	1	1	1	
+40S ribosomal protein S14(rps-14)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S23(rps-23)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S15(rps-15)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S17(rps-17)	0	1	1	1	1	1	1	1	
+Ribosomal Protein, Small subunit(rps-11)	0	1	1	1	1	1	1	1	
+28S ribosomal protein S7, mitochondrial(mrps-7)	0	1	1	1	1	1	1	1	
+Ubiquitin-like protein 1(ubl-1)	0	1	1	1	1	1	1	1	
+Ribosomal protein(mrpl-36)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S28(rps-28)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S3a(rps-1)	0	1	1	1	1	1	1	1	
+40S ribosomal protein S7(rps-7)	0	1	1	1	1	1	1	1	
+Probable 39S ribosomal protein L35, mitochondrial(mrpl-35)	0	1	1	1	1	1	1	1	
+60S ribosomal protein L3(rpl-3)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L24(rpl-24.1)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L5(rpl-5)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L18(rpl-18)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L19(rpl-19)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L13(rpl-13)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L31(rpl-31)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L11-2(rpl-11.2)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L9(rpl-9)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L23a 2(rpl-25.2)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L35(rpl-35)	1	1	1	1	1	1	1	1	
+Ribosomal protein L36.A(rpl-36.A)	1	1	1	1	1	1	1	1	
+hypothetical protein(Y37E3.8)	1	1	1	1	1	1	1	1	
+60S ribosomal protein L15(rpl-15)	1	1	1	1	1	1	1	1	

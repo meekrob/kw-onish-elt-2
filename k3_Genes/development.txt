@@ -1,0 +1,786 @@
+	GO:0002119~nematode larval development	GO:0000003~reproduction	GO:0009792~embryo development ending in birth or egg hatching	
+UBiquitin Conjugating enzyme(ubc-6)	1	0	0	
+Sop-2-related protein 3(sor-3)	1	0	0	
+CarboxyPeptidase D family(cpd-1)	1	0	0	
+Ubiquinone biosynthesis O-methyltransferase, mitochondrial(coq-3)	1	0	0	
+E2F-like (mammalian transcription factor)(efl-3)	1	0	0	
+Enoyl-CoA Hydratase(ech-1.2)	1	0	0	
+Target Of Splicing(tos-1)	1	0	0	
+Nuclear hormone receptor family member nhr-40(nhr-40)	1	0	0	
+Acyl-CoA dehydrogenase family member 11(acdh-11)	1	0	0	
+hypothetical protein(W09D10.1)	1	0	0	
+Synaptobrevin-1(snb-1)	1	0	0	
+hypothetical protein(D2030.2)	1	0	0	
+myelin regulatory factor related(myrf-1)	1	0	0	
+hypothetical protein(Y37D8A.16)	1	0	0	
+MTM (myotubularin) family(mtm-6)	1	0	0	
+Serine/threonine-protein kinase pak-1(pak-1)	1	0	0	
+hypothetical protein(C26D10.3)	1	0	0	
+CeNTaurin(cnt-1)	1	0	0	
+Phosphocholine CYtidylylTransferase(pcyt-1)	1	0	0	
+Dual specificity mitogen-activated protein kinase kinase sek-1(sek-1)	1	0	0	
+hypothetical protein(F49E2.5)	1	0	0	
+Forkhead box protein O(daf-16)	1	0	0	
+Probable 39S ribosomal protein L35, mitochondrial(mrpl-35)	1	0	0	
+Polyadenylation Factor Subunit homolog(pfs-2)	1	0	0	
+Nuclear hormone receptor family member daf-12(daf-12)	1	0	0	
+Suppressor/enhancer of lin-12 protein 9(sel-9)	1	0	0	
+Dual-Leucine zipper Kinase(dlk-1)	1	0	0	
+hypothetical protein(mec-14)	1	0	0	
+Eukaryotic translation initiation factor 2-alpha kinase pek-1(pek-1)	1	0	0	
+Heat shock protein Hsp-16.1/Hsp-16.11(hsp-16.1)	1	0	0	
+Connector enhancer of kinase suppressor of ras(cnk-1)	1	0	0	
+Mitogen-activated protein kinase sma-5(sma-5)	1	0	0	
+Dwarfin sma(daf-8)	1	0	0	
+PHd Finger family(phf-15)	1	0	0	
+ABC transporter ATP-binding protein/permease wht-3(wht-3)	1	0	0	
+SMAll(sma-1)	1	0	0	
+MonoCarboxylate Transporter family(mct-6)	1	0	0	
+MIZ-type zinc finger putative transcription factor(miz-1)	1	0	0	
+T-box protein 2(tbx-2)	1	0	0	
+DumPY: shorter than wild-type(dpy-17)	1	0	0	
+Cell surface receptor daf-4(daf-4)	1	0	0	
+cAMP-dependent protein kinase catalytic subunit(kin-1)	1	0	0	
+hypothetical protein(F09E5.11)	1	0	0	
+Enhanced RNAI (RNA interference)(eri-6)	0	1	0	
+Probable DNA-directed RNA polymerase III subunit RPC6(W09C3.4)	0	1	0	
+Mitochondrial Ribosomal Protein, Small(mrps-28)	0	1	0	
+hypothetical protein(ZK1127.6)	0	1	0	
+Cullin-4(cul-4)	0	1	0	
+hypothetical protein(C30H7.2)	0	1	0	
+hypothetical protein(let-355)	0	1	0	
+Oxysterol-binding protein(obr-4)	0	1	0	
+hypothetical protein(C06A5.3)	0	1	0	
+hypothetical protein(ZK632.9)	0	1	0	
+Ubiquitin carboxyl-terminal hydrolase(usp-5)	0	1	0	
+yeast RBX (ring finger protein) homolog(rbx-2)	0	1	0	
+SKp1 Related (ubiquitin ligase complex component)(skr-12)	0	1	0	
+hypothetical protein(D2045.8)	0	1	0	
+hypothetical protein(C37A2.8)	0	1	0	
+Stress-induced-phosphoprotein 1(sti-1)	0	1	0	
+C-type LECtin(clec-205)	0	1	0	
+hypothetical protein(Y56A3A.6)	0	1	0	
+Nuclear Hormone Receptor family(nhr-45)	0	1	0	
+SCAVenger receptor (CD36 family) related(scav-3)	0	1	0	
+Transient receptor potential channel(gon-2)	0	1	0	
+Alanine--tRNA ligase, mitochondrial(aars-1)	0	1	0	
+hypothetical protein(C31H5.6)	0	1	0	
+THaumatiN family(thn-1)	0	1	0	
+hypothetical protein(C29F9.8)	0	1	0	
+Nicalin(nra-2)	0	1	0	
+Dual specificity mitogen-activated protein kinase kinase mek-1(mek-1)	0	1	0	
+Transcription factor fos-1(fos-1)	0	1	0	
+Cystatin(cpi-2)	0	1	0	
+Cytosolic Fe-S cluster assembly factor NUBP1 homolog(nubp-1)	0	1	0	
+hypothetical protein(B0416.5)	0	1	0	
+hypothetical protein(C01B9.1)	0	1	0	
+hypothetical protein(F55A3.2)	0	1	0	
+NURF (nucleosome remodeling factor) complex homolog(nurf-1)	0	1	0	
+Histone-lysine N-methyltransferase mes-2(mes-2)	0	1	0	
+Helix Loop Helix(hlh-30)	0	1	0	
+DystroGlycaN(dgn-1)	0	1	0	
+hypothetical protein(F30B5.4)	0	1	0	
+Germinal Center Kinase family(gck-1)	0	1	0	
+Protein lin-14(lin-14)	0	1	0	
+Probable S-adenosylmethionine synthase 1(sams-1)	0	1	0	
+Probable calcium-binding mitochondrial carrier K02F3.2(K02F3.2)	0	1	0	
+2 (Zwei) IG domain protein(zig-11)	0	1	0	
+hypothetical protein(W05H12.1)	0	1	0	
+hypothetical protein(W09C5.1)	0	1	0	
+Sex-determining protein fem-1(fem-1)	0	1	0	
+Cullin-5(cul-5)	0	1	0	
+homologous to Drosophila SQD (squid) protein(sqd-1)	0	1	0	
+Zinc MetalloProtease(zmp-2)	0	1	0	
+Mitochondrial import inner membrane translocase subunit Tim9(tin-9.1)	0	1	0	
+Splicing factor 3B subunit 6-like protein(C50D2.5)	0	1	0	
+DNaJ domain (prokaryotic heat shock protein)(dnj-13)	0	1	0	
+PhosphatidylInositol Transfer Protein family(pitp-1)	0	1	0	
+Equilibrative Nucleoside Transporter(ent-2)	0	1	0	
+hypothetical protein(C36E8.1)	0	1	0	
+ALdehyde deHydrogenase(alh-6)	0	1	0	
+hypothetical protein(F40F8.11)	0	1	0	
+Protein Kinase, cGMP-dependent(pkg-2)	0	1	0	
+Neuropeptide-Like Protein(nlp-40)	0	1	0	
+Caffeine Induced Death (S. pombe Cid) homolog(cid-1)	0	1	0	
+hypothetical protein(C53D5.5)	0	1	0	
+Suppressor of PAr-Two defect(spat-3)	0	1	0	
+MADF domain transcription factor(madf-11)	0	1	0	
+EPHeXin (Eph-interacting GEF) homolog(ephx-1)	0	1	0	
+hypothetical protein(C24F3.2)	0	1	0	
+hypothetical protein(daf-14)	0	1	0	
+AIP1 (Actin Interacting Protein 1) Like(aipl-1)	0	1	0	
+hypothetical protein(K08F9.4)	0	1	0	
+O-linked GlcNAc Transferase(ogt-1)	0	1	0	
+hypothetical protein(tag-234)	0	1	0	
+hypothetical protein(F13H8.2)	0	1	0	
+UreidoPropionase Beta(upb-1)	0	1	0	
+Serine/threonine-protein kinase sma-6(sma-6)	0	1	0	
+SUn (SUN) domain Containing Ossification factor homolog(suco-1)	0	1	0	
+hypothetical protein(emb-4)	0	0	1	
+hypothetical protein(Y119C1B.5)	0	0	1	
+hypothetical protein(F11E6.6)	0	0	1	
+Abnormal cell migration protein 10(mig-10)	0	0	1	
+hypothetical protein(F10E9.11)	0	0	1	
+hypothetical protein(B0303.3)	0	0	1	
+Zinc metalloproteinase nas-7(nas-7)	0	0	1	
+Acyl CoA DeHydrogenase(acdh-12)	0	0	1	
+Thymidylate synthase(tyms-1)	0	0	1	
+hypothetical protein(F52G2.3)	0	0	1	
+G2/mitotic-specific cyclin-A1(cya-1)	0	0	1	
+MAGUK family(magu-2)	0	0	1	
+Translocon-associated protein subunit beta(trap-2)	0	0	1	
+Lipoamide acyltransferase component of branched-chain alpha-keto acid dehydrogenase complex, mitochondrial(dbt-1)	0	0	1	
+Nose resistant to fluoxetine protein 6(nrf-6)	0	0	1	
+Ubiquitin-like protease 4(ulp-4)	0	0	1	
+hypothetical protein(F10B5.8)	0	0	1	
+STAUfen (dsRNA binding protein) homolog(stau-1)	0	0	1	
+Signal transducing adapter molecule 1(stam-1)	0	0	1	
+human FANCD2 (Fanconi's anemia defect) ortholog(fcd-2)	0	0	1	
+CalNeXin(cnx-1)	0	0	1	
+hypothetical protein(H11E01.3)	0	0	1	
+Heterogeneous nuclear RibonucleoProtein (HnRNP) K homolog(hrpk-1)	0	0	1	
+AP-2 Transcription Factor family(aptf-4)	0	0	1	
+Annexin(nex-2)	0	0	1	
+SWI/SNF-related matrix-associated actin-dependent regulator of chromatin subfamily A containing DEAD/H box 1 homolog(M03C11.8)	0	0	1	
+Meiotic spindle formation protein 2(mei-2)	0	0	1	
+NeuroPeptide Receptor family(npr-30)	0	0	1	
+VANG (Van Gogh/Strabismus planar polarity protein) homolog(vang-1)	0	0	1	
+CeNTaurin(cnt-2)	0	0	1	
+CULlin(cul-3)	0	0	1	
+TWiK family of potassium channels(twk-26)	0	0	1	
+Exocyst complex component 1(sec-3)	0	0	1	
+hypothetical protein(F19H6.4)	0	0	1	
+Glyceraldehyde-3-phosphate dehydrogenase 3(gpd-3)	0	0	1	
+AuTophaGy (yeast Atg homolog)(atg-9)	0	0	1	
+hypothetical protein(C01G6.5)	0	0	1	
+Coiled coil Helix Coiled coiled Helix domain(chch-3)	0	0	1	
+Protein sax-3(sax-3)	0	0	1	
+DNA polymerase(Y47D3A.29)	0	0	1	
+FiZzy Related family(fzr-1)	0	0	1	
+Endophilin-Related Protein(erp-1)	0	0	1	
+Tankyrase-like protein(tank-1)	0	0	1	
+hypothetical protein(F52A8.5)	0	0	1	
+hypothetical protein(F10C1.8)	0	0	1	
+DPH3 homolog(dph-3)	0	0	1	
+hypothetical protein(T10B5.3)	0	0	1	
+TAF (TBP-associated transcription factor) family(taf-12)	0	0	1	
+Nuclear Hormone Receptor family(nhr-86)	0	0	1	
+kNOB-like posterior (NO Backside)(nob-1)	0	0	1	
+hypothetical protein(C54G4.9)	0	0	1	
+Peptidyl-prolyl cis-trans isomerase 4(cyn-4)	0	0	1	
+Alpha-1,4 glucan phosphorylase(T22F3.3)	0	0	1	
+Polypeptide N-acetylgalactosaminyltransferase 5(gly-5)	0	0	1	
+tRNA (guanine-N(7)-)-methyltransferase(W02B12.10)	0	0	1	
+Retinoblastoma Binding Protein Like(rbpl-1)	0	0	1	
+Invertebrate LYSozyme(ilys-5)	0	0	1	
+MAD-Like(mdl-1)	0	0	1	
+Phosphotransferase(hxk-1)	0	0	1	
+Prion-like-(Q/N-rich)-domain-bearing protein(pqn-51)	0	0	1	
+Uncharacterized serine carboxypeptidase F13S12.6(F13D12.6)	0	0	1	
+Protein Phosphatase Four Regulatory subunit(ppfr-1)	0	0	1	
+hypothetical protein(Y49G5B.1)	0	0	1	
+Eukaryotic translation initiation factor 4E-5(ife-5)	0	0	1	
+Mitogen-activated protein kinase kinase kinase mom-4(mom-4)	0	0	1	
+Helix Loop Helix(hlh-29)	0	0	1	
+Receptor Mediated Endocytosis(rme-1)	0	0	1	
+ERCC (DNA excision repair protein) homolog(ercc-1)	0	0	1	
+Gastrulation defective protein 1(gad-1)	0	0	1	
+human UTX (Ubiquitously transcribed TPR on X) homolog(utx-1)	0	0	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-20)	0	0	1	
+INSulin related(ins-33)	0	0	1	
+hypothetical protein(Y69A2AR.21)	0	0	1	
+MAD (yeast Mitosis arrest DeFicient) related(mdf-2)	0	0	1	
+Lateral Signaling Target(lst-1)	0	0	1	
+Apical Junction Molecule(ajm-1)	0	0	1	
+hypothetical protein(C31C9.2)	0	0	1	
+AdaPtin, Alpha chain (clathrin associated complex)(apa-2)	0	0	1	
+Intermediate filament protein ifp-1(ifp-1)	0	0	1	
+hypothetical protein(W02B8.2)	0	0	1	
+Pyruvate dehydrogenase E1 component subunit beta, mitochondrial(pdhb-1)	0	0	1	
+ER lumen protein-retaining receptor(erd-2)	0	0	1	
+Protein roller-3(rol-3)	0	0	1	
+Cell division cycle protein 73(cdc-73)	0	0	1	
+Rho GTPase Activating protein(rga-2)	0	0	1	
+hypothetical protein(T23B12.6)	0	0	1	
+RNP (RRM RNA binding domain) containing(rnp-2)	0	0	1	
+WAPL (Drosophila Wings APart-Like cohesin interactor)(wapl-1)	0	0	1	
+Protein YIPF(W02D9.2)	0	0	1	
+JuMonJi (transcription factor) Domain protein(jmjd-1.2)	0	0	1	
+C.Elegans Chromodomain protein(cec-8)	0	0	1	
+MeDiaTor(mdt-27)	0	0	1	
+hypothetical protein(K07B1.4)	0	0	1	
+ACyLtransferase-like(acl-14)	0	0	1	
+BICaudal D (Drosophila) homolog(bicd-1)	0	0	1	
+Ubiquinol-Cytochrome c oxidoReductase complex(ucr-2.1)	0	0	1	
+hypothetical protein(H24G06.1)	0	0	1	
+hypothetical protein(F22G12.4)	0	0	1	
+HERmaphrodization of XO animals(her-1)	0	0	1	
+Intermediate filament protein ifd-1(ifd-1)	0	0	1	
+hypothetical protein(Y22D7AL.10)	0	0	1	
+40S ribosomal protein S25(rps-25)	0	0	1	
+Lateral-signal-Induced Phosphatase(lip-1)	0	0	1	
+hypothetical protein(F59A6.2)	0	0	1	
+Polyglutamine-repeat protein pqn-41(pqn-41)	0	0	1	
+hypothetical protein(R05H5.5)	0	0	1	
+HnRNP F homolog(hrpf-2)	0	0	1	
+hypothetical protein(Y67H2A.10)	0	0	1	
+HIstone H1 Like(hil-7)	0	0	1	
+DNaJ domain (prokaryotic heat shock protein)(dnj-12)	0	0	1	
+Serine/threonine-protein phosphatase PP1-beta(gsp-2)	0	0	1	
+hypothetical protein(C44H4.4)	0	0	1	
+Drosophila PRicKLe homolog(prkl-1)	0	0	1	
+hypothetical protein(C06G3.5)	0	0	1	
+Probable succinyl-CoA ligase [ADP/GDP-forming] subunit alpha, mitochondrial(sucl-1)	0	0	1	
+hypothetical protein(Y53G8AM.8)	0	0	1	
+K+/Cl-Cotransporter(kcc-1)	0	0	1	
+UBX-containing protein in Nematodes(ubxn-3)	0	0	1	
+Nipped-B-like protein pqn-85(pqn-85)	0	0	1	
+hypothetical protein(F47G9.1)	0	0	1	
+hypothetical protein(pam-1)	0	0	1	
+hypothetical protein(F32E10.5)	0	0	1	
+T-box protein 12(mab-9)	0	0	1	
+hypothetical protein(F55A11.1)	0	0	1	
+hypothetical protein(C06A6.2)	0	0	1	
+Alpha-catenin-like protein hmp-1(hmp-1)	0	0	1	
+PLaSTin (actin bundling protein) homolog(plst-1)	0	0	1	
+hypothetical protein(C14B9.10)	0	0	1	
+DyNactin Complex component(dnc-4)	0	0	1	
+Nuclear hormone receptor family member nhr-31(nhr-31)	0	0	1	
+hypothetical protein(R12C12.7)	0	0	1	
+hypothetical protein(ndg-4)	0	0	1	
+Prenylated Rab Acceptor 1 domain Family(praf-3)	0	0	1	
+Alanine--glyoxylate aminotransferase 2-like(T01B11.2)	0	0	1	
+SyNaptoBrevin related(snb-2)	0	0	1	
+hypothetical protein(C54E4.4)	0	0	1	
+hypothetical protein(T28H10.3)	0	0	1	
+hypothetical protein(vab-19)	0	0	1	
+Protein phosphatase 1 regulatory subunit(H18N23.2)	0	0	1	
+Probable actin-related protein 2/3 complex subunit 4(arx-6)	0	0	1	
+Mitochondrial Processing Peptidase Beta(mppb-1)	0	0	1	
+hypothetical protein(R186.1)	0	0	1	
+hypothetical protein(lin-38)	0	0	1	
+hypothetical protein(F47G3.3)	0	0	1	
+High Incidence of Males (increased X chromosome loss)(him-17)	0	0	1	
+MORC (mouse microrchidia) family CW-type zinc finger protein(morc-1)	0	0	1	
+NASP (human Nuclear Autoantigenic Sperm Protein) homolog(nasp-2)	0	0	1	
+Mitochondrial Ribosomal Protein, Small(mrps-26)	0	0	1	
+TOLl (Drosophila) family(tol-1)	0	0	1	
+PSF (yeast Partner of Sld Five) conserved replication factor, GINS complex(psf-3)	0	0	1	
+BIR (baculovirus inhibitory repeat) family(bir-2)	0	0	1	
+LETM1 (Leucine zipper, EF-hand, TransMembrane mitochondrial protein) homolog(letm-1)	0	0	1	
+DNA N6-methyl adenine demethylase(F09F7.7)	0	0	1	
+Signal Element on Autosome(sea-2)	0	0	1	
+Protein Wnt-2(cwn-2)	0	0	1	
+CAMTA (CAlModulin-binding Transcriptional activator)(camt-1)	0	0	1	
+Probable dynactin subunit 2(dnc-2)	0	0	1	
+FarNesylTransferase, Beta subunit(fntb-1)	0	0	1	
+Probable histone chaperone asf-1(unc-85)	0	0	1	
+hypothetical protein(Y37E3.8)	0	0	1	
+hypothetical protein(rad-51)	0	0	1	
+Nuclear Pore complex Protein(npp-13)	0	0	1	
+NeuroFibroMatosis homolog(nfm-1)	0	0	1	
+Cyclin-dependent kinase 7(cdk-7)	0	0	1	
+hypothetical protein(R05F9.6)	0	0	1	
+BTB/POZ Domain-containing protein homolog(btbd-10)	0	0	1	
+KH domain-containing protein akap-1(akap-1)	0	0	1	
+TRYpsin-like protease(try-1)	0	0	1	
+Serine hydroxymethyltransferase(mel-32)	0	0	1	
+hypothetical protein(F32B5.6)	0	0	1	
+CathePsin Z(cpz-1)	0	0	1	
+Peptidyl-prolyl cis-trans isomerase 7(cyn-7)	0	0	1	
+Actin-related protein 3(arx-1)	0	0	1	
+Putative nudix hydrolase 6(ndx-6)	0	0	1	
+Carnitine Palmitoyl Transferase(cpt-2)	0	0	1	
+Vasa-and Belle-like Helicase(vbh-1)	0	0	1	
+hypothetical protein(F36D3.1)	0	0	1	
+human/fission yeast MIS (MInichromosome Stability) homolog(mis-12)	0	0	1	
+RAs-related GTP binding protein C homolog(ragc-1)	0	0	1	
+AlkylGuanine DNA alkylTransferase(agt-2)	0	0	1	
+Zinc finger putative Transcription Factor family(ztf-27)	0	0	1	
+LIGase(lig-4)	0	0	1	
+P-GlycoProtein related(pgp-9)	0	0	1	
+Disco-Interacting Protein 2 homolog(dip-2)	0	0	1	
+hypothetical protein(C32D5.8)	0	0	1	
+hypothetical protein(C18E3.9)	0	0	1	
+Probable splicing factor, arginine/serine-rich 5(rsp-5)	0	0	1	
+ACINus (mammalian Apoptotic Chromatin condensation Inducer in the Nucleus) homolog(acin-1)	0	0	1	
+Probable replication factor C subunit 5(F44B9.8)	0	0	1	
+Kinesin-like protein unc-104(unc-104)	1	1	0	
+hypothetical protein(lin-66)	1	1	0	
+IRE1 kinase related(ire-1)	1	1	0	
+60S ribosomal protein L11-2(rpl-11.2)	1	1	0	
+Ribosomal Protein, Large subunit(rpl-32)	1	1	0	
+Putative H/ACA ribonucleoprotein complex subunit 4(K01G5.5)	1	1	0	
+Ribosomal protein S6 kinase beta(rsks-1)	1	1	0	
+Protein lin-61(lin-61)	1	1	0	
+U3 small nucleolar ribonucleoprotein protein MPP10(Y75B8A.7)	1	1	0	
+Pre-rRNA-processing protein pro-1(pro-1)	1	1	0	
+Ribosomal Protein, Small subunit(rps-24)	1	1	0	
+Protein lin-41(lin-41)	1	1	0	
+hypothetical protein(lin-29)	1	1	0	
+hypothetical protein(eat-16)	1	1	0	
+40S ribosomal protein S28(rps-28)	1	1	0	
+G1/S-specific cyclin-D(cyd-1)	1	1	0	
+B lymphocyte-induced maturation protein 1 homolog(blmp-1)	1	1	0	
+Vacuolar H ATPase(vha-19)	1	1	0	
+Ribosomal Protein, Small subunit(rps-30)	1	1	0	
+Serine/threonine-protein kinase mig-15(mig-15)	1	1	0	
+Heat Shock Factor(hsf-1)	1	1	0	
+hypothetical protein(let-522)	1	1	0	
+hypothetical protein(Y87G2A.1)	1	1	0	
+Probable S-adenosylmethionine synthase 3(sams-3)	1	1	0	
+hypothetical protein(C46G7.1)	1	1	0	
+Axin-like protein pry-1(pry-1)	1	1	0	
+CKA And Striatin Homolog(cash-1)	1	1	0	
+Insulin-like receptor subunit beta(daf-2)	1	1	0	
+Prion-like-(Q/N-rich)-domain-bearing protein(pqn-27)	1	1	0	
+hypothetical protein(hsr-9)	1	1	0	
+Protein lin-49(lin-49)	1	1	0	
+Zinc Finger and Homeobox(zfh-2)	1	1	0	
+G protein, Subunit Alpha(gsa-1)	1	1	0	
+hypothetical protein(egl-30)	1	1	0	
+Probable coatomer subunit delta(copd-1)	1	1	0	
+Alcohol/Ribitol Dehydrogenase family(ard-1)	1	1	0	
+Zinc finger protein lin-13(lin-13)	1	1	0	
+Nuclear anchorage protein 1(anc-1)	1	0	1	
+related to yeast Vacuolar Protein Sorting factor(vps-32.1)	1	0	1	
+WD Repeat protein(wdr-46)	1	0	1	
+hypothetical protein(Y39B6A.3)	1	0	1	
+Putative peroxisomal biogenesis factor 19(prx-19)	1	0	1	
+MiTochondrial Carrier Homolog(mtch-1)	1	0	1	
+hypothetical protein(F31D4.2)	1	0	1	
+Probable methylcrotonoyl-CoA carboxylase beta chain, mitochondrial(F02A9.4)	1	0	1	
+hypothetical protein(T09A5.5)	1	0	1	
+Probable ubiquitin carboxyl-terminal hydrolase ubh-4(ubh-4)	1	0	1	
+Tropomodulin(unc-94)	1	0	1	
+DAB (Drosophila disabled) homolog(dab-1)	1	0	1	
+hypothetical protein(Y51H4A.15)	1	0	1	
+TuBulin, Beta(tbb-1)	1	0	1	
+SPeCtrin(spc-1)	1	0	1	
+Exocyst complex component 2(sec-5)	1	0	1	
+AP-2 complex subunit mu(dpy-23)	1	0	1	
+Probable NADH dehydrogenase [ubiquinone] iron-sulfur protein 6, mitochondrial(nduf-6)	1	0	1	
+Putative ribosomal protein S6 kinase alpha-2(rskn-2)	1	0	1	
+Mitotic chromosome and X-chromosome-associated protein mix-1(mix-1)	1	0	1	
+Homeobox protein unc-62(unc-62)	1	0	1	
+Nucleolar complex protein 3 homolog(C37H5.5)	1	0	1	
+Protein maternal effect lethal 26(mel-26)	1	0	1	
+hypothetical protein(mec-8)	1	0	1	
+Kinesin light chain(klc-2)	1	0	1	
+COHesin family(coh-1)	1	0	1	
+Probable DNA replication complex GINS protein PSF2(psf-2)	1	0	1	
+Myotonic dystrophy-Related, Cdc42-binding Kinase homolog(mrck-1)	1	0	1	
+NADH-cytochrome b5 reductase(hpo-19)	1	0	1	
+hypothetical protein(unc-70)	1	0	1	
+PArtner of DroSHa (DRSH-1 interactor)(pash-1)	1	0	1	
+hypothetical protein(hpo-9)	1	0	1	
+Enhancer of EfL-1 mutant phenotype(eel-1)	1	0	1	
+Calcium-transporting ATPase(mca-3)	1	0	1	
+Nuclear Hormone Receptor family(nhr-61)	1	0	1	
+AuTophaGy (yeast Atg homolog)(atg-18)	1	0	1	
+Actin-Related Proteins(arp-1)	1	0	1	
+SUPpressor(sup-37)	1	0	1	
+Putative peroxisome assembly protein 12(prx-12)	1	0	1	
+Suppressor of Mec and Unc defects(smu-1)	1	0	1	
+hypothetical protein(unc-39)	1	0	1	
+Branched-chain-amino-acid aminotransferase, cytosolic(bcat-1)	1	0	1	
+ATP synthase lipid-binding protein, mitochondrial(Y82E9BR.3)	1	0	1	
+hypothetical protein(Y82E9BR.16)	1	0	1	
+YTochrome B(cytb-5.1)	1	0	1	
+Proteasome subunit alpha type-2(pas-2)	1	0	1	
+Lipoyl synthase, mitochondrial(M01F1.3)	1	0	1	
+Conserved oligomeric Golgi complex subunit 2(cogc-2)	1	0	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-28)	1	0	1	
+hypothetical protein(C50F4.4)	1	0	1	
+RNA polymerase II-associated factor 1 homolog(pafo-1)	1	0	1	
+Myotubularin-related protein 3(mtm-3)	1	0	1	
+EMC Endoplasmic Membrane protein Complex (yeast EMC) homolog(emc-6)	1	0	1	
+BIR (baculovirus inhibitory repeat) family(bir-1)	1	0	1	
+DNA polymerase delta catalytic subunit(F10C2.4)	1	0	1	
+Nuclear Hormone Receptor family(nhr-66)	1	0	1	
+hypothetical protein(R04F11.2)	1	0	1	
+DEAD boX helicase homolog(ddx-17)	1	0	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-15)	1	0	1	
+MeValonate Kinase(mvk-1)	1	0	1	
+related to yeast Vacuolar Protein Sorting factor(vps-24)	1	0	1	
+Probable malate dehydrogenase, mitochondrial(mdh-2)	1	0	1	
+AdaPtin, Mu/medium chain (clathrin associated complex)(apm-3)	1	0	1	
+MeDiaTor(mdt-26)	1	0	1	
+Ectopic P granules protein 4(epg-4)	1	0	1	
+Putative methyltransferase B0361.6(B0361.6)	1	0	1	
+Conserved Oligomeric Golgi (COG) Component(cogc-1)	1	0	1	
+CalPoNin(cpn-3)	1	0	1	
+Probable elongation factor 1-beta/1-delta 1(eef-1B.1)	1	0	1	
+INtegrator complex SubuniT 1 homolog(inst-1)	0	1	1	
+CCR (yeast CCR4/NOT complex component) homolog(ccr-4)	0	1	1	
+Probable protein disulfide-isomerase A4(C14B9.2)	0	1	1	
+Kinetochore null protein 1(knl-1)	0	1	1	
+Dual specificity tyrosine-phosphorylation-regulated kinase mbk-2(mbk-2)	0	1	1	
+Maternal Effect Sterile(mes-3)	0	1	1	
+hypothetical protein(R186.8)	0	1	1	
+yeast PRP (splicing factor) related(prp-31)	0	1	1	
+Spindle assembly abnormal protein 6(sas-6)	0	1	1	
+TRansport Protein Particle(trpp-8)	0	1	1	
+Histone H3-like centromeric protein hcp-3(hcp-3)	0	1	1	
+yeast SEC homolog(sec-61)	0	1	1	
+Serine/threonine-protein kinase tousled-like 1(tlk-1)	0	1	1	
+hypothetical protein(ZK484.4)	0	1	1	
+hypothetical protein(T13H5.4)	0	1	1	
+Methionine AminoPeptidase(map-2)	0	1	1	
+hypothetical protein(san-1)	0	1	1	
+Pharyngeal Enhancer Binding(peb-1)	0	1	1	
+Uridine MonoPhosphate Synthetase(umps-1)	0	1	1	
+human ATX (ataxin) related(atx-2)	0	1	1	
+1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase beta egl-8(egl-8)	0	1	1	
+60S acidic ribosomal protein P2(C37A2.7)	0	1	1	
+hypothetical protein(mel-11)	0	1	1	
+Regulator of Spindle Assembly(rsa-2)	0	1	1	
+hypothetical protein(ekl-1)	0	1	1	
+Sex-determining transformer protein 1(tra-1)	0	1	1	
+C. Elegans Homeobox(ceh-18)	0	1	1	
+Rho GTPase Activating protein(rga-4)	0	1	1	
+Pumilio domain-containing protein 12(puf-12)	0	1	1	
+GLIoTactin (Drosophila neuroligin-like) homolog(glit-1)	0	1	1	
+Maternal uncoordinated protein 2(mau-2)	0	1	1	
+Nucleoporin NUP53(npp-19)	0	1	1	
+60S ribosomal protein L23a 2(rpl-25.2)	0	1	1	
+hypothetical protein(Y39H10A.6)	0	1	1	
+Probable isocitrate dehydrogenase [NAD] subunit alpha, mitochondrial(idha-1)	0	1	1	
+Aspergillus NUclear Division related(nud-1)	0	1	1	
+MUTator(mut-2)	0	1	1	
+Son of sevenless homolog(sos-1)	0	1	1	
+Poly(A) RNA polymerase gld-4(gld-4)	0	1	1	
+Probable ATP synthase subunit g 2, mitochondrial(asg-2)	0	1	1	
+hypothetical protein(K07F5.12)	0	1	1	
+Probable 26S protease regulatory subunit 4(rpt-2)	0	1	1	
+hypothetical protein(mus-101)	0	1	1	
+Casein kinase II subunit alpha(kin-3)	0	1	1	
+hypothetical protein(Y51H1A.3)	0	1	1	
+Protein lap1(let-413)	0	1	1	
+hypothetical protein(C36E8.4)	0	1	1	
+LIM Domain Binding protein(ldb-1)	0	1	1	
+DNA PRImase homolog(pri-2)	0	1	1	
+COP9/Signalosome and eIF3 complex-shared subunit 1(cif-1)	0	1	1	
+Probable prefoldin subunit 3(pfd-3)	0	1	1	
+hypothetical protein(unc-45)	0	1	1	
+Protein pad-1(pad-1)	0	1	1	
+hypothetical protein(C02B10.5)	0	1	1	
+SMN (Survival of Motor Neuron protein) Related(smr-1)	0	1	1	
+hypothetical protein(F47G4.4)	0	1	1	
+POLH (DNA polymerase eta) homolog(polh-1)	0	1	1	
+hypothetical protein(ekl-4)	0	1	1	
+Histone H1.1(his-24)	0	1	1	
+Microtubule-Associated Protein Homolog(maph-1.1)	0	1	1	
+DNA polymerase(pole-1)	0	1	1	
+Probable elongation factor 1-gamma(eef-1G)	0	1	1	
+DEnse Body(deb-1)	0	1	1	
+hypothetical protein(Y105E8A.25)	0	1	1	
+TAF (TBP-associated transcription factor) family(taf-10)	0	1	1	
+Spindle assembly abnormal protein 5(sas-5)	0	1	1	
+Protein nipi-3(nipi-3)	0	1	1	
+Integrin beta pat-3(pat-3)	0	1	1	
+SQuashed Vulva(sqv-1)	0	1	1	
+FEMinization of XX and XO animals(fem-3)	0	1	1	
+hypothetical protein(K10D2.5)	0	1	1	
+hypothetical protein(gut-2)	0	1	1	
+ADP-ribosylation factor 1-like 2(arf-1.2)	0	1	1	
+hypothetical protein(spe-15)	0	1	1	
+Serine/threonine-protein kinase par-1(par-1)	0	1	1	
+hypothetical protein(F01F1.11)	0	1	1	
+proteasome Regulatory Particle, Non-ATPase-like(rpn-5)	0	1	1	
+Pre-rRNA-processing protein TSR1 homolog(tag-151)	0	1	1	
+hypothetical protein(Y53C12B.1)	0	1	1	
+hypothetical protein(C23G10.8)	0	1	1	
+Eukaryotic Initiation Factor(eif-3.I)	0	1	1	
+Interactor of FizzY protein(ify-1)	0	1	1	
+hypothetical protein(Y54F10AR.1)	0	1	1	
+Protein pop-1(pop-1)	0	1	1	
+Protein kinase C-like 3(pkc-3)	0	1	1	
+SWI/SNF nucleosome remodeling complex component(swsn-4)	0	1	1	
+Replication factor C subunit 4(rfc-4)	0	1	1	
+Putative zinc finger protein C02F5.12(C02F5.12)	0	1	1	
+hypothetical protein(K04G7.1)	0	1	1	
+fatty Acid CoA Synthetase family(acs-4)	0	1	1	
+yeast SEC homolog(sec-31)	0	1	1	
+protein KINase(kin-4)	0	1	1	
+hypothetical protein(M04B2.4)	0	1	1	
+hypothetical protein(mig-38)	0	1	1	
+Vacuolar protein sorting-associated protein 35(vps-35)	0	1	1	
+TRPA cation channel homolog(trpa-1)	0	1	1	
+Succinate dehydrogenase cytochrome b560 subunit, mitochondrial(mev-1)	0	1	1	
+Membrane-associated protein gex-3(gex-3)	1	1	1	
+40S ribosomal protein S23(rps-23)	1	1	1	
+Mitochondrial Ribosomal Protein, Small(mrps-35)	1	1	1	
+Bromodomain-containing protein bet-1(bet-1)	1	1	1	
+Pre-mRNA-splicing factor 8 homolog(prp-8)	1	1	1	
+60S ribosomal protein L24(rpl-24.1)	1	1	1	
+Brix domain-containing protein ZK795.3(ZK795.3)	1	1	1	
+hypothetical protein(T14B4.3)	1	1	1	
+hypothetical protein(sld-2)	1	1	1	
+Egg-laying defective protein 27(egl-27)	1	1	1	
+Mitochondrial import inner membrane translocase subunit Tim10B(tin-9.2)	1	1	1	
+Rho-associated protein kinase let-502(let-502)	1	1	1	
+hypothetical protein(Y48A6C.6)	1	1	1	
+26S proteasome non-ATPase regulatory subunit 3(rpn-3)	1	1	1	
+Lysine--tRNA ligase(kars-1)	1	1	1	
+Defective in germ line development protein 3(gld-3)	1	1	1	
+Proteasome subunit alpha type-4(pas-3)	1	1	1	
+Zinc Finger Protein(zfp-1)	1	1	1	
+Target of rapamycin homolog(let-363)	1	1	1	
+Defective pharyngeal development protein 4(pha-4)	1	1	1	
+Ezrin/Radixin/Moesin(erm-1)	1	1	1	
+ATP synthase subunit(atp-3)	1	1	1	
+60S ribosomal protein L18(rpl-18)	1	1	1	
+60S ribosomal protein L19(rpl-19)	1	1	1	
+hypothetical protein(F59A3.4)	1	1	1	
+Dolichyl-diphosphooligosaccharide--protein glycosyltransferase subunit 2(ostd-1)	1	1	1	
+Cyclin-dependent kinase inhibitor 1(cki-1)	1	1	1	
+Spindle apparatus protein lin-5(lin-5)	1	1	1	
+Probable V-type proton ATPase subunit G(vha-10)	1	1	1	
+Dolichyl-diphosphooligosaccharide--protein glycosyltransferase 48 kDa subunit(ostb-1)	1	1	1	
+Protein patched homolog 1(ptc-1)	1	1	1	
+Mitochondrial import inner membrane translocase subunit TIM14(dnj-21)	1	1	1	
+Nuclear Pore complex Protein(npp-7)	1	1	1	
+SR Protein Kinase(spk-1)	1	1	1	
+V-type proton ATPase subunit D(vha-14)	1	1	1	
+WW domain-containing protein ZK1098.1(ZK1098.1)	1	1	1	
+hypothetical protein(lin-35)	1	1	1	
+hypothetical protein(C32F10.8)	1	1	1	
+EPS (human endocytosis) related(eps-8)	1	1	1	
+T-complex protein 1 subunit alpha(cct-1)	1	1	1	
+hypothetical protein(Y41E3.11)	1	1	1	
+Polyadenylation and cleavage factor homolog 11(pcf-11)	1	1	1	
+V-type proton ATPase 16 kDa proteolipid subunit 1(vha-1)	1	1	1	
+Eukaryotic translation initiation factor 3 subunit G(eif-3.G)	1	1	1	
+Phenylalanine--tRNA ligase beta subunit(fars-3)	1	1	1	
+Phenylalanyl Amino-acyl tRNA Synthetase(fars-1)	1	1	1	
+Ras-like GTP-binding protein rhoA(rho-1)	1	1	1	
+40S ribosomal protein S17(rps-17)	1	1	1	
+Eukaryotic translation initiation factor 5A-2(iff-2)	1	1	1	
+60S ribosomal protein L5(rpl-5)	1	1	1	
+hypothetical protein(lsy-2)	1	1	1	
+Cleavage and Polyadenylation Factor(cpf-1)	1	1	1	
+Kinetochore NuLl(knl-2)	1	1	1	
+Heat shock 70 kDa protein A(hsp-1)	1	1	1	
+Trehalase(tre-1)	1	1	1	
+Enolase(enol-1)	1	1	1	
+T-complex protein 1 subunit beta(cct-2)	1	1	1	
+2,3-bisphosphoglycerate-independent phosphoglycerate mutase(ipgm-1)	1	1	1	
+hypothetical protein(C18E9.4)	1	1	1	
+Non-muscle MYosin(nmy-1)	1	1	1	
+Ribosomal RNA small subunit methyltransferase nep-1(Y39A1A.14)	1	1	1	
+G1/S-specific cyclin-E(cye-1)	1	1	1	
+Transcription factor jun-1(jun-1)	1	1	1	
+Actin-interacting protein 1(unc-78)	1	1	1	
+Asparagine--tRNA ligase, cytoplasmic(nars-1)	1	1	1	
+Glycogenin-1(gyg-1)	1	1	1	
+Adenylosuccinate lyase(adsl-1)	1	1	1	
+Membrane-associated tyrosine-and threonine-specific cdc2-inhibitory kinase wee-1.3(wee-1.3)	1	1	1	
+ELongin B(elb-1)	1	1	1	
+SR Protein (splicing factor)(rsp-8)	1	1	1	
+ATP Synthase B homolog(asb-2)	1	1	1	
+hypothetical protein(F33H1.4)	1	1	1	
+Worm AIF (apoptosis inducing factor) Homolog(wah-1)	1	1	1	
+hypothetical protein(lsy-22)	1	1	1	
+Mediator of RNA polymerase II transcription subunit 22(mdt-22)	1	1	1	
+Probable V-type proton ATPase subunit F(vha-9)	1	1	1	
+HIStone(his-72)	1	1	1	
+Actin-4(act-4)	1	1	1	
+Probable small nuclear ribonucleoprotein E(snr-6)	1	1	1	
+Transitional endoplasmic reticulum ATPase homolog 1(cdc-48.1)	1	1	1	
+Enhancer of PolyComb-like(epc-1)	1	1	1	
+hypothetical protein(Y111B2A.12)	1	1	1	
+Beta-amyloid-like protein(apl-1)	1	1	1	
+RNA Polymerase II (B) subunit(rpb-12)	1	1	1	
+Casein kinase II subunit beta(kin-10)	1	1	1	
+Cytochrome c oxidase subunit 5A, mitochondrial(cco-2)	1	1	1	
+Probable histone-lysine N-methyltransferase lin-59(lin-59)	1	1	1	
+hypothetical protein(let-607)	1	1	1	
+Drosophila Discs LarGe homolog(dlg-1)	1	1	1	
+Nuclear/nucleolar GTP-binding Protein family(ngp-1)	1	1	1	
+F-actin-capping protein subunit beta(cap-2)	1	1	1	
+Dauer or Aging adult Overexpression(dao-5)	1	1	1	
+Vesicle-fusing ATPase(nsf-1)	1	1	1	
+yeast SEC homolog(sec-12)	1	1	1	
+Ribosomal protein L36.A(rpl-36.A)	1	1	1	
+hypothetical protein(lin-40)	1	1	1	
+Cleavage Factor IM (CFIm) homolog(cfim-1)	1	1	1	
+Adenine Nucleotide Translocator(ant-1.1)	1	1	1	
+Lamin-1(lmn-1)	1	1	1	
+40S ribosomal protein S15(rps-15)	1	1	1	
+ACTin(act-5)	1	1	1	
+Histone-lysine N-methyltransferase(set-16)	1	1	1	
+hypothetical protein(Y61A9LA.10)	1	1	1	
+FumarylAcetoacetate Hydrolase(fah-1)	1	1	1	
+Probable NADH dehydrogenase [ubiquinone] iron-sulfur protein 7, mitochondrial(nduf-7)	1	1	1	
+Daf-12-interacting protein 1(din-1)	1	1	1	
+hypothetical protein(F29C4.2)	1	1	1	
+Threonine--tRNA ligase, cytoplasmic(tars-1)	1	1	1	
+Elongation factor 2(eef-2)	1	1	1	
+DNA-directed RNA polymerase subunit beta(rpoa-2)	1	1	1	
+Skp1-related protein(skr-1)	1	1	1	
+Laminin-like protein lam-2(lam-2)	1	1	1	
+60S ribosomal protein L15(rpl-15)	1	1	1	
+DNA helicase(mcm-2)	1	1	1	
+Probable RNA methyltransferase Y17G7B.18(Y17G7B.18)	1	1	1	
+related to yeast Vacuolar Protein Sorting factor(vps-37)	1	1	1	
+mRNA Capping Enzyme Like(cel-1)	1	1	1	
+Probable ribosome biogenesis protein RLP24(rpl-24.2)	1	1	1	
+Hydroxymethylglutaryl-CoA synthase(hmgs-1)	1	1	1	
+Ribosomal Protein, Large subunit(rpl-14)	1	1	1	
+NMUR (NeuroMedin U Receptor) homolog(nmur-4)	1	1	1	
+hypothetical protein(Y55F3AM.3)	1	1	1	
+GEI-4 (Four) Interacting protein(gfi-2)	1	1	1	
+COP9 signalosome complex subunit 4(csn-4)	1	1	1	
+Cytochrome C Oxidase(cco-1)	1	1	1	
+hypothetical protein(Y77E11A.7)	1	1	1	
+SYmmetrical Sister cell hermaphrodite gonad defect(sys-1)	1	1	1	
+Protein SEC13 homolog(npp-20)	1	1	1	
+Aldehyde dehydrogenase(alh-4)	1	1	1	
+CTP synthase(ctps-1)	1	1	1	
+Casein kinase I gamma(csnk-1)	1	1	1	
+Ribosomal RNA-processing protein 7 homolog(ZC434.4)	1	1	1	
+40S ribosomal protein S7(rps-7)	1	1	1	
+Elongation factor G, mitochondrial(gfm-1)	1	1	1	
+PolyA Binding protein(pab-1)	1	1	1	
+hypothetical protein(F25H2.4)	1	1	1	
+Proteasome subunit alpha type-5(pas-5)	1	1	1	
+hypothetical protein(Y57E12AL.6)	1	1	1	
+Eukaryotic translation initiation factor 3 subunit E(eif-3.E)	1	1	1	
+hypothetical protein(K12H4.5)	1	1	1	
+Cadherin-related hmr-1(hmr-1)	1	1	1	
+Probable DNA-directed RNA polymerase II subunit RPB11(rpb-11)	1	1	1	
+Ribosome biogenesis protein BOP1 homolog(Y48B6A.1)	1	1	1	
+hypothetical protein(smgl-2)	1	1	1	
+SNAP (Soluble NSF Attachment Protein) homolog(snap-1)	1	1	1	
+hypothetical protein(vab-10)	1	1	1	
+Masculinisation Of Germline(mog-4)	1	1	1	
+DNaJ domain (prokaryotic heat shock protein)(dnj-22)	1	1	1	
+Eukaryotic translation initiation factor 3 subunit B(eif-3.B)	1	1	1	
+GTP-binding protein SAR1(sar-1)	1	1	1	
+AT hook Transcription Factor family(attf-3)	1	1	1	
+GEX Interacting protein(gei-4)	1	1	1	
+14-3-3-like protein 2(ftt-2)	1	1	1	
+GDP-fucose transporter(nstp-10)	1	1	1	
+Histone H4(his-37)	1	1	1	
+Temporal Asymmetry between Division of Sister cells(tads-1)	1	1	1	
+hypothetical protein(Y48G10A.4)	1	1	1	
+KNL (kinetochore null) Binding Protein(kbp-4)	1	1	1	
+60S ribosomal protein L31(rpl-31)	1	1	1	
+hypothetical protein(W04A4.5)	1	1	1	
+hypothetical protein(W09C5.8)	1	1	1	
+Protein skinhead-1(skn-1)	1	1	1	
+C-type LECtin(clec-178)	1	1	1	
+Putative RNA-binding protein R05D3.8(R05D3.8)	1	1	1	
+Chaperonin homolog Hsp-60, mitochondrial(hsp-60)	1	1	1	
+Probable RNA-binding protein EIF1AD(ZK856.11)	1	1	1	
+Lin-12 And Glp-1 phenotype(lag-1)	1	1	1	
+Cyclin-dependent kinase 4 homolog(cdk-4)	1	1	1	
+Protein argonaute(alg-1)	1	1	1	
+Tropomyosin isoforms a/b/d/f(lev-11)	1	1	1	
+AP complex subunit beta(apb-1)	1	1	1	
+LiPid Depleted(lpd-9)	1	1	1	
+hypothetical protein(let-805)	1	1	1	
+Vacuolar H ATPase(vha-8)	1	1	1	
+DYnein Chain, light Intermediate(dyci-1)	1	1	1	
+SWI/SNF nucleosome remodeling complex component(swsn-3)	1	1	1	
+TU elongation Factor (EF-Tu), Mitochondrial(tufm-1)	1	1	1	
+hypothetical protein(F56F11.4)	1	1	1	
+PLeiotropic ReGulator (vertebrate) homolog(plrg-1)	1	1	1	
+RuvB-like 2(ruvb-2)	1	1	1	
+Ubiquitin-like protein 1(ubl-1)	1	1	1	
+Actin-2(act-2)	1	1	1	
+Actin-1(act-1)	1	1	1	
+Actin-Related Proteins(arp-11)	1	1	1	
+ELAV-Type RNA binding-protein family(etr-1)	1	1	1	
+hypothetical protein(ben-1)	1	1	1	
+Protein lag-3(sel-8)	1	1	1	
+V-type proton ATPase 16 kDa proteolipid subunit 2/3(vha-2)	1	1	1	
+Chromosome condensation protein dpy-27(dpy-27)	1	1	1	
+Sterile alpha and TIR motif-containing protein tir-1(tir-1)	1	1	1	
+Dynamin(dyn-1)	1	1	1	
+60S ribosomal protein L3(rpl-3)	1	1	1	
+Probable splicing factor, arginine/serine-rich 6(rsp-6)	1	1	1	
+Protein lin-15B(lin-15B)	1	1	1	
+V-type proton ATPase catalytic subunit A(vha-13)	1	1	1	
+Tubulin beta-2 chain(tbb-2)	1	1	1	
+Chromosome-Segregation and RNAi deficient(csr-1)	1	1	1	
+Probable small nuclear ribonucleoprotein Sm D2(snr-4)	1	1	1	
+hypothetical protein(F20D12.2)	1	1	1	
+CYclin L(cyl-1)	1	1	1	
+Mitogen-activated protein kinase mpk-1(mpk-1)	1	1	1	
+26S protease regulatory subunit 7(rpt-1)	1	1	1	
+Cyclin-dependent kinase 12(cdk-12)	1	1	1	
+G patch domain-containing protein 1 homolog(R07E5.1)	1	1	1	
+40S ribosomal protein S3a(rps-1)	1	1	1	
+Probable signal recognition particle subunit SRP68(srpa-68)	1	1	1	
+Chaperonin Containing TCP-1(cct-5)	1	1	1	
+hypothetical protein(T26A8.4)	1	1	1	
+Polycomb protein mes-6(mes-6)	1	1	1	
+hypothetical protein(T04A8.6)	1	1	1	
+hypothetical protein(Y71H2AM.5)	1	1	1	
+SNAPc (Small Nuclear RNA Activating Complex) homolog(snpc-3.4)	1	1	1	
+La-related protein 1(larp-1)	1	1	1	
+60S ribosomal protein L7(rpl-7)	1	1	1	
+Ras-related protein rab-11.1(rab-11.1)	1	1	1	
+TAF (TBP-associated transcription factor) family(taf-4)	1	1	1	
+Probable coatomer subunit beta'(copb-2)	1	1	1	
+Inhibitor of Cell Death(icd-2)	1	1	1	
+Probable serine/threonine-protein phosphatase PP2A regulatory subunit(paa-1)	1	1	1	
+LiPIN (mammalian lipodystrophy associated) homolog(lpin-1)	1	1	1	
+mRNA transport homolog 4(mtr-4)	1	1	1	
+Partitioning defective protein 3(par-3)	1	1	1	
+AdaPtin, Small chain (clathrin associated complex)(aps-3)	1	1	1	
+Nuclear Pore complex Protein(npp-1)	1	1	1	
+hypothetical protein(K12C11.1)	1	1	1	
+NOT-Like (yeast CCR4/NOT complex component)(ntl-2)	1	1	1	
+hypothetical protein(ZK430.7)	1	1	1	
+hypothetical protein(ZC376.6)	1	1	1	
+hypothetical protein(C53H9.2)	1	1	1	
+Probable protein phosphatase methylesterase 1(B0464.9)	1	1	1	
+TransKeTolase homolog(tkt-1)	1	1	1	
+RNAi-Induced Longevity(ril-1)	1	1	1	
+Heat shock protein 90(daf-21)	1	1	1	
+Protein unc-112(unc-112)	1	1	1	
+26S proteasome non-ATPase regulatory subunit 1(rpn-2)	1	1	1	
+hypothetical protein(Y39G10AR.8)	1	1	1	
+DNA helicase(mcm-4)	1	1	1	
+Small Glutamine-rich Tetratrico repeat protein(sgt-1)	1	1	1	
+Very-long-chain 3-oxooacyl-coA reductase let-767(let-767)	1	1	1	
+AdaPtin, Small chain (clathrin associated complex)(aps-2)	1	1	1	
+hypothetical protein(C16A3.6)	1	1	1	
+Proteasome subunit beta type-3(pbs-3)	1	1	1	
+hypothetical protein(let-716)	1	1	1	
+Ubiquitin-Like Protease(ulp-2)	1	1	1	
+ORC (Origin Recognition Complex) subunit(orc-5)	1	1	1	
+hypothetical protein(let-526)	1	1	1	
+Mediator of RNA polymerase II transcription subunit 1.1(sop-3)	1	1	1	
+Tyrosine-protein phosphatase vhp-1(vhp-1)	1	1	1	
+NTF2-related eXporT protein(nxt-1)	1	1	1	
+hypothetical protein(K04C2.2)	1	1	1	
+ATP-dependent RNA helicase SUV3 homolog, mitochondrial(C08F8.2)	1	1	1	
+Probable 26S proteasome regulatory subunit rpn-6.1(rpn-6.1)	1	1	1	
+Serine/threonine-protein kinase RIO1(riok-1)	1	1	1	
+Histone H2A(his-3)	1	1	1	
+NADH Ubiquinone Oxidoreductase(nuo-4)	1	1	1	
+40S ribosomal protein S14(rps-14)	1	1	1	
+hypothetical protein(F37C12.1)	1	1	1	
+TIA-1/TIAL RNA binding protein homolog(tiar-1)	1	1	1	
+EXOSome (multiexonuclease complex) component(exos-9)	1	1	1	
+Ribosomal Protein, Small subunit(rps-11)	1	1	1	
+hypothetical protein(F56C9.10)	1	1	1	
+60S ribosomal protein L13(rpl-13)	1	1	1	
+Frataxin, mitochondrial(frh-1)	1	1	1	
+Nuclear Pore complex Protein(npp-11)	1	1	1	
+Anamorsin homolog(T20B12.7)	1	1	1	
+IMportin Beta family(imb-3)	1	1	1	
+hypothetical protein(unc-108)	1	1	1	
+14-3-3-like protein 1(par-5)	1	1	1	
+60S ribosomal protein L9(rpl-9)	1	1	1	
+Serine/threonine-protein phosphatase(let-92)	1	1	1	
+Histone H3(his-59)	1	1	1	
+60S ribosomal protein L35(rpl-35)	1	1	1	
+hypothetical protein(F11A10.7)	1	1	1	
+ATP synthase subunit delta, mitochondrial(F58F12.1)	1	1	1	
+proteasome Regulatory Particle, Non-ATPase-like(rpn-8)	1	1	1	
+hypothetical protein(C27A2.12)	1	1	1	

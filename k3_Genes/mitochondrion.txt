@@ -1,0 +1,98 @@
+	transit peptide:Mitochondrion	Transit peptide	Mitochondrion	GO:0005739~mitochondrion	
+Zinc MetalloProtease(zmp-2)	1	0	0	0	
+ASpartyl Protease(asp-9)	1	0	0	0	
+NADH Ubiquinone Oxidoreductase(nuo-4)	0	0	1	0	
+Enoyl-CoA Hydratase(ech-1.2)	0	0	0	1	
+hypothetical protein(F44E7.4)	0	0	0	1	
+Serine hydroxymethyltransferase(mel-32)	0	0	0	1	
+hypothetical protein(Y71H2AM.5)	0	0	0	1	
+hypothetical protein(Y43E12A.2)	0	0	0	1	
+Glutathione-independent glyoxalase DJR-1.2(djr-1.2)	0	0	0	1	
+Phenylalanyl Amino-acyl tRNA Synthetase(fars-2)	0	0	0	1	
+NADH-cytochrome b5 reductase(hpo-19)	0	0	0	1	
+hypothetical protein(B0303.3)	0	0	0	1	
+hypothetical protein(C18E9.4)	0	0	0	1	
+Acyl-CoA dehydrogenase family member 11(acdh-11)	0	0	0	1	
+Mitochondrial Ribosomal Protein, Small(mrps-26)	0	0	0	1	
+TPR repeat-containing protein ZK370.8(ZK370.8)	0	0	0	1	
+Acyl CoA DeHydrogenase(acdh-12)	0	0	0	1	
+hypothetical protein(T15B12.1)	0	0	0	1	
+MiTochondrial Carrier Homolog(mtch-1)	0	0	0	1	
+IsoValeryl-CoA Dehydrogenase(ivd-1)	0	0	0	1	
+Adenine Nucleotide Translocator(ant-1.1)	0	0	0	1	
+Malate synthase(icl-1)	0	0	0	1	
+Nicotinamide Nucleotide Transhydrogenase(nnt-1)	0	0	0	1	
+ATP synthase subunit(atp-3)	0	0	0	1	
+PYruvate Carboxylase(pyc-1)	0	0	0	1	
+Aspartate aminotransferase(got-2.2)	0	0	0	1	
+FErroChelatase-Like(fecl-1)	0	0	0	1	
+hypothetical protein(F46B6.6)	0	0	0	1	
+Branched-chain-amino-acid aminotransferase, cytosolic(bcat-1)	0	0	0	1	
+Regulator of G protein Signaling(rgs-5)	0	0	0	1	
+hypothetical protein(ric-7)	0	0	0	1	
+hypothetical protein(T09A5.5)	0	0	0	1	
+DEAD boX helicase homolog(ddx-17)	0	0	0	1	
+hypothetical protein(Y51H1A.3)	0	0	0	1	
+Protein skinhead-1(skn-1)	0	0	0	1	
+LIGase(lig-4)	0	0	0	1	
+Methylmalonyl-CoA Epimerase(mce-1)	0	0	0	1	
+Peptidyl-prolyl cis-trans isomerase 1(cyn-1)	0	0	0	1	
+Mitochondrial Ribosomal Protein, Large(mrpl-55)	0	0	0	1	
+hypothetical protein(smgl-2)	0	0	0	1	
+Acyl CoA DeHydrogenase(acdh-7)	0	0	0	1	
+Enoyl-CoA Hydratase(ech-5)	0	0	0	1	
+Mitochondrial Calcium Uniporter(mcu-1)	0	1	1	0	
+Ubiquinone biosynthesis O-methyltransferase, mitochondrial(coq-3)	0	1	1	0	
+Mitochondrial import inner membrane translocase subunit Tim10B(tin-9.2)	0	0	1	1	
+Biogenesis of lysosome-related organelles complex 1 subunit 1(blos-1)	0	0	1	1	
+Mitochondrial import inner membrane translocase subunit Tim9(tin-9.1)	0	0	1	1	
+Glutamyl-tRNA(Gln) amidotransferase subunit A, mitochondrial(Y41D4A.6)	0	0	1	1	
+Sideroflexin(sfxn-1.5)	0	0	1	1	
+MICOS complex subunit MIC13(W04C9.2)	0	0	1	1	
+Probable calcium-binding mitochondrial carrier K02F3.2(K02F3.2)	0	0	1	1	
+Probable calcium-binding mitochondrial carrier F17E5.2(F17E5.2)	0	0	1	1	
+Serine/threonine-protein phosphatase Pgam5, mitochondrial(pgam-5)	0	0	1	1	
+Anamorsin homolog(T20B12.7)	0	0	1	1	
+Mpv17-like protein(T18D3.9)	0	0	1	1	
+Mitochondrial import inner membrane translocase subunit TIM14(dnj-21)	0	0	1	1	
+Probable ATP synthase subunit g 2, mitochondrial(asg-2)	0	0	1	1	
+Ubiquitin-like protease 4(ulp-4)	0	0	1	1	
+Worm AIF (apoptosis inducing factor) Homolog(wah-1)	0	0	1	1	
+NAD kinase 2, mitochondrial(Y17G7B.10)	0	0	1	1	
+APOPT family protein Y39B6A.34, mitochondrial(Y39B6A.34)	0	1	1	1	
+Lipoyl synthase, mitochondrial(M01F1.3)	0	1	1	1	
+28S ribosomal protein S31, mitochondrial(mrps-31)	0	1	1	1	
+2-oxoisovalerate dehydrogenase subunit alpha, mitochondrial(Y39E4A.3)	0	1	1	1	
+Essential Mitochondrial calcium uniporter (MCU) REgulator(emre-1)	0	1	1	1	
+Single-stranded DNA-binding protein, mitochondrial(mtss-1)	0	1	1	1	
+Isocitrate dehydrogenase [NAD] subunit, mitochondrial(idhg-2)	0	1	1	1	
+Phosphatidylserine decarboxylase beta chain(psd-1)	0	1	1	1	
+Alanine--tRNA ligase, mitochondrial(aars-1)	0	1	1	1	
+Frataxin, mitochondrial(frh-1)	0	1	1	1	
+ATP synthase lipid-binding protein, mitochondrial(Y82E9BR.3)	0	1	1	1	
+Lipoamide acyltransferase component of branched-chain alpha-keto acid dehydrogenase complex, mitochondrial(dbt-1)	0	1	1	1	
+NAD-dependent protein deacylase sir-2.2(sir-2.2)	0	1	1	1	
+Putative tricarboxylate transport protein, mitochondrial(K11H3.3)	1	1	1	1	
+Propionyl-CoA carboxylase alpha chain, mitochondrial(pcca-1)	1	1	1	1	
+Probable succinyl-CoA ligase [ADP-forming] subunit beta, mitochondrial(suca-1)	1	1	1	1	
+Probable succinyl-CoA ligase [ADP/GDP-forming] subunit alpha, mitochondrial(sucl-1)	1	1	1	1	
+Cytochrome c oxidase subunit 5A, mitochondrial(cco-2)	1	1	1	1	
+Probable malate dehydrogenase, mitochondrial(mdh-2)	1	1	1	1	
+ATP-dependent RNA helicase SUV3 homolog, mitochondrial(C08F8.2)	1	1	1	1	
+Probable isocitrate dehydrogenase [NAD] subunit alpha, mitochondrial(idha-1)	1	1	1	1	
+Elongation factor G, mitochondrial(gfm-1)	1	1	1	1	
+ATPase inhibitor mai-1, mitochondrial(mai-1)	1	1	1	1	
+Probable methylmalonyl-CoA mutase, mitochondrial(mmcm-1)	1	1	1	1	
+Probable trans-2-enoyl-CoA reductase 2, mitochondrial(Y48A6B.9)	1	1	1	1	
+Probable methylcrotonoyl-CoA carboxylase beta chain, mitochondrial(F02A9.4)	1	1	1	1	
+28S ribosomal protein S7, mitochondrial(mrps-7)	1	1	1	1	
+Probable glutaryl-CoA dehydrogenase, mitochondrial(F54D5.7)	1	1	1	1	
+Probable NADH dehydrogenase [ubiquinone] iron-sulfur protein 7, mitochondrial(nduf-7)	1	1	1	1	
+Succinate dehydrogenase cytochrome b560 subunit, mitochondrial(mev-1)	1	1	1	1	
+ATPase inhibitor mai-2, mitochondrial(mai-2)	1	1	1	1	
+Pyruvate dehydrogenase E1 component subunit beta, mitochondrial(pdhb-1)	1	1	1	1	
+Probable succinyl-CoA:3-ketoacid coenzyme A transferase, mitochondrial(C05C10.3)	1	1	1	1	
+Chaperonin homolog Hsp-60, mitochondrial(hsp-60)	1	1	1	1	
+ATP synthase subunit delta, mitochondrial(F58F12.1)	1	1	1	1	
+Probable 39S ribosomal protein L35, mitochondrial(mrpl-35)	1	1	1	1	
+Probable NADH dehydrogenase [ubiquinone] iron-sulfur protein 6, mitochondrial(nduf-6)	1	1	1	1	

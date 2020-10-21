@@ -1,0 +1,53 @@
+	Fatty acid biosynthesis	Fatty acid metabolism	GO:0006631~fatty acid metabolic process	GO:0006633~fatty acid biosynthetic process	Lipid biosynthesis	Lipid metabolism	GO:0006629~lipid metabolic process	
+Enoyl-CoA Hydratase(ech-8)	0	0	1	0	0	0	0	
+Enoyl-CoA Hydratase(ech-9)	0	0	1	0	0	0	0	
+dietary restriction down regulated(drd-1)	0	0	0	1	0	0	0	
+hypothetical protein(F49E12.10)	0	0	0	1	0	0	0	
+hypothetical protein(C25A1.5)	0	0	1	1	0	0	0	
+Ankyrin repeat and KH domain-containing protein R11A8.7(R11A8.7)	0	0	0	0	0	0	1	
+hypothetical protein(Y46H3A.5)	0	0	0	0	0	0	1	
+hypothetical protein(C40H1.8)	0	0	0	0	0	0	1	
+hypothetical protein(K11E4.1)	0	0	0	0	0	0	1	
+DiAcylGlycerol Lipase homolog(dagl-2)	0	0	0	0	0	0	1	
+hypothetical protein(C40H1.7)	0	0	0	0	0	0	1	
+Peptide transporter family 1(pept-1)	0	0	0	0	0	0	1	
+Forkhead box protein O(daf-16)	0	0	0	0	0	0	1	
+Sterol regulatory element Binding Protein(sbp-1)	0	0	0	0	0	0	1	
+hypothetical protein(Y51H4A.5)	0	0	0	0	0	0	1	
+Beclin homolog(bec-1)	0	0	0	0	0	0	1	
+Intracelllar PhosphoLipase A family(ipla-2)	0	0	0	0	0	0	1	
+Intracelllar PhosphoLipase A family(ipla-7)	0	0	0	0	0	0	1	
+Phosphoethanolamine MethylTransferase(pmt-1)	0	0	0	0	0	0	1	
+hypothetical protein(F25A2.1)	0	0	0	0	0	0	1	
+Putative glycerophosphocholine phosphodiesterase GPCPD1 homolog 2(gpcp-2)	0	0	0	0	0	0	1	
+hypothetical protein(W07E6.3)	0	0	0	0	0	0	1	
+hypothetical protein(Y110A7A.7)	0	0	0	0	0	0	1	
+Kruppel-Like Factor (zinc finger protein)(klf-3)	0	0	0	0	0	0	1	
+hypothetical protein(pod-2)	0	0	0	1	0	0	1	
+LIPase Like(lipl-5)	0	0	0	0	0	1	1	
+Lipase(lipl-3)	0	0	0	0	0	1	1	
+Serine palmitoyltransferase 2(sptl-2)	0	0	0	0	0	1	1	
+Phosphoinositide phospholipase C(plc-1)	0	0	0	0	0	1	1	
+Serine palmitoyltransferase 3(sptl-3)	0	0	0	0	0	1	1	
+Non-lysosomal glucosylceramidase(R08F11.1)	0	0	0	0	0	1	1	
+Lipase(lipl-1)	0	0	0	0	0	1	1	
+Sphingomyelin phosphodiesterase 2(asm-2)	0	0	0	0	0	1	1	
+Phospholipase A(2)(Y69A2AL.2)	0	0	0	0	0	1	1	
+Phosphatidylcholine:ceramide cholinephosphotransferase 2(sms-2)	0	0	0	0	0	1	1	
+Putative sphingomyelin phosphodiesterase asm-3(asm-3)	0	0	0	0	0	1	1	
+Putative glucosylceramidase 2(gba-2)	0	0	0	0	0	1	1	
+Lipase(lipl-2)	0	0	0	0	0	1	1	
+Epoxide hydrolase 2(ceeh-2)	0	0	0	0	0	1	1	
+Non-lysosomal glucosylceramidase(hpo-13)	0	0	0	0	0	1	1	
+Myotubularin-related protein 3(mtm-3)	0	0	0	0	0	1	1	
+Ceramide synthase hyl-2(hyl-2)	0	0	0	0	1	1	1	
+Ceramide glucosyltransferase 2(cgt-2)	0	0	0	0	1	1	1	
+Acetoacetyl-CoA synthetase(sur-5)	0	1	1	0	0	1	1	
+Probable medium-chain specific acyl-CoA dehydrogenase 10, mitochondrial(acdh-10)	0	1	1	0	0	1	1	
+Probable ATP-citrate synthase(acly-1)	0	0	0	1	1	1	1	
+Cholesterol 25-hydroxylase-like protein(F35C8.5)	0	0	0	1	1	1	1	
+Putative fatty acid elongation protein 3(elo-3)	1	1	1	1	1	1	1	
+Very-long-chain (3R)-3-hydroxyacyl-CoA dehydratase hpo-8(hpo-8)	1	1	1	1	1	1	1	
+Omega-3 fatty acid desaturase fat-1(fat-1)	1	1	1	1	1	1	1	
+Probable trans-2-enoyl-CoA reductase 1, mitochondrial(mecr-1)	1	1	1	1	1	1	1	
+Elongation of very long chain fatty acids protein(elo-9)	1	1	1	1	1	1	1	

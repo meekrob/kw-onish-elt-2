@@ -14,68 +14,53 @@ library(ggplot2)
 
 
 ```{r plotDavid}
-
-plotDavid = function(anno_cluster.wide, main.label="Some Representative Term", chip.cluster.label="k cluster")
-{
-anno_cluster.wide$X.1 = NULL # trailing tabs add a garbage column
-anno_cluster.wide$gene = factor(rownames(anno_cluster.wide), levels=rownames(anno_cluster.wide), ordered=T)
-
-anno_cluster.long = melt(anno_cluster.wide)
-green_label="corresponding gene-term association positively reported"
-black_label="corresponding gene-term association not reported yet"
-labelled_value = factor(ifelse(anno_cluster.long$value, green_label, black_label),levels=c(black_label,green_label),ordered=T)
-anno_cluster.long$value = labelled_value
-
-tileplot<-ggplot(anno_cluster.long, aes(x=gene, y=variable)) + 
-  ggtitle(
-    bquote(
-      paste(bold(.(chip.cluster.label)), 
-            ": DAVID Cluster including ", 
-            italic(.(main.label)) 
-            )
-      )
-  ) +
-  xlab("Gene name") +
-  ylab("Annotation term") +
-  geom_tile(aes(fill=value),color="white") + 
-  scale_fill_manual(values=c("black","green")) + 
-  coord_equal() +
-  theme(
-    legend.position="top", legend.title = element_blank(), legend.direction = "vertical",
-    axis.text.x = element_text(angle = 45,hjust=1,size=6),
-    axis.text.y = element_text(size = 6)) 
-return(tileplot)
-}
+source('plotDAVID.R')
 ```
 
 ```{r k1_using_func}
-k1_anno_cluster = read.table('k1/developmental_protein.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1)
-tileplot=plotDavid(k1_anno_cluster,"Developmental Protein","Embryo")
-pdf(file="k1/developmental_protein.pdf")
-tileplot
+k1_anno_cluster = read.table('k1_Genes/developmental_protein.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.1=plotDavid(k1_anno_cluster,"Developmental Protein","Embryo")
+pdf(file="k1_Genes/developmental_protein.pdf")
+tileplot.1
 dev.off()
 ```
 
 
 ```{r k1-immune-related}
-k1_anno_cluster = read.table('k1/immunoglob.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1)
-tileplot=plotDavid(k1_anno_cluster,"Immunoglobulin","Embryo")
-pdf(file="k1/immunoglob.pdf")
-tileplot
+k1_anno_cluster = read.table('k1_Genes/immunoglob.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.2=plotDavid(k1_anno_cluster,"Immunoglobulin","Embryo")
+pdf(file="k1_Genes/immunoglob.pdf")
+tileplot.2
 dev.off()
 ```
 
 ```{r k1-glycoprotein}
-k1_anno_cluster = read.table('k1/disulfide_bond.txt', header=T,sep="\t",skipNul=T,row.names = 1)
-tileplot=plotDavid(k1_anno_cluster,"Disulfide","Embryo")
-pdf(file="k1/disulfide.pdf")
-tileplot
+k1_anno_cluster = read.table('k1_Genes/disulfide_bond.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.3=plotDavid(k1_anno_cluster,"Disulfide","Embryo")
+pdf(file="k1_Genes/disulfide.pdf")
+tileplot.3
 dev.off()
 ```
 ```{r k1-axon}
-k1_anno_cluster = read.table('k1/axon.txt', header=T,sep="\t",skipNul=T,row.names = 1)
-tileplot=plotDavid(k1_anno_cluster,"Axon","Embryo")
-pdf(file="k1/axon.pdf")
+k1_anno_cluster = read.table('k1_Genes/axon.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.4=plotDavid(k1_anno_cluster,"Axon","Embryo")
+pdf(file="k1_Genes/axon.pdf")
+tileplot.4
+dev.off()
+```
+```{r all_embryo}
+pdf(file="k1_Genes/allEmbryoClusters.pdf")
+tileplot.1
+tileplot.2
+tileplot.3
+tileplot.4
+dev.off()
+```
+
+```{r k2}
+k2_anno_cluster = read.delim('k2_Genes/ATP-binding.cluster.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot=plotDavid(k2_anno_cluster,"ATP-binding","Larval",xaxis.size=3)
+pdf(file="k2_Genes/ATP-binding.pdf", width=10)
 tileplot
 dev.off()
 ```
