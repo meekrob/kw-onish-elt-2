@@ -1,0 +1,18 @@
+	short sequence motif:TXY	IPR003527:Mitogen-activated protein (MAP) kinase, conserved site	GO:0004707~MAP kinase activity	GO:0000165~MAPK cascade	
+Calcium/calmodulin-dependent protein kinase type II(unc-43)	0	0	0	1	
+Protein kinase C(pkc-1)	0	0	0	1	
+Mitogen-activated protein kinase kinase kinase mlk-1(mlk-1)	0	0	0	1	
+Dual specificity mitogen-activated protein kinase kinase mek-1(mek-1)	0	0	0	1	
+MAP kinase Activated protein Kinase(mak-2)	0	0	0	1	
+Mitogen-activated protein kinase kinase kinase nsy-1(nsy-1)	0	0	0	1	
+MAP kinase Activated protein Kinase(mak-1)	0	0	0	1	
+related to vertebrate MEF2 transcription factor(mef-2)	0	0	0	1	
+GLH-binding kinase 1(kgb-1)	0	1	1	0	
+Mitogen-activated protein kinase sma-5(sma-5)	0	0	1	1	
+Mitogen-activated protein kinase(kgb-2)	0	1	1	1	
+Serine/threonine kinase NLK(lit-1)	0	1	1	1	
+Mitogen-activated protein kinase(F09C12.2)	0	1	1	1	
+Mitogen-activated protein kinase(mpk-2)	0	1	1	1	
+Mitogen-activated protein kinase pmk-3(pmk-3)	1	1	1	1	
+Mitogen-activated protein kinase(pmk-2)	1	1	1	1	
+Mitogen-activated protein kinase mpk-1(mpk-1)	1	1	1	1	

@@ -1,0 +1,10 @@
+	IPR008138:Saposin-like type B, 2	SM00741:SapB	IPR011001:Saposin-like	IPR008139:Saposin B	
+hypothetical protein(Y77E11A.14)	0	0	1	0	
+SaPosin-like Protein family(spp-18)	0	1	0	1	
+hypothetical protein(K02A11.4)	0	0	1	1	
+SaPosin-like Protein family(spp-17)	0	1	1	1	
+SaPosin-like Protein family(spp-1)	0	1	1	1	
+Sphingomyelin phosphodiesterase 2(asm-2)	0	1	1	1	
+SaPosin-like Protein family(spp-2)	1	1	1	1	
+SaPosin-like Protein family(spp-3)	1	1	1	1	
+SaPosin-like Protein family(spp-4)	1	1	1	1	

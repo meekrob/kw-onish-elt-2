@@ -4,11 +4,12 @@
 plotDavid = function(anno_cluster.wide, 
                      main.label="Some Representative Term", 
                      chip.cluster.label="k cluster",
+                     xaxis.hjust=1,
                      xaxis.size=6,
                      yaxis.size=6)
 {
   anno_cluster.wide$X.1 = NULL # trailing tabs add a garbage column
-  anno_cluster.wide$gene = factor(rownames(anno_cluster.wide), levels=rownames(anno_cluster.wide), ordered=T)
+  anno_cluster.wide$gene = factor(rownames(anno_cluster.wide), levels=rev(rownames(anno_cluster.wide)), ordered=T)
   
   anno_cluster.long = melt(anno_cluster.wide)
   green_label="corresponding gene-term association positively reported"
@@ -32,7 +33,8 @@ plotDavid = function(anno_cluster.wide,
     coord_equal() +
     theme(
       legend.position="top", legend.title = element_blank(), legend.direction = "vertical",
-      axis.text.x = element_text(angle = 45,hjust=1,size=xaxis.size),
+      axis.text.x = element_text(angle = 45, hjust=xaxis.hjust, size=xaxis.size),
+      axis.ticks.x = element_blank(),
       axis.text.y = element_text(size = yaxis.size)) 
   return(tileplot)
 }

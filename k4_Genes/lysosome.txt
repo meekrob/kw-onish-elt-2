@@ -1,0 +1,46 @@
+	IPR025660:Cysteine peptidase, histidine active site	Thiol protease	IPR025661:Cysteine peptidase, asparagine active site	IPR000169:Cysteine peptidase, cysteine active site	IPR000668:Peptidase C1A, papain C-terminal	IPR013128:Peptidase C1A, papain	SM00645:Pept_C1	GO:0004197~cysteine-type endopeptidase activity	GO:0008234~cysteine-type peptidase activity	GO:0051603~proteolysis involved in cellular protein catabolic process	GO:0005764~lysosome	
+Carboxypeptidase(ctsa-2)	0	0	0	0	0	0	0	0	0	1	0	
+hypothetical protein(Y32F6A.5)	0	0	0	0	0	0	0	0	0	1	0	
+Proteasome subunit alpha type-7(pas-4)	0	0	0	0	0	0	0	0	0	1	0	
+Carboxypeptidase(Y16B4A.2)	0	0	0	0	0	0	0	0	0	1	0	
+Proteasome subunit beta type(pbs-1)	0	0	0	0	0	0	0	0	0	1	0	
+Uncharacterized serine carboxypeptidase F13S12.6(F13D12.6)	0	0	0	0	0	0	0	0	0	1	0	
+Uncharacterized serine carboxypeptidase F32A5.3(F32A5.3)	0	0	0	0	0	0	0	0	0	1	0	
+Carboxypeptidase(K10C2.1)	0	0	0	0	0	0	0	0	0	1	0	
+Acid ceramidase(asah-1)	0	0	0	0	0	0	0	0	0	0	1	
+ASpartyl Protease(asp-4)	0	0	0	0	0	0	0	0	0	0	1	
+CHolesterol UPtake associated(chup-1)	0	0	0	0	0	0	0	0	0	0	1	
+hypothetical protein(cup-5)	0	0	0	0	0	0	0	0	0	0	1	
+Heme transporter hrg-1(hrg-1)	0	0	0	0	0	0	0	0	0	0	1	
+Probable beta-mannosidase(C33G3.4)	0	0	0	0	0	0	0	0	0	0	1	
+Aspartic protease 3(asp-3)	0	0	0	0	0	0	0	0	0	0	1	
+Acid Alpha Glucosidase Relate(aagr-2)	0	0	0	0	0	0	0	0	0	0	1	
+hypothetical protein(W03A5.2)	0	0	0	0	0	0	0	0	0	0	1	
+Acid Alpha Glucosidase Relate(aagr-3)	0	0	0	0	0	0	0	0	0	0	1	
+Niemann-Pick C1 protein homolog 1(ncr-1)	0	0	0	0	0	0	0	0	0	0	1	
+RAB family(rab-7)	0	0	0	0	0	0	0	0	0	0	1	
+Battenin(cln-3.3)	0	0	0	0	0	0	0	0	0	0	1	
+Deoxyribonuclease-2(nuc-1)	0	0	0	0	0	0	0	0	0	0	1	
+hypothetical protein(C33A11.2)	0	0	0	0	0	0	0	0	0	0	1	
+Lipase(lipl-1)	0	0	0	0	0	0	0	0	0	0	1	
+Chloride intracellular channel exl-1(exl-1)	0	0	0	0	0	0	0	0	0	0	1	
+Ubiquitin carboxyl-terminal hydrolase 14(usp-14)	0	1	0	0	0	0	0	0	1	0	0	
+Probable ubiquitin carboxyl-terminal hydrolase K02C4.3(K02C4.3)	0	1	0	0	0	0	0	0	1	0	0	
+Ubiquitin-like protease 4(ulp-4)	0	1	0	0	0	0	0	0	1	0	0	
+hypothetical protein(T28H10.3)	0	0	0	0	0	0	0	1	0	1	0	
+hypothetical protein(K02E7.10)	0	0	0	0	1	1	1	1	1	1	1	
+hypothetical protein(F32H5.1)	0	0	0	0	1	1	1	1	1	1	1	
+Cysteine PRotease related(cpr-8)	0	0	0	0	1	1	1	1	1	1	1	
+CathePsin Z(cpz-2)	0	0	1	0	1	1	1	1	1	1	1	
+CathePsin Z(cpz-1)	0	0	1	0	1	1	1	1	1	1	1	
+hypothetical protein(Y40H7A.10)	0	0	0	1	1	1	1	1	1	1	1	
+hypothetical protein(R07E3.1)	1	0	0	1	1	1	1	1	1	1	1	
+hypothetical protein(Y113G7B.15)	0	1	1	1	1	1	1	1	1	1	1	
+Cathepsin B-like cysteine proteinase 3(cpr-3)	1	1	1	1	1	1	1	1	1	1	1	
+CathePsin L family(cpl-1)	1	1	1	1	1	1	1	1	1	1	1	
+Cathepsin B-like cysteine proteinase 4(cpr-4)	1	1	1	1	1	1	1	1	1	1	1	
+hypothetical protein(W07B8.4)	1	1	1	1	1	1	1	1	1	1	1	
+Cathepsin B-like cysteine proteinase 5(cpr-5)	1	1	1	1	1	1	1	1	1	1	1	
+Gut-specific cysteine proteinase(cpr-1)	1	1	1	1	1	1	1	1	1	1	1	
+hypothetical protein(F57F5.1)	1	1	1	1	1	1	1	1	1	1	1	
+Cathepsin B-like cysteine proteinase 6(cpr-6)	1	1	1	1	1	1	1	1	1	1	1	
