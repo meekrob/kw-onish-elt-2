@@ -191,6 +191,55 @@ pdf(file="k3_Genes/kinases.pdf")
 tileplot.19
 dev.off()
 ```
+```{r k4-lysosome}
+k4_anno_cluster = read.delim('k4_Genes/lysosome.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.20=plotDavid(k4_anno_cluster,
+                      "Lysosome",
+                      "Increasing in Development",
+                      xaxis.size = 4,
+                      yaxis.size = 4)
+pdf(file="k4_Genes/lysosome.pdf")
+tileplot.20
+dev.off()
+```
+```{r k4-saposin}
+k4_anno_cluster = read.delim('k4_Genes/SaPosin.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "SaPosin",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/SaPosin.pdf")
+tileplot.21
+dev.off()
+```
+
+```{r k4-oxidoreductase}
+k4_anno_cluster = read.delim('k4_Genes/oxidoreductase.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "Oxidoreductase",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/oxidoreductase.pdf")
+tileplot.21
+dev.off()
+```
+```{r k4-mapk}
+k4_anno_cluster = read.delim('k4_Genes/mapk.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "MAPK",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/mapk.pdf")
+tileplot.21
+dev.off()
+```
 
 
 
