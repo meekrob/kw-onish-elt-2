@@ -9,7 +9,7 @@
 NTHREADS=${SLURM_NTASKS} # passes --ntasks set above
 echo "$SLURM_JOB_NAME[$SLURM_JOB_ID] $@" # log the command line
 SUBMIT=$0
-JOBSTEPS="BWA BAM SPP IDR BW BW-SUBTRACT UNION AGGREGATE"
+JOBSTEPS="SPP IDR BW BW-SUBTRACT UNION AGGREGATE"
 ########################################################
 ##### CONFIGURATION VARIABLES
 FLANK=150 # for bedToBw
@@ -377,9 +377,18 @@ else
              -savp="${outdir}/$prefix.pdf" \
              -out=${outdir}/$prefix.ccscores"
         run $cmd
-        # results do not come out sorted
+        # results do not come out sorted, and sometimes have negatives in field 2 (awk)
+        _awk_filter_peakfile_()
+        {
+            # column 2: enforce a min of 0
+            # change 2 and 3 to ints
+            # print resultant columns 1-10
+            #awk 'BEGIN{OFS="\t"}{ if ($2<0) $2=0; print $1,int($2),int($3),$4,$5,$6,$7,$8,$9,$10;}' 
+            awk 'BEGIN{OFS="\t"}{ if ($2<0) $2=0; print $0;}' 
+        }
+        declare -f _awk_filter_peakfile_ # show this function in the log
         sortTempfile="${outdir}/.${output}"
-        cmd="zcat $output | sort -k1,1 -k2,2n > $sortTempfile && mv $sortTempfile ${outdir}/$output}"
+        cmd="zcat ${outdir}/$output | _awk_filter_peakfile_ | sort -k1,1 -k2,2n | gzip -c - > $sortTempfile && mv $sortTempfile ${outdir}/$output"
         run $cmd
         
     
