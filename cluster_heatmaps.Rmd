@@ -69,10 +69,10 @@ dfG = makeGRangesFromDataFrame(df,
                                ignore.strand = T, 
                                starts.in.df.are.0based = T)
 
-seqinfo(dfG) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), 
-                    c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), 
-                    c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
-                    c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
+# seqinfo(dfG) <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX'), 
+#                     c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942), 
+#                     c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), 
+#                     c("ce11", "ce11", "ce11", "ce11", "ce11", "ce11"))
 dfG$LE_IDR = FALSE
 dfG$L1_IDR = FALSE
 dfG$L3_IDR = FALSE
@@ -856,28 +856,7 @@ if (! "WORMGO" %in% ls()) {
 # create an object where you can access all the GO terms that are assigned to a specific gene
 geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
 
-
-# All possible genes
-all.genes <- unique(as.character(WORMGO$wbps_gene_id))
-geneList = factor(as.integer(all.genes %in% all_CDS_genes$wbps_gene_id))
-names(geneList) = all.genes
-
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-MF.go = new("topGOdata", ontology='MF'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-CC.go = new("topGOdata", ontology='CC'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-GOSummary<- function(GOdata, topNodes = 50) {
+GOSummary<- function(GOdata, topNodes = 200) {
   test.stat <- new("classicCount", testStatistic = GOFisherTest, name = "Fisher test")
   resultFis <- getSigGroups(GOdata, test.stat)
   test.stat <- new("classicScore", testStatistic = GOKSTest, name = "KS tests")
@@ -887,106 +866,66 @@ GOSummary<- function(GOdata, topNodes = 50) {
   test.stat <- new("weightCount", testStatistic = GOFisherTest, name = "Fisher test", sigRatio = "ratio")
   resultWeight <- getSigGroups(GOdata, test.stat)
   l <- list(classic = resultFis, KS = resultKS, elim = resultElim,weight = resultWeight)
-  return(GenTable(object=GOdata, weight=l$weight, classic=l$classic, elim=l$elim, KS=l$KS, orderBy="weight",ranksOf = "classic", topNodes = topNodes))
+  GenTable(
+      object=GOdata, 
+      weight=l$weight, 
+      classic=l$classic, 
+      elim=l$elim, 
+      KS=l$KS,
+      orderBy="weight",
+      ranksOf = "classic", 
+      topNodes = topNodes
+  ) -> tab
+  # not sure where the conversion to char is happening. convert back
+  tab$weight = as.numeric(tab$weight)
+  tab$classic = as.numeric(tab$classic)
+  tab$elim = as.numeric(tab$elim)
+  tab$KS = as.numeric(tab$KS)
+  return(tab)
 }
 
-## algorithm weight01 performs a traversal of the DAG 
-# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-# peakset.BP.results.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f)
-# showSigOfNodes(BP.go, score(BP.results.01f),useInfo = 'all' ,firstSigNodes = 10)
-# 
-# MF.go = new("topGOdata", ontology='MF'
-# , allGenes = geneList
-# , annot = annFUN.gene2GO
-# , gene2GO = geneID2GO)
-# GOdata=MF.go
-# MF.results <- runTest(MF.go, algorithm = "weight01", statistic = "fisher")
-# MF.results.tab <- GenTable(object = MF.go, elimFisher = MF.results)
-# 
-# 
-# CC.go = new("topGOdata", ontology='CC'
-# , allGenes = geneList
-# , annot = annFUN.gene2GO
-# , gene2GO = geneID2GO)
-# GOdata = CC.go
-# CC.results <- runTest(CC.go, algorithm = "weight01", statistic = "fisher")
-# CC.results.tab <- GenTable(object = CC.go, elimFisher = CC.results, topNodes=20)
-unique.ap.wbid=all.genes
-# Sub clusters vs all peaks
 
-#0
-unique.clust_0_wbid = unique(bycluster$ap_0$feature);
-geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_0_wbid))
-names(geneList) = unique.ap.wbid
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
+mkGO = function(foreground_genes, background_genes) {
+  # create a TRUE/FALSE list the size of background genes, TRUE if in foreground
+  geneList = factor(as.integer(background_genes %in% foreground_genes))
+  names(geneList) = background_genes
+  BP.go = new("topGOdata", ontology='BP'
+    , allGenes = geneList
+    , annot = annFUN.gene2GO
+    , gene2GO = geneID2GO)
+  MF.go = new("topGOdata", ontology='MF'
+    , allGenes = geneList
+    , annot = annFUN.gene2GO
+    , gene2GO = geneID2GO)
+  CC.go = new("topGOdata", ontology='CC'
+    , allGenes = geneList
+    , annot = annFUN.gene2GO
+    , gene2GO = geneID2GO)
+  list(BP=BP.go,CC=CC.go,MF=MF.go)
+}
+unique.clust_0_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 0))$feature)
+unique.clust_1_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 1))$feature)
+unique.clust_2_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 2))$feature)
+unique.clust_3_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 3))$feature)
+unique.clust_4_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 4))$feature)
 
-#BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-#BP.results.k0.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
-K0_allBPRes = GOSummary(BP.go)
+all.genes <- unique(as.character(WORMGO$wbps_gene_id))
+unique.ap.wbid = unique(annotatedPeaks$ap$feature)
+all.GO = mkGO(unique.ap.wbid, all.genes)
+K0.GO = mkGO(unique.clust_0_wbid, unique.ap.wbid)
+K1.GO = mkGO(unique.clust_1_wbid, unique.ap.wbid)
+K2.GO = mkGO(unique.clust_2_wbid, unique.ap.wbid)
+K3.GO = mkGO(unique.clust_3_wbid, unique.ap.wbid)
+K4.GO = mkGO(unique.clust_4_wbid, unique.ap.wbid)
+l = list(K0=K0.GO,K1=K1.GO,K2=K2.GO,K3=K3.GO,K4=K4.GO)
+o = list()
+for (dataset.name in names(l)) {
+  print(dataset.name)
+  dataset = l[[dataset.name]]
+  BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
+  CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
+  MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
+  o[dataset.name] = list(rbind(BP.tab, CC.tab, MF.tab))
+}
 
-#1
-unique.clust_1_wbid = unique(bycluster$ap_1$feature);
-geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_1_wbid))
-names(geneList) = unique.ap.wbid
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-# algo weight01 performs a conditional traversal of the DAG
-#BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-#BP.results.k1.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
-K1_allBPRes = GOSummary(BP.go)
-kable(K1_allBPRes[order(K1_allBPRes$elim),][K1_allBPRes$Significant > 2,])
-#2
-unique.clust_2_wbid = unique(bycluster$ap_2$feature);
-geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_2_wbid))
-names(geneList) = unique.ap.wbid
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-# algo weight01 performs a conditional traversal of the DAG
-# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-# BP.results.k2.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
-K2_allBPRes = GOSummary(BP.go)
-kable(K2_allBPRes[order(K2_allBPRes$elim),][K2_allBPRes$Significant > 2,])
-#3
-unique.clust_3_wbid = unique(bycluster$ap_3$feature);
-geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_3_wbid))
-names(geneList) = unique.ap.wbid
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-# algo weight01 performs a conditional traversal of the DAG
-# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-# BP.results.k3.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
-K3_allBPRes = GOSummary(BP.go)
-kable(K3_allBPRes[order(K3_allBPRes$elim),][K3_allBPRes$Significant > 2,])
-#4
-unique.clust_4_wbid = unique(bycluster$ap_4$feature);
-geneList = factor(as.integer(unique.ap.wbid %in% unique.clust_4_wbid))
-names(geneList) = unique.ap.wbid
-BP.go = new("topGOdata", ontology='BP'
-, allGenes = geneList
-, annot = annFUN.gene2GO
-, gene2GO = geneID2GO)
-
-# algo weight01 performs a conditional traversal of the DAG
-# BP.results.01f = runTest(BP.go, algorithm = "weight01", statistic="fisher")
-# BP.results.k4.tab <- GenTable(object = BP.go, elimFisher = BP.results.01f, topNodes=20)
-K4_allBPRes = GOSummary(BP.go)
-
-
-K3_allBPRes[order(K3_allBPRes$elim),][K3_allBPRes$Significant > 2,] -> bestK3terms; View(bestK3terms)
-K4_allBPRes[order(K4_allBPRes$elim),][K4_allBPRes$Significant > 2,] -> bestK4terms; View(bestK4terms)
-K2_allBPRes[order(K2_allBPRes$elim),][K2_allBPRes$Significant > 2,] -> bestK2terms; View(bestK2terms)
-K1_allBPRes[order(K1_allBPRes$elim),][K1_allBPRes$Significant > 2,] -> bestK1terms; View(bestK1terms)
-K0_allBPRes[order(K0_allBPRes$elim),][K0_allBPRes$Significant > 2,] -> bestK0terms; View(bestK0terms)
 ```
