@@ -1,9 +1,0 @@
-	IPR003703:Acyl-CoA thioesterase	GO:0047617~acyl-CoA hydrolase activity	GO:0006637~acyl-CoA metabolic process	
-Non-specific lipid-transfer protein-like 2(daf-22)	0	0	1	
-hypothetical protein(T05E7.1)	0	0	1	
-hypothetical protein(C31H5.6)	0	0	1	
-hypothetical protein(W03D8.8)	0	0	1	
-DeHydrogenases, Short chain(dhs-28)	0	0	1	
-hypothetical protein(C17C3.1)	1	1	1	
-hypothetical protein(Y87G2A.2)	1	1	1	
-hypothetical protein(D2021.4)	1	1	1	
