@@ -1,18 +1,17 @@
 ---
 title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
-date: "Spring 2019"
+date: "Fall 2020"
 output:
   pdf_document: default
   html_document: default
 ---
 
-```{r setup, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE}
 options(repos = c(CRAN = "http://cran.rstudio.com"))
-R.version
+
 # checks for packages, run install if necessary 
-source("scripts/check_for_install_deps.R",echo = T) 
+source("scripts/check_for_install_deps.R",echo = F) 
 library(pheatmap, quietly=T, warn.conflicts = F)
 library(stringr, quietly=T, warn.conflicts = F)
 library(reshape2, quietly=T, warn.conflicts = F)
@@ -24,15 +23,18 @@ library(biomaRt, quietly=T, warn.conflicts = F)
 library(ChIPpeakAnno, quietly=T, warn.conflicts = F)
 library(topGO, quietly=T, warn.conflicts = F)
 library(dplyr, quietly=T, warn.conflicts = F)
-library(UpSetR)
-library(knitr)
-library(grid)
-library(VennDiagram)
-library(plyranges) # tidy the GRange datatypes
+library(UpSetR, quietly=T, warn.conflicts = F)
+library(knitr, quietly=T, warn.conflicts = F)
+library(grid, quietly=T, warn.conflicts = F)
+library(VennDiagram, quietly=T, warn.conflicts = F)
+library(plyranges, quietly=T, warn.conflicts = F) # tidy the GRange datatypes
 
 ```
 
-## Script version
+## Script version and versions
+
+This repo is from ``bash git remote -v```. Using ``r R.version.string``.
+
 ```{bash repo version, echo=FALSE}
 
 git remote -v
