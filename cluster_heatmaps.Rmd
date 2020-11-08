@@ -208,10 +208,12 @@ thresholded_data = list( w_reps = list(threshold6d_q=threshold6d_q,
 rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
    threshold3d_q,threshold3d_ix,threshold3d_x,include3d_x,
    THRESHOLD,TXT_THRESHOLD)
+```
 
+```{r overlap plots}
 LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
-upset(as.data.frame(LEL1L3))
 
+## Venn diagram
 area1 = sum(LEL1L3[,1] == 1)
 area2 = sum(LEL1L3[,2] == 1)
 area3 = sum(LEL1L3[,3] == 1)
@@ -221,13 +223,89 @@ n12 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 )
 n13 = sum(LEL1L3[,1] == 1  & LEL1L3[,3] == 1)
 
 n123 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
+
+LE_purple = "#7570B3" # Chetwode blue
+L1_green = "#1B9E77" # Elf green 
+L3_orange = "#D95F02" # Tawny
+Increasing_pink = "#E7298A" # Deep Cerise
+
 grid.newpage()
-grid.draw(draw.triple.venn(area1, area2, area3, n12, n23, n13, n123, scale=F,euler.d=F,fill=c('red','green','blue')))
+grid.draw(
+  draw.triple.venn(
+    area1, area2, area3, n12, n23, n13, n123,
+    fill=c(LE_purple,L1_green,L3_orange), # reflects the colors used in clusters/categories
+    category=c("LE","L1","L3")
+    )
+  )
+overlap = function(under, over,a=.5) {
+    r1 <- strtoi(substr(under, 2, 3), base = 16)
+    r2 <- strtoi(substr(over, 2, 3), base = 16)
+    g1 <- strtoi(substr(under, 4, 5), base = 16)
+    g2 <- strtoi(substr(over, 4, 5), base = 16)
+    b1 <- strtoi(substr(under, 6, 7), base = 16)
+    b2 <- strtoi(substr(over, 6, 7), base = 16)
+    
+    
+    result <- rgb(a * r2 + (1 - a) * r1,
+                  a * g2 + (1 - a) * g1,
+                  a * b2 + (1 - a) * b1,
+                  alpha = 255,
+                  max=255)
+    return(result)
+}
+LEL1_color = overlap(LE_purple,L1_green)
+L1L3_color = overlap(L1_green,L3_orange)
+LEL3_color = overlap(LE_purple,L3_orange)
+all_color = overlap(overlap(LEL1_color, L1L3_color), LEL3_color)
 
-
-cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
-cat("include_x: reps not merged:", dim(thresholded_data$w_reps$include6d_x),"\n")
-cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
+# upset plot
+upset(as.data.frame(LEL1L3),
+      keep.order = T,
+      queries=list(
+        list(
+          query=intersects,
+          params=list("LE_IDR"),
+          color=LE_purple,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("L1_IDR"),
+          color=L1_green,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("L3_IDR"),
+          color = L3_orange,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("LE_IDR","L1_IDR"), 
+          color = LEL1_color,
+          active=T),
+      list(
+          query=intersects,
+          params=list("LE_IDR","L3_IDR"), 
+          color = LEL3_color,
+          active=T),
+      list(
+          query=intersects,
+          params=list("L1_IDR","L3_IDR"), 
+          color = L1L3_color,
+          active=T),
+      list(
+          query=intersects,
+          params=list("LE_IDR","L1_IDR","L3_IDR"), 
+          color = all_color,
+          active=T)
+        )
+)
+# 
+# cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
+# cat("include_x: reps not merged:", dim(thresholded_data$w_reps$include6d_x),"\n")
+# cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
 ```
 
 ```{r cluster}
@@ -663,30 +741,7 @@ if (FALSE)
   dev.off()
 }
 ```
-
-``` {r GO term analysis}
-attach(annotatedPeaks)
-
-
-# get the annotations from PARASITE
-if (! "paramart" %in% ls()) {
-  system.time({paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)})}
-if (! "WORMGO" %in% ls()) {
-  # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
-  system.time({WORMGO = biomaRt::getBM(
-    mart = paramart,
-    filter = "species_id_1010",
-    value = "caelegprjna13758",
-    attributes = c(
-      "wbps_gene_id",
-      "external_gene_id",
-      "go_accession",
-      "go_name_1006",
-      "go_linkage_type"
-    )
-  )}) 
-}
-
+```{GO Functions}
 # create an object where you can access all the GO terms that are assigned to a specific gene
 geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
 
@@ -698,7 +753,13 @@ GOSummary<- function(GOdata, topNodes = 200) {
   test.stat <- new("elimCount", testStatistic = GOFisherTest, name = "Fisher test",cutOff = 0.01)
   resultElim <- getSigGroups(GOdata, test.stat)
   test.stat <- new("weightCount", testStatistic = GOFisherTest, name = "Fisher test", sigRatio = "ratio")
+  
+  resultFisher <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  
+  
   resultWeight <- getSigGroups(GOdata, test.stat)
+  
+  
   l <- list(classic = resultFis, KS = resultKS, elim = resultElim,weight = resultWeight)
   GenTable(
       object=GOdata, 
@@ -737,6 +798,32 @@ mkGO = function(foreground_genes, background_genes) {
     , gene2GO = geneID2GO)
   list(BP=BP.go,CC=CC.go,MF=MF.go)
 }
+```
+
+
+``` {r GO term analysis, include=FALSE}
+attach(annotatedPeaks)
+
+# get the annotations from PARASITE
+if (! "paramart" %in% ls()) {
+  system.time({paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)})}
+if (! "WORMGO" %in% ls()) {
+  # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
+  system.time({WORMGO = biomaRt::getBM(
+    mart = paramart,
+    filter = "species_id_1010",
+    value = "caelegprjna13758",
+    attributes = c(
+      "wbps_gene_id",
+      "external_gene_id",
+      "go_accession",
+      "go_name_1006",
+      "go_linkage_type"
+    )
+  )}) 
+}
+
+
 unique.clust_0_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 0))$feature)
 unique.clust_1_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 1))$feature)
 unique.clust_2_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 2))$feature)
@@ -753,13 +840,25 @@ K3.GO = mkGO(unique.clust_3_wbid, unique.ap.wbid)
 K4.GO = mkGO(unique.clust_4_wbid, unique.ap.wbid)
 l = list(K0=K0.GO,K1=K1.GO,K2=K2.GO,K3=K3.GO,K4=K4.GO)
 o = list()
-for (dataset.name in names(l)) {
+system.time(
+{for (dataset.name in names(l)) {
   print(dataset.name)
   dataset = l[[dataset.name]]
   BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
   CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
   MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
   o[dataset.name] = list(rbind(BP.tab, CC.tab, MF.tab))
-}
+}})
+```
 
+``` {r GO output}
+
+weight01.fisher <- runTest(K1.GO$BP, algorithm="weight01", statistic = "fisher")
+weight01.t <- runTest(GOdata, algorithm = "weight01", statistic = "t")
+
+kable(o['K0'])
+kable(o['K1'])
+kable(o['K2'])
+kable(o['K3'])
+kable(o['K4'])
 ```
