@@ -700,12 +700,14 @@ wbid_clusters= list(k0=wbid_rownames[wbid_names_k0_bool],
                     k3=wbid_rownames[wbid_names_k3_bool], 
                     k4=wbid_rownames[wbid_names_k4_bool])
 
-# print out lists of genes
+# Save lists of genes
 for (wbk in names(wbid_clusters)) {
   print(length(wbid_clusters[[wbk]]))
-  filename=sprintf("%s.Genes.txt",wbk)
+  filename=sprintf("gene_lists/%s.Genes.txt",wbk)
   write.table(wbid_clusters[[wbk]], filename, quote=F, row.names = F, col.names = F)
 }
+write.table(unique(wbid_rownames), file="gene_lists/all.genes.txt",quote=F, row.names = F, col.names = F)
+write.table(unique(wbid_rownames[!wbid_names_k0_bool]),file="gene_lists/all.dynamic.genes.txt",quote=F, row.names = F, col.names = F)
 
 library(UpSetR);
 wbid_clusters_fromlist = fromList(wbid_clusters)
