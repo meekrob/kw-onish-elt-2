@@ -1,5 +1,5 @@
 # vi swp files
-.*.swp
+*.swp
 
 # Excel swap/lock files
 ~$*.xlsx
