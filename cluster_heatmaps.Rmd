@@ -230,8 +230,8 @@ L3_orange = "#D95F02" # Tawny
 Increasing_pink = "#E7298A" # Deep Cerise
 
 grid.newpage()
-title <- textGrob("Peaks", y=unit(0.5,"npc") + 0.5*h, 
-                  vjust=0, gp=gpar(fontsize=20))
+# title <- textGrob("Peaks", y=unit(0.5,"npc") + 0.5*h, 
+#                   vjust=0, gp=gpar(fontsize=20))
 grid.draw(
   draw.triple.venn(
     area1, area2, area3, n12, n23, n13, n123,
@@ -745,41 +745,26 @@ if (FALSE)
   dev.off()
 }
 ```
-```{GO Functions}
+```{r GO Functions}
+# GO Code
 # create an object where you can access all the GO terms that are assigned to a specific gene
 geneID2GO <- by(WORMGO$go_accession, WORMGO$wbps_gene_id, function(x) as.character(x))
 
 GOSummary<- function(GOdata, topNodes = 200) {
-  test.stat <- new("classicCount", testStatistic = GOFisherTest, name = "Fisher test")
-  resultFis <- getSigGroups(GOdata, test.stat)
-  test.stat <- new("classicScore", testStatistic = GOKSTest, name = "KS tests")
-  resultKS <- getSigGroups(GOdata, test.stat)
-  test.stat <- new("elimCount", testStatistic = GOFisherTest, name = "Fisher test",cutOff = 0.01)
-  resultElim <- getSigGroups(GOdata, test.stat)
-  test.stat <- new("weightCount", testStatistic = GOFisherTest, name = "Fisher test", sigRatio = "ratio")
   
-  resultFisher <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  resultElim <- runTest(GOdata, algorithm = "weight01", statistic = "fisher")
   
-  
-  resultWeight <- getSigGroups(GOdata, test.stat)
-  
-  
-  l <- list(classic = resultFis, KS = resultKS, elim = resultElim,weight = resultWeight)
   GenTable(
-      object=GOdata, 
-      weight=l$weight, 
-      classic=l$classic, 
-      elim=l$elim, 
-      KS=l$KS,
-      orderBy="weight",
-      ranksOf = "classic", 
-      topNodes = topNodes
+    object=GOdata, 
+    classicFisher = resultClassic,
+    elim=resultElim,    
+    orderBy="elim",
+    topNodes = topNodes
   ) -> tab
   # not sure where the conversion to char is happening. convert back
-  tab$weight = as.numeric(tab$weight)
-  tab$classic = as.numeric(tab$classic)
+  tab$classicFisher = as.numeric(tab$classicFisher)
   tab$elim = as.numeric(tab$elim)
-  tab$KS = as.numeric(tab$KS)
   return(tab)
 }
 
@@ -789,17 +774,17 @@ mkGO = function(foreground_genes, background_genes) {
   geneList = factor(as.integer(background_genes %in% foreground_genes))
   names(geneList) = background_genes
   BP.go = new("topGOdata", ontology='BP'
-    , allGenes = geneList
-    , annot = annFUN.gene2GO
-    , gene2GO = geneID2GO)
+              , allGenes = geneList
+              , annot = annFUN.gene2GO
+              , gene2GO = geneID2GO)
   MF.go = new("topGOdata", ontology='MF'
-    , allGenes = geneList
-    , annot = annFUN.gene2GO
-    , gene2GO = geneID2GO)
+              , allGenes = geneList
+              , annot = annFUN.gene2GO
+              , gene2GO = geneID2GO)
   CC.go = new("topGOdata", ontology='CC'
-    , allGenes = geneList
-    , annot = annFUN.gene2GO
-    , gene2GO = geneID2GO)
+              , allGenes = geneList
+              , annot = annFUN.gene2GO
+              , gene2GO = geneID2GO)
   list(BP=BP.go,CC=CC.go,MF=MF.go)
 }
 ```
@@ -843,26 +828,27 @@ K2.GO = mkGO(unique.clust_2_wbid, unique.ap.wbid)
 K3.GO = mkGO(unique.clust_3_wbid, unique.ap.wbid)
 K4.GO = mkGO(unique.clust_4_wbid, unique.ap.wbid)
 l = list(K0=K0.GO,K1=K1.GO,K2=K2.GO,K3=K3.GO,K4=K4.GO)
+
 o = list()
-system.time(
-{for (dataset.name in names(l)) {
+for (dataset.name in names(l)) {
   print(dataset.name)
   dataset = l[[dataset.name]]
   BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
   CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
   MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
   o[dataset.name] = list(rbind(BP.tab, CC.tab, MF.tab))
-}})
+}
 ```
 
 ``` {r GO output}
-
-weight01.fisher <- runTest(K1.GO$BP, algorithm="weight01", statistic = "fisher")
-weight01.t <- runTest(GOdata, algorithm = "weight01", statistic = "t")
-
 kable(o['K0'])
+write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o['K1'])
+write.table(o$K1[,c(1,8)], "gene_lists/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o['K2'])
+write.table(o$K2[,c(1,8)], "gene_lists/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o['K3'])
+write.table(o$K3[,c(1,8)], "gene_lists/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o['K4'])
+write.table(o$K4[,c(1,8)], "gene_lists/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 ```
