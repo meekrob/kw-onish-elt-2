@@ -230,6 +230,8 @@ L3_orange = "#D95F02" # Tawny
 Increasing_pink = "#E7298A" # Deep Cerise
 
 grid.newpage()
+title <- textGrob("Peaks", y=unit(0.5,"npc") + 0.5*h, 
+                  vjust=0, gp=gpar(fontsize=20))
 grid.draw(
   draw.triple.venn(
     area1, area2, area3, n12, n23, n13, n123,
@@ -260,7 +262,7 @@ all_color = overlap(overlap(LEL1_color, L1L3_color), LEL3_color)
 
 # upset plot
 upset(as.data.frame(LEL1L3),
-      keep.order = T,
+      order.by = "degree", decreasing=F,
       queries=list(
         list(
           query=intersects,
@@ -293,12 +295,12 @@ upset(as.data.frame(LEL1L3),
       list(
           query=intersects,
           params=list("L1_IDR","L3_IDR"), 
-          color = L1L3_color,
+          color = "#A0682A",
           active=T),
       list(
           query=intersects,
           params=list("LE_IDR","L1_IDR","L3_IDR"), 
-          color = all_color,
+          color = "#926134",
           active=T)
         )
 )
