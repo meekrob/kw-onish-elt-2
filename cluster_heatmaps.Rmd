@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 R.version
 # checks for packages, run install if necessary 
-source("check_for_install_deps.R",echo = T) 
+source("scripts/check_for_install_deps.R",echo = T) 
 library(pheatmap, quietly=T, warn.conflicts = F)
 library(stringr, quietly=T, warn.conflicts = F)
 library(reshape2, quietly=T, warn.conflicts = F)
