@@ -753,10 +753,10 @@ write.table(unique(wbid_rownames), file="gene_lists/all.genes.txt",quote=F, row.
 write.table(unique(wbid_rownames[!wbid_names_k0_bool]),file="gene_lists/all.dynamic.genes.txt",quote=F, row.names = F, col.names = F)
 
 library(UpSetR);
-wbid_clusters_fromlist = fromList(wbid_clusters)
+wbid_clusters_fromlist = fromList(wbid_clusters) %>% rename("not_changing" = k0, Embryo=k1, Larval= k2, L3=k3, Increasing=k4)
 
 upset(wbid_clusters_fromlist, 
-      sets=rev(c("k1", "k2", "k3", "k4","k0")), 
+      sets=rev(c("Embryo", "Larval", "L3", "Increasing")), 
       mainbar.y.label = "Geneset intersections", 
       sets.x.label="# of genes in cluster",
       set_size.show=T,
@@ -765,7 +765,59 @@ upset(wbid_clusters_fromlist,
       keep.order = T,
       query.legend = "top", 
       nintersects=NA, 
-      order.by = "degree", decreasing=F)
+      order.by = "degree", decreasing=F,
+            queries=list(
+        list(
+          query=intersects,
+          params=list("Embryo"),
+          color=LE_purple,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Larval"),
+          color=L1_green,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("L3"),
+          color = L3_orange,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Increasing"),
+          color = Increasing_pink,
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Increasing","Larval"),
+          color = overlap(Increasing_pink,L1_green),
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Increasing","L3"),
+          color = overlap(Increasing_pink,L3_orange),
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Larval","L3"),
+          color = overlap(L1_green,L3_orange),
+          active=T
+        ),
+        list(
+          query=intersects,
+          params=list("Larval","L3","Increasing"),
+          color="darkgoldenrod",
+          active=T
+        )
+        )
+      )
+        
 
 #  sum(311, 270, 876, 1544, 2153)
 
