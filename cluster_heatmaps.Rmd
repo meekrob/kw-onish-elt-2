@@ -897,12 +897,12 @@ Paste output two-column files (GO-term p-like-value) into the form at. http://re
 ``` {r GO output, echo=FALSE}
 
 write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o['K1'])
+kable(o[['K1']],caption="Embryo cluster versus whole dataset")
 write.table(o$K1[,c(1,8)], "gene_lists/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o['K2'])
+kable(o[['K2']], caption="Larval cluster versus whole dataset")
 write.table(o$K2[,c(1,8)], "gene_lists/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o['K3'])
+kable(o[['K3']],caption="L3 cluster versus whole dataset")
 write.table(o$K3[,c(1,8)], "gene_lists/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o['K4'])
+kable(o[['K4']],caption="Increasing cluster versus whole dataset")
 write.table(o$K4[,c(1,8)], "gene_lists/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 ```
