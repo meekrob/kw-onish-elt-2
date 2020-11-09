@@ -344,6 +344,13 @@ attach(thresholded_data)
 source('scripts/reorder_kmeans.R')
 nclust=4
 
+# scree
+wss=0
+for (i in 2:20) {
+  wss[i] = kmeans(reps_avd$include3d_x, centers = i)$tot.withinss
+  
+}
+plot(2:20,wss[2:20],type='b',xlab='number of clusters', ylab='total within groups sum-of-squares')
 
 label=paste(
   sprintf("kmeans clusters at std. dev. > %.3f,", 
