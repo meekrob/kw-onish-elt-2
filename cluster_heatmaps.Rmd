@@ -859,7 +859,7 @@ mkGO = function(foreground_genes, background_genes) {
 
 Run the topGO analyses using the above functions. 
 
-``` {r GO term analysis, echo=FALSE}
+``` {r GO term analysis, include=FALSE}
 attach(annotatedPeaks)
 
 unique.clust_0_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 0))$feature)
@@ -893,10 +893,9 @@ for (dataset.name in names(l)) {
 
 Paste output two-column files (GO-term p-like-value) into the form at. http://revigo.irb.hr/index.jsp
 
-Any score value is allowed.
 
 ``` {r GO output, echo=FALSE}
-kable(o['K0'])
+
 write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o['K1'])
 write.table(o$K1[,c(1,8)], "gene_lists/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
