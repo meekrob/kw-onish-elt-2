@@ -350,7 +350,7 @@ for (i in 2:20) {
   wss[i] = kmeans(reps_avd$include3d_x, centers = i)$tot.withinss
   
 }
-plot(2:20,wss[2:20],type='b',xlab='number of clusters', ylab='total within groups sum-of-squares')
+plot(2:20,wss[2:20],type='b',xlab='number of clusters', ylab='total within groups sum-of-squares', main="Skree plot for cluster number")
 
 label=paste(
   sprintf("kmeans clusters at std. dev. > %.3f,", 
@@ -368,12 +368,9 @@ heatmap_color = colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)
 pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
 
 set.seed(31415)
-clusters$kmeans_on3d_k11 = reorder_kmeans(kmeans(reps_avd$include3d_x,11))
-k11_explained_variance = clusters$kmeans_on3d_k11$betweenss/clusters$kmeans_on3d_k11$totss
-#### work with the 3d matrix as a circle in 2D
-source('scripts/rotation_matrices.R')
-circular_data3d = flatten_std( reps_avd$include3d_x ) # this seems not to be right, but since it's for vis. purposes, 
-# xy coordinates range between -1,1, and polar coordinates all have radius=1, so I'm sticking with it for now.
+clusters$kmeans_on3d_k6 = reorder_kmeans(kmeans(reps_avd$include3d_x,6))
+k6_explained_variance = clusters$kmeans_on3d_k6$betweenss/clusters$kmeans_on3d_k6$totss
+
 
 # trend plot with 4 clusters
 clusters$k4_trends = clusters$kmeans_on3d_k4$centers
@@ -423,29 +420,28 @@ print( # k4stacked.pdf, scrunch the "Plots" display in the right panel all the w
                          )
 )
 
-rgb_colors = c("80,80,80",apply(t(col2rgb(c("#7570B3","#1B9E77","#D95F02","#E7298A"))),1, str_flatten, collapse = ',')) # includes grey for the 0 cluster
+# trend plot with 6 clusters
+clusters$k6_trends = as.data.frame(clusters$kmeans_on3d_k6$centers)
+clusters$k6_trends$label <- sprintf("%d (%d)", 1:6, clusters$kmeans_on3d_k6$size)
 
-# trend plot with 11 clusters
-clusters$k11_trends = as.data.frame(clusters$kmeans_on3d_k11$centers)
-clusters$k11_trends$label <- sprintf("%d (%d)", 1:11, clusters$kmeans_on3d_k11$size)
-clusters$k11_trends$lt700 = ifelse(clusters$kmeans_on3d_k11$size < 700, "cluster size < 700", "cluster size > 700")
-k11_trends_long = melt(clusters$k11_trends)
-k11_trends_long$label = factor(k11_trends_long$label, levels = clusters$k11_trends$label)
-colnames(k11_trends_long) <- c("cluster","lt700","stage","center")
-# the following list is a reorder of brewer.pal(11,"Paired")
-almostHueSorted = c("#FFFF99","#FF7F00","#FB9A99","#E31A1C","#FDBF6F","#33A02C","#B2DF8A","#1F78B4","#A6CEE3", "#6A3D9A","#CAB2D6")
-figure_colors = scale_colour_manual(name="cluster Id (size)", values=almostHueSorted)
+k6_trends_long = melt(clusters$k6_trends)
+k6_trends_long$label = factor(k6_trends_long$label, levels = clusters$k6_trends$label)
+colnames(k6_trends_long) <- c("cluster","stage","center")
+
+figure_colors = scale_colour_manual(name="cluster Id (size)", 
+                                      values=c("#7570B3", "#A6D854", "#1B9E77","#D95F02","#E7298A","#E7298A")
+                                      )
 print(
-  ggplot(k11_trends_long, 
+  ggplot(k6_trends_long, 
          aes(x=stage,y=center, 
              group=cluster,
              colour=cluster)) + 
     geom_line(size = 1.5) + 
-    labs(title="Kmeans cluster centers (k=11)",
-         subtitle=sprintf("%.1f%% variance explained",100*k11_explained_variance),
+    labs(title="Kmeans cluster centers (k=6)",
+         subtitle=sprintf("%.1f%% variance explained",100*k6_explained_variance),
          y = "cluster center (Z)", 
          x = "developmental stage") + 
-    figure_colors + facet_grid(~ lt700) + 
+    figure_colors + 
     theme(panel.background=element_rect(fill='#E6E6E6'))
     
   )
@@ -460,27 +456,24 @@ clusters$k4weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k4$clus
 # laptop:
 #    user  system elapsed 
 #   17.295   0.227  18.562 
-#clusters$k11weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k11$cluster, clusters$kmeans_on3d_k11$centers)
-clusters$k11weights = rep(1,length(clusters$kmeans_on3d_k11$cluster)) # this takes too long, and we don't use it currently
-# laptop:
-#   user  system elapsed 
-# 46.197   0.537  49.254
+#clusters$k6weights = kweights(reps_avd$include3d_x, clusters$kmeans_on3d_k6$cluster, clusters$kmeans_on3d_k6$centers)
+clusters$k6weights = rep(1,length(clusters$kmeans_on3d_k6$cluster))
 
 # The standard heatmaps. See https://stackoverflow.com/questions/36852101/r-legend-title-or-units-when-using-pheatmap for 
 # getting the data out manually.
 pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster,-clusters$k4weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
-pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k11$cluster,-clusters$k11weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
+pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k6$cluster,-clusters$k6weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
 
 
 # add clusters and weights to GenomicRanges object
 dfG_max$k4cluster = 0
-dfG_max$k11cluster = 0
+dfG_max$k6cluster = 0
 dfG_max$k4weights = 0
-dfG_max$k11weights = 0
+dfG_max$k6weights = 0
 dfG_max$k4cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k4$cluster
 dfG_max$k4weights[reps_avd$threshold3d_ix] = clusters$k4weights
-dfG_max$k11cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k11$cluster
-dfG_max$k11weights[reps_avd$threshold3d_ix] = clusters$k11weights
+dfG_max$k6cluster[reps_avd$threshold3d_ix] <- clusters$kmeans_on3d_k6$cluster
+dfG_max$k6weights[reps_avd$threshold3d_ix] = clusters$k6weights
 
 ```
 
@@ -521,7 +514,7 @@ peaksForBigBed$k4labels = c(
   "L3-high",
   "Increasing"
 )[peaksForBigBed$k4cluster + 1]
-peaksForBigBed$k11weights = sprintf(float_precision_string, peaksForBigBed$k11weights)
+peaksForBigBed$k6weights = sprintf(float_precision_string, peaksForBigBed$k6weights)
 peaksForBigBed$variance = apply(mcols(peaksForBigBed)[,c('LE_nonNormed','L1_nonNormed','L3_nonNormed')], 1, var)
 peaksForBigBed$LE_nonNormed = sprintf(float_precision_string, peaksForBigBed$LE_nonNormed)
 peaksForBigBed$L1_nonNormed = sprintf(float_precision_string, peaksForBigBed$L1_nonNormed)
