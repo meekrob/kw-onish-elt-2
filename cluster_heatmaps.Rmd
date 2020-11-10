@@ -765,27 +765,31 @@ upset(wbid_clusters_fromlist,
       keep.order = T,
       query.legend = "top", 
       nintersects=NA, 
-      order.by = "degree", decreasing=F,
+      order.by = "freq", decreasing=T,
             queries=list(
         list(
+          query.name = "Embryo-only",
           query=intersects,
           params=list("Embryo"),
           color=LE_purple,
           active=T
         ),
         list(
+          query.name = "Larval-only",
           query=intersects,
           params=list("Larval"),
           color=L1_green,
           active=T
         ),
         list(
+          query.name = "L3-only",
           query=intersects,
           params=list("L3"),
           color = L3_orange,
           active=T
         ),
         list(
+          query.name = "Increasing-only",
           query=intersects,
           params=list("Increasing"),
           color = Increasing_pink,
@@ -793,14 +797,14 @@ upset(wbid_clusters_fromlist,
         ),
         list(
           query=intersects,
-          params=list("Increasing","Larval"),
-          color = overlap(Increasing_pink,L1_green),
+          params=list("Increasing","L3"),
+          color = overlap(Increasing_pink,L3_orange),
           active=T
         ),
         list(
           query=intersects,
-          params=list("Increasing","L3"),
-          color = overlap(Increasing_pink,L3_orange),
+          params=list("Larval","Increasing"),
+          color = overlap(L1_green,Increasing_pink),
           active=T
         ),
         list(
@@ -819,7 +823,6 @@ upset(wbid_clusters_fromlist,
       )
         
 
-#  sum(311, 270, 876, 1544, 2153)
 
 # breakdown of genes with multiple peaks
 clustersPerGene_rowSums = rowSums(clustersPerGene)
