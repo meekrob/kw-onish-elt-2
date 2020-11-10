@@ -65,7 +65,7 @@ LE_IDR = makeGRangesFromNarrowPeak('redux/LE.narrowPeak')
 L3_IDR = makeGRangesFromNarrowPeak('redux/L3.narrowPeak')
 # Union of all IDR output, with peak maxes assigned via my modification of javaGenomicsToolkit https://github.com/meekrob/java-genomics-toolkit
 #df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
-df = read.table("redux/allStagesUNION.bed.df", header=T, sep="\t")
+df = read.table("redux/allStagesUnion.bed.df", header=T, sep="\t")
 chroms <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX', 'chrM'),
                     c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942, 13794),
                     rep(FALSE,7),

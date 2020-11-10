@@ -1,4 +1,4 @@
-## ----setup, include=FALSE--------------------------------------------------
+## ----setup, include=FALSE---------------------------------------------------------------
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 
 # checks for packages, run install if necessary 
@@ -32,7 +32,7 @@ library(plyranges, quietly=T, warn.conflicts = F) # tidy the GRange datatypes
 ## git diff cluster_heatmaps.Rmd
 
 
-## ----get-data, echo=FALSE--------------------------------------------------
+## ----get-data, echo=FALSE---------------------------------------------------------------
 # IDR peaks
 
 # narrowPeak is bedlike. Each line contains - 
@@ -49,7 +49,7 @@ LE_IDR = makeGRangesFromNarrowPeak('redux/LE.narrowPeak')
 L3_IDR = makeGRangesFromNarrowPeak('redux/L3.narrowPeak')
 # Union of all IDR output, with peak maxes assigned via my modification of javaGenomicsToolkit https://github.com/meekrob/java-genomics-toolkit
 #df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
-df = read.table("redux/allStagesUNION.bed.df", header=T, sep="\t")
+df = read.table("redux/allStagesUnion.bed.df", header=T, sep="\t")
 chroms <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX', 'chrM'),
                     c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942, 13794),
                     rep(FALSE,7),
@@ -68,7 +68,7 @@ dfG$L1_IDR = FALSE
 dfG$L3_IDR = FALSE
 
 
-## ----manage-data, echo=FALSE-----------------------------------------------
+## ----manage-data, echo=FALSE------------------------------------------------------------
 
 #### Mark which IDR peaks contributed to the union
 LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="any")
@@ -147,7 +147,7 @@ df_max %>% dplyr::mutate(
 nrow(data3d)
 
 
-## ----normalization, echo=FALSE---------------------------------------------
+## ----normalization, echo=FALSE----------------------------------------------------------
 
 # perform normalization on 3d
 peaks3d_sd = apply(data3d, 1, sd)
@@ -206,7 +206,7 @@ rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
    THRESHOLD,TXT_THRESHOLD)
 
 
-## ----overlap plots, echo=FALSE---------------------------------------------
+## ----overlap plots, echo=FALSE----------------------------------------------------------
 LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
 
 ## Venn diagram
@@ -306,7 +306,7 @@ upset(as.data.frame(LEL1L3),
 # cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
 
 
-## ----cluster, echo=FALSE---------------------------------------------------
+## ----cluster, echo=FALSE----------------------------------------------------------------
 attach(thresholded_data)
 source('scripts/reorder_kmeans.R')
 nclust=4
@@ -444,7 +444,7 @@ dfG_max$k6weights[reps_avd$threshold3d_ix] = clusters$k6weights
 
 
 
-## ----format prepare BED, echo=FALSE----------------------------------------
+## ----format prepare BED, echo=FALSE-----------------------------------------------------
 dfG_max$LE_nonNormed = (dfG_max$LE_1 + dfG_max$LE_2)/2
 dfG_max$L1_nonNormed = (dfG_max$L1_1 + dfG_max$L1_2)/2
 dfG_max$L3_nonNormed = (dfG_max$L3_1 + dfG_max$L3_2)/2
@@ -668,7 +668,7 @@ write(chrom.sizes,"chrom.sizes")
 ## #bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as -extraIndex=name
 
 
-## ----Get Coding Genes, echo=FALSE------------------------------------------
+## ----Get Coding Genes, echo=FALSE-------------------------------------------------------
 # annotatedPeaks assigned in previous chunk
 attach(annotatedPeaks)
  # a pie chart with the breakdown of how the annotation happened
@@ -800,7 +800,7 @@ if (FALSE)
 }
 
 
-## ----GO Functions, echo=FALSE----------------------------------------------
+## ----GO Functions, echo=FALSE-----------------------------------------------------------
 # get the annotations from PARASITE
 if (! "paramart" %in% ls()) {
   system.time({paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)})}
@@ -864,7 +864,7 @@ mkGO = function(foreground_genes, background_genes) {
 }
 
 
-## ----GO term analysis, include=FALSE---------------------------------------
+## ----GO term analysis, include=FALSE----------------------------------------------------
 attach(annotatedPeaks)
 
 unique.clust_0_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 0))$feature)
@@ -894,7 +894,7 @@ for (dataset.name in names(l)) {
 }
 
 
-## ----GO output, echo=FALSE-------------------------------------------------
+## ----GO output, echo=FALSE--------------------------------------------------------------
 
 write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 kable(o[['K1']],caption="Embryo cluster versus whole dataset")
