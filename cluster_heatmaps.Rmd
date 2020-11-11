@@ -661,7 +661,6 @@ string  k4weight;   \"Weight assigned to kmeans = 4 cluster assignment [0-1]\"
 char[1] LE_IDR; \"0/1 IDR peak in Late embryo\"
 char[1] L1_IDR; \"0/1 IDR peak in Stage 1 Larvae\"
 char[1] L3_IDR; \"0/1 IDR peak in Stage 3 Larvae\"
-string summit_agreement; \"Average bp difference in summit calls to mean\"
 )"
 write(peakSchema, "peaks.as")
 
@@ -701,9 +700,9 @@ Run UCSC-user apps tools.
 ```{bash make bigBed, echo=FALSE}
 # you must execute the above chunks first
 # better figure out the PATH on your system
-#PATH=$PATH:/Users/david/bin/UCSC_userApps 
-#bedSort peaksForBigBed.bed peaksForBigBed.bed
-#bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as -extraIndex=name
+PATH=$PATH:/Users/david/bin/UCSC_userApps 
+bedSort peaksForBigBed.bed peaksForBigBed.bed
+bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -as=peaks.as -extraIndex=name
 ```
 
 ### Plot gene mapping stats.
