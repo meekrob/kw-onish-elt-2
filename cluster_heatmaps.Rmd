@@ -264,6 +264,18 @@ grid.draw(
     category=c("LE","L1","L3")
     )
   )
+
+pdf("Peak_overlap_Venn.pdf") 
+grid.draw(
+  draw.triple.venn(
+    area1, area2, area3, n12, n23, n13, n123,
+    fill=c(LE_purple,L1_green,L3_orange), # reflects the colors used in clusters/categories
+    category=c("LE","L1","L3")
+    )
+  )
+dev.off()
+
+
 overlap = function(under, over,a=.5) {
     r1 <- strtoi(substr(under, 2, 3), base = 16)
     r2 <- strtoi(substr(over, 2, 3), base = 16)
@@ -464,7 +476,12 @@ clusters$k6weights = rep(1,length(clusters$kmeans_on3d_k6$cluster))
 pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster,-clusters$k4weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
 pheatmap(reps_avd$include3d_x[order(clusters$kmeans_on3d_k6$cluster,-clusters$k6weights),], cluster_rows=F, cluster_cols=F, color=heatmap_color, show_rownames=F)
 
-
+if(F)
+{
+  pdf("fig2_heatmap.pdf",width=7, height=3)
+pheatmap(t(reps_avd$include3d_x[order(clusters$kmeans_on3d_k4$cluster, -clusters$k4weights),]), cluster_rows=F, cluster_cols=F, color=heatmap_color, show_colnames=F)
+dev.off()
+}
 # add clusters and weights to GenomicRanges object
 dfG_max$k4cluster = 0
 dfG_max$k6cluster = 0
@@ -726,6 +743,13 @@ breakdown = list(`upstream` = mapping_breakdown['upstream'] +
 pie_labels = paste0(names(breakdown), rep(" (",4), unlist(breakdown), rep(")",4))
 pie(unlist(breakdown), labels=pie_labels, main="Peaks mapping nearest to a gene", clockwise=T, init.angle=-90)
 
+pdf("gene_mapping_pie.pdf")
+
+pie_labels = paste0(names(breakdown), rep(" (",4), unlist(breakdown), rep(")",4))
+pie(unlist(breakdown), labels=pie_labels, main="Peaks mapping nearest to a gene", clockwise=T, init.angle=-90)
+
+dev.off()
+
 # upset plot: identify set overlap by assigned value of k
 clustersPerGene = table(ap$feature, ap$k4cluster)
 wbid_rownames = rownames(clustersPerGene)
@@ -950,13 +974,19 @@ Paste output two-column files (GO-term p-like-value) into the form at. http://re
 
 ``` {r GO output, echo=FALSE}
 
+
+kable(o[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="Embryo cluster versus whole dataset")
+
+kable(o[['K2']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="Larval cluster versus whole dataset")
+
+kable(o[['K3']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="L3 cluster versus whole dataset")
+
+kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20),
+      caption="Increasing cluster versus whole dataset")
+
 write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o[['K1']],caption="Embryo cluster versus whole dataset")
 write.table(o$K1[,c(1,8)], "gene_lists/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o[['K2']], caption="Larval cluster versus whole dataset")
 write.table(o$K2[,c(1,8)], "gene_lists/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o[['K3']],caption="L3 cluster versus whole dataset")
 write.table(o$K3[,c(1,8)], "gene_lists/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-kable(o[['K4']],caption="Increasing cluster versus whole dataset")
 write.table(o$K4[,c(1,8)], "gene_lists/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 ```
