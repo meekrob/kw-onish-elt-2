@@ -984,9 +984,14 @@ kable(o[['K3']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim)
 kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20),
       caption="Increasing cluster versus whole dataset")
 
-write.table(o$K0[,c(1,8)], "gene_lists/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-write.table(o$K1[,c(1,8)], "gene_lists/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-write.table(o$K2[,c(1,8)], "gene_lists/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-write.table(o$K3[,c(1,8)], "gene_lists/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
-write.table(o$K4[,c(1,8)], "gene_lists/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+write.table(o$K0[,c(1,8)], "gene_lists/K0.REVIGO/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+write.table(o$K1[,c(1,8)], "gene_lists/K1.REVIGO/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+write.table(o$K2[,c(1,8)], "gene_lists/K2.REVIGO/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+write.table(o$K3[,c(1,8)], "gene_lists/K3.REVIGO/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+
+o[['K2']] %>% rename(term_ID=GO.ID) -> ok2
+larv.revigo.bp = read.csv('freeze_1/K2.REVIGO.BP.csv')
+ok2 %>% inner_join(larv.revigo.bp, by = 'term_ID') %>% select(-plot_X, -plot_Y, -plot_size) -> jok2
+rownames(jok2) <- jok2$term_ID
 ```
