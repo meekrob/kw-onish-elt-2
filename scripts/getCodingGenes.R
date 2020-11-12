@@ -84,7 +84,7 @@ getCodingGenes = function(peaks, within_genes_kb = 5){
   # sort by feature type, favoring the levels above, then shortest distance within each peak
   overlapping_ap = overlapping_ap[ order(overlapping_ap$peak,overlapping_ap$insideFeature, overlapping_ap$shortestDistance)]
   
-  # this function actually chooses the peak for the gene by taking the first occurance,
+  # this function actually chooses the peak for the gene by taking the first occurrence,
   # the sort order outside this function determines which mapping occurs first
   unique_indexes = function(vec) {
     return(match(unique(vec), vec))
