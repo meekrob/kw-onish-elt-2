@@ -974,14 +974,14 @@ Paste output two-column files (GO-term p-like-value) into the form at. http://re
 
 ``` {r GO output, echo=FALSE}
 
+howmany_in_kable = 50
+kable(o[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Embryo cluster versus whole dataset")
 
-kable(o[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="Embryo cluster versus whole dataset")
+kable(o[['K2']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Larval cluster versus whole dataset")
 
-kable(o[['K2']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="Larval cluster versus whole dataset")
+kable(o[['K3']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="L3 cluster versus whole dataset")
 
-kable(o[['K3']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20), caption="L3 cluster versus whole dataset")
-
-kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(20),
+kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable),
       caption="Increasing cluster versus whole dataset")
 
 write.table(o$K0[,c(1,8)], "gene_lists/K0.REVIGO/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
@@ -989,21 +989,73 @@ write.table(o$K1[,c(1,8)], "gene_lists/K1.REVIGO/K1.forREVIGO.txt",quote=F,col.n
 write.table(o$K2[,c(1,8)], "gene_lists/K2.REVIGO/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K3[,c(1,8)], "gene_lists/K3.REVIGO/K3.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
+```
 
-o[['K2']] %>% rename(term_ID=GO.ID) -> ok2
 
 
-bp=(read.csv('gene_lists/K2.REVIGO/K2.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
-cc=(read.csv('gene_lists/K2.REVIGO/K2.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
-mf=(read.csv('gene_lists/K2.REVIGO/K2.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
 
-ok2 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% mutate(nlogp=-log(elim)) -> xx
+```{r filter by collapsed in REVIGO}
+
+o[['K1']] %>% rename(term_ID=GO.ID) -> ok1
+
+bp=(read.csv('gene_lists/K1.REVIGO/K1.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K1.REVIGO/K1.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K1.REVIGO/REVIGO.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+ok1 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
 xx$Term = factor(xx$Term, levels=rev(xx$Term))
 ggplot(xx) + 
   geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
   geom_vline(aes(xintercept=2.99)) +
   theme(legend.position = 'none') +
-  theme_bw() + scale_fill_manual("ontology",values=c('black','grey','white'))
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to embryo-high peaks")
 
+
+o[['K2']] %>% rename(term_ID=GO.ID) -> ok2
+
+bp=(read.csv('gene_lists/K2.REVIGO/K2.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K2.REVIGO/K2.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K2.REVIGO/K2.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+ok2 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + 
+  geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
+  geom_vline(aes(xintercept=2.99)) +
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to larval-high peaks")
+
+o[['K3']] %>% rename(term_ID=GO.ID) -> ok3
+
+bp=(read.csv('gene_lists/K3.REVIGO/K3.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K3.REVIGO/K3.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K3.REVIGO/K3.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+
+ok3 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + 
+ geom_col(aes(nlogp,Term,fill=DB),color='black' ) + 
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to L3-high peaks")
+
+
+o[['K4']] %>% rename(term_ID=GO.ID) -> ok4
+
+bp=(read.csv('gene_lists/K4.REVIGO/K4.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K4.REVIGO/K4.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K4.REVIGO/K4.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+ok4 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
+
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + 
+ geom_col(aes(nlogp,Term,fill=DB),color='black' ) + 
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to Increasing peaks")
 
 ```
