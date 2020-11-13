@@ -991,7 +991,14 @@ write.table(o$K3[,c(1,8)], "gene_lists/K3.REVIGO/K3.forREVIGO.txt",quote=F,col.n
 write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 
 o[['K2']] %>% rename(term_ID=GO.ID) -> ok2
-larv.revigo.bp = read.csv('freeze_1/K2.REVIGO.BP.csv')
-ok2 %>% inner_join(larv.revigo.bp, by = 'term_ID') %>% select(-plot_X, -plot_Y, -plot_size) -> jok2
-rownames(jok2) <- jok2$term_ID
+
+
+bp=(read.csv('gene_lists/K2.REVIGO/K2.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K2.REVIGO/K2.CC.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K2.REVIGO/K2.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+ok2 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% mutate(nlogp=-log(elim)) -> xx
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + geom_col(aes(nlogp,Term,fill=DB)) + geom_vline(aes(xintercept=2.99)) + scale_fill_brewer(palette="OrRd")
+
 ```
