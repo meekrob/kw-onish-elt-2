@@ -999,6 +999,11 @@ mf=(read.csv('gene_lists/K2.REVIGO/K2.MF.csv') %>% filter(eliminated == 0) %>% s
 
 ok2 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% mutate(nlogp=-log(elim)) -> xx
 xx$Term = factor(xx$Term, levels=rev(xx$Term))
-ggplot(xx) + geom_col(aes(nlogp,Term,fill=DB)) + geom_vline(aes(xintercept=2.99)) + scale_fill_brewer(palette="OrRd")
+ggplot(xx) + 
+  geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
+  geom_vline(aes(xintercept=2.99)) +
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('black','grey','white'))
+
 
 ```
