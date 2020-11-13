@@ -949,14 +949,32 @@ unique.clust_4_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 4))$feat
 all.genes <- unique(as.character(WORMGO$wbps_gene_id))
 unique.ap.wbid = unique(annotatedPeaks$ap$feature)
 all.GO = mkGO(unique.ap.wbid, all.genes)
-K0.GO = mkGO(unique.clust_0_wbid, unique.ap.wbid)
+
+
+omigod = list()
+
+cl <- makeClusterPSOCK(4, outfile = NULL, verbose = TRUE) # this is quite verbose
+clusterExport(cl, list("GOSummary","unique.ap.wbid","mkGO","geneID2GO"))
+genelists = list(K0=unique.clust_0_wbid, K1=unique.clust_1_wbid, K2=unique.clust_2_wbid, K3=unique.clust_3_wbid, K4=unique.clust_4_wbid)
+system.time({
+  omigod = parLapply(cl, genelists, function(foreground_genelist) {
+      library(dplyr,quietly = T,warn.conflicts = F)
+      library(topGO,quietly = T,warn.conflicts = F)
+      dataset = mkGO(foreground_genelist, unique.ap.wbid)
+      BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
+      CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
+      MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
+      rbind(BP.tab, CC.tab, MF.tab)
+  })
+})
+o = list()
+system.time({
+  K0.GO = mkGO(unique.clust_0_wbid, unique.ap.wbid)
 K1.GO = mkGO(unique.clust_1_wbid, unique.ap.wbid)
 K2.GO = mkGO(unique.clust_2_wbid, unique.ap.wbid)
 K3.GO = mkGO(unique.clust_3_wbid, unique.ap.wbid)
 K4.GO = mkGO(unique.clust_4_wbid, unique.ap.wbid)
 l = list(K0=K0.GO,K1=K1.GO,K2=K2.GO,K3=K3.GO,K4=K4.GO)
-
-o = list()
 for (dataset.name in names(l)) {
   print(dataset.name)
   dataset = l[[dataset.name]]
@@ -965,6 +983,7 @@ for (dataset.name in names(l)) {
   MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
   o[dataset.name] = list(rbind(BP.tab, CC.tab, MF.tab))
 }
+})
 ```
 
 ### Output GO term enrichment results. Also, write files to paste into Revigo analysis, which collapses terms.
@@ -996,6 +1015,8 @@ write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.n
 
 ```{r filter by collapsed in REVIGO}
 
+pdf("GOplots.pdf")
+
 o[['K1']] %>% rename(term_ID=GO.ID) -> ok1
 
 bp=(read.csv('gene_lists/K1.REVIGO/K1.BP.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
@@ -1006,7 +1027,6 @@ ok1 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% se
 xx$Term = factor(xx$Term, levels=rev(xx$Term))
 ggplot(xx) + 
   geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
-  geom_vline(aes(xintercept=2.99)) +
   theme(legend.position = 'none') +
   theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
   ggtitle("Terms enriched in genes mapped to embryo-high peaks")
@@ -1022,7 +1042,6 @@ ok2 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% se
 xx$Term = factor(xx$Term, levels=rev(xx$Term))
 ggplot(xx) + 
   geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
-  geom_vline(aes(xintercept=2.99)) +
   theme(legend.position = 'none') +
   theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
   ggtitle("Terms enriched in genes mapped to larval-high peaks")
@@ -1058,4 +1077,5 @@ ggplot(xx) +
   theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
   ggtitle("Terms enriched in genes mapped to Increasing peaks")
 
+dev.off()
 ```
