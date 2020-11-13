@@ -1,0 +1,11 @@
+term_ID,description,frequency,plot_X,plot_Y,plot_size,log10 p-value,uniqueness,dispensability,representative,eliminated
+GO:0005912,"adherens junction",0.311%,-4.750,-1.458,1.556,-1.3675,0.791,0.000,5912,0
+GO:0010494,"cytoplasmic stress granule",0.071%, 6.062,-1.500,0.954,-2.3188,0.615,0.000,10494,0
+GO:0016324,"apical plasma membrane",0.550%,-4.296, 3.943,1.799,-1.9957,0.466,0.041,16324,0
+GO:0045179,"apical cortex",0.053%,null,null,0.845,-1.5452,0.489,0.786,16324,1
+GO:0016323,"basolateral plasma membrane",0.355%,null,null,1.613,-1.4461,0.548,0.739,16324,1
+GO:0009986,"cell surface",0.488%,-1.353,-5.887,1.748,-1.3990,0.711,0.049,9986,0
+GO:0071944,"cell periphery",11.918%, 0.853, 7.123,3.128,-1.3045,0.700,0.070,71944,0
+GO:0030659,"cytoplasmic vesicle membrane",0.506%, 6.889, 2.388,1.763,-1.3565,0.617,0.211,30659,0
+GO:0005634,"nucleus",19.673%, 4.258, 3.321,3.346,-1.5287,0.650,0.222,5634,0
+GO:0005667,"transcription factor complex",0.976%, 4.687,-4.101,2.045,-1.4437,0.650,0.237,5667,0

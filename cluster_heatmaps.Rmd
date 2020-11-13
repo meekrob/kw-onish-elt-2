@@ -953,37 +953,31 @@ all.GO = mkGO(unique.ap.wbid, all.genes)
 
 omigod = list()
 
-cl <- makeClusterPSOCK(4, outfile = NULL, verbose = TRUE) # this is quite verbose
+genelists = list(
+  all=list(fore=unique.ap.wbid, back=all.genes),
+  K0=list(fore=unique.clust_0_wbid, back=unique.ap.wbid),
+  K1=list(fore=unique.clust_1_wbid, back=unique.ap.wbid),
+  K2=list(fore=unique.clust_2_wbid, back=unique.ap.wbid), 
+  K3=list(fore=unique.clust_3_wbid, back=unique.ap.wbid), 
+  K4=list(fore=unique.clust_4_wbid, back=unique.ap.wbid))
+
+#library(parallelly)
+
+cl <- makeClusterPSOCK( length(genelists), outfile = NULL, verbose = TRUE) # this is quite verbose
 clusterExport(cl, list("GOSummary","unique.ap.wbid","mkGO","geneID2GO"))
-genelists = list(K0=unique.clust_0_wbid, K1=unique.clust_1_wbid, K2=unique.clust_2_wbid, K3=unique.clust_3_wbid, K4=unique.clust_4_wbid)
 system.time({
-  omigod = parLapply(cl, genelists, function(foreground_genelist) {
+  omigod = parLapply(cl, genelists, function(set_genelist) {
       library(dplyr,quietly = T,warn.conflicts = F)
       library(topGO,quietly = T,warn.conflicts = F)
-      dataset = mkGO(foreground_genelist, unique.ap.wbid)
+      dataset = mkGO(set_genelist$fore, set_genelist$back)
       BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
       CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
       MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
       rbind(BP.tab, CC.tab, MF.tab)
   })
 })
-o = list()
-system.time({
-  K0.GO = mkGO(unique.clust_0_wbid, unique.ap.wbid)
-K1.GO = mkGO(unique.clust_1_wbid, unique.ap.wbid)
-K2.GO = mkGO(unique.clust_2_wbid, unique.ap.wbid)
-K3.GO = mkGO(unique.clust_3_wbid, unique.ap.wbid)
-K4.GO = mkGO(unique.clust_4_wbid, unique.ap.wbid)
-l = list(K0=K0.GO,K1=K1.GO,K2=K2.GO,K3=K3.GO,K4=K4.GO)
-for (dataset.name in names(l)) {
-  print(dataset.name)
-  dataset = l[[dataset.name]]
-  BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
-  CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
-  MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
-  o[dataset.name] = list(rbind(BP.tab, CC.tab, MF.tab))
-}
-})
+stopCluster(cl)
+
 ```
 
 ### Output GO term enrichment results. Also, write files to paste into Revigo analysis, which collapses terms.
@@ -992,8 +986,15 @@ Paste output two-column files (GO-term p-like-value) into the form at. http://re
 
 
 ``` {r GO output, echo=FALSE}
-
+o=omigod
 howmany_in_kable = 50
+
+kable(o[['all']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Dataset versus genome")
+
+
+kable(o[['K0']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Not changing versus whole dataset")
+
+
 kable(o[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Embryo cluster versus whole dataset")
 
 kable(o[['K2']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Larval cluster versus whole dataset")
@@ -1002,7 +1003,11 @@ kable(o[['K3']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim)
 
 kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable),
       caption="Increasing cluster versus whole dataset")
+```
 
+
+```{r write REVIGO tables}
+write.table(o$all[,c(1,8)], "gene_lists/all.REVIGO/all.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K0[,c(1,8)], "gene_lists/K0.REVIGO/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K1[,c(1,8)], "gene_lists/K1.REVIGO/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K2[,c(1,8)], "gene_lists/K2.REVIGO/K2.forREVIGO.txt",quote=F,col.names=F,row.names=F)
@@ -1016,6 +1021,37 @@ write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.n
 ```{r filter by collapsed in REVIGO}
 
 pdf("GOplots.pdf")
+
+o[['all']] %>% rename(term_ID=GO.ID) -> okAll
+bp=(read.csv('gene_lists/all.REVIGO/all.BP.69.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/all.REVIGO/all.CC.69.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/all.REVIGO/all.MF.69.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+okAll%>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + 
+  geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to all peaks (versus genome)")
+
+
+
+o[['K0']] %>% rename(term_ID=GO.ID) -> ok0
+
+bp=(read.csv('gene_lists/K0.REVIGO/K0.BP.69.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+cc=(read.csv('gene_lists/K0.REVIGO/K0.CC.69.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+mf=(read.csv('gene_lists/K0.REVIGO/K0.MF.csv') %>% filter(eliminated == 0) %>% select(term_ID))[[1]]
+
+ok0 %>% filter(term_ID %in% c(bp,cc,mf)) %>% arrange(`Rank in elim`,elim) %>% select(Term, term_ID, elim, DB) %>% head(20) %>% arrange(DB, elim) %>% mutate(nlogp=-log10(elim)) -> xx
+xx$Term = factor(xx$Term, levels=rev(xx$Term))
+ggplot(xx) + 
+  geom_col(aes(nlogp,Term,fill=DB),color='black' )+ 
+  theme(legend.position = 'none') +
+  theme_bw() + scale_fill_manual("ontology",values=c('#404040','grey','white')) +
+  ggtitle("Terms enriched in genes mapped to 'not changing' peaks")
+
+
 
 o[['K1']] %>% rename(term_ID=GO.ID) -> ok1
 
