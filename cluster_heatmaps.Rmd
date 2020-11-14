@@ -4,7 +4,8 @@ author: "DC King - Onish lab"
 date: "Fall 2020"
 output:
   pdf_document: default
-  html_document: default
+  word_document:
+    kee_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +29,8 @@ library(knitr, quietly=T, warn.conflicts = F)
 library(grid, quietly=T, warn.conflicts = F)
 library(VennDiagram, quietly=T, warn.conflicts = F)
 library(plyranges, quietly=T, warn.conflicts = F) # tidy the GRange datatypes
-
+library(parallel)
+library(future)
 ```
 
 ## Script version and versions
@@ -498,7 +500,7 @@ dfG_max$k6weights[reps_avd$threshold3d_ix] = clusters$k6weights
 
 Custom tracks are served locally (but world-readable). The chunk currently also maps peaks to genes through the "scripts/getCodingGenes.R".
 
-```{r format prepare BED, echo=FALSE}
+```{r format prepare BED, echo=FALSE,cache=TRUE}
 dfG_max$LE_nonNormed = (dfG_max$LE_1 + dfG_max$LE_2)/2
 dfG_max$L1_nonNormed = (dfG_max$L1_1 + dfG_max$L1_2)/2
 dfG_max$L3_nonNormed = (dfG_max$L3_1 + dfG_max$L3_2)/2
@@ -844,8 +846,6 @@ upset(wbid_clusters_fromlist,
         )
         )
       )
-        
-
 
 # breakdown of genes with multiple peaks
 clustersPerGene_rowSums = rowSums(clustersPerGene)
@@ -937,7 +937,7 @@ mkGO = function(foreground_genes, background_genes) {
 
 Run the topGO analyses using the above functions. 
 
-``` {r GO term analysis, include=FALSE}
+``` {r GO term analysis, include=FALSE, cache=TRUE}
 attach(annotatedPeaks)
 
 unique.clust_0_wbid = unique((annotatedPeaks$ap %>% filter(k4cluster == 0))$feature)
