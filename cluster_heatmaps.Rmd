@@ -353,7 +353,7 @@ upset(as.data.frame(LEL1L3),
 
 Perform K-means on the peaks that vary throughout the timecourse.
 
-```{r cluster, echo=FALSE}
+```{r cluster, echo=FALSE, cache=TRUE}
 attach(thresholded_data)
 source('scripts/reorder_kmeans.R')
 nclust=4
