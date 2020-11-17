@@ -3,9 +3,9 @@ title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
 date: "Fall 2020"
 output:
-  pdf_document: default
   word_document:
-    kee_md: true
+    keep_md: true
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -42,7 +42,7 @@ This repo is from ``bash git remote -v```. Using ``r R.version.string``.
 git remote -v
 git log -n 1
 git status -s | grep -v '^?'
-git diff cluster_heatmaps.Rmd
+#git diff cluster_heatmaps.Rmd
 ```
 ## Process data
 
@@ -50,7 +50,7 @@ The source data is a BED file corresponding to the basewise UNION of LE, L1, and
 
 The original IDR peaks are rescanned to determine the composition of each peak.
 
-```{r get-data, echo=FALSE}
+```{r get-data, echo=FALSE,cache=TRUE}
 # IDR peaks
 
 # narrowPeak is bedlike. Each line contains - 
@@ -90,7 +90,7 @@ dfG$L3_IDR = FALSE
 The total number of merged peaks is ``r length(dfG)``.
 Now, map the IDR calls into the aggregate dataframe, showing the architecture of the union.
 
-```{r manage-data, echo=FALSE}
+```{r manage-data, echo=FALSE,cache=T}
 
 #### Mark which IDR peaks contributed to the union
 LE_verify = GenomicRanges::findOverlaps(LE_IDR, dfG, type="any")
@@ -170,11 +170,11 @@ nrow(data3d)
 ```
 ### Post-scaling of data
 
-Now the quantitative data represents 3 timepoints, 2 replicates each. Each value is the input and read-depth normalized pileups (signal) computed per basepair. The maximum value within a peak is the value used. There are ``r nrow(data3d)`` peaks, (and therefore rows).
+Now the quantitative data represents 3 timepoints, 2 replicates each. Each value is the input and read-depth normalized pileups (signal) computed per basepair. The maximum value within a peak is the value used. There are ``r format(nrow(data3d), big.mark = ',')`` peaks, (and therefore rows).
 
 Next we want to filter the lesser 5% invariant rows, and then normalize the values by row.
 
-```{R normalization, echo=FALSE}
+```{R normalization, echo=FALSE,cache=TRUE}
 
 # perform normalization on 3d
 peaks3d_sd = apply(data3d, 1, sd)
@@ -237,7 +237,7 @@ rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
 
 Using the original IDR files, compare them to the all UNION'd file. 
 
-```{r overlap plots, echo=FALSE}
+```{r overlap plots, echo=FALSE, cache=TRUE}
 LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
 
 ## Venn diagram
@@ -343,11 +343,14 @@ upset(as.data.frame(LEL1L3),
           active=T)
         )
 )
-# 
-# cat("Datasets: threshold at:", thresholded_data$TXT_THRESHOLD,"\n")
-# cat("include_x: reps not merged:", dim(thresholded_data$w_reps$include6d_x),"\n")
-# cat("include3d_x: reps merged:", dim(thresholded_data$reps_avd$include3d_x),"\n")
 ```
+
+The overlap between the different IDR-vetted peaks is not uniform. Although a large class is present in all three stages, 
+`r format(n123, big.mark=',')`, only `r sprintf('%.0f%%',100*n123/nrow(df_max))` of total. Peaks representing a single stage are also not uniform, as Late Embryo-only yields 
+`r format(sum( LEL1L3[,1] == 1 & LEL1L3[,2] == 0 & LEL1L3[,3] == 0), big.mark=',')`, 
+and for the other stages, 
+`r format(sum( LEL1L3[,2] == 1 & LEL1L3[,1] == 0 & LEL1L3[,3] == 0), big.mark=',')` 
+and `r format(sum( LEL1L3[,3] == 1 & LEL1L3[,2] == 0 & LEL1L3[,1] == 0), big.mark=',')`, for L1-only and L3-only, respectively.
 
 ### K-means clustering
 
@@ -716,7 +719,7 @@ write(chrom.sizes,"chrom.sizes")
 
 Run UCSC-user apps tools.
 
-```{bash make bigBed, echo=FALSE}
+```{bash make bigBed, echo=FALSE, cache=TRUE}
 # you must execute the above chunks first
 # better figure out the PATH on your system
 PATH=$PATH:/Users/david/bin/UCSC_userApps 
@@ -728,7 +731,7 @@ bedToBigBed peaksForBigBed.bed chrom.sizes peaksForBigBed.bb -type=bed3+8 -tab -
 
 Pie chart for the relative locations and counts of how the peaks mapped to genes.
 
-```{r Get Coding Genes, echo=FALSE}
+```{r Get Coding Genes, echo=FALSE, cache=TRUE}
 # annotatedPeaks assigned in previous chunk
 attach(annotatedPeaks)
  # a pie chart with the breakdown of how the annotation happened
@@ -869,7 +872,7 @@ if (FALSE)
 
 Data is from paramart, the functions are necessary to make the topGO analysis easier to repeat across the clusters.
 
-```{r GO Functions, echo=FALSE}
+```{r GO Functions, echo=FALSE, cache=TRUE}
 # get the annotations from PARASITE
 if (! "paramart" %in% ls()) {
   system.time({paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)})}
@@ -963,7 +966,7 @@ genelists = list(
 
 #library(parallelly)
 
-cl <- makeClusterPSOCK( length(genelists), outfile = NULL, verbose = TRUE) # this is quite verbose
+cl <- makeClusterPSOCK(4) 
 clusterExport(cl, list("GOSummary","unique.ap.wbid","mkGO","geneID2GO"))
 system.time({
   omigod = parLapply(cl, genelists, function(set_genelist) {
@@ -973,7 +976,7 @@ system.time({
       BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
       CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
       MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
-      rbind(BP.tab, CC.tab, MF.tab)
+      return(rbind(BP.tab, CC.tab, MF.tab))
   })
 })
 stopCluster(cl)
