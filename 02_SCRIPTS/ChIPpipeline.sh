@@ -9,7 +9,7 @@
 NTHREADS=${SLURM_NTASKS} # passes --ntasks set above
 echo "$SLURM_JOB_NAME[$SLURM_JOB_ID] $@" # log the command line
 SUBMIT=$0
-JOBSTEPS="SPP IDR BW BW-SUBTRACT UNION AGGREGATE"
+JOBSTEPS="SPP IDR BW BW-SUBTRACT BW-AVERAGE UNION AGGREGATE"
 ########################################################
 ##### CONFIGURATION VARIABLES
 FLANK=150 # for bedToBw
@@ -169,6 +169,17 @@ then
 
             stage_jids="$stage_jids $bws_jid1 $bws_jid2"
             SCORE_JOB_IDS="$SCORE_JOB_IDS $bws_jid1 $bws_jid2"
+        fi
+
+        # BW-AVERAGE
+        signal_averaged_file="${label}.bw"
+        if [[ " $JOBSTEPS " =~ " BW-AVERAGE " ]] 
+        then
+            D=$(deps $bws_jid1 $bws_jid2)
+            ntasks="--ntasks=4"
+            tim="--time=0:03:00"
+            bwav_jid=$(sb --job-name=${label}-ave $ntasks $time $D $SUBMIT BW-AVERAGE $SIG_DIR/$rep1_input_subtracted_bw $SIG_DIR/$rep2_input_subtracted_bw $SIG_DIR/$signal_averaged_file)
+            stage_jids="$stage_jids $bwav_jid"
         fi
 
         # PEAK CALLS (SPP)
@@ -342,6 +353,22 @@ else
         cmd="02_SCRIPTS/javaGenomicsToolkit wigmath.Subtract -z -p $SLURM_NTASKS -m $minuend -s $subtrahend -o $wigfilename"
         run $cmd
         
+        # convert to bigWig (binary, compressed)
+        cmd="wigToBigWig -clip $wigfilename $CHROMLENGTHS $outfilename && rm -v $wigfilename"
+        run $cmd
+
+#BW-AVERAGE ###########################
+    elif [ $jobstep == "BW-AVERAGE" ]
+    then
+        rep1=$1
+        rep2=$2
+        outfilename=$3
+        wigfilename=${outfilename/bw/wig}
+        # perform average
+        # creates a wiggle file (ASCII)
+        cmd="02_SCRIPTS/javaGenomicsToolkit wigmath.Average -p $SLURM_NTASKS $rep1 $rep2 -o $wigfilename"
+        run $cmd
+
         # convert to bigWig (binary, compressed)
         cmd="wigToBigWig -clip $wigfilename $CHROMLENGTHS $outfilename && rm -v $wigfilename"
         run $cmd
