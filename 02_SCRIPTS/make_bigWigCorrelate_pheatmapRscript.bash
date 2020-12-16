@@ -17,8 +17,6 @@ then
     exit
 fi
 
-source /projects/dcking@colostate.edu/paths.bashrc
-
 echo "###### BEGIN R SCRIPT #######"
 echo "# Command \"$0 $@\""
 
