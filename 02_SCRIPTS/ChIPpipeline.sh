@@ -23,9 +23,13 @@ ALL_STAGES_UNION=allStagesUnion.bed
 ALL_STAGES_AGGREGATE=${ALL_STAGES_UNION}.df
 # PROJECT ORGANIZATION
 INPUT_DIR=01_FASTQ
-ALIGN_DIR=03_ALIGN
-SPP_DIR=04_SPP
-IDR_DIR=05_IDR
+#ALIGN_DIR=03_ALIGN
+#SPP_DIR=04_SPP
+#IDR_DIR=05_IDR
+ALIGN_DIR=03_SUBALIGN
+SPP_DIR=04_SUBSPP
+IDR_DIR=05_SUBIDR
+
 SIG_DIR=06_SIGNAL
 SEQ_DIR=07_SEQUENCES
 
@@ -116,7 +120,7 @@ then
         fi
 
         #CONVERT FORMAT
-        # FILENAMES
+        # files generated:
         rep1_bam=${rep1_sam/.sam/.bam}
         rep2_bam=${rep2_sam/.sam/.bam}
         input_bam=${input_sam/.sam/.bam}
@@ -133,7 +137,7 @@ then
         fi
 
         #BW COMPUTE SIGNAL FILES
-        # filenames
+        # files generated:
         # see function: makeFlankFilename()
         rep1_bw=${label}_1.bw
         rep2_bw=${label}_2.bw
@@ -154,7 +158,7 @@ then
         fi
         
         #BW-SUBTRACT
-        # 
+        # files generated:
         rep1_input_subtracted_bw="${label}_1_minus_input.bw"
         rep2_input_subtracted_bw="${label}_2_minus_input.bw"
         SCORE_FILEPATHS="$SCORE_FILEPATHS $SIG_DIR/$rep1_input_subtracted_bw $SIG_DIR/$rep2_input_subtracted_bw"
@@ -172,6 +176,7 @@ then
         fi
 
         # BW-AVERAGE
+        # file generated:
         signal_averaged_file="${label}.bw"
         if [[ " $JOBSTEPS " =~ " BW-AVERAGE " ]] 
         then
@@ -182,13 +187,12 @@ then
             stage_jids="$stage_jids $bwav_jid"
         fi
 
-        # PEAK CALLS (SPP)
-        # SPP OUTPUT FILENAMES are not specified directly, but have the following format 
-        # (like L1_1_VS_L1_input.regionPeak.gz), 
+        #SPP
+        # files generated:
         rep1_regionPeak=${rep1_bam%%.bam}_VS_${input_bam%%.bam}.regionPeak.gz
         rep2_regionPeak=${rep2_bam%%.bam}_VS_${input_bam%%.bam}.regionPeak.gz
 
-        # SPP JOBS
+        # SPP JOBSTEPS
         if [[ " $JOBSTEPS " =~ " SPP " ]] 
         then
             echo "pipeline: $label SPP"
@@ -202,7 +206,7 @@ then
         fi
 
         # IDR launch
-        # IDR FILENAMES
+        # file generated:
         idr_out="${label}.narrowPeak"
         idr_filenames="$idr_filenames ${IDR_DIR}/$idr_out"
         # IDR JOBS
@@ -370,6 +374,7 @@ else
         run $cmd
 
         # convert to bigWig (binary, compressed)
+        # -clip is necessary to keep things inside CHROMLENGTHS
         cmd="wigToBigWig -clip $wigfilename $CHROMLENGTHS $outfilename && rm -v $wigfilename"
         run $cmd
 
