@@ -31,13 +31,17 @@ library(VennDiagram, quietly=T, warn.conflicts = F)
 library(plyranges, quietly=T, warn.conflicts = F) # tidy the GRange datatypes
 library(parallel)
 library(future)
+
+commathou = function(num) {
+  format(num, big.mark = ",")
+}
 ```
 
 ## Script version and versions
 
 This repo is from ``bash git remote -v```. Using ``r R.version.string``.
 
-```{bash repo version, echo=FALSE}
+```{bash repo version, include=FALSE, echo=FALSE}
 
 git remote -v
 git log -n 1
@@ -61,10 +65,13 @@ The original IDR peaks are rescanned to determine the composition of each peak.
 source('scripts/makeGRangesFromNarrowPeak.R') # this script retains the extra columns and drops unused ones
 #L1_IDR = makeGRangesFromNarrowPeak('L1_1_L1_2.IDR_0.05.narrowPeak')
 L1_IDR = makeGRangesFromNarrowPeak('redux/L1.narrowPeak')
+L1_npeaks = length(L1_IDR)
 #LE_IDR = makeGRangesFromNarrowPeak('LE_1_LE_2.IDR_0.05.narrowPeak')
 LE_IDR = makeGRangesFromNarrowPeak('redux/LE.narrowPeak')
+LE_npeaks = length(LE_IDR)
 #L3_IDR = makeGRangesFromNarrowPeak('L3_1_L3_2.IDR_0.05.narrowPeak')
 L3_IDR = makeGRangesFromNarrowPeak('redux/L3.narrowPeak')
+L3_npeaks = length(L3_IDR)
 # Union of all IDR output, with peak maxes assigned via my modification of javaGenomicsToolkit https://github.com/meekrob/java-genomics-toolkit
 #df = read.table("allStagesUNION.IDR_0.05.sorted.bed_s.df", header=T, sep="\t")
 df = read.table("redux/allStagesUnion.bed.df", header=T, sep="\t")
@@ -85,10 +92,7 @@ dfG$LE_IDR = FALSE
 dfG$L1_IDR = FALSE
 dfG$L3_IDR = FALSE
 ```
-### Description of data
 
-The total number of merged peaks is ``r length(dfG)``.
-Now, map the IDR calls into the aggregate dataframe, showing the architecture of the union.
 
 ```{r manage-data, echo=FALSE,cache=T}
 
@@ -168,74 +172,7 @@ df_max %>% dplyr::mutate(
 
 nrow(data3d)
 ```
-### Post-scaling of data
 
-Now the quantitative data represents 3 timepoints, 2 replicates each. Each value is the input and read-depth normalized pileups (signal) computed per basepair. The maximum value within a peak is the value used. There are ``r format(nrow(data3d), big.mark = ',')`` peaks, (and therefore rows).
-
-Next we want to filter the lesser 5% invariant rows, and then normalize the values by row.
-
-```{R normalization, echo=FALSE,cache=TRUE}
-
-# perform normalization on 3d
-peaks3d_sd = apply(data3d, 1, sd)
-peaks3d_mu = apply(data3d, 1, mean)
-peaks3d_std = (data3d - peaks3d_mu) /  peaks3d_sd
-
-# perform normalization on 6d (data)
-peaks6d_sd = apply(data6d, 1, sd)
-peaks6d_mu = apply(data6d, 1, mean)
-# normalize by row
-peaks6d_std = (data6d- peaks6d_mu) /  peaks6d_sd
-
-# change filenames to shorter labels
-colnames(peaks6d_std) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
-
-# changing versus not-changing
-q.peaks6d_zeroed_nans_sd = function(q) { quantile(peaks6d_sd, q)}
-q.peaks3d_zeroed_nans_sd = function(q) { quantile(peaks3d_sd, q)}
-
-THRESHOLD = .05
-
-# make the text conversions consistent
-TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
-
-# Enforce stdev-passing peaks and "all IDR" as part of the threshold
-# w/reps
-threshold6d_q = q.peaks6d_zeroed_nans_sd(THRESHOLD)
-threshold6d_ix = peaks6d_sd > threshold6d_q
-# to restrict to all IDR only
-#threshold6d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold6d_ix
-threshold6d_x = peaks6d_std[threshold6d_ix,]
-# w/reps avg'd
-threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
-threshold3d_ix = peaks3d_sd > threshold3d_q
-# to restrict to all IDR only
-#threshold3d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold3d_ix
-threshold3d_x = peaks3d_std[threshold3d_ix,]
-
-include6d_x = threshold6d_x
-include3d_x = threshold3d_x
-
-# clean up the environment some more
-thresholded_data = list( w_reps = list(threshold6d_q=threshold6d_q,
-                                       threshold6d_ix=threshold6d_ix,
-                                       threshold6d_x=threshold6d_x,
-                                       include6d_x=include6d_x),
-                         reps_avd = list(threshold3d_q=threshold3d_q,
-                                         threshold3d_ix=threshold3d_ix,
-                                         threshold3d_x=threshold3d_x,
-                                         include3d_x=include3d_x),
-                         THRESHOLD=THRESHOLD,
-                         TXT_THRESHOLD = sprintf("%.3f", THRESHOLD))
-
-rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
-   threshold3d_q,threshold3d_ix,threshold3d_x,include3d_x,
-   THRESHOLD,TXT_THRESHOLD)
-```
-
-### Evaluate overlap between different stages in terms of the stages called in an overlapping location
-
-Using the original IDR files, compare them to the all UNION'd file. 
 
 ```{r overlap plots, echo=FALSE, cache=TRUE}
 LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
@@ -245,10 +182,21 @@ area1 = sum(LEL1L3[,1] == 1)
 area2 = sum(LEL1L3[,2] == 1)
 area3 = sum(LEL1L3[,3] == 1)
 
+# Stage-specific counts of peaks called. Not needed for draw.venn, but used in text
+n100 = sum( LEL1L3[,1] == 1 & LEL1L3[,2] == 0 & LEL1L3[,3] == 0)
+n020 = sum( LEL1L3[,2] == 1 & LEL1L3[,1] == 0 & LEL1L3[,3] == 0)
+n003 = sum( LEL1L3[,3] == 1 & LEL1L3[,2] == 0 & LEL1L3[,1] == 0)
+
+n120 = sum( LEL1L3[,1] == 1 & LEL1L3[,2] == 1 & LEL1L3[,3] == 0)
+n023 = sum( LEL1L3[,2] == 0 & LEL1L3[,1] == 1 & LEL1L3[,3] == 1)
+n103 = sum( LEL1L3[,3] == 1 & LEL1L3[,2] == 0 & LEL1L3[,1] == 1)
+
+# two-way overlaps
 n23 = sum( LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
 n12 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 )
 n13 = sum(LEL1L3[,1] == 1  & LEL1L3[,3] == 1)
 
+# three-way intersection
 n123 = sum(LEL1L3[,1] == 1 & LEL1L3[,2] == 1 & LEL1L3[,3] == 1)
 
 LE_purple = "#7570B3" # Chetwode blue
@@ -345,12 +293,81 @@ upset(as.data.frame(LEL1L3),
 )
 ```
 
-The overlap between the different IDR-vetted peaks is not uniform. Although a large class is present in all three stages, 
-`r format(n123, big.mark=',')`, only `r sprintf('%.0f%%',100*n123/nrow(df_max))` of total. Peaks representing a single stage are also not uniform, as Late Embryo-only yields 
-`r format(sum( LEL1L3[,1] == 1 & LEL1L3[,2] == 0 & LEL1L3[,3] == 0), big.mark=',')`, 
-and for the other stages, 
-`r format(sum( LEL1L3[,2] == 1 & LEL1L3[,1] == 0 & LEL1L3[,3] == 0), big.mark=',')` 
-and `r format(sum( LEL1L3[,3] == 1 & LEL1L3[,2] == 0 & LEL1L3[,1] == 0), big.mark=',')`, for L1-only and L3-only, respectively.
+The overlap between the different IDR-vetted peaks is not uniform. Individually, the number of peaks called at each stage increases through developmental time, ranging from `r commathou(LE_npeaks)`, `r commathou(L1_npeaks)`, and `r commathou(L3_npeaks)` for late embryo, L1, and L3, respectively. The total number of merged peaks is `r commathou(length(dfG))`. 
+`r commathou(n003)` are stage-specific; `r commathou(n120+n023+n103)` are called in at least two stages.
+A large class is present in all three stages, 
+`r commathou(n123)`, representing `r sprintf('%.0f%%',100*n123/nrow(df_max))` of total. 
+
+### current wording in text
+The overlap between the different IDR-vetted peaks at different stages is not uniform. Individually, the number of peaks called at each stage increases through developmental time, ranging from `r commathou(LE_npeaks)`, to `r commathou(L1_npeaks)`, to `r commathou(L3_npeaks)` for LE, L1, and L3, respectively. The total number of merged peaks is `r commathou(length(dfG))`. The largest individual class is the set of `r commathou(n003)` peaks called in L3 without LE or L1 counterparts by overlapping position. A large class is present in all three stages, `r commathou(n123)`, representing `r sprintf('%.0f%%',100*n123/nrow(df_max))` of total.
+
+### Post-scaling of data
+
+Now the quantitative data represents 3 timepoints, 2 replicates each. Each value is the input and read-depth normalized pileups (signal) computed per basepair. The maximum value within a peak is the value used. There are `r format(nrow(data3d), big.mark = ',')` peaks, (and therefore rows).
+
+Next we want to filter the lesser 5% invariant rows, and then normalize the values by row.
+
+```{R normalization, echo=FALSE,cache=TRUE}
+
+# perform normalization on 3d
+peaks3d_sd = apply(data3d, 1, sd)
+peaks3d_mu = apply(data3d, 1, mean)
+peaks3d_std = (data3d - peaks3d_mu) /  peaks3d_sd
+
+# perform normalization on 6d (data)
+peaks6d_sd = apply(data6d, 1, sd)
+peaks6d_mu = apply(data6d, 1, mean)
+# normalize by row
+peaks6d_std = (data6d- peaks6d_mu) /  peaks6d_sd
+
+# change filenames to shorter labels
+colnames(peaks6d_std) <- c("LE_1", "LE_2", "L1_1", "L1_2", "L3_1","L3_2")
+
+# changing versus not-changing
+q.peaks6d_zeroed_nans_sd = function(q) { quantile(peaks6d_sd, q)}
+q.peaks3d_zeroed_nans_sd = function(q) { quantile(peaks3d_sd, q)}
+
+THRESHOLD = .05
+
+# make the text conversions consistent
+TXT_THRESHOLD = sprintf("%.3f", THRESHOLD)
+
+# Enforce stdev-passing peaks and "all IDR" as part of the threshold
+# w/reps
+threshold6d_q = q.peaks6d_zeroed_nans_sd(THRESHOLD)
+threshold6d_ix = peaks6d_sd > threshold6d_q
+# to restrict to all IDR only
+#threshold6d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold6d_ix
+threshold6d_x = peaks6d_std[threshold6d_ix,]
+# w/reps avg'd
+threshold3d_q = q.peaks3d_zeroed_nans_sd(THRESHOLD)
+threshold3d_ix = peaks3d_sd > threshold3d_q
+# to restrict to all IDR only
+#threshold3d_ix = dfG$LE_IDR & dfG$L1_IDR & dfG$L3_IDR & threshold3d_ix
+threshold3d_x = peaks3d_std[threshold3d_ix,]
+
+include6d_x = threshold6d_x
+include3d_x = threshold3d_x
+
+# clean up the environment some more
+thresholded_data = list( w_reps = list(threshold6d_q=threshold6d_q,
+                                       threshold6d_ix=threshold6d_ix,
+                                       threshold6d_x=threshold6d_x,
+                                       include6d_x=include6d_x),
+                         reps_avd = list(threshold3d_q=threshold3d_q,
+                                         threshold3d_ix=threshold3d_ix,
+                                         threshold3d_x=threshold3d_x,
+                                         include3d_x=include3d_x),
+                         THRESHOLD=THRESHOLD,
+                         TXT_THRESHOLD = sprintf("%.3f", THRESHOLD))
+
+rm(threshold6d_q,threshold6d_ix,threshold6d_x,include6d_x,
+   threshold3d_q,threshold3d_ix,threshold3d_x,include3d_x,
+   THRESHOLD,TXT_THRESHOLD)
+```
+
+
+
 
 ### K-means clustering
 
