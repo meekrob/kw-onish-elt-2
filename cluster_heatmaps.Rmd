@@ -897,8 +897,8 @@ if (! "WORMGO" %in% ls()) {
   # go to https://parasite.wormbase.org/biomart/martview/ to figure out the values to use for this
   system.time({WORMGO = biomaRt::getBM(
     mart = paramart,
-    filter = "species_id_1010",
-    value = "caelegprjna13758",
+    filter = c("species_id_1010","biotype"),
+    value = list(species_id_1010="caelegprjna13758",biotype="protein_coding"),
     attributes = c(
       "wbps_gene_id",
       "external_gene_id",
@@ -923,11 +923,11 @@ GOSummary<- function(GOdata, topNodes = 200) {
     object=GOdata, 
     classicFisher = resultClassic,
     elim=resultElim,    
-    orderBy="elim",
+    orderBy="classicFisher",
     topNodes = topNodes
   ) -> tab
   # not sure where the conversion to char is happening. convert back
-  tab$classicFisher = as.numeric(tab$classicFisher)
+  tab$fisher = as.numeric(tab$classicFisher)
   tab$elim = as.numeric(tab$elim)
   return(tab)
 }
@@ -990,15 +990,83 @@ system.time({
       library(dplyr,quietly = T,warn.conflicts = F)
       library(topGO,quietly = T,warn.conflicts = F)
       dataset = mkGO(set_genelist$fore, set_genelist$back)
-      BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
-      CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
-      MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
+      BP.tab = GOSummary(dataset$BP) %>% filter(fisher < .05) %>% arrange(fisher) %>% mutate(DB="BP")
+      CC.tab = GOSummary(dataset$CC) %>% filter(fisher < .05) %>% arrange(fisher) %>% mutate(DB="CC")
+      MF.tab = GOSummary(dataset$MF) %>% filter(fisher < .05) %>% arrange(fisher) %>% mutate(DB="MF")
+      # BP.tab = GOSummary(dataset$BP) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="BP")
+      # CC.tab = GOSummary(dataset$CC) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="CC")
+      # MF.tab = GOSummary(dataset$MF) %>% filter(elim < .05) %>% arrange(elim) %>% mutate(DB="MF")
       return(rbind(BP.tab, CC.tab, MF.tab))
   })
 })
 stopCluster(cl)
 
 ```
+
+```{r ddd}
+
+chip_v_genome_wide=mkGO(unique.ap.wbid, all.genes)
+gBP = GOSummary(chip_v_genome_wide$BP,1000)
+goID="GO:0050769"
+neurogo=c('GO:0007218','GO:0033563','GO:0048665','GO:0097376','GO:0050769','GO:0007416','GO:0050769','GO:0003388')
+gene.universe = genes(chip_v_genome_wide$BP)
+go.genes <- genesInTerm(chip_v_genome_wide$BP, goID)[[1]]
+sig.genes <- sigGenes(chip_v_genome_wide$BP)
+my.group <- new("classicCount", testStatistic = GOFisherTest, name = "fisher",
+                 allMembers = gene.universe, groupMembers = go.genes,
+                 sigMembers = sig.genes)
+contTable(my.group)
+runTest(my.group)
+```
+
+```{r embryo-golists}
+dataset=mkGO(unique.clust_1_wbid,unique.ap.wbid)
+
+neurogo=c('GO:0007218','GO:0033563','GO:0048665','GO:0097376','GO:0050769','GO:0007416','GO:0050769','GO:0003388')
+neuroterms=genesInTerm(dataset$BP, neurogo)
+neurogenes=c()
+# neuropeptide signaling pathway
+neuroterms$`GO:0007218`[neuroterms$`GO:0007218` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# dorsal/ventral axon guidance
+neuroterms$`GO:0033563`[neuroterms$`GO:0033563` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# neuron fate specification
+neuroterms$`GO:0048665`[neuroterms$`GO:0048665` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# interneuron axon guidance
+neuroterms$`GO:0097376`[neuroterms$`GO:0097376` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# synapse assembly
+neuroterms$`GO:0007416`[neuroterms$`GO:0007416` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# GO:0050769	positive regulation of neurogenesis
+neuroterms$`GO:0050769`[neuroterms$`GO:0050769` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+# GO:0003388	neuron development involved in amphid se…	2	2	
+neuroterms$`GO:0003388`[neuroterms$`GO:0003388` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
+neurogenes=unique(neurogenes)
+
+# in K3:
+# GO:0007212	dopamine receptor signaling pathway 
+
+# in K4: reproduction-
+# GO:1905516	positive regulation of fertilization
+# and GO:0000003	reproduction	461	262
+# in K4: neuro-
+# GO:0007614	short-term memory 9	8	
+# GO:0042048	olfactory behavior	20	17	
+
+# These values are used in the text below.
+# neuroterms "found in "significantly enriched" in Embryo cluster that are significantly enriched in the whole dataset versus the C. elegans genome
+n_neuroterms_all = omigod[['all']] %>% filter(GO.ID %in% neurogo) %>% nrow # 0
+n_0050769 = length(genesInTerm(dataset$BP,"GO:0050769")[[1]]) # 43
+n_0050769_genome = length(genesInTerm(all.GO$BP,"GO:0050769")[[1]]) # 61
+stats_0050769_k1 = omigod[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% filter(GO.ID == 'GO:0050769') # 4 Significant, 1.62 Expected, 0.0373 p-val
+
+# The genes with this term are:
+annotatedPeaks$all_CDS_genes[neuroterms$`GO:0050769`[neuroterms$`GO:0050769` %in% unique.clust_1_wbid]]
+```
+We find some GO terms are enriched in some of the clusters versus the ELT-2 peaks at-large (all clusters). However, those terms *ARE NOT enriched* in ELT-2 peaks (all clusters) versus the genome (there are `r n_neuroterms_all` enriched).
+
+For example, having `r n_0050769` genes annotated with the term "GO:0050769: positive regulation of neurogenesis" in the ELT-2 peaks is not *enriched* versus the whole genome (`r n_0050769_genome` genes).
+
+However, having `r stats_0050769_k1$Significant` of those genes near Embryo-high peaks, relative to `r stats_0050769_k1$Expected` expected, gives a p-value of `r stats_0050769_k1$pval` using the elimination method implemented in topGO.
+
 
 ### Output GO term enrichment results. Also, write files to paste into Revigo analysis, which collapses terms.
 
@@ -1009,7 +1077,8 @@ Paste output two-column files (GO-term p-like-value) into the form at. http://re
 o=omigod
 howmany_in_kable = 50
 
-kable(o[['all']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Dataset versus genome")
+#kable(o[['all']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(fisher) %>% head(howmany_in_kable), caption="Dataset versus genome")
+kable(o[['all']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(fisher), caption="Dataset versus genome")
 
 
 kable(o[['K0']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% arrange(pval) %>% head(howmany_in_kable), caption="Not changing versus whole dataset")
@@ -1026,7 +1095,7 @@ kable(o[['K4']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim)
 ```
 
 
-```{r write REVIGO tables}
+```{r write REVIGO tables, echo=FALSE}
 write.table(o$all[,c(1,8)], "gene_lists/all.REVIGO/all.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K0[,c(1,8)], "gene_lists/K0.REVIGO/K0.forREVIGO.txt",quote=F,col.names=F,row.names=F)
 write.table(o$K1[,c(1,8)], "gene_lists/K1.REVIGO/K1.forREVIGO.txt",quote=F,col.names=F,row.names=F)
@@ -1038,7 +1107,7 @@ write.table(o$K4[,c(1,8)], "gene_lists/K4.REVIGO/K4.forREVIGO.txt",quote=F,col.n
 
 
 
-```{r filter by collapsed in REVIGO}
+```{r filter by collapsed in REVIGO, echo=FALSE}
 
 pdf("GOplots.pdf")
 
