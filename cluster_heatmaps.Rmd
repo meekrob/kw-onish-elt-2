@@ -31,6 +31,8 @@ library(VennDiagram, quietly=T, warn.conflicts = F)
 library(plyranges, quietly=T, warn.conflicts = F) # tidy the GRange datatypes
 library(parallel)
 library(future)
+library(clusterProfiler)
+library(org.Ce.eg.db)
 
 commathou = function(num) {
   format(num, big.mark = ",")
@@ -105,7 +107,14 @@ dfG$L1_IDR[ to(L1_verify) ] <- TRUE
 dfG$L3_IDR[ to(L3_verify) ] <- TRUE
 
 source('scripts/r_isect_union.R')
-#dfG$summit_agreement = score_peak_summit_agreement(dfG, LE_IDR, L1_IDR, L3_IDR)$summit_agreement
+summit_agreement = score_peak_summit_agreement(dfG, LE_IDR, L1_IDR, L3_IDR)
+dfG$LE_peak_1_summit = summit_agreement$LE_peak_1_summit
+dfG$LE_peak_2_summit = summit_agreement$LE_peak_2_summit
+dfG$L1_peak_1_summit = summit_agreement$L1_peak_1_summit
+dfG$L1_peak_2_summit = summit_agreement$L1_peak_2_summit
+dfG$L3_peak_1_summit = summit_agreement$L3_peak_1_summit
+dfG$L3_peak_2_summit = summit_agreement$L3_peak_2_summit
+dfG$summit_agreement = summit_agreement$summit_agreement
 
 # collect some variables 
 IDR_sets = list(LE_IDR=LE_IDR,L1_IDR=L1_IDR,L3_IDR=L3_IDR,LE_verify=LE_verify,L1_verify=L1_verify,L3_verify=L3_verify)
@@ -150,8 +159,9 @@ dfG_metadata %>% as.data.frame() %>% dplyr::select(-starts_with('min'), -starts_
     L1_2,
     L3_1,
     L3_2,
-    ends_with("IDR")
-   # summit_agreement
+    ends_with("IDR"),
+    ends_with("summit"),
+    summit_agreement
   ) -> 
   dfG_metadata_max
 # not changing the row count, can map back onto dfG
@@ -885,6 +895,121 @@ if (FALSE)
 }
 ```
 
+
+```{r cluster-profiler, cache=TRUE}
+annotatedPeaks$ap$k4labels[annotatedPeaks$ap$k4labels == "Post-embryonic"] <- "Larval"
+annotatedPeaks$ap$k4labels = factor(annotatedPeaks$ap$k4labels, levels=c("LE-specific","Larval","L3-high","Increasing","Not-changing or not IDR-passing"))
+lapply(split(annotatedPeaks$ap$feature, annotatedPeaks$ap$k4labels),unique) -> ap.split
+lapply(ap.split, length)
+sum(unlist(.Last.value))
+gene.df <- lapply( ap.split, function(WBGeneID){ bitr(WBGeneID,
+     fromType = "WORMBASE",
+     toType = "ENTREZID",
+     OrgDb = org.Ce.eg.db)})
+
+lapply(gene.df,nrow)
+sum(unlist(.Last.value))
+
+
+gene.df$`Not-changing or not IDR-passing` = NULL
+system.time(
+{compareCluster(lapply(gene.df, function(x) x$ENTREZID),
+               fun = "enrichGO",
+               pvalueCutoff = 0.05,
+               keyType = "ENTREZID",
+               ont="MF",
+               OrgDb = org.Ce.eg.db,
+               pAdjustMethod = "BH",
+               minGSSize = 5,
+               maxGSSize = 150,
+               readable=TRUE) -> compClust.MF})
+
+# MF:
+#   user  system elapsed 
+# 16.542   2.653 128.106 
+system.time(
+{compareCluster(lapply(gene.df, function(x) x$ENTREZID),
+               fun = "enrichGO",
+               pvalueCutoff = 0.05,
+               keyType = "ENTREZID",
+               ont="BP",
+               OrgDb = org.Ce.eg.db,
+               pAdjustMethod = "BH",
+               minGSSize = 5,
+               maxGSSize = 150,
+               readable=TRUE) -> compClust.BP})
+# BP:
+#   user  system elapsed 
+# 30.142   5.171 149.272
+# 33.919   6.138 236.847  (had readable=T)
+# 26.847   4.398  39.339  (had readable=T)
+# 27.766   4.445  40.864  (had readable=T)
+# 32.690   5.623 107.306  
+system.time(
+{compareCluster(lapply(gene.df, function(x) x$ENTREZID),
+               fun = "enrichGO",
+               pvalueCutoff = 0.05,
+               keyType = "ENTREZID",
+               ont="CC",
+               OrgDb = org.Ce.eg.db,
+               pAdjustMethod = "BH",
+               minGSSize = 5,
+               maxGSSize = 150,
+               readable=TRUE) -> compClust.CC})
+```
+
+```{r dotplot-MF, cache=TRUE}
+compClust.simp = simplify(compClust.MF,cutoff=.25)
+dotplot(compClust.simp, showCategory=10, includeAll=T,by="count") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text.y=element_text(size=8))  + ggtitle("Molecular Function (GO)")
+```
+
+```{r dotplot-BP, cache=TRUE}
+compClust.simp = simplify(compClust.BP,cutoff=.3)
+dotplot(compClust.simp, showCategory=10, includeAll=T,by="count") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text.y=element_text(size=8))  + ggtitle("Biological Process (GO)")
+```
+
+```{r dotplot-CC, cache=TRUE}
+compClust.simp = simplify(compClust.CC,cutoff=.7)
+dotplot(compClust.simp, showCategory=10, includeAll=T,by="count") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text.y=element_text(size=8))  + ggtitle("Cellular Component (GO)")
+```
+
+
+```{r GO-dotplot, cache=TRUE }
+
+dotplot(compClust.simp, showCategory=10, includeAll=T,by="count") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.text.y=element_text(size=8)) + ggtitle("GO (BP)")
+```
+
+```{r KEGG-dotplot, cache=TRUE }
+c_eK<- compareCluster(geneClusters = lapply(gene.df, function(x) x$ENTREZID), 
+                      fun="enrichKEGG", 
+                      organism = "cel", 
+                      pvalueCutoff = 0.05, 
+                      keyType = "ncbi-geneid", 
+                      pAdjustMethod = "BH", 
+                      minGSSize = 5, 
+                      maxGSSize = 150)
+dotplot(c_eK) + ggtitle("KEGG pathways")
+
+gene.df.ENTREZID = lapply(gene.df, function(x) x$ENTREZID)
+
+kegg.readable = lapply(gene.df.ENTREZID, function(clust.entrez.ids) {
+  as.data.frame(setReadable(
+    enrichKEGG(clust.entrez.ids,
+               organism = 'cel',
+               keyType = 'ncbi-geneid'),
+    OrgDb = org.Ce.eg.db,
+    keyType = "ENTREZID"
+  ))
+})
+# switch to kables
+#View(kegg.readable$`LE-specific`) # empty
+#View(kegg.readable$`Larval`)
+#View(kegg.readable$`L3-high`)
+#View(kegg.readable$Increasing)
+
+
+```
+
 ### GO data and processing functions
 
 Data is from paramart, the functions are necessary to make the topGO analysis easier to repeat across the clusters.
@@ -1003,7 +1128,7 @@ stopCluster(cl)
 
 ```
 
-```{r ddd}
+```{r ddd, cache=TRUE}
 
 chip_v_genome_wide=mkGO(unique.ap.wbid, all.genes)
 gBP = GOSummary(chip_v_genome_wide$BP,1000)
@@ -1019,7 +1144,7 @@ contTable(my.group)
 runTest(my.group)
 ```
 
-```{r embryo-golists}
+```{r embryo-golists, cache=TRUE}
 dataset=mkGO(unique.clust_1_wbid,unique.ap.wbid)
 
 neurogo=c('GO:0007218','GO:0033563','GO:0048665','GO:0097376','GO:0050769','GO:0007416','GO:0050769','GO:0003388')
