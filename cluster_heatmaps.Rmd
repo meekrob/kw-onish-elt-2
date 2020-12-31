@@ -184,6 +184,26 @@ nrow(data3d)
 ```
 
 
+```{r chromosome distribution, echo=FALSE, cache=TRUE}
+chromlens=seqlengths(seqinfo(dfG))
+
+positionals = data.frame(position=start(dfG),index=seq_along(start(dfG)), chrom=seqnames(dfG))
+positionals = positionals %>% filter(chrom != 'chrM')
+positionals$relpos = positionals$position / chromlens[positionals$chrom]
+
+npeaks_by_chrom = table(as.character(positionals$chrom))
+npeaks_vs_chromlen = data.frame(
+  npeaks=as.numeric(npeaks_by_chrom), # as.numeric, otherwise it splits into npeaks.Var1,npeaks.Freq
+           chromlens=chromlens[names(npeaks_by_chrom)] # crossreference by name
+  )
+ggplot(npeaks_vs_chromlen, aes(y=npeaks,x=chromlens, label=rownames(npeaks_vs_chromlen))) + geom_point() +geom_smooth(formula='y~x',method="lm") + geom_text_repel() + ggtitle("Number of peaks versus chromosome length") + xlab("chromosome length") + ylab("# peaks called")
+
+ggplot(positionals, aes(x=relpos)) + geom_density(adjust=1)  + facet_wrap(vars(chrom)) + ggtitle("Peaks favor chromosome centers") + xlab("Relative position of peak along chromosome") + ylab("peak density")
+```
+Peaks are equally distributed across the nuclear chromosomes, accounting for the chromosome size in bases.
+
+Peaks favor the centers of chromosomes. 
+
 ```{r overlap plots, echo=FALSE, cache=TRUE}
 LEL1L3=ifelse(as.matrix(mcols(dfG_max))[,c('LE_IDR','L1_IDR','L3_IDR')],1,0)
 
@@ -1197,6 +1217,13 @@ However, having `r stats_0050769_k1$Significant` of those genes near Embryo-high
 
 Paste output two-column files (GO-term p-like-value) into the form at. http://revigo.irb.hr/index.jsp
 
+```{r immune-go-lists}
+innate_immune_response = 'GO:0045087'
+dataset=mkGO(unique.clust_2_wbid,unique.ap.wbid)
+immune_genes_chip = genesInTerm(dataset$BP, innate_immune_response)[[1]] # 170
+immune_genes_larval = immune_genes[immune_genes %in% unique.clust_2_wbid] # 65
+immune_peaks_chip = ap[ap$feature %in% immune_genes_chip] # 305
+```
 
 ``` {r GO output, echo=FALSE}
 o=omigod
