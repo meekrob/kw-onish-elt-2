@@ -6,6 +6,7 @@ pkgs = c(
   "pheatmap",
   "ggplot2",
   "ggExtra",
+  "ggrepel",
   "RColorBrewer",
   "VennDiagram",
   "dplyr",
