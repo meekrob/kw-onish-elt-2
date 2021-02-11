@@ -1,0 +1,23 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+dreme.xml	GMAAAC	DREME-7	GMAAAC	dreme.xml	TGATAA	DREME-1	TGATAA	0	0	.	.	.	3.93e-07	0	0	16	769	1.22e-13	1.10e-12
+dreme.xml	GMAAAC	DREME-7	GMAAAC	dreme.xml	TGATAA	DREME-1	TGATAA	0	0	.	.	.	3.93e-07	0	8	24	769	2.22e-10	1.99e-09
+dreme.xml	GMAAAC	DREME-7	GMAAAC	dreme.xml	TGATAA	DREME-1	TGATAA	0	0	.	.	.	3.93e-07	0	4	16	769	2.37e-09	2.14e-08
+dreme.xml	GMAAAC	DREME-7	GMAAAC	dreme.xml	TGATAA	DREME-1	TGATAA	0	0	.	.	.	3.93e-07	0	5	16	769	2.37e-09	2.14e-08
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TGATAA	DREME-1	4.36e-07	0	0	17	911	1.35e-13	1.22e-12
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TGATAA	DREME-1	4.36e-07	0	8	28	911	1.50e-11	1.35e-10
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TGATAA	DREME-1	4.36e-07	0	4	17	911	4.17e-09	3.75e-08
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TGATAA	DREME-1	4.36e-07	0	5	17	911	4.17e-09	3.75e-08
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TGATAA	DREME-1	4.36e-07	0	2	11	911	9.13e-08	8.21e-07
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0772_1.02	elt-7	NCTGATAACDNN	2	3	.	.	.	2.09e+00	0	2	10	905	6.55e-07	5.90e-06
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0381_1.02	mnm-2	DDDGAWVNGY	3	0	.	.	.	2.14e+00	121	7	6	126	6.72e-07	6.04e-06
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0381_1.02	mnm-2	DDDGAWVNGY	3	0	.	.	.	2.14e+00	121	8	7	126	3.55e-06	3.20e-05
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0346_1.02	zip-3	RTGAYGTVA	0	3	.	.	.	2.50e+00	23	0	8	553	7.79e-07	7.01e-06
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0645_1.02	Y67D8A.3	AAAGGT	0	0	.	.	.	2.59e+00	130	5	6	131	8.08e-07	7.27e-06
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0645_1.02	Y67D8A.3	AAAGGT	0	0	.	.	.	2.59e+00	130	8	7	131	4.36e-06	3.93e-05
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0575_1.02	mex-6	NAATAATAAR	1	1	.	.	.	3.52e+00	142	5	10	480	1.12e-06	1.01e-05
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M0575_1.02	mex-6	NAATAATAAR	1	1	.	.	.	3.52e+00	142	0	7	480	3.01e-06	2.71e-05
+dreme.xml	GMAAAC	DREME-7	GMAAAC	Caenorhabditis_elegans	M2335_1.02	elt-3	TGATAAGA	0	0	.	.	.	9.02e+00	0	7	12	775	2.89e-06	2.60e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/bound_all_class_peaks/spamo_out_12 -bgfile 02_output/bound_all_class_peaks/background -keepprimary -primary GMAAAC 02_output/bound_all_class_peaks/bound_all_class_peaks.fasta 02_output/bound_all_class_peaks/dreme_out/dreme.xml 02_output/bound_all_class_peaks/meme_out/meme.xml 02_output/bound_all_class_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

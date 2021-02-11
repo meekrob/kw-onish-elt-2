@@ -1,0 +1,8 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+dreme.xml	AAAWGTG	DREME-3	AAAWGTG	Caenorhabditis_elegans	M0494_1.02	ztf-6	NTTHCAGHNN	1	3	.	.	.	1.10e+00	10	3	5	126	3.48e-07	3.13e-06
+dreme.xml	AAAWGTG	DREME-3	AAAWGTG	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	.	.	.	4.56e+00	9	8	8	153	1.45e-06	1.30e-05
+dreme.xml	AAAWGTG	DREME-3	AAAWGTG	Caenorhabditis_elegans	M0217_1.02	(cnd-1)_(Mus_musculus)_(DBD_0.64)	DCCATATGKB	1	1	.	.	.	7.43e+00	138	4	4	46	2.41e-06	2.17e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/dineen_SET3_peaks/spamo_out_3 -bgfile 02_output/dineen_SET3_peaks/background -keepprimary -primary AAAWGTG 02_output/dineen_SET3_peaks/dineen_SET3_peaks.fasta 02_output/dineen_SET3_peaks/dreme_out/dreme.xml 02_output/dineen_SET3_peaks/meme_out/meme.xml 02_output/dineen_SET3_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

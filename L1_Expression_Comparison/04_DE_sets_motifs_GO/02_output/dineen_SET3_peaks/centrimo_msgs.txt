@@ -1,0 +1,2 @@
+Warning: 4/270 motifs were skipped due to the score threshold (5.00).
+         Consider decreasing the score threshold.

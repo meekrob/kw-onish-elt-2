@@ -1,0 +1,26 @@
+MOTIF_INDEX	MOTIF_SOURCE	MOTIF_ID	ALT_ID	CONSENSUS	WIDTH	SITES	E-VALUE	E-VALUE_SOURCE	MOST_SIMILAR_MOTIF_SOURCE	MOST_SIMILAR_MOTIF	URL
+1	MEME	TCTTATCARTW	MEME-1	TCTTATCARTW	11	341	6.9e-146	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M2335_1.02 (elt-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02
+2	DREME	TGATAA	DREME-1	TGATAA	6	441	5.0e-054	DREME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0786_1.02 (elt-6)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084987_1.02
+3	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0786_1.02	elt-6	VTGATAAN	8	815	8.4e-044	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084987_1.02
+4	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0772_1.02	elt-7	NCTGATAACDNN	12	801	3.6e-043	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084368_1.02
+5	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0788_1.02	end-3	NNWGATAASV	10	821	6.7e-042	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084990_1.02
+6	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M2335_1.02	elt-3	TGATAAGA	8	806	2.0e-039	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02
+7	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M4715_1.02	egl-27	YTGATAAG	8	780	1.2e-031	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T086516_1.02
+8	MEME	GVGRSVSRVRRGVSRSRGAHRSVGRGAVVA	MEME-2	GVGRSVSRVRRGVSRSRGAHRSVGRGAVVA	30	89	3.6e-026	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0495_1.02 (sptf-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T061515_1.02
+9	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0787_1.02	end-1	NNHGATADNN	10	821	1.1e-022	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084989_1.02
+10	MEME	TGTGTRTDTGKGTGTGTGTGTGYGTSTS	MEME-3	TGTGTRTDTGKGTGTGTGTGTGYGTSTS	28	14	2.8e-010	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0387_1.02 (ztf-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T037194_1.02
+11	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0346_1.02	zip-3	RTGAYGTVA	9	809	4.2e-007	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T028085_1.02
+12	DREME	MGATAA	DREME-4	MGATAA	6	180	3.5e-006	DREME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0788_1.02 (end-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084990_1.02
+13	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0343_1.02	skn-1	DNGATGAYWW	10	815	3.8e-005	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T028060_1.02
+14	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M4709_1.02	mdl-1	GTCACGTG	8	780	4.3e-005	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T018211_1.02
+15	DREME	AAAMTGT	DREME-2	AAAMTGT	7	137	1.3e-004	DREME	 	 	 
+16	DREME	CTGRAA	DREME-3	CTGRAA	6	189	9.1e-004	DREME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0494_1.02 (ztf-6)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T061510_1.02
+17	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0495_1.02	sptf-3	RGGGGCGKRN	10	655	3.3e-003	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T061515_1.02
+18	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M1050_1.02	(ceh-20)_(Mus_musculus)_(DBD_0.88)	NNHRTCANN	9	556	9.7e-003	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T098457_1.02
+19	DREME	AAAGYGG	DREME-5	AAAGYGG	7	40	1.3e-002	DREME	 	 	 
+20	DREME	RGAGCA	DREME-6	RGAGCA	6	109	3.0e-002	DREME	 	 	 
+21	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0456_1.02	klf-3	DGGGCGKRD	9	768	4.5e-002	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T057655_1.02
+
+# MEME-ChIP (Motif Analysis of Large Nucleotide Datasets): Version 5.1.1 released on Wed Jan 29 15:00:42 2020 -0800
+# The format of this file is described at http://localhost:8080/doc/meme-chip-output-format.html
+# meme-chip -oc 02_output/dineen_SET6_peaks -meme-p 24 -ccut 100 -fdesc description -order 1 -db motif_databases/CIS-BP/Caenorhabditis_elegans.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 01_input/dineen_SET6_peaks.fasta

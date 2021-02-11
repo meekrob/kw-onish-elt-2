@@ -1,0 +1,6 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+Caenorhabditis_elegans	M0170_1.02	hlh-25	SACACGCG	Caenorhabditis_elegans	M0489_1.02	egl-43	RDGATGMGHN	2	4	.	.	.	1.37e+00	31	5	8	260	4.33e-07	3.90e-06
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/bound_ClassD_peaks/spamo_out_5 -bgfile 02_output/bound_ClassD_peaks/background -keepprimary -primary M0170_1.02 02_output/bound_ClassD_peaks/bound_ClassD_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/bound_ClassD_peaks/meme_out/meme.xml 02_output/bound_ClassD_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

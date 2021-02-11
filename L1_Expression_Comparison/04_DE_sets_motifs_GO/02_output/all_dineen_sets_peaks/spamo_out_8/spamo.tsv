@@ -1,0 +1,6 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+dreme.xml	GAGACRCA	DREME-5	GAGACGCA	Caenorhabditis_elegans	M1472_1.02	(fax-1)_(Drosophila_pseudoobscura)_(DBD_0.89)	KTGATCTY	0	0	.	.	.	3.26e+00	0	3	4	73	1.03e-06	9.23e-06
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_8 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GAGACRCA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

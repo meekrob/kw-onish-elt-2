@@ -1,0 +1,24 @@
+db_index	motif_id	motif_alt_id	consensus	E-value	adj_p-value	log_adj_p-value	bin_location	bin_width	total_width	sites_in_bin	total_sites	p_success	p-value	mult_tests
+   1	TCTTATCARTW	MEME-1	TCTTATCARTW	4.7e-28	   1.8e-30	         -68.52	         0.0	    248.0	        490	         262	        316	  0.50612	7.2e-33	       244
+   2	TGATAAB	DREME-1	TGATAAG	3.2e-23	   1.2e-25	         -57.38	         0.0	    246.0	        494	         228	        280	  0.49798	4.9e-28	       246
+   3	M0786_1.02	elt-6	VTGATAAN	8.2e-20	   3.1e-22	         -49.53	         0.0	    351.0	        493	         343	        370	  0.71197	1.2e-24	       246
+   3	M2335_1.02	elt-3	TGATAAGA	4.6e-19	   1.7e-21	         -47.81	         0.0	    247.0	        493	         278	        367	  0.50101	7.0e-24	       246
+   3	M4715_1.02	egl-27	YTGATAAG	1.5e-18	   5.8e-21	         -46.60	         0.0	    255.0	        493	         274	        355	  0.51724	2.3e-23	       246
+   3	M0788_1.02	end-3	NNWGATAASV	7.0e-18	   2.6e-20	         -45.09	         0.0	    249.0	        491	         280	        371	  0.50713	1.1e-22	       245
+   3	M0772_1.02	elt-7	NCTGATAACDNN	2.2e-17	   8.3e-20	         -43.93	         0.0	    253.0	        489	         279	        365	  0.51738	3.4e-22	       244
+   3	M0787_1.02	end-1	NNHGATADNN	4.1e-14	   1.5e-16	         -36.41	         0.0	    177.0	        491	         218	        371	  0.36049	6.3e-19	       245
+   1	DRRARAVRGAGAGARRKRRRRARGGVRR	MEME-2	DRRARAVRGAGAGARRKRRRRARGGVRR	6.1e-5	   2.3e-7	         -15.29	         0.0	    165.0	        473	         139	        261	  0.34884	9.7e-10	       236
+   3	M0346_1.02	zip-3	RTGAYGTVA	2.0e-1	   7.5e-4	          -7.19	         0.0	    200.0	        492	         193	        368	  0.40650	3.1e-6	       245
+   3	M0387_1.02	ztf-3	TGTGTGTG	3.0e-1	   1.1e-3	          -6.79	         0.0	    277.0	        493	         239	        352	  0.56187	4.6e-6	       246
+   3	M0343_1.02	skn-1	DNGATGAYWW	7.3e-1	   2.7e-3	          -5.90	         0.0	    295.0	        491	         263	        371	  0.60081	1.1e-5	       245
+   3	M0457_1.02	F55C5.11	NNKGYGACA	2.7e0	   1.0e-2	          -4.59	         0.0	    128.0	        492	         131	        370	  0.26016	4.2e-5	       245
+   3	M0389_1.02	scrt-1	DNNDDYRDN	4.2e0	   1.6e-2	          -4.14	         0.0	    204.0	        492	         110	        199	  0.41463	6.5e-5	       245
+   3	M0347_1.02	W08E12.1	TGACGTMA	4.7e0	   1.8e-2	          -4.03	         0.0	    147.0	        493	          78	        178	  0.29817	7.3e-5	       246
+   3	M1477_1.02	nhr-1	AGTGATCA	5.1e0	   1.9e-2	          -3.95	         0.0	    365.0	        493	         284	        343	  0.74037	7.9e-5	       246
+   3	M1624_1.02	tbx-38	NDRGTGYKAA	5.2e0	   1.9e-2	          -3.95	         0.0	     13.0	        491	          24	        374	  0.02648	8.0e-5	       245
+   3	M0275_1.02	atf-7	DATGACGTVN	5.5e0	   2.0e-2	          -3.89	         0.0	    187.0	        491	         152	        312	  0.38086	8.4e-5	       245
+   3	M0342_1.02	atf-5	NGMTGACGTMA	5.7e0	   2.1e-2	          -3.85	         0.0	    254.0	        490	         202	        324	  0.51837	8.8e-5	       244
+
+# CentriMo (Local Motif Enrichment Analysis): Version 5.1.1 compiled on May 28 2020 at 04:38:08
+# The format of this file is described at http://localhost:8080/doc/centrimo-output-format.html.
+# centrimo -seqlen 500 -verbosity 1 -oc 02_output/bound_ClassC_peaks/centrimo_out -bfile 02_output/bound_ClassC_peaks/background -score 5.0 -ethresh 10.0 02_output/bound_ClassC_peaks/bound_ClassC_peaks.fasta 02_output/bound_ClassC_peaks/meme_out/meme.xml 02_output/bound_ClassC_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

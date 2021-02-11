@@ -1,0 +1,17 @@
+MOTIF_INDEX	MOTIF_SOURCE	MOTIF_ID	ALT_ID	CONSENSUS	WIDTH	SITES	E-VALUE	E-VALUE_SOURCE	MOST_SIMILAR_MOTIF_SOURCE	MOST_SIMILAR_MOTIF	URL
+1	MEME	WAYTGATAAGA	MEME-1	WAYTGATAAGA	11	183	3.1e-081	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M2335_1.02 (elt-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02
+2	MEME	CYCTCYSCYYCTCTSYYYCHC	MEME-2	CYCTCYSCYYCTCTSYYYCHC	21	61	3.0e-035	MEME	 	 	 
+3	DREME	TTATCR	DREME-1	TTATCR	6	318	8.9e-028	DREME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M2335_1.02 (elt-3)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02
+4	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0786_1.02	elt-6	VTGATAAN	8	544	1.8e-021	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084987_1.02
+5	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M2335_1.02	elt-3	TGATAAGA	8	528	8.2e-021	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02
+6	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0788_1.02	end-3	NNWGATAASV	10	545	9.8e-021	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084990_1.02
+7	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0772_1.02	elt-7	NCTGATAACDNN	12	526	4.3e-020	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084368_1.02
+8	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M4715_1.02	egl-27	YTGATAAG	8	507	5.4e-017	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T086516_1.02
+9	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0787_1.02	end-1	NNHGATADNN	10	548	4.1e-011	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084989_1.02
+10	MEME	TTYTTYTTCTKCWTTYTYTYY	MEME-3	TTYTTYTTCTKCWTTYTYTYY	21	31	8.8e-010	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0493_1.02 (lin-29)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T061509_1.02
+11	DREME	AAAATRT	DREME-2	AAAATRT	7	130	4.2e-005	DREME	 	 	 
+12	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M4709_1.02	mdl-1	GTCACGTG	8	523	4.1e-002	CENTRIMO	 	 	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T018211_1.02
+
+# MEME-ChIP (Motif Analysis of Large Nucleotide Datasets): Version 5.1.1 released on Wed Jan 29 15:00:42 2020 -0800
+# The format of this file is described at http://localhost:8080/doc/meme-chip-output-format.html
+# meme-chip -oc 02_output/bound_ClassA_peaks -meme-p 24 -ccut 100 -fdesc description -order 1 -db motif_databases/CIS-BP/Caenorhabditis_elegans.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 01_input/bound_ClassA_peaks.fasta

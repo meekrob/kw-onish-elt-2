@@ -1,0 +1,850 @@
+********************************************************************************
+MEME - Motif discovery tool
+********************************************************************************
+MEME version 5.1.1 (Release date: Wed Jan 29 15:00:42 2020 -0800)
+
+For further information on how to interpret please access http://localhost:8080.
+To get a copy of the MEME software please access http://meme-suite.org.
+
+********************************************************************************
+
+
+********************************************************************************
+REFERENCE
+********************************************************************************
+If you use this program in your research, please cite:
+
+Timothy L. Bailey and Charles Elkan,
+"Fitting a mixture model by expectation maximization to discover
+motifs in biopolymers", Proceedings of the Second International
+Conference on Intelligent Systems for Molecular Biology, pp. 28-36,
+AAAI Press, Menlo Park, California, 1994.
+********************************************************************************
+
+
+********************************************************************************
+TRAINING SET
+********************************************************************************
+PRIMARY SEQUENCES= 02_output/dineen_SET1_peaks/seqs-centered
+CONTROL SEQUENCES= --none--
+ALPHABET= ACGT
+Sequence name            Weight Length  Sequence name            Weight Length  
+-------------            ------ ------  -------------            ------ ------  
+ELT2peak00050            1.0000    100  ELT2peak00051            1.0000    100  
+ELT2peak00052            1.0000    100  ELT2peak00058            1.0000    100  
+ELT2peak00302            1.0000    100  ELT2peak00460            1.0000    100  
+ELT2peak00466            1.0000    100  ELT2peak00467            1.0000    100  
+ELT2peak01371            1.0000    100  ELT2peak01447            1.0000    100  
+ELT2peak01448            1.0000    100  ELT2peak01465            1.0000    100  
+ELT2peak01473            1.0000    100  ELT2peak01474            1.0000    100  
+ELT2peak01518            1.0000    100  ELT2peak01680            1.0000    100  
+ELT2peak01681            1.0000    100  ELT2peak01857            1.0000    100  
+ELT2peak01947            1.0000    100  ELT2peak01948            1.0000    100  
+ELT2peak02065            1.0000    100  ELT2peak02097            1.0000    100  
+ELT2peak02098            1.0000    100  ELT2peak02148            1.0000    100  
+ELT2peak02412            1.0000    100  ELT2peak02849            1.0000    100  
+ELT2peak02904            1.0000    100  ELT2peak02905            1.0000    100  
+ELT2peak03007            1.0000    100  ELT2peak03008            1.0000    100  
+ELT2peak03009            1.0000    100  ELT2peak03072            1.0000    100  
+ELT2peak03073            1.0000    100  ELT2peak03159            1.0000    100  
+ELT2peak03244            1.0000    100  ELT2peak03245            1.0000    100  
+ELT2peak03280            1.0000    100  ELT2peak03429            1.0000    100  
+ELT2peak03430            1.0000    100  ELT2peak03786            1.0000    100  
+ELT2peak04479            1.0000    100  ELT2peak04559            1.0000    100  
+ELT2peak04698            1.0000    100  ELT2peak04729            1.0000    100  
+ELT2peak05094            1.0000    100  ELT2peak05136            1.0000    100  
+ELT2peak05212            1.0000    100  ELT2peak05258            1.0000    100  
+ELT2peak05259            1.0000    100  ELT2peak05347            1.0000    100  
+ELT2peak05348            1.0000    100  ELT2peak05385            1.0000    100  
+ELT2peak05520            1.0000    100  ELT2peak05744            1.0000    100  
+ELT2peak05745            1.0000    100  ELT2peak05949            1.0000    100  
+ELT2peak06002            1.0000    100  ELT2peak06446            1.0000    100  
+ELT2peak06812            1.0000    100  ELT2peak06902            1.0000    100  
+ELT2peak06922            1.0000    100  ELT2peak06930            1.0000    100  
+ELT2peak06931            1.0000    100  ELT2peak06932            1.0000    100  
+ELT2peak07054            1.0000    100  ELT2peak07325            1.0000    100  
+ELT2peak07353            1.0000    100  ELT2peak07391            1.0000    100  
+ELT2peak07694            1.0000    100  ELT2peak07996            1.0000    100  
+ELT2peak07997            1.0000    100  ELT2peak08222            1.0000    100  
+ELT2peak08245            1.0000    100  ELT2peak08257            1.0000    100  
+ELT2peak08278            1.0000    100  ELT2peak08279            1.0000    100  
+ELT2peak08394            1.0000    100  ELT2peak08444            1.0000    100  
+ELT2peak08496            1.0000    100  ELT2peak08668            1.0000    100  
+ELT2peak08670            1.0000    100  ELT2peak08692            1.0000    100  
+ELT2peak08766            1.0000    100  ELT2peak08824            1.0000    100  
+ELT2peak08830            1.0000    100  ELT2peak08831            1.0000    100  
+ELT2peak08832            1.0000    100  ELT2peak08833            1.0000    100  
+ELT2peak08834            1.0000    100  ELT2peak08835            1.0000    100  
+ELT2peak08836            1.0000    100  ELT2peak08856            1.0000    100  
+ELT2peak09218            1.0000    100  ELT2peak09278            1.0000    100  
+ELT2peak09279            1.0000    100  ELT2peak09432            1.0000    100  
+ELT2peak09575            1.0000    100  ELT2peak09601            1.0000    100  
+ELT2peak09619            1.0000    100  ELT2peak09915            1.0000    100  
+ELT2peak09917            1.0000    100  ELT2peak10044            1.0000    100  
+ELT2peak10045            1.0000    100  ELT2peak10498            1.0000    100  
+ELT2peak10830            1.0000    100  ELT2peak11004            1.0000    100  
+ELT2peak11005            1.0000    100  ELT2peak11006            1.0000    100  
+ELT2peak11007            1.0000    100  ELT2peak11008            1.0000    100  
+ELT2peak11009            1.0000    100  ELT2peak00250            1.0000    100  
+ELT2peak01825            1.0000    100  ELT2peak02104            1.0000    100  
+ELT2peak02105            1.0000    100  ELT2peak02848            1.0000    100  
+ELT2peak02903            1.0000    100  ELT2peak03281            1.0000    100  
+ELT2peak03907            1.0000    100  ELT2peak04282            1.0000    100  
+ELT2peak04674            1.0000    100  ELT2peak04675            1.0000    100  
+ELT2peak05301            1.0000    100  ELT2peak05349            1.0000    100  
+ELT2peak05534            1.0000    100  ELT2peak05564            1.0000    100  
+ELT2peak05722            1.0000    100  ELT2peak06497            1.0000    100  
+ELT2peak08221            1.0000    100  ELT2peak08248            1.0000    100  
+ELT2peak08837            1.0000    100  ELT2peak08838            1.0000    100  
+ELT2peak08839            1.0000    100  ELT2peak08840            1.0000    100  
+ELT2peak08897            1.0000    100  ELT2peak08898            1.0000    100  
+ELT2peak08899            1.0000    100  ELT2peak09574            1.0000    100  
+ELT2peak10499            1.0000    100  ELT2peak10500            1.0000    100  
+ELT2peak10501            1.0000    100  ELT2peak10502            1.0000    100  
+ELT2peak10509            1.0000    100  ELT2peak10642            1.0000    100  
+ELT2peak10966            1.0000    100  ELT2peak11010            1.0000    100  
+********************************************************************************
+
+********************************************************************************
+COMMAND LINE SUMMARY
+********************************************************************************
+This information can also be useful in the event you wish to report a
+problem with the MEME software.
+
+command: meme 02_output/dineen_SET1_peaks/seqs-centered -oc 02_output/dineen_SET1_peaks/meme_out -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile 02_output/dineen_SET1_peaks/background -dna -searchsize 100000 -p 24 -revcomp -nostatus 
+
+model:  mod=         zoops    nmotifs=         3    evt=           inf
+objective function:           em=       E-value of product of p-values
+                              starts=   E-value of product of p-values
+strands: + -
+width:  minw=            6    maxw=           30
+nsites: minsites=        2    maxsites=      146    wnsites=       0.8
+theta:  spmap=         uni    spfuzz=        0.5
+em:     prior=   dirichlet    b=            0.01    maxiter=        50
+        distance=    1e-05
+trim:   wg=             11    ws=              1    endgaps=       yes
+data:   n=           14600    N=             146
+sample: seed=            0    hsfrac=          0
+        searchsize=  14600    norand=         no    csites=       1000
+Letter frequencies in dataset:
+A 0.312 C 0.188 G 0.188 T 0.312 
+Background letter frequencies (from file 02_output/dineen_SET1_peaks/background):
+A 0.321 C 0.179 G 0.179 T 0.321 
+Background model order: 1
+********************************************************************************
+
+
+********************************************************************************
+MOTIF RRWRAGDGAGRRARAHSRAGA MEME-1	width =  21  sites =  39  llr = 428  E-value = 2.6e-015
+********************************************************************************
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 Description
+--------------------------------------------------------------------------------
+Simplified        A  556472317356638425829
+pos.-specific     C  :2:::2:221:2:22331:1:
+probability       G  43162647:65335::54:7:
+matrix            T  113:1:3::1::1::3::2::
+
+         bits    2.5                      
+                 2.2                      
+                 2.0                      
+                 1.7                      
+Relative         1.5                      
+Entropy          1.2        *           **
+(15.8 bits)      1.0    * * *  *   *   ***
+                 0.7    *** ** *  ** *****
+                 0.5 *  ************ *****
+                 0.2 *********************
+                 0.0 ---------------------
+
+Multilevel           AAAGAGGGAGAAAGAAGAAGA
+consensus            GGTAGATCCAGGGACCCG   
+sequence                   A        TA    
+                                          
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 sites sorted by position p-value
+--------------------------------------------------------------------------------
+Sequence name            Strand  Start   P-value                    Site       
+-------------            ------  ----- ---------            ---------------------
+ELT2peak08838                +     47  2.95e-10 TCGGAAGTTT GATGAGAGAGAGAGACGGAGA GACGGAGAGA
+ELT2peak08840                -     62  1.44e-09 CCAGCGAGTG AGAGAGAGAGAGAGACGCAGA GTGGCTAAGA
+ELT2peak05949                -     32  4.90e-08 ATTCATCAGA AATGGGTGAGAGAAATGAAGA AAATTGAAGA
+ELT2peak08836                -     15  7.61e-08 GTAGGGAGGA GATGAAGGAGGAGGAGGAAGA AAAGGGCAGA
+ELT2peak04282                +     80  1.33e-07 ACATACATCG GGAGGGAGCGGCGCCCCGAGA           
+ELT2peak06446                +      5  1.98e-07       ATCG GCAAAGGCAGAAGCAACAAGA GTTGCCAGGA
+ELT2peak05520                +     58  1.98e-07 AGGATGAGAA AAAGGATGAAAAGGAAGAAGA TAAGAAGAGT
+ELT2peak09575                +     23  3.30e-07 CGCCGATTAA GAAGACTCACGAAGCAGAAGA GTCTTTATCA
+ELT2peak08248                -     28  3.73e-07 TTCTGTGATG GGAGACTGCGAGAGAACAAAA TATTGAAGAT
+ELT2peak11005                +     27  4.75e-07 TAAAATAGGA AAAAAGGGAAAAAGATGGACA GACTCTGAAT
+ELT2peak04729                -     13  6.01e-07 CTTTTTCACA GCAGACGCAGGGAAAAACAGA CATTTGTCGA
+ELT2peak00051                +     75  6.75e-07 CAGCTATATT GATAAGAGATGAAAAACGAGA GGAAT     
+ELT2peak04674                +     64  8.47e-07 GATTAACAAC TGTGAAGGACAAAGAAGAAGA AAACTATAAA
+ELT2peak03281                +     44  1.06e-06 AATTTCTACA AAAAAGTGCAAAACCAGAAGA CATGTTTCAT
+ELT2peak05301                -     63  1.18e-06 TGAATTGAGG AGAGTGTGCTAGAGAACGAGA TTGGAATGTG
+ELT2peak02105                -     33  1.31e-06 GGAACGGAAG AAGAGAGGAGGAGGATGGTGA TTATCACTTA
+ELT2peak05094                -     80  1.31e-06          . AGTGAGAGACGGAGACAGAAA GCGCTACAAC
+ELT2peak02412                +     41  1.62e-06 GTTGTGAAGT GATAAGGAAGGGAGAACGTGA TGATGCCCAA
+ELT2peak03073                -      9  1.80e-06 TGGACAAAAA TTAGAGTGAGGAAGAACATGA ATTTCACA  
+ELT2peak06931                +     58  2.21e-06 TGTGTGGGGG GAGGGGGGTGGCTGACGAAGA CTGGGAAAAT
+ELT2peak09619                +     77  2.98e-06 AGAAACCAAG AGAGACACATGAAGATAAAGA AGA       
+ELT2peak07694                +     49  4.36e-06 AAAAAAACAT AATAAAACAGACAAACCGAGA CTCCGATTTT
+ELT2peak00467                +      5  5.25e-06       CATC GATGTGGGCGGAGCCCAGAAA CACTGTTGAG
+ELT2peak08898                +     38  5.75e-06 TTTTCTTCAT AAAAAGTCGGGAAAACCCAGA AATTTTCCAA
+ELT2peak05348                +      8  6.87e-06    CTTCTAA AGAAGAGGAAAAGAATAAAGA GAAGAAGAAC
+ELT2peak04675                +     56  8.92e-06 AAAATGTAAC AGAAAGGGAACAAACAGGTGA TAATGAAAAC
+ELT2peak10499                +     47  9.72e-06 CGTGCATCGT GATGTGTGCAACGCACAAAGA CCTCTGATAA
+ELT2peak08834                -     76  9.72e-06       CGTC ATTAGAAGAAGAAGAAGAAGA AGTTCCTGGT
+ELT2peak05534                -     68  1.25e-05 CCGTATTAGA TAAAAGGGAAAATGACCAAAA AGAACAAAGT
+ELT2peak06932                -     43  1.35e-05 TTCGCGGAAA AAAGAGAAAAGGAGATCAACA ATTTCTCTAT
+ELT2peak02065                +     11  1.47e-05 TGCGGACAAA ACACAGACAGAAGGATGAAAA GAACACATGA
+ELT2peak00302                -     74  1.47e-05     GGGAAT GGGGGGACAGGCAACCACTGA TTATATAACT
+ELT2peak06930                +     41  1.59e-05 GGATGGACAA GAAGAAGGAAGGAATAGAAAA TAGCTGTGGA
+ELT2peak11006                -     33  2.01e-05 TTGGATTGGC GGCGACGGCGGCGACAGGAGG AAAACCGAAA
+ELT2peak00460                -     31  2.17e-05 GGAATTAAAC AGAAAATGATAAGAAAGAACA AAAAATGTCC
+ELT2peak00058                -     13  2.72e-05 GAGTTAAATA AATAAGTCAGAATCATGCTGA AAATGTGTTT
+ELT2peak06922                -      4  2.93e-05 TTGGAGAGAC GCAGACTTCGAAAAATAGAGA TAA       
+ELT2peak05258                +     53  3.15e-05 ATTGAGTTTT TCAGAGTGAGAGTGAAAGAGT GAATTTTGGC
+ELT2peak09218                -     47  6.72e-05 TCCGCGCAGA ACGGTCGGAGAAAACTGATAA TACATTTGGT
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 block diagrams
+--------------------------------------------------------------------------------
+SEQUENCE NAME            POSITION P-VALUE  MOTIF DIAGRAM
+-------------            ----------------  -------------
+ELT2peak08838                     2.9e-10  46_[+1]_33
+ELT2peak08840                     1.4e-09  61_[-1]_18
+ELT2peak05949                     4.9e-08  31_[-1]_48
+ELT2peak08836                     7.6e-08  14_[-1]_65
+ELT2peak04282                     1.3e-07  79_[+1]
+ELT2peak06446                       2e-07  4_[+1]_75
+ELT2peak05520                       2e-07  57_[+1]_22
+ELT2peak09575                     3.3e-07  22_[+1]_57
+ELT2peak08248                     3.7e-07  27_[-1]_52
+ELT2peak11005                     4.7e-07  26_[+1]_53
+ELT2peak04729                       6e-07  12_[-1]_67
+ELT2peak00051                     6.7e-07  74_[+1]_5
+ELT2peak04674                     8.5e-07  63_[+1]_16
+ELT2peak03281                     1.1e-06  43_[+1]_36
+ELT2peak05301                     1.2e-06  62_[-1]_17
+ELT2peak02105                     1.3e-06  32_[-1]_47
+ELT2peak05094                     1.3e-06  79_[-1]
+ELT2peak02412                     1.6e-06  40_[+1]_39
+ELT2peak03073                     1.8e-06  8_[-1]_71
+ELT2peak06931                     2.2e-06  57_[+1]_22
+ELT2peak09619                       3e-06  76_[+1]_3
+ELT2peak07694                     4.4e-06  48_[+1]_31
+ELT2peak00467                     5.2e-06  4_[+1]_75
+ELT2peak08898                     5.7e-06  37_[+1]_42
+ELT2peak05348                     6.9e-06  7_[+1]_72
+ELT2peak04675                     8.9e-06  55_[+1]_24
+ELT2peak10499                     9.7e-06  46_[+1]_33
+ELT2peak08834                     9.7e-06  75_[-1]_4
+ELT2peak05534                     1.2e-05  67_[-1]_12
+ELT2peak06932                     1.4e-05  42_[-1]_37
+ELT2peak02065                     1.5e-05  10_[+1]_69
+ELT2peak00302                     1.5e-05  73_[-1]_6
+ELT2peak06930                     1.6e-05  40_[+1]_39
+ELT2peak11006                       2e-05  32_[-1]_47
+ELT2peak00460                     2.2e-05  30_[-1]_49
+ELT2peak00058                     2.7e-05  12_[-1]_67
+ELT2peak06922                     2.9e-05  3_[-1]_76
+ELT2peak05258                     3.2e-05  52_[+1]_27
+ELT2peak09218                     6.7e-05  46_[-1]_33
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 in BLOCKS format
+--------------------------------------------------------------------------------
+BL   MOTIF RRWRAGDGAGRRARAHSRAGA width=21 seqs=39
+ELT2peak08838            (   47) GATGAGAGAGAGAGACGGAGA  1 
+ELT2peak08840            (   62) AGAGAGAGAGAGAGACGCAGA  1 
+ELT2peak05949            (   32) AATGGGTGAGAGAAATGAAGA  1 
+ELT2peak08836            (   15) GATGAAGGAGGAGGAGGAAGA  1 
+ELT2peak04282            (   80) GGAGGGAGCGGCGCCCCGAGA  1 
+ELT2peak06446            (    5) GCAAAGGCAGAAGCAACAAGA  1 
+ELT2peak05520            (   58) AAAGGATGAAAAGGAAGAAGA  1 
+ELT2peak09575            (   23) GAAGACTCACGAAGCAGAAGA  1 
+ELT2peak08248            (   28) GGAGACTGCGAGAGAACAAAA  1 
+ELT2peak11005            (   27) AAAAAGGGAAAAAGATGGACA  1 
+ELT2peak04729            (   13) GCAGACGCAGGGAAAAACAGA  1 
+ELT2peak00051            (   75) GATAAGAGATGAAAAACGAGA  1 
+ELT2peak04674            (   64) TGTGAAGGACAAAGAAGAAGA  1 
+ELT2peak03281            (   44) AAAAAGTGCAAAACCAGAAGA  1 
+ELT2peak05301            (   63) AGAGTGTGCTAGAGAACGAGA  1 
+ELT2peak02105            (   33) AAGAGAGGAGGAGGATGGTGA  1 
+ELT2peak05094            (   80) AGTGAGAGACGGAGACAGAAA  1 
+ELT2peak02412            (   41) GATAAGGAAGGGAGAACGTGA  1 
+ELT2peak03073            (    9) TTAGAGTGAGGAAGAACATGA  1 
+ELT2peak06931            (   58) GAGGGGGGTGGCTGACGAAGA  1 
+ELT2peak09619            (   77) AGAGACACATGAAGATAAAGA  1 
+ELT2peak07694            (   49) AATAAAACAGACAAACCGAGA  1 
+ELT2peak00467            (    5) GATGTGGGCGGAGCCCAGAAA  1 
+ELT2peak08898            (   38) AAAAAGTCGGGAAAACCCAGA  1 
+ELT2peak05348            (    8) AGAAGAGGAAAAGAATAAAGA  1 
+ELT2peak04675            (   56) AGAAAGGGAACAAACAGGTGA  1 
+ELT2peak10499            (   47) GATGTGTGCAACGCACAAAGA  1 
+ELT2peak08834            (   76) ATTAGAAGAAGAAGAAGAAGA  1 
+ELT2peak05534            (   68) TAAAAGGGAAAATGACCAAAA  1 
+ELT2peak06932            (   43) AAAGAGAAAAGGAGATCAACA  1 
+ELT2peak02065            (   11) ACACAGACAGAAGGATGAAAA  1 
+ELT2peak00302            (   74) GGGGGGACAGGCAACCACTGA  1 
+ELT2peak06930            (   41) GAAGAAGGAAGGAATAGAAAA  1 
+ELT2peak11006            (   33) GGCGACGGCGGCGACAGGAGG  1 
+ELT2peak00460            (   31) AGAAAATGATAAGAAAGAACA  1 
+ELT2peak00058            (   13) AATAAGTCAGAATCATGCTGA  1 
+ELT2peak06922            (    4) GCAGACTTCGAAAAATAGAGA  1 
+ELT2peak05258            (   53) TCAGAGTGAGAGTGAAAGAGT  1 
+ELT2peak09218            (   47) ACGGTCGGAGAAAACTGATAA  1 
+//
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 position-specific scoring matrix
+--------------------------------------------------------------------------------
+log-odds matrix: alength= 4 w= 21 n= 11680 bayes= 9.14463 E= 2.6e-015 
+    60  -1193    119   -164 
+    60    -22     78   -264 
+    81   -280    -80     -6 
+    16   -280    178  -1193 
+   111  -1193     19   -164 
+   -48      0    172  -1193 
+   -19  -1193    110      6 
+  -264     36    195   -364 
+   121     19   -280   -364 
+   -32   -122    165   -164 
+    68   -280    136  -1193 
+    81    -22     65  -1193 
+    94  -1193     65   -164 
+     6    -22    152  -1193 
+   126     19  -1193   -364 
+    44     65   -280    -32 
+   -48     65    144  -1193 
+    68    -48    100  -1193 
+   135  -1193  -1193    -84 
+   -84   -122    205  -1193 
+   156  -1193   -280   -364 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 position-specific probability matrix
+--------------------------------------------------------------------------------
+letter-probability matrix: alength= 4 w= 21 nsites= 39 E= 2.6e-015 
+ 0.487179  0.000000  0.410256  0.102564 
+ 0.487179  0.153846  0.307692  0.051282 
+ 0.564103  0.025641  0.102564  0.307692 
+ 0.358974  0.025641  0.615385  0.000000 
+ 0.692308  0.000000  0.205128  0.102564 
+ 0.230769  0.179487  0.589744  0.000000 
+ 0.282051  0.000000  0.384615  0.333333 
+ 0.051282  0.230769  0.692308  0.025641 
+ 0.743590  0.205128  0.025641  0.025641 
+ 0.256410  0.076923  0.564103  0.102564 
+ 0.512821  0.025641  0.461538  0.000000 
+ 0.564103  0.153846  0.282051  0.000000 
+ 0.615385  0.000000  0.282051  0.102564 
+ 0.333333  0.153846  0.512821  0.000000 
+ 0.769231  0.205128  0.000000  0.025641 
+ 0.435897  0.282051  0.025641  0.256410 
+ 0.230769  0.282051  0.487179  0.000000 
+ 0.512821  0.128205  0.358974  0.000000 
+ 0.820513  0.000000  0.000000  0.179487 
+ 0.179487  0.076923  0.743590  0.000000 
+ 0.948718  0.000000  0.025641  0.025641 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif RRWRAGDGAGRRARAHSRAGA MEME-1 regular expression
+--------------------------------------------------------------------------------
+[AG][AG][AT][GA][AG][GA][GTA][GC][AC][GA][AG][AG][AG][GA][AC][ACT][GCA][AG]AGA
+--------------------------------------------------------------------------------
+
+
+
+
+Time 20.03 secs.
+
+********************************************************************************
+
+
+********************************************************************************
+MOTIF GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2	width =  28  sites =   7  llr = 161  E-value = 5.8e-003
+********************************************************************************
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 Description
+--------------------------------------------------------------------------------
+Simplified        A  ::13:17:6:7117611::43:::311:
+pos.-specific     C  :441133939:7::1:1164361a6:71
+probability       G  a64693:1:11:9339373:449:17:1
+matrix            T  :::::3::1:11::::4111:::::117
+
+         bits    2.5 *                      *    
+                 2.2 *                      *    
+                 2.0 *   *  * *            **    
+                 1.7 *   *  * *  *  *      **    
+Relative         1.5 **  *  * *  *  *     ***    
+Entropy          1.2 **  *  * *  *  * *   ***    
+(33.2 bits)      1.0 *** * ** * *** * **  *** ** 
+                 0.7 ***** ** * ***** ** ********
+                 0.5 ***** ********** ***********
+                 0.2 ****************************
+                 0.0 ----------------------------
+
+Multilevel           GGCGGCACACACGAAGTGCAGCGCCGCT
+consensus             CGA GC C    GG G GCAG  A   
+sequence                  T              C       
+                                                 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 sites sorted by position p-value
+--------------------------------------------------------------------------------
+Sequence name            Strand  Start   P-value                        Site          
+-------------            ------  ----- ---------            ----------------------------
+ELT2peak03907                +     60  8.24e-14 CACACAGTCT GGGGGTACACACGAAATGCCCGGCAGCT CGCGCACCGA
+ELT2peak01474                +     34  2.62e-12 CATGGTGATT GGCGGAACCCGCGAAGCCGTCCGCCGCT CAAATTGCGT
+ELT2peak02148                +     38  4.18e-12 GGCGGAGCGA GCGCGCACACAAGAAGTGTCACGCCGCG GAACTCGCTA
+ELT2peak11005                +     70  1.83e-11 ATCTGTTGGC GCGACGACACATGGGGAGCAGGGCGGCT GCG       
+ELT2peak05301                -     11  2.15e-11 GTCTGACCCC GCAGGTCCCCACAGGGGGCCACCCCGCC TCTTATGATT
+ELT2peak00250                -     73  1.19e-10          . GGCGGCCCTGACGACGGGGAGGGCATTT GATAACGGAA
+ELT2peak06922                +     49  1.90e-10 AACCGATCTT GGCAGGAGACTCGAAGTTCAGCGCCAAT AGAGAAATGA
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 block diagrams
+--------------------------------------------------------------------------------
+SEQUENCE NAME            POSITION P-VALUE  MOTIF DIAGRAM
+-------------            ----------------  -------------
+ELT2peak03907                     8.2e-14  59_[+2]_13
+ELT2peak01474                     2.6e-12  33_[+2]_39
+ELT2peak02148                     4.2e-12  37_[+2]_35
+ELT2peak11005                     1.8e-11  69_[+2]_3
+ELT2peak05301                     2.1e-11  10_[-2]_62
+ELT2peak00250                     1.2e-10  72_[-2]
+ELT2peak06922                     1.9e-10  48_[+2]_24
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 in BLOCKS format
+--------------------------------------------------------------------------------
+BL   MOTIF GSSRGNACMCACGARGKGSMVSGCMGCT width=28 seqs=7
+ELT2peak03907            (   60) GGGGGTACACACGAAATGCCCGGCAGCT  1 
+ELT2peak01474            (   34) GGCGGAACCCGCGAAGCCGTCCGCCGCT  1 
+ELT2peak02148            (   38) GCGCGCACACAAGAAGTGTCACGCCGCG  1 
+ELT2peak11005            (   70) GCGACGACACATGGGGAGCAGGGCGGCT  1 
+ELT2peak05301            (   11) GCAGGTCCCCACAGGGGGCCACCCCGCC  1 
+ELT2peak00250            (   73) GGCGGCCCTGACGACGGGGAGGGCATTT  1 
+ELT2peak06922            (   49) GGCAGGAGACTCGAAGTTCAGCGCCAAT  1 
+//
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 position-specific scoring matrix
+--------------------------------------------------------------------------------
+log-odds matrix: alength= 4 w= 28 n= 10658 bayes= 11.1774 E= 5.8e-003 
+  -945   -945    248   -945 
+  -945    126    167   -945 
+  -116    126    126   -945 
+   -17    -33    167   -945 
+  -945    -33    226   -945 
+  -116     67     67    -17 
+   115     67   -945   -945 
+  -945    226    -33   -945 
+    83     67   -945   -116 
+  -945    226    -33   -945 
+   115   -945    -33   -116 
+  -116    199   -945   -116 
+  -116   -945    226   -945 
+   115   -945     67   -945 
+    83    -33     67   -945 
+  -116   -945    226   -945 
+  -116    -33     67     42 
+  -945    -33    199   -116 
+  -945    167     67   -116 
+    42    126   -945   -116 
+   -17     67    126   -945 
+  -945    167    126   -945 
+  -945    -33    226   -945 
+  -945    248   -945   -945 
+   -17    167    -33   -945 
+  -116   -945    199   -116 
+  -116    199   -945   -116 
+  -945    -33    -33    115 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 position-specific probability matrix
+--------------------------------------------------------------------------------
+letter-probability matrix: alength= 4 w= 28 nsites= 7 E= 5.8e-003 
+ 0.000000  0.000000  1.000000  0.000000 
+ 0.000000  0.428571  0.571429  0.000000 
+ 0.142857  0.428571  0.428571  0.000000 
+ 0.285714  0.142857  0.571429  0.000000 
+ 0.000000  0.142857  0.857143  0.000000 
+ 0.142857  0.285714  0.285714  0.285714 
+ 0.714286  0.285714  0.000000  0.000000 
+ 0.000000  0.857143  0.142857  0.000000 
+ 0.571429  0.285714  0.000000  0.142857 
+ 0.000000  0.857143  0.142857  0.000000 
+ 0.714286  0.000000  0.142857  0.142857 
+ 0.142857  0.714286  0.000000  0.142857 
+ 0.142857  0.000000  0.857143  0.000000 
+ 0.714286  0.000000  0.285714  0.000000 
+ 0.571429  0.142857  0.285714  0.000000 
+ 0.142857  0.000000  0.857143  0.000000 
+ 0.142857  0.142857  0.285714  0.428571 
+ 0.000000  0.142857  0.714286  0.142857 
+ 0.000000  0.571429  0.285714  0.142857 
+ 0.428571  0.428571  0.000000  0.142857 
+ 0.285714  0.285714  0.428571  0.000000 
+ 0.000000  0.571429  0.428571  0.000000 
+ 0.000000  0.142857  0.857143  0.000000 
+ 0.000000  1.000000  0.000000  0.000000 
+ 0.285714  0.571429  0.142857  0.000000 
+ 0.142857  0.000000  0.714286  0.142857 
+ 0.142857  0.714286  0.000000  0.142857 
+ 0.000000  0.142857  0.142857  0.714286 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSSRGNACMCACGARGKGSMVSGCMGCT MEME-2 regular expression
+--------------------------------------------------------------------------------
+G[GC][CG][GA]G[CGT][AC]C[AC]CACG[AG][AG]G[TG]G[CG][AC][GAC][CG]GC[CA]GCT
+--------------------------------------------------------------------------------
+
+
+
+
+Time 38.13 secs.
+
+********************************************************************************
+
+
+********************************************************************************
+MOTIF GSAAYGYTYMMCGTRCVCHACGSG MEME-3	width =  24  sites =   8  llr = 159  E-value = 1.7e-001
+********************************************************************************
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 Description
+--------------------------------------------------------------------------------
+Simplified        A  ::96:11::55:11413:391:1:
+pos.-specific     C  :413514:445a::1849518:51
+probability       G  86:1:6:111::9:5141:::949
+matrix            T  3:::51595::::9::::3:11::
+
+         bits    2.5            *            
+                 2.2            *            
+                 2.0            *     *     *
+                 1.7            **    *   * *
+Relative         1.5 **         **    *   * *
+Entropy          1.2 ***    *   **  * * *** *
+(28.6 bits)      1.0 *** *  *  **** * * *****
+                 0.7 ****** *********** *****
+                 0.5 ************************
+                 0.2 ************************
+                 0.0 ------------------------
+
+Multilevel           GGAACGTTTAACGTGCCCCACGCG
+consensus            TC CT C CCC   A G A   G 
+sequence                             A T     
+                                             
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 sites sorted by position p-value
+--------------------------------------------------------------------------------
+Sequence name            Strand  Start   P-value                      Site        
+-------------            ------  ----- ---------            ------------------------
+ELT2peak03159                -     59  1.64e-12 CGGTGTTTGC GGACTGCGTACCGTACCCCACGCG CAAAAGAAGG
+ELT2peak05349                +     32  5.58e-11 AATATCTGGT GGCACGTTTCACGTGAACCACGGG GTACTGTAGT
+ELT2peak05259                +     49  6.83e-11 CGCGTCAGAG GCAATGTTGACCGTACCCCAAGGG GAAATTCAGC
+ELT2peak01448                -      7  1.94e-10 GTACTGTACA GGACTGTTTGCCGTACACACCGGG TACTGT    
+ELT2peak10501                +     49  5.92e-10 CTCCGCATGA TCAACACTTCACGTGCGGTACGCG TGTTCATCGA
+ELT2peak11004                -     63  7.54e-10 CTTTTGAAAT TGAACTTTCAACGTGCCCAATGCG AGAATGTTTA
+ELT2peak04729                +     59  2.66e-09 ACAATGTTGT GCAACGCTCCACAAGCGCCACTCC CAAGAGAAAG
+ELT2peak00466                -     28  8.99e-09 GGACCGCGAT GGAGTCATCACCGTCGGCTACGAG CAGTTCCTGA
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 block diagrams
+--------------------------------------------------------------------------------
+SEQUENCE NAME            POSITION P-VALUE  MOTIF DIAGRAM
+-------------            ----------------  -------------
+ELT2peak03159                     1.6e-12  58_[-3]_18
+ELT2peak05349                     5.6e-11  31_[+3]_45
+ELT2peak05259                     6.8e-11  48_[+3]_28
+ELT2peak01448                     1.9e-10  6_[-3]_70
+ELT2peak10501                     5.9e-10  48_[+3]_28
+ELT2peak11004                     7.5e-10  62_[-3]_14
+ELT2peak04729                     2.7e-09  58_[+3]_18
+ELT2peak00466                       9e-09  27_[-3]_49
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 in BLOCKS format
+--------------------------------------------------------------------------------
+BL   MOTIF GSAAYGYTYMMCGTRCVCHACGSG width=24 seqs=8
+ELT2peak03159            (   59) GGACTGCGTACCGTACCCCACGCG  1 
+ELT2peak05349            (   32) GGCACGTTTCACGTGAACCACGGG  1 
+ELT2peak05259            (   49) GCAATGTTGACCGTACCCCAAGGG  1 
+ELT2peak01448            (    7) GGACTGTTTGCCGTACACACCGGG  1 
+ELT2peak10501            (   49) TCAACACTTCACGTGCGGTACGCG  1 
+ELT2peak11004            (   63) TGAACTTTCAACGTGCCCAATGCG  1 
+ELT2peak04729            (   59) GCAACGCTCCACAAGCGCCACTCC  1 
+ELT2peak00466            (   28) GGAGTCATCACCGTCGGCTACGAG  1 
+//
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 position-specific scoring matrix
+--------------------------------------------------------------------------------
+log-odds matrix: alength= 4 w= 24 n= 11242 bayes= 10.4556 E= 1.7e-001 
+  -965   -965    206    -36 
+  -965    106    180   -965 
+   145    -52   -965   -965 
+    96     48    -52   -965 
+  -965    148   -965     64 
+  -136    -52    180   -136 
+  -136    106   -965     64 
+  -965   -965    -52    145 
+  -965    106    -52     64 
+    64    106    -52   -965 
+    64    148   -965   -965 
+  -965    248   -965   -965 
+  -136   -965    229   -965 
+  -136   -965   -965    145 
+    22    -52    148   -965 
+  -136    206    -52   -965 
+   -36    106    106   -965 
+  -965    229    -52   -965 
+   -36    148   -965    -36 
+   145    -52   -965   -965 
+  -136    206   -965   -136 
+  -965   -965    229   -136 
+  -136    148    106   -965 
+  -965    -52    229   -965 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 position-specific probability matrix
+--------------------------------------------------------------------------------
+letter-probability matrix: alength= 4 w= 24 nsites= 8 E= 1.7e-001 
+ 0.000000  0.000000  0.750000  0.250000 
+ 0.000000  0.375000  0.625000  0.000000 
+ 0.875000  0.125000  0.000000  0.000000 
+ 0.625000  0.250000  0.125000  0.000000 
+ 0.000000  0.500000  0.000000  0.500000 
+ 0.125000  0.125000  0.625000  0.125000 
+ 0.125000  0.375000  0.000000  0.500000 
+ 0.000000  0.000000  0.125000  0.875000 
+ 0.000000  0.375000  0.125000  0.500000 
+ 0.500000  0.375000  0.125000  0.000000 
+ 0.500000  0.500000  0.000000  0.000000 
+ 0.000000  1.000000  0.000000  0.000000 
+ 0.125000  0.000000  0.875000  0.000000 
+ 0.125000  0.000000  0.000000  0.875000 
+ 0.375000  0.125000  0.500000  0.000000 
+ 0.125000  0.750000  0.125000  0.000000 
+ 0.250000  0.375000  0.375000  0.000000 
+ 0.000000  0.875000  0.125000  0.000000 
+ 0.250000  0.500000  0.000000  0.250000 
+ 0.875000  0.125000  0.000000  0.000000 
+ 0.125000  0.750000  0.000000  0.125000 
+ 0.000000  0.000000  0.875000  0.125000 
+ 0.125000  0.500000  0.375000  0.000000 
+ 0.000000  0.125000  0.875000  0.000000 
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+	Motif GSAAYGYTYMMCGTRCVCHACGSG MEME-3 regular expression
+--------------------------------------------------------------------------------
+[GT][GC]A[AC][CT]G[TC]T[TC][AC][AC]CGT[GA]C[CGA]C[CAT]ACG[CG]G
+--------------------------------------------------------------------------------
+
+
+
+
+Time 55.87 secs.
+
+********************************************************************************
+
+
+********************************************************************************
+SUMMARY OF MOTIFS
+********************************************************************************
+
+--------------------------------------------------------------------------------
+	Combined block diagrams: non-overlapping sites with p-value < 0.0001
+--------------------------------------------------------------------------------
+SEQUENCE NAME            COMBINED P-VALUE  MOTIF DIAGRAM
+-------------            ----------------  -------------
+ELT2peak00050                    6.87e-01  100
+ELT2peak00051                    5.53e-04  74_[+1(6.75e-07)]_5
+ELT2peak00052                    7.97e-02  100
+ELT2peak00058                    6.64e-02  12_[-1(2.72e-05)]_67
+ELT2peak00302                    3.15e-02  73_[-1(1.47e-05)]_6
+ELT2peak00460                    2.38e-02  30_[-1(2.17e-05)]_49
+ELT2peak00466                    8.58e-06  27_[-3(8.99e-09)]_49
+ELT2peak00467                    3.93e-03  4_[+1(5.25e-06)]_75
+ELT2peak01371                    8.89e-01  100
+ELT2peak01447                    3.96e-01  100
+ELT2peak01448                    1.58e-07  6_[-3(1.94e-10)]_70
+ELT2peak01465                    9.99e-01  100
+ELT2peak01473                    4.05e-02  25_[-2(7.44e-05)]_47
+ELT2peak01474                    1.28e-08  33_[+2(2.62e-12)]_39
+ELT2peak01518                    3.36e-01  100
+ELT2peak01680                    1.38e-01  100
+ELT2peak01681                    4.16e-01  100
+ELT2peak01857                    8.45e-01  100
+ELT2peak01947                    9.68e-02  100
+ELT2peak01948                    4.57e-02  100
+ELT2peak02065                    1.88e-02  10_[+1(1.47e-05)]_69
+ELT2peak02097                    8.93e-01  100
+ELT2peak02098                    2.99e-01  100
+ELT2peak02148                    7.42e-10  37_[+2(4.18e-12)]_35
+ELT2peak02412                    3.62e-03  40_[+1(1.62e-06)]_39
+ELT2peak02849                    9.80e-02  100
+ELT2peak02904                    3.81e-02  100
+ELT2peak02905                    5.32e-01  100
+ELT2peak03007                    9.39e-01  100
+ELT2peak03008                    7.34e-01  100
+ELT2peak03009                    1.60e-01  100
+ELT2peak03072                    4.42e-01  100
+ELT2peak03073                    5.87e-03  8_[-1(1.80e-06)]_71
+ELT2peak03159                    3.08e-09  58_[-3(1.64e-12)]_18
+ELT2peak03244                    9.02e-02  100
+ELT2peak03245                    3.48e-01  100
+ELT2peak03280                    5.99e-01  100
+ELT2peak03429                    5.50e-01  100
+ELT2peak03430                    1.62e-02  36_[-2(2.02e-05)]_36
+ELT2peak03786                    4.74e-01  100
+ELT2peak04479                    9.37e-01  100
+ELT2peak04559                    1.48e-01  100
+ELT2peak04698                    1.55e-01  100
+ELT2peak04729                    1.63e-10  12_[-1(6.01e-07)]_25_[+3(2.66e-09)]_\
+    18
+ELT2peak05094                    2.15e-04  79_[-1(1.31e-06)]
+ELT2peak05136                    7.25e-01  100
+ELT2peak05212                    7.65e-01  100
+ELT2peak05258                    3.68e-02  52_[+1(3.15e-05)]_27
+ELT2peak05259                    7.50e-08  48_[+3(6.83e-11)]_28
+ELT2peak05347                    9.26e-01  100
+ELT2peak05348                    9.51e-03  7_[+1(6.87e-06)]_72
+ELT2peak05385                    9.64e-01  100
+ELT2peak05520                    7.90e-04  6_[+1(2.44e-06)]_30_[+1(1.98e-07)]_\
+    22
+ELT2peak05744                    3.22e-01  100
+ELT2peak05745                    8.39e-01  100
+ELT2peak05949                    3.42e-04  31_[-1(4.90e-08)]_48
+ELT2peak06002                    3.79e-01  100
+ELT2peak06446                    9.77e-05  4_[+1(1.98e-07)]_75
+ELT2peak06812                    1.60e-01  100
+ELT2peak06902                    6.98e-01  100
+ELT2peak06922                    1.19e-08  3_[-1(2.93e-05)]_24_[+2(1.90e-10)]_\
+    24
+ELT2peak06930                    3.82e-02  40_[+1(1.59e-05)]_39
+ELT2peak06931                    3.78e-05  4_[+2(7.61e-05)]_25_[+1(2.21e-06)]_\
+    22
+ELT2peak06932                    3.44e-02  42_[-1(1.35e-05)]_37
+ELT2peak07054                    6.58e-01  100
+ELT2peak07325                    2.46e-01  100
+ELT2peak07353                    3.54e-01  100
+ELT2peak07391                    7.50e-01  100
+ELT2peak07694                    9.67e-03  48_[+1(4.36e-06)]_31
+ELT2peak07996                    7.44e-01  100
+ELT2peak07997                    1.22e-01  100
+ELT2peak08222                    3.85e-01  100
+ELT2peak08245                    2.34e-01  100
+ELT2peak08257                    5.64e-01  100
+ELT2peak08278                    5.32e-01  100
+ELT2peak08279                    5.66e-01  100
+ELT2peak08394                    8.25e-01  100
+ELT2peak08444                    1.36e-01  100
+ELT2peak08496                    8.48e-01  100
+ELT2peak08668                    4.23e-02  100
+ELT2peak08670                    1.85e-01  100
+ELT2peak08692                    1.66e-01  100
+ELT2peak08766                    4.04e-02  100
+ELT2peak08824                    7.36e-01  100
+ELT2peak08830                    3.81e-01  100
+ELT2peak08831                    4.25e-01  100
+ELT2peak08832                    1.06e-02  100
+ELT2peak08833                    9.94e-01  100
+ELT2peak08834                    5.51e-05  2_[+3(1.23e-05)]_49_[-1(9.72e-06)]_\
+    4
+ELT2peak08835                    2.52e-01  100
+ELT2peak08836                    2.94e-06  11_[-1(5.69e-08)]_39_[-3(3.03e-05)]_\
+    5
+ELT2peak08856                    6.19e-01  100
+ELT2peak09218                    1.51e-03  49_[+3(3.47e-05)]_27
+ELT2peak09278                    6.61e-01  100
+ELT2peak09279                    4.26e-01  100
+ELT2peak09432                    8.72e-01  100
+ELT2peak09575                    3.34e-04  22_[+1(3.30e-07)]_57
+ELT2peak09601                    2.56e-01  100
+ELT2peak09619                    1.53e-02  76_[+1(2.98e-06)]_3
+ELT2peak09915                    8.21e-01  100
+ELT2peak09917                    9.28e-02  100
+ELT2peak10044                    1.04e-01  100
+ELT2peak10045                    5.82e-01  100
+ELT2peak10498                    4.61e-01  100
+ELT2peak10830                    2.85e-01  100
+ELT2peak11004                    9.50e-06  62_[-3(7.54e-10)]_14
+ELT2peak11005                    1.38e-11  26_[+1(4.75e-07)]_22_[+2(1.83e-11)]_\
+    3
+ELT2peak11006                    9.58e-03  32_[-1(2.01e-05)]_47
+ELT2peak11007                    7.06e-03  100
+ELT2peak11008                    8.80e-02  63_[-3(5.88e-05)]_13
+ELT2peak11009                    3.16e-01  100
+ELT2peak00250                    2.79e-08  72_[-2(1.19e-10)]
+ELT2peak01825                    6.35e-01  100
+ELT2peak02104                    6.78e-02  4_[-1(6.29e-05)]_75
+ELT2peak02105                    1.05e-04  32_[-1(1.31e-06)]_47
+ELT2peak02848                    1.44e-01  100
+ELT2peak02903                    5.67e-02  100
+ELT2peak03281                    6.42e-03  43_[+1(1.06e-06)]_36
+ELT2peak03907                    5.87e-10  59_[+2(8.24e-14)]_13
+ELT2peak04282                    1.06e-04  79_[+1(1.33e-07)]
+ELT2peak04674                    6.59e-03  63_[+1(8.47e-07)]_16
+ELT2peak04675                    3.86e-02  55_[+1(8.92e-06)]_24
+ELT2peak05301                    1.00e-10  10_[-2(2.15e-11)]_24_[-1(1.18e-06)]_\
+    17
+ELT2peak05349                    2.49e-08  31_[+3(5.58e-11)]_45
+ELT2peak05534                    1.30e-02  67_[-1(1.25e-05)]_12
+ELT2peak05564                    6.92e-01  100
+ELT2peak05722                    2.92e-01  100
+ELT2peak06497                    3.08e-01  100
+ELT2peak08221                    1.60e-01  100
+ELT2peak08248                    2.28e-03  27_[-1(3.73e-07)]_52
+ELT2peak08837                    4.78e-01  100
+ELT2peak08838                    9.86e-07  46_[+1(2.95e-10)]_33
+ELT2peak08839                    7.76e-02  100
+ELT2peak08840                    4.50e-06  61_[-1(1.44e-09)]_18
+ELT2peak08897                    9.03e-01  100
+ELT2peak08898                    1.59e-02  37_[+1(5.75e-06)]_42
+ELT2peak08899                    3.95e-01  100
+ELT2peak09574                    1.81e-01  100
+ELT2peak10499                    2.13e-03  46_[+1(9.72e-06)]_33
+ELT2peak10500                    8.21e-01  100
+ELT2peak10501                    2.99e-06  48_[+3(5.92e-10)]_28
+ELT2peak10502                    8.75e-01  100
+ELT2peak10509                    2.26e-01  100
+ELT2peak10642                    9.06e-02  100
+ELT2peak10966                    8.28e-01  100
+ELT2peak11010                    9.89e-01  100
+--------------------------------------------------------------------------------
+
+********************************************************************************
+
+
+********************************************************************************
+Stopped because requested number of motifs (3) found.
+********************************************************************************
+
+CPU: shas0804.rc.int.colorado.edu
+
+********************************************************************************

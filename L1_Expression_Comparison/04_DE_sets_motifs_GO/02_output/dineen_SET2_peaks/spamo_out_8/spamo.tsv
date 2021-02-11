@@ -1,0 +1,6 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+dreme.xml	ATTTTCH	DREME-4	ATTTTCH	Caenorhabditis_elegans	M0358_1.02	ces-2	ATTAYRTAA	0	0	.	.	.	1.08e+00	4	7	6	111	3.49e-07	3.15e-06
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/dineen_SET2_peaks/spamo_out_8 -bgfile 02_output/dineen_SET2_peaks/background -keepprimary -primary ATTTTCH 02_output/dineen_SET2_peaks/dineen_SET2_peaks.fasta 02_output/dineen_SET2_peaks/dreme_out/dreme.xml 02_output/dineen_SET2_peaks/meme_out/meme.xml 02_output/dineen_SET2_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

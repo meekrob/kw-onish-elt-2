@@ -1,0 +1,3066 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!-- Document definition -->
+<!-- http://zlab.bu.edu/~phaverty/SupplementalData/CisML/cisml.dtd -->
+<!DOCTYPE cis-element-search[
+<!ELEMENT cis-element-search (program-name, parameters, (pattern | multi-pattern-scan)*)>
+<!ELEMENT program-name (#PCDATA)>
+<!ELEMENT parameters (
+  pattern-file, 
+  sequence-file, 
+  background-seq-file?,
+  pattern-pvalue-cutoff?,
+  sequence-pvalue-cutoff?,
+  site-pvalue-cutoff?,
+  sequence-filtering,
+  ANY*
+ )>
+<!ELEMENT command-line (#PCDATA)>
+<!ELEMENT pattern-file (#PCDATA)>
+<!ELEMENT sequence-file (#PCDATA)>
+<!ELEMENT background-seq-file (#PCDATA)>
+<!ELEMENT pattern-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-pvalue-cutoff (#PCDATA)>
+<!ELEMENT site-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-filtering EMPTY>
+<!ELEMENT multi-pattern-scan (pattern+, ANY*)>
+<!ELEMENT pattern (scanned-sequence+, ANY*)>
+<!ELEMENT scanned-sequence (matched-element*, ANY*)>
+<!ELEMENT matched-element (sequence)>
+<!ELEMENT sequence (#PCDATA)>
+<!ATTLIST cis-element-search
+xmlns:xsi CDATA #IMPLIED
+xmlns:mem CDATA #IMPLIED
+xsi:schemaLocation CDATA #IMPLIED
+>
+<!ATTLIST sequence-filtering
+on-off CDATA #REQUIRED
+type CDATA #IMPLIED
+>
+<!ATTLIST multi-pattern-scan
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+>
+<!ATTLIST pattern
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+pvalue CDATA #IMPLIED
+score CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST scanned-sequence
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+length CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST matched-element
+start CDATA #REQUIRED
+stop CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+clusterid CDATA #IMPLIED
+>
+
+]>
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>fimo</program-name>
+<parameters>
+<command-line>fimo --parse-genomic-coord --verbosity 1 --oc 02_output/dineen_SET3_peaks/fimo_out_2 --bgfile 02_output/dineen_SET3_peaks/background --motif RVGKRKRGARARRNRGRARWR 02_output/dineen_SET3_peaks/meme_out/meme.xml 02_output/dineen_SET3_peaks/dineen_SET3_peaks.fasta</command-line>
+<pattern-file>02_output/dineen_SET3_peaks/meme_out/meme.xml</pattern-file>
+<sequence-file>02_output/dineen_SET3_peaks/dineen_SET3_peaks.fasta</sequence-file>
+<site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
+<sequence-filtering on-off="off"/>
+</parameters>
+<pattern accession="RVGKRKRGARARRNRGRARWR" name="MEME-2">
+<scanned-sequence accession="ELT2peak00176" name="ELT2peak00176">
+<matched-element start="251" stop="271" score="14.2073" pvalue="7.47e-06">
+<sequence>GAGTGTGCGAAACGAGGAGAG</sequence>
+<mem:qvalue>0.0274</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00191" name="ELT2peak00191">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00192" name="ELT2peak00192">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00193" name="ELT2peak00193">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00310" name="ELT2peak00310">
+<matched-element start="431" stop="451" score="14.8049" pvalue="4.77e-06">
+<sequence>AAATGGAAAGAGAGAGAGGAG</sequence>
+<mem:qvalue>0.0206</mem:qvalue>
+</matched-element>
+<matched-element start="485" stop="465" score="14.1098" pvalue="8.02e-06">
+<sequence>AAAAAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.0281</mem:qvalue>
+</matched-element>
+<matched-element start="429" stop="449" score="12.8415" pvalue="1.92e-05">
+<sequence>GTAAATGGAAAGAGAGAGAGG</sequence>
+<mem:qvalue>0.0437</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00311" name="ELT2peak00311">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00324" name="ELT2peak00324">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00384" name="ELT2peak00384">
+<matched-element start="65" stop="85" score="13.1341" pvalue="1.58e-05">
+<sequence>ACCAATGCAGAAAGAGCAAAA</sequence>
+<mem:qvalue>0.0397</mem:qvalue>
+</matched-element>
+<matched-element start="328" stop="348" score="12.0122" pvalue="3.22e-05">
+<sequence>GGTTGTAGAGAATTGGAGATA</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00385" name="ELT2peak00385">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00391" name="ELT2peak00391">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00392" name="ELT2peak00392">
+<matched-element start="188" stop="208" score="14.4634" pvalue="6.18e-06">
+<sequence>GGTGGCGGGAAGAAAAGAAGG</sequence>
+<mem:qvalue>0.0242</mem:qvalue>
+</matched-element>
+<matched-element start="187" stop="207" score="13.2195" pvalue="1.49e-05">
+<sequence>CGGTGGCGGGAAGAAAAGAAG</sequence>
+<mem:qvalue>0.0386</mem:qvalue>
+</matched-element>
+<matched-element start="192" stop="212" score="11.1951" pvalue="5.19e-05">
+<sequence>GCGGGAAGAAAAGAAGGCTAA</sequence>
+<mem:qvalue>0.0756</mem:qvalue>
+</matched-element>
+<matched-element start="186" stop="206" score="10.8902" pvalue="6.15e-05">
+<sequence>GCGGTGGCGGGAAGAAAAGAA</sequence>
+<mem:qvalue>0.078</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00393" name="ELT2peak00393">
+<matched-element start="133" stop="113" score="12.0976" pvalue="3.06e-05">
+<sequence>AAAAAGCGGAAGGCGAAAGAA</sequence>
+<mem:qvalue>0.056</mem:qvalue>
+</matched-element>
+<matched-element start="472" stop="492" score="11.7683" pvalue="3.73e-05">
+<sequence>AAATGTGGAGAGGGGAACCAA</sequence>
+<mem:qvalue>0.0624</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00506" name="ELT2peak00506">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00507" name="ELT2peak00507">
+<matched-element start="234" stop="254" score="10.2805" pvalue="8.53e-05">
+<sequence>GCATGGGGAAAGAGTGTCTAG</sequence>
+<mem:qvalue>0.0916</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00788" name="ELT2peak00788">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00789" name="ELT2peak00789">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00845" name="ELT2peak00845">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00919" name="ELT2peak00919">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00963" name="ELT2peak00963">
+<matched-element start="92" stop="112" score="10.2683" pvalue="8.58e-05">
+<sequence>AGCGGGCAAGAATCAGACAAG</sequence>
+<mem:qvalue>0.0918</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00969" name="ELT2peak00969">
+<matched-element start="209" stop="229" score="17.5732" pvalue="4.17e-07">
+<sequence>GAGAATGAAGAGGGAGGAAAA</sequence>
+<mem:qvalue>0.00804</mem:qvalue>
+</matched-element>
+<matched-element start="215" stop="235" score="15.0244" pvalue="4.02e-06">
+<sequence>GAAGAGGGAGGAAAAGAAATA</sequence>
+<mem:qvalue>0.0189</mem:qvalue>
+</matched-element>
+<matched-element start="218" stop="238" score="10.3171" pvalue="8.37e-05">
+<sequence>GAGGGAGGAAAAGAAATATAG</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+<matched-element start="182" stop="202" score="10.2927" pvalue="8.48e-05">
+<sequence>CTGGGGGAATGAATGGAAAAA</sequence>
+<mem:qvalue>0.0912</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00970" name="ELT2peak00970">
+<matched-element start="259" stop="279" score="12.6098" pvalue="2.22e-05">
+<sequence>AGCGACACGAAAAAAGAAGAA</sequence>
+<mem:qvalue>0.0481</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01168" name="ELT2peak01168">
+<matched-element start="285" stop="305" score="14.6707" pvalue="5.28e-06">
+<sequence>AAGGGGAGAAAGTAGAGAAGA</sequence>
+<mem:qvalue>0.0218</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01314" name="ELT2peak01314">
+<matched-element start="249" stop="269" score="10.2927" pvalue="8.48e-05">
+<sequence>GAATACGAAAAGAGAGCATTA</sequence>
+<mem:qvalue>0.0912</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01316" name="ELT2peak01316">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01317" name="ELT2peak01317">
+<matched-element start="230" stop="210" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="232" stop="212" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="234" stop="214" score="16.5976" pvalue="1.06e-06">
+<sequence>CGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="236" stop="216" score="13.6463" pvalue="1.11e-05">
+<sequence>CTCGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.034</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01399" name="ELT2peak01399">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01400" name="ELT2peak01400">
+<matched-element start="364" stop="384" score="10.9024" pvalue="6.11e-05">
+<sequence>AAGCAGGAAGAGGCTAGAAGG</sequence>
+<mem:qvalue>0.078</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01402" name="ELT2peak01402">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01403" name="ELT2peak01403">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01612" name="ELT2peak01612">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01613" name="ELT2peak01613">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01627" name="ELT2peak01627">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01672" name="ELT2peak01672">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01673" name="ELT2peak01673">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01675" name="ELT2peak01675">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01676" name="ELT2peak01676">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01694" name="ELT2peak01694">
+<matched-element start="372" stop="352" score="11.0244" pvalue="5.71e-05">
+<sequence>AGCAAGAAAAAAGAGAAAAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01695" name="ELT2peak01695">
+<matched-element start="277" stop="297" score="11" pvalue="5.79e-05">
+<sequence>ATGTGTAAAAAAAGAGGAAGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01696" name="ELT2peak01696">
+<matched-element start="420" stop="400" score="11.0244" pvalue="5.71e-05">
+<sequence>AGCAAGAAAAAAGAGAAAAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01697" name="ELT2peak01697">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01698" name="ELT2peak01698">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01702" name="ELT2peak01702">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01703" name="ELT2peak01703">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01704" name="ELT2peak01704">
+<matched-element start="316" stop="336" score="10.5122" pvalue="7.55e-05">
+<sequence>AAGATGCGAAAAGGAAGAATG</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01705" name="ELT2peak01705">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01706" name="ELT2peak01706">
+<matched-element start="325" stop="305" score="11.0488" pvalue="5.64e-05">
+<sequence>CAGTGGAAAGAATTGGACAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01707" name="ELT2peak01707">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01708" name="ELT2peak01708">
+<matched-element start="193" stop="213" score="10.561" pvalue="7.36e-05">
+<sequence>CAAAACAAAAAAGCAGAAAAA</sequence>
+<mem:qvalue>0.0873</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01732" name="ELT2peak01732">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01733" name="ELT2peak01733">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01734" name="ELT2peak01734">
+<matched-element start="23" stop="43" score="15.3537" pvalue="3.09e-06">
+<sequence>GGAATTGGAGAGGTAGAAGAA</sequence>
+<mem:qvalue>0.0161</mem:qvalue>
+</matched-element>
+<matched-element start="47" stop="67" score="11.1098" pvalue="5.45e-05">
+<sequence>GTAGAAGAAGAAGAGGAAGAG</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01740" name="ELT2peak01740">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01741" name="ELT2peak01741">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01766" name="ELT2peak01766">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01771" name="ELT2peak01771">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01784" name="ELT2peak01784">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01809" name="ELT2peak01809">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01829" name="ELT2peak01829">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01830" name="ELT2peak01830">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02056" name="ELT2peak02056">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02057" name="ELT2peak02057">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02086" name="ELT2peak02086">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02126" name="ELT2peak02126">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02127" name="ELT2peak02127">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02154" name="ELT2peak02154">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02155" name="ELT2peak02155">
+<matched-element start="281" stop="261" score="14.5366" pvalue="5.85e-06">
+<sequence>AATGAGGGAGAAATGGCATTG</sequence>
+<mem:qvalue>0.0233</mem:qvalue>
+</matched-element>
+<matched-element start="337" stop="317" score="11.0732" pvalue="5.56e-05">
+<sequence>GCGGACGCAAAAACGAAGACA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02156" name="ELT2peak02156">
+<matched-element start="255" stop="235" score="16.5488" pvalue="1.11e-06">
+<sequence>GGGGGTGAAAAGAAGAAAAAA</sequence>
+<mem:qvalue>0.00868</mem:qvalue>
+</matched-element>
+<matched-element start="264" stop="244" score="16.3537" pvalue="1.32e-06">
+<sequence>CGGAGGGGAGGGGGTGAAAAG</sequence>
+<mem:qvalue>0.00969</mem:qvalue>
+</matched-element>
+<matched-element start="269" stop="249" score="15.5854" pvalue="2.55e-06">
+<sequence>GAAAACGGAGGGGAGGGGGTG</sequence>
+<mem:qvalue>0.0147</mem:qvalue>
+</matched-element>
+<matched-element start="265" stop="245" score="13.7195" pvalue="1.06e-05">
+<sequence>ACGGAGGGGAGGGGGTGAAAA</sequence>
+<mem:qvalue>0.0332</mem:qvalue>
+</matched-element>
+<matched-element start="259" stop="239" score="13.6585" pvalue="1.11e-05">
+<sequence>GGGAGGGGGTGAAAAGAAGAA</sequence>
+<mem:qvalue>0.034</mem:qvalue>
+</matched-element>
+<matched-element start="262" stop="242" score="13.5" pvalue="1.23e-05">
+<sequence>GAGGGGAGGGGGTGAAAAGAA</sequence>
+<mem:qvalue>0.0354</mem:qvalue>
+</matched-element>
+<matched-element start="266" stop="246" score="13.4146" pvalue="1.31e-05">
+<sequence>AACGGAGGGGAGGGGGTGAAA</sequence>
+<mem:qvalue>0.0362</mem:qvalue>
+</matched-element>
+<matched-element start="263" stop="243" score="13.1951" pvalue="1.52e-05">
+<sequence>GGAGGGGAGGGGGTGAAAAGA</sequence>
+<mem:qvalue>0.0388</mem:qvalue>
+</matched-element>
+<matched-element start="276" stop="256" score="11.5122" pvalue="4.33e-05">
+<sequence>AGAGATGGAAAACGGAGGGGA</sequence>
+<mem:qvalue>0.0683</mem:qvalue>
+</matched-element>
+<matched-element start="353" stop="333" score="10.6585" pvalue="6.98e-05">
+<sequence>GAGAGCAAAGAAAGAGGGTTA</sequence>
+<mem:qvalue>0.0844</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02157" name="ELT2peak02157">
+<matched-element start="92" stop="112" score="10.1585" pvalue="9.09e-05">
+<sequence>GAGCGCGAGAAGCAAGAGATG</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02158" name="ELT2peak02158">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02178" name="ELT2peak02178">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02224" name="ELT2peak02224">
+<matched-element start="276" stop="296" score="12.8171" pvalue="1.95e-05">
+<sequence>GGACATAGATAAGAGGGCGAG</sequence>
+<mem:qvalue>0.0442</mem:qvalue>
+</matched-element>
+<matched-element start="480" stop="500" score="10.0122" pvalue="9.8e-05">
+<sequence>GGCTTGCGAGAGGTGATGAAA</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+<matched-element start="147" stop="167" score="10" pvalue="9.86e-05">
+<sequence>AAACGCCAAAAAAAGGAAAAA</sequence>
+<mem:qvalue>0.0962</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02225" name="ELT2peak02225">
+<matched-element start="276" stop="256" score="14.5854" pvalue="5.64e-06">
+<sequence>GGACGCGGAAAGGTGAGATAG</sequence>
+<mem:qvalue>0.0228</mem:qvalue>
+</matched-element>
+<matched-element start="188" stop="168" score="13.6098" pvalue="1.14e-05">
+<sequence>GAAAGCAGAAAGAGGAGAAGA</sequence>
+<mem:qvalue>0.0343</mem:qvalue>
+</matched-element>
+<matched-element start="190" stop="170" score="12.3902" pvalue="2.55e-05">
+<sequence>AGGAAAGCAGAAAGAGGAGAA</sequence>
+<mem:qvalue>0.0507</mem:qvalue>
+</matched-element>
+<matched-element start="186" stop="166" score="12.3293" pvalue="2.65e-05">
+<sequence>AAGCAGAAAGAGGAGAAGATG</sequence>
+<mem:qvalue>0.0515</mem:qvalue>
+</matched-element>
+<matched-element start="189" stop="169" score="12.1098" pvalue="3.04e-05">
+<sequence>GGAAAGCAGAAAGAGGAGAAG</sequence>
+<mem:qvalue>0.056</mem:qvalue>
+</matched-element>
+<matched-element start="195" stop="175" score="10.8659" pvalue="6.24e-05">
+<sequence>AGCGGAGGAAAGCAGAAAGAG</sequence>
+<mem:qvalue>0.0782</mem:qvalue>
+</matched-element>
+<matched-element start="180" stop="160" score="10.2439" pvalue="8.69e-05">
+<sequence>AAAGAGGAGAAGATGATGGTG</sequence>
+<mem:qvalue>0.0919</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02228" name="ELT2peak02228">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02229" name="ELT2peak02229">
+<matched-element start="423" stop="403" score="10.7073" pvalue="6.8e-05">
+<sequence>GAGATTGAAAGAATGGAAAAG</sequence>
+<mem:qvalue>0.0835</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02252" name="ELT2peak02252">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02253" name="ELT2peak02253">
+<matched-element start="347" stop="367" score="14.878" pvalue="4.5e-06">
+<sequence>ACGGGTGGAAGAATGAGGAAG</sequence>
+<mem:qvalue>0.0202</mem:qvalue>
+</matched-element>
+<matched-element start="348" stop="368" score="12.1463" pvalue="2.97e-05">
+<sequence>CGGGTGGAAGAATGAGGAAGA</sequence>
+<mem:qvalue>0.0552</mem:qvalue>
+</matched-element>
+<matched-element start="358" stop="378" score="11" pvalue="5.79e-05">
+<sequence>AATGAGGAAGAAATTGAAGGA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02287" name="ELT2peak02287">
+<matched-element start="260" stop="240" score="12.2683" pvalue="2.75e-05">
+<sequence>AAGGAGACAAAAATCGAAGTA</sequence>
+<mem:qvalue>0.052</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02288" name="ELT2peak02288">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02292" name="ELT2peak02292">
+<matched-element start="470" stop="450" score="12.0244" pvalue="3.2e-05">
+<sequence>CACGAGAAAAAAGTAGTGGGA</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02293" name="ELT2peak02293">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02294" name="ELT2peak02294">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02329" name="ELT2peak02329">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02330" name="ELT2peak02330">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02334" name="ELT2peak02334">
+<matched-element start="45" stop="25" score="14.2073" pvalue="7.47e-06">
+<sequence>ACACAGAGAGAAATGGAGAAA</sequence>
+<mem:qvalue>0.0274</mem:qvalue>
+</matched-element>
+<matched-element start="341" stop="361" score="10.9268" pvalue="6.03e-05">
+<sequence>GAGTAGACAAGAAAGGCATGG</sequence>
+<mem:qvalue>0.0777</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02388" name="ELT2peak02388">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02445" name="ELT2peak02445">
+<matched-element start="275" stop="295" score="16.1098" pvalue="1.63e-06">
+<sequence>CATGAGAGAGAGACGAGAGAG</sequence>
+<mem:qvalue>0.0113</mem:qvalue>
+</matched-element>
+<matched-element start="126" stop="106" score="14.7439" pvalue="4.99e-06">
+<sequence>GAATGTGAAGAAGAAGAAAAA</sequence>
+<mem:qvalue>0.0214</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02446" name="ELT2peak02446">
+<matched-element start="299" stop="319" score="12.4512" pvalue="2.46e-05">
+<sequence>AAAAACCGGGAGGGAGCAAGG</sequence>
+<mem:qvalue>0.0503</mem:qvalue>
+</matched-element>
+<matched-element start="347" stop="367" score="10.2683" pvalue="8.58e-05">
+<sequence>AAAGTGGGGGAAAAGGCCATA</sequence>
+<mem:qvalue>0.0918</mem:qvalue>
+</matched-element>
+<matched-element start="339" stop="359" score="10.1463" pvalue="9.15e-05">
+<sequence>GTCGACAAAAAGTGGGGGAAA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+<matched-element start="350" stop="370" score="10.0366" pvalue="9.68e-05">
+<sequence>GTGGGGGAAAAGGCCATAAAG</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02541" name="ELT2peak02541">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02544" name="ELT2peak02544">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02572" name="ELT2peak02572">
+<matched-element start="240" stop="260" score="11.4756" pvalue="4.42e-05">
+<sequence>AAATGTAGGGAAAGGAAAATG</sequence>
+<mem:qvalue>0.0693</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02697" name="ELT2peak02697">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02788" name="ELT2peak02788">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02819" name="ELT2peak02819">
+<matched-element start="73" stop="53" score="13.3537" pvalue="1.36e-05">
+<sequence>GGTTGCGAATAGAAGGCAGAG</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="207" stop="187" score="12.4756" pvalue="2.42e-05">
+<sequence>ATGGGCAGGAAAATGGCAAGA</sequence>
+<mem:qvalue>0.0499</mem:qvalue>
+</matched-element>
+<matched-element start="246" stop="226" score="11.6341" pvalue="4.03e-05">
+<sequence>GTCGGGGGGAAAGCGAACAGA</sequence>
+<mem:qvalue>0.0654</mem:qvalue>
+</matched-element>
+<matched-element start="247" stop="227" score="11.439" pvalue="4.52e-05">
+<sequence>GGTCGGGGGGAAAGCGAACAG</sequence>
+<mem:qvalue>0.0699</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02845" name="ELT2peak02845">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02850" name="ELT2peak02850">
+<matched-element start="500" stop="480" score="10.439" pvalue="7.85e-05">
+<sequence>CGATATACGAAAAAGGCAAAA</sequence>
+<mem:qvalue>0.0892</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02874" name="ELT2peak02874">
+<matched-element start="325" stop="305" score="15.4268" pvalue="2.91e-06">
+<sequence>GGAGAGAGAAAATGAGAAATG</sequence>
+<mem:qvalue>0.0155</mem:qvalue>
+</matched-element>
+<matched-element start="408" stop="388" score="14.9878" pvalue="4.13e-06">
+<sequence>ACGGGGAGAAGAGAAGGACAA</sequence>
+<mem:qvalue>0.0192</mem:qvalue>
+</matched-element>
+<matched-element start="331" stop="311" score="12.5732" pvalue="2.28e-05">
+<sequence>GCCAGTGGAGAGAGAAAATGA</sequence>
+<mem:qvalue>0.0484</mem:qvalue>
+</matched-element>
+<matched-element start="361" stop="341" score="11.9024" pvalue="3.44e-05">
+<sequence>AACTATGAAGAAATAGGGAAA</sequence>
+<mem:qvalue>0.0602</mem:qvalue>
+</matched-element>
+<matched-element start="327" stop="307" score="11.8293" pvalue="3.59e-05">
+<sequence>GTGGAGAGAGAAAATGAGAAA</sequence>
+<mem:qvalue>0.0615</mem:qvalue>
+</matched-element>
+<matched-element start="329" stop="309" score="11.7683" pvalue="3.73e-05">
+<sequence>CAGTGGAGAGAGAAAATGAGA</sequence>
+<mem:qvalue>0.0624</mem:qvalue>
+</matched-element>
+<matched-element start="403" stop="383" score="11.1098" pvalue="5.45e-05">
+<sequence>GAGAAGAGAAGGACAATAGTG</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+<matched-element start="406" stop="386" score="10.4756" pvalue="7.7e-05">
+<sequence>GGGGAGAAGAGAAGGACAATA</sequence>
+<mem:qvalue>0.0881</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02896" name="ELT2peak02896">
+<matched-element start="25" stop="45" score="11.939" pvalue="3.37e-05">
+<sequence>AGCGACGGGAAGGTAGACCTA</sequence>
+<mem:qvalue>0.0591</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03032" name="ELT2peak03032">
+<matched-element start="358" stop="338" score="13.4512" pvalue="1.28e-05">
+<sequence>ACGTGGGCGGAGGTGATAAGA</sequence>
+<mem:qvalue>0.0361</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03033" name="ELT2peak03033">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03055" name="ELT2peak03055">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03056" name="ELT2peak03056">
+<matched-element start="160" stop="180" score="10.378" pvalue="8.1e-05">
+<sequence>GGGAAACGAGAAGTAGGACGG</sequence>
+<mem:qvalue>0.0905</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03081" name="ELT2peak03081">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03082" name="ELT2peak03082">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03083" name="ELT2peak03083">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03086" name="ELT2peak03086">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03162" name="ELT2peak03162">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03167" name="ELT2peak03167">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03168" name="ELT2peak03168">
+<matched-element start="362" stop="342" score="16.8171" pvalue="8.65e-07">
+<sequence>GATGACGCAAAAAGGGAAAAG</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03370" name="ELT2peak03370">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03371" name="ELT2peak03371">
+<matched-element start="499" stop="479" score="10.2927" pvalue="8.48e-05">
+<sequence>GGAAGGGGAAGGAGCGGGCTG</sequence>
+<mem:qvalue>0.0912</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03372" name="ELT2peak03372">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03443" name="ELT2peak03443">
+<matched-element start="281" stop="261" score="12.6463" pvalue="2.17e-05">
+<sequence>GCTTATCGAGAGATAGTAGAA</sequence>
+<mem:qvalue>0.0477</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03444" name="ELT2peak03444">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03445" name="ELT2peak03445">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03449" name="ELT2peak03449">
+<matched-element start="296" stop="316" score="12.5976" pvalue="2.24e-05">
+<sequence>AAGGAGGCAGAATAGAGAATA</sequence>
+<mem:qvalue>0.0481</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03454" name="ELT2peak03454">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03468" name="ELT2peak03468">
+<matched-element start="250" stop="230" score="11.7195" pvalue="3.84e-05">
+<sequence>AGAGTGAGGGAGAGGGGATTA</sequence>
+<mem:qvalue>0.0635</mem:qvalue>
+</matched-element>
+<matched-element start="311" stop="291" score="11.2805" pvalue="4.95e-05">
+<sequence>AAAGGGGCGGGACTGGAAAAG</sequence>
+<mem:qvalue>0.0729</mem:qvalue>
+</matched-element>
+<matched-element start="434" stop="454" score="10.7927" pvalue="6.49e-05">
+<sequence>CGAGGTGGAGGAGGTGGATGA</sequence>
+<mem:qvalue>0.0803</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03484" name="ELT2peak03484">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03485" name="ELT2peak03485">
+<matched-element start="230" stop="210" score="19.7073" pvalue="3.84e-08">
+<sequence>AGAGAGGGAAAGAAGGAAGTG</sequence>
+<mem:qvalue>0.00226</mem:qvalue>
+</matched-element>
+<matched-element start="234" stop="214" score="12.8049" pvalue="1.96e-05">
+<sequence>AAATAGAGAGGGAAAGAAGGA</sequence>
+<mem:qvalue>0.0443</mem:qvalue>
+</matched-element>
+<matched-element start="236" stop="216" score="12.5976" pvalue="2.24e-05">
+<sequence>AAAAATAGAGAGGGAAAGAAG</sequence>
+<mem:qvalue>0.0481</mem:qvalue>
+</matched-element>
+<matched-element start="244" stop="224" score="11.2561" pvalue="5.02e-05">
+<sequence>AACTAGAAAAAAATAGAGAGG</sequence>
+<mem:qvalue>0.0737</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03493" name="ELT2peak03493">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03505" name="ELT2peak03505">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03506" name="ELT2peak03506">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03537" name="ELT2peak03537">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03583" name="ELT2peak03583">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03584" name="ELT2peak03584">
+<matched-element start="315" stop="295" score="11.6341" pvalue="4.03e-05">
+<sequence>GCATATGGAAAAGTAAGATAA</sequence>
+<mem:qvalue>0.0654</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03586" name="ELT2peak03586">
+<matched-element start="290" stop="310" score="15.8415" pvalue="2.06e-06">
+<sequence>GCGCATGGAAAAGTGATAGAG</sequence>
+<mem:qvalue>0.0131</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03587" name="ELT2peak03587">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03677" name="ELT2peak03677">
+<matched-element start="380" stop="400" score="10.5244" pvalue="7.5e-05">
+<sequence>AAGGAGGAGAAATTTGGAGAA</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03678" name="ELT2peak03678">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03705" name="ELT2peak03705">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03830" name="ELT2peak03830">
+<matched-element start="28" stop="48" score="20.7927" pvalue="9.09e-09">
+<sequence>GAGGATGGAGAAATGGAAGTG</sequence>
+<mem:qvalue>0.00214</mem:qvalue>
+</matched-element>
+<matched-element start="300" stop="280" score="14.2195" pvalue="7.4e-06">
+<sequence>CCGGGTGCATAAGGAGTGGTG</sequence>
+<mem:qvalue>0.0274</mem:qvalue>
+</matched-element>
+<matched-element start="422" stop="402" score="10" pvalue="9.86e-05">
+<sequence>GACGGTAGATAAGTGTGGATG</sequence>
+<mem:qvalue>0.0962</mem:qvalue>
+</matched-element>
+<matched-element start="412" stop="392" score="9.97561" pvalue="9.98e-05">
+<sequence>AAGTGTGGATGGAGTGAGAGG</sequence>
+<mem:qvalue>0.0966</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04012" name="ELT2peak04012">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04014" name="ELT2peak04014">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04069" name="ELT2peak04069">
+<matched-element start="253" stop="233" score="15.6341" pvalue="2.45e-06">
+<sequence>GACAGGGAAAAAGTAGAAGTA</sequence>
+<mem:qvalue>0.0146</mem:qvalue>
+</matched-element>
+<matched-element start="256" stop="236" score="12.4756" pvalue="2.42e-05">
+<sequence>GATGACAGGGAAAAAGTAGAA</sequence>
+<mem:qvalue>0.0499</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04196" name="ELT2peak04196">
+<matched-element start="214" stop="234" score="10.3902" pvalue="8.05e-05">
+<sequence>ACATGAAGAAAAGTAGCAAAA</sequence>
+<mem:qvalue>0.0902</mem:qvalue>
+</matched-element>
+<matched-element start="224" stop="244" score="10.0244" pvalue="9.74e-05">
+<sequence>AAGTAGCAAAAACTGGAGGAA</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04202" name="ELT2peak04202">
+<matched-element start="292" stop="272" score="12.378" pvalue="2.57e-05">
+<sequence>GACTAGGAAGAAGTGATAAGG</sequence>
+<mem:qvalue>0.0508</mem:qvalue>
+</matched-element>
+<matched-element start="303" stop="283" score="10.0976" pvalue="9.38e-05">
+<sequence>GAAGAGACAAAGACTAGGAAG</sequence>
+<mem:qvalue>0.0949</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04329" name="ELT2peak04329">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04345" name="ELT2peak04345">
+<matched-element start="156" stop="176" score="12.6463" pvalue="2.17e-05">
+<sequence>AAAGGTGCAAGAACGGCAGTA</sequence>
+<mem:qvalue>0.0477</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04346" name="ELT2peak04346">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04415" name="ELT2peak04415">
+<matched-element start="6" stop="26" score="10.7927" pvalue="6.49e-05">
+<sequence>GCGAAGAAAGAAGAAATGGAA</sequence>
+<mem:qvalue>0.0803</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04474" name="ELT2peak04474">
+<matched-element start="238" stop="258" score="13.7927" pvalue="1.01e-05">
+<sequence>CAGAACAAGAAAGTGGAAGAG</sequence>
+<mem:qvalue>0.0318</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04530" name="ELT2peak04530">
+<matched-element start="131" stop="111" score="13" pvalue="1.73e-05">
+<sequence>GGAGTGGGAAAGTTGAAAGTG</sequence>
+<mem:qvalue>0.0414</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04531" name="ELT2peak04531">
+<matched-element start="390" stop="410" score="12.8902" pvalue="1.86e-05">
+<sequence>GGGTATAGAGAGTTGGAAACA</sequence>
+<mem:qvalue>0.0434</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04555" name="ELT2peak04555">
+<matched-element start="292" stop="272" score="10.561" pvalue="7.36e-05">
+<sequence>GCGCGGCGAAGGCAGGCACAG</sequence>
+<mem:qvalue>0.0873</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04556" name="ELT2peak04556">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04592" name="ELT2peak04592">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04593" name="ELT2peak04593">
+<matched-element start="78" stop="58" score="11.1463" pvalue="5.34e-05">
+<sequence>GCATGCAGAGAATGAGAACAA</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04594" name="ELT2peak04594">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04595" name="ELT2peak04595">
+<matched-element start="247" stop="227" score="14.1341" pvalue="7.88e-06">
+<sequence>CCTGGTGCATAGGTAGAAAGG</sequence>
+<mem:qvalue>0.0281</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04597" name="ELT2peak04597">
+<matched-element start="270" stop="250" score="14.378" pvalue="6.58e-06">
+<sequence>CCTGGTGCATAGGTAGGAAGG</sequence>
+<mem:qvalue>0.0256</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04806" name="ELT2peak04806">
+<matched-element start="354" stop="374" score="16.3171" pvalue="1.36e-06">
+<sequence>AGAAATGGAAAAGGGGAGAGG</sequence>
+<mem:qvalue>0.00986</mem:qvalue>
+</matched-element>
+<matched-element start="362" stop="382" score="15.4512" pvalue="2.85e-06">
+<sequence>AAAAGGGGAGAGGGGGTATAA</sequence>
+<mem:qvalue>0.0155</mem:qvalue>
+</matched-element>
+<matched-element start="311" stop="291" score="15.3293" pvalue="3.15e-06">
+<sequence>GAAAAGAGAAAAAGAGAAAAA</sequence>
+<mem:qvalue>0.0161</mem:qvalue>
+</matched-element>
+<matched-element start="356" stop="376" score="12.6341" pvalue="2.19e-05">
+<sequence>AAATGGAAAAGGGGAGAGGGG</sequence>
+<mem:qvalue>0.0479</mem:qvalue>
+</matched-element>
+<matched-element start="355" stop="375" score="12.5244" pvalue="2.35e-05">
+<sequence>GAAATGGAAAAGGGGAGAGGG</sequence>
+<mem:qvalue>0.0495</mem:qvalue>
+</matched-element>
+<matched-element start="317" stop="297" score="11.9756" pvalue="3.29e-05">
+<sequence>AGCTAGGAAAAGAGAAAAAGA</sequence>
+<mem:qvalue>0.0584</mem:qvalue>
+</matched-element>
+<matched-element start="309" stop="289" score="11.7317" pvalue="3.81e-05">
+<sequence>AAAGAGAAAAAGAGAAAAATG</sequence>
+<mem:qvalue>0.0635</mem:qvalue>
+</matched-element>
+<matched-element start="364" stop="384" score="11.122" pvalue="5.41e-05">
+<sequence>AAGGGGAGAGGGGGTATAATG</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+<matched-element start="313" stop="293" score="10.2073" pvalue="8.86e-05">
+<sequence>AGGAAAAGAGAAAAAGAGAAA</sequence>
+<mem:qvalue>0.0924</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04807" name="ELT2peak04807">
+<matched-element start="197" stop="177" score="11.1098" pvalue="5.45e-05">
+<sequence>AGCAGGCGAGAGATGGGCACA</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+<matched-element start="464" stop="444" score="11.061" pvalue="5.6e-05">
+<sequence>GGGTAGGCGTAGGTAGGCCTG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="158" stop="138" score="10.3415" pvalue="8.26e-05">
+<sequence>ATAGGCACAAAGGCAAGAAAG</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04808" name="ELT2peak04808">
+<matched-element start="388" stop="408" score="14.8293" pvalue="4.68e-06">
+<sequence>AGAGTTGGAAAAACGGAGGAG</sequence>
+<mem:qvalue>0.0206</mem:qvalue>
+</matched-element>
+<matched-element start="380" stop="400" score="12.7195" pvalue="2.07e-05">
+<sequence>GAGAACAAAGAGTTGGAAAAA</sequence>
+<mem:qvalue>0.046</mem:qvalue>
+</matched-element>
+<matched-element start="240" stop="260" score="11.9512" pvalue="3.34e-05">
+<sequence>GAGTTGGCAGAAAAAGTAAAA</sequence>
+<mem:qvalue>0.0589</mem:qvalue>
+</matched-element>
+<matched-element start="308" stop="328" score="11.8171" pvalue="3.62e-05">
+<sequence>AGTCATAGAGAGAGTGGAGAA</sequence>
+<mem:qvalue>0.0615</mem:qvalue>
+</matched-element>
+<matched-element start="371" stop="391" score="10.6951" pvalue="6.84e-05">
+<sequence>AGAGACGCAGAGAACAAAGAG</sequence>
+<mem:qvalue>0.0837</mem:qvalue>
+</matched-element>
+<matched-element start="400" stop="420" score="10.6707" pvalue="6.93e-05">
+<sequence>ACGGAGGAGGAGGACGCGCGG</sequence>
+<mem:qvalue>0.084</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04852" name="ELT2peak04852">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04853" name="ELT2peak04853">
+<matched-element start="254" stop="234" score="13.9634" pvalue="8.91e-06">
+<sequence>GACAACGCAAGGATGGGGGAG</sequence>
+<mem:qvalue>0.0299</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04990" name="ELT2peak04990">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05043" name="ELT2peak05043">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05044" name="ELT2peak05044">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05061" name="ELT2peak05061">
+<matched-element start="277" stop="257" score="10.4146" pvalue="7.95e-05">
+<sequence>CATGGCAGAAAAAGAATAAAA</sequence>
+<mem:qvalue>0.0897</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05062" name="ELT2peak05062">
+<matched-element start="42" stop="22" score="10.7317" pvalue="6.71e-05">
+<sequence>ACTGAGAGAAGAGCTGAAAAA</sequence>
+<mem:qvalue>0.0828</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05086" name="ELT2peak05086">
+<matched-element start="494" stop="474" score="11.5488" pvalue="4.24e-05">
+<sequence>CAGGGTGAAGAGGAATACGAG</sequence>
+<mem:qvalue>0.0676</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05087" name="ELT2peak05087">
+<matched-element start="174" stop="154" score="16.7927" pvalue="8.85e-07">
+<sequence>CAACACAGAGAGGGGGAAGAA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="176" stop="156" score="15.5244" pvalue="2.68e-06">
+<sequence>GCCAACACAGAGAGGGGGAAG</sequence>
+<mem:qvalue>0.0149</mem:qvalue>
+</matched-element>
+<matched-element start="166" stop="146" score="13.8049" pvalue="9.97e-06">
+<sequence>AGAGGGGGAAGAACAACAGAG</sequence>
+<mem:qvalue>0.0317</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05138" name="ELT2peak05138">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05141" name="ELT2peak05141">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05170" name="ELT2peak05170">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05278" name="ELT2peak05278">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05284" name="ELT2peak05284">
+<matched-element start="288" stop="308" score="15.5732" pvalue="2.58e-06">
+<sequence>AGGGAGGCAGAGAGGAGGTAG</sequence>
+<mem:qvalue>0.0147</mem:qvalue>
+</matched-element>
+<matched-element start="435" stop="455" score="14.1463" pvalue="7.81e-06">
+<sequence>GCAGACAAGAAGGCAGGAAGG</sequence>
+<mem:qvalue>0.0281</mem:qvalue>
+</matched-element>
+<matched-element start="297" stop="317" score="13.7073" pvalue="1.07e-05">
+<sequence>GAGAGGAGGTAGGTAGGCATG</sequence>
+<mem:qvalue>0.0333</mem:qvalue>
+</matched-element>
+<matched-element start="279" stop="299" score="13.0488" pvalue="1.67e-05">
+<sequence>ACAGTTAGAAGGGAGGCAGAG</sequence>
+<mem:qvalue>0.0407</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05371" name="ELT2peak05371">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05382" name="ELT2peak05382">
+<matched-element start="283" stop="263" score="12.3293" pvalue="2.65e-05">
+<sequence>CCGGATAGAGAAATGTGAAAA</sequence>
+<mem:qvalue>0.0515</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05383" name="ELT2peak05383">
+<matched-element start="59" stop="39" score="13.5976" pvalue="1.15e-05">
+<sequence>AGTTGGAGAAAAAAAGAGAAA</sequence>
+<mem:qvalue>0.0343</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05413" name="ELT2peak05413">
+<matched-element start="459" stop="439" score="12.0122" pvalue="3.22e-05">
+<sequence>ACCGGAGAAGAGAAAGGAGTA</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05414" name="ELT2peak05414">
+<matched-element start="276" stop="296" score="11.4512" pvalue="4.49e-05">
+<sequence>AGGTGGACGAAAGCAAAGATG</sequence>
+<mem:qvalue>0.0699</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05418" name="ELT2peak05418">
+<matched-element start="386" stop="366" score="10.0976" pvalue="9.38e-05">
+<sequence>CAAGAGACGGAAAAAAGGAAG</sequence>
+<mem:qvalue>0.0949</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05470" name="ELT2peak05470">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05555" name="ELT2peak05555">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05608" name="ELT2peak05608">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05609" name="ELT2peak05609">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05610" name="ELT2peak05610">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05651" name="ELT2peak05651">
+<matched-element start="44" stop="24" score="10.4756" pvalue="7.7e-05">
+<sequence>ATCAGCGGAAAAATGGAATGG</sequence>
+<mem:qvalue>0.0881</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05653" name="ELT2peak05653">
+<matched-element start="99" stop="79" score="10.8902" pvalue="6.15e-05">
+<sequence>GGCGAGAGCAAGTGGGAAGCG</sequence>
+<mem:qvalue>0.078</mem:qvalue>
+</matched-element>
+<matched-element start="103" stop="83" score="10.8902" pvalue="6.15e-05">
+<sequence>ACAGGGCGAGAGCAAGTGGGA</sequence>
+<mem:qvalue>0.078</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05654" name="ELT2peak05654">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05728" name="ELT2peak05728">
+<matched-element start="236" stop="256" score="14.5854" pvalue="5.64e-06">
+<sequence>ACCGACGGAGAGAAAGAGGCG</sequence>
+<mem:qvalue>0.0228</mem:qvalue>
+</matched-element>
+<matched-element start="238" stop="258" score="11.6585" pvalue="3.98e-05">
+<sequence>CGACGGAGAGAAAGAGGCGCG</sequence>
+<mem:qvalue>0.0649</mem:qvalue>
+</matched-element>
+<matched-element start="480" stop="500" score="10.9268" pvalue="6.03e-05">
+<sequence>AGAGACGCAGAGAAAAAACAG</sequence>
+<mem:qvalue>0.0777</mem:qvalue>
+</matched-element>
+<matched-element start="187" stop="207" score="10.4878" pvalue="7.65e-05">
+<sequence>GAAGTTAGAGGAACAGAGAAG</sequence>
+<mem:qvalue>0.0881</mem:qvalue>
+</matched-element>
+<matched-element start="179" stop="199" score="10.122" pvalue="9.26e-05">
+<sequence>AAACGCAGGAAGTTAGAGGAA</sequence>
+<mem:qvalue>0.0943</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05729" name="ELT2peak05729">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05730" name="ELT2peak05730">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05778" name="ELT2peak05778">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05780" name="ELT2peak05780">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05843" name="ELT2peak05843">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05846" name="ELT2peak05846">
+<matched-element start="204" stop="224" score="13.1585" pvalue="1.55e-05">
+<sequence>CCATACCGAGAGGAAGCAGTA</sequence>
+<mem:qvalue>0.0395</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05847" name="ELT2peak05847">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05957" name="ELT2peak05957">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05995" name="ELT2peak05995">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06099" name="ELT2peak06099">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06100" name="ELT2peak06100">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06110" name="ELT2peak06110">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06111" name="ELT2peak06111">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06129" name="ELT2peak06129">
+<matched-element start="240" stop="220" score="18.0854" pvalue="2.46e-07">
+<sequence>GGGGGCGGAAAAGAAACAGAA</sequence>
+<mem:qvalue>0.00604</mem:qvalue>
+</matched-element>
+<matched-element start="242" stop="222" score="11.5488" pvalue="4.24e-05">
+<sequence>GTGGGGGCGGAAAAGAAACAG</sequence>
+<mem:qvalue>0.0676</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06130" name="ELT2peak06130">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06135" name="ELT2peak06135">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06136" name="ELT2peak06136">
+<matched-element start="341" stop="361" score="11.6098" pvalue="4.09e-05">
+<sequence>GAATGGAAAAGGATGGAGAGA</sequence>
+<mem:qvalue>0.0661</mem:qvalue>
+</matched-element>
+<matched-element start="339" stop="359" score="10.4512" pvalue="7.8e-05">
+<sequence>AAGAATGGAAAAGGATGGAGA</sequence>
+<mem:qvalue>0.0888</mem:qvalue>
+</matched-element>
+<matched-element start="340" stop="360" score="10.0854" pvalue="9.44e-05">
+<sequence>AGAATGGAAAAGGATGGAGAG</sequence>
+<mem:qvalue>0.0952</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06161" name="ELT2peak06161">
+<matched-element start="330" stop="310" score="14.1341" pvalue="7.88e-06">
+<sequence>GAAGAGGGAGGAGTCGGAAAA</sequence>
+<mem:qvalue>0.0281</mem:qvalue>
+</matched-element>
+<matched-element start="322" stop="302" score="12.2927" pvalue="2.71e-05">
+<sequence>AGGAGTCGGAAAACGGTGAAG</sequence>
+<mem:qvalue>0.0517</mem:qvalue>
+</matched-element>
+<matched-element start="345" stop="325" score="11.2927" pvalue="4.91e-05">
+<sequence>AAAGAGCACAAGGTGGAAGAG</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06174" name="ELT2peak06174">
+<matched-element start="257" stop="237" score="17.2317" pvalue="5.84e-07">
+<sequence>AAGTGTGGAAAAATGGCGGAA</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="337" stop="357" score="10.939" pvalue="5.99e-05">
+<sequence>GGCCACAAAAAGTGAGAAAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06175" name="ELT2peak06175">
+<matched-element start="222" stop="202" score="14.7317" pvalue="5.04e-06">
+<sequence>GGAGAGGAATGAGGGGAAAAG</sequence>
+<mem:qvalue>0.0214</mem:qvalue>
+</matched-element>
+<matched-element start="228" stop="208" score="10.9512" pvalue="5.95e-05">
+<sequence>AGTAATGGAGAGGAATGAGGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06176" name="ELT2peak06176">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06177" name="ELT2peak06177">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06178" name="ELT2peak06178">
+<matched-element start="132" stop="152" score="11.3293" pvalue="4.81e-05">
+<sequence>ACGTTTGGAGAAGTGAAATAG</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+<matched-element start="125" stop="105" score="10.2195" pvalue="8.81e-05">
+<sequence>AGAGGTGCAGAGCCGGCAACA</sequence>
+<mem:qvalue>0.0922</mem:qvalue>
+</matched-element>
+<matched-element start="205" stop="225" score="10.061" pvalue="9.56e-05">
+<sequence>AGAAAGGGAAAGATCAAAATG</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06206" name="ELT2peak06206">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06207" name="ELT2peak06207">
+<matched-element start="353" stop="373" score="12.8902" pvalue="1.86e-05">
+<sequence>GGAAACCGAAAAAAGGAAAGA</sequence>
+<mem:qvalue>0.0434</mem:qvalue>
+</matched-element>
+<matched-element start="230" stop="250" score="10.0244" pvalue="9.74e-05">
+<sequence>GCAAGTGGAAAAATTAGAATG</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06238" name="ELT2peak06238">
+<matched-element start="244" stop="264" score="19.0488" pvalue="8.48e-08">
+<sequence>ACGTGTGGAAAAGAGGAAAAA</sequence>
+<mem:qvalue>0.00399</mem:qvalue>
+</matched-element>
+<matched-element start="245" stop="265" score="11.1098" pvalue="5.45e-05">
+<sequence>CGTGTGGAAAAGAGGAAAAAA</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06239" name="ELT2peak06239">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06242" name="ELT2peak06242">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06368" name="ELT2peak06368">
+<matched-element start="277" stop="297" score="13.8537" pvalue="9.63e-06">
+<sequence>CAGGGTAGAAAAGAAAAGAGA</sequence>
+<mem:qvalue>0.031</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06369" name="ELT2peak06369">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06429" name="ELT2peak06429">
+<matched-element start="153" stop="173" score="10.2439" pvalue="8.69e-05">
+<sequence>ACCGACCCAGAAAGAGCCGTA</sequence>
+<mem:qvalue>0.0919</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06430" name="ELT2peak06430">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06431" name="ELT2peak06431">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06432" name="ELT2peak06432">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06433" name="ELT2peak06433">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06434" name="ELT2peak06434">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06444" name="ELT2peak06444">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06445" name="ELT2peak06445">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06460" name="ELT2peak06460">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06461" name="ELT2peak06461">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06462" name="ELT2peak06462">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06463" name="ELT2peak06463">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06562" name="ELT2peak06562">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06635" name="ELT2peak06635">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06636" name="ELT2peak06636">
+<matched-element start="353" stop="373" score="14.8049" pvalue="4.77e-06">
+<sequence>GAGCGTGAAAAGTGGGCGGGG</sequence>
+<mem:qvalue>0.0206</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06648" name="ELT2peak06648">
+<matched-element start="251" stop="231" score="16.8537" pvalue="8.36e-07">
+<sequence>CAGTAGGGAAAGGGAAGAAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="267" stop="247" score="13.4268" pvalue="1.3e-05">
+<sequence>CCAGGTGCAGAGGTTGCAGTA</sequence>
+<mem:qvalue>0.0362</mem:qvalue>
+</matched-element>
+<matched-element start="250" stop="230" score="13.1341" pvalue="1.58e-05">
+<sequence>AGTAGGGAAAGGGAAGAAGAA</sequence>
+<mem:qvalue>0.0397</mem:qvalue>
+</matched-element>
+<matched-element start="247" stop="227" score="12.7561" pvalue="2.02e-05">
+<sequence>AGGGAAAGGGAAGAAGAAATG</sequence>
+<mem:qvalue>0.0455</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06649" name="ELT2peak06649">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06691" name="ELT2peak06691">
+<matched-element start="263" stop="283" score="12.7439" pvalue="2.04e-05">
+<sequence>AGTGATAAAAAGAGAGCAAAA</sequence>
+<mem:qvalue>0.0457</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06723" name="ELT2peak06723">
+<matched-element start="322" stop="302" score="12.3415" pvalue="2.63e-05">
+<sequence>GGAGACAGAAAAGGTAAAAAG</sequence>
+<mem:qvalue>0.0515</mem:qvalue>
+</matched-element>
+<matched-element start="324" stop="304" score="12.0244" pvalue="3.2e-05">
+<sequence>ATGGAGACAGAAAAGGTAAAA</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06736" name="ELT2peak06736">
+<matched-element start="247" stop="267" score="10.8659" pvalue="6.24e-05">
+<sequence>AGTGAGAAGGAGAGAGCCAAA</sequence>
+<mem:qvalue>0.0782</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06737" name="ELT2peak06737">
+<matched-element start="381" stop="401" score="10.1463" pvalue="9.15e-05">
+<sequence>GCAGACCGGGAAATGGACCAA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06741" name="ELT2peak06741">
+<matched-element start="157" stop="177" score="10.1951" pvalue="8.92e-05">
+<sequence>CGTGGGAGAAAAAAATAAGGA</sequence>
+<mem:qvalue>0.0928</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06792" name="ELT2peak06792">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06801" name="ELT2peak06801">
+<matched-element start="347" stop="327" score="10.9634" pvalue="5.91e-05">
+<sequence>AAGGACGGGGAGTTGAGAGCA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06810" name="ELT2peak06810">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06826" name="ELT2peak06826">
+<matched-element start="28" stop="8" score="10.5" pvalue="7.6e-05">
+<sequence>GTAGGTAGGTAGGCGGGACAA</sequence>
+<mem:qvalue>0.088</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06872" name="ELT2peak06872">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06874" name="ELT2peak06874">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06875" name="ELT2peak06875">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06899" name="ELT2peak06899">
+<matched-element start="296" stop="276" score="11.3049" pvalue="4.88e-05">
+<sequence>CGGCACGAAAAAGAAAAAAAA</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+<matched-element start="298" stop="278" score="10.9634" pvalue="5.91e-05">
+<sequence>AGCGGCACGAAAAAGAAAAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06915" name="ELT2peak06915">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06916" name="ELT2peak06916">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06917" name="ELT2peak06917">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06918" name="ELT2peak06918">
+<matched-element start="299" stop="279" score="16.8171" pvalue="8.65e-07">
+<sequence>AAAAGCGGAAAGGCGGGCGAG</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06972" name="ELT2peak06972">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06995" name="ELT2peak06995">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06996" name="ELT2peak06996">
+<matched-element start="150" stop="170" score="10.3902" pvalue="8.05e-05">
+<sequence>AAATGCGGGAGAAGAGACGAA</sequence>
+<mem:qvalue>0.0902</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06997" name="ELT2peak06997">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07000" name="ELT2peak07000">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07001" name="ELT2peak07001">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07038" name="ELT2peak07038">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07039" name="ELT2peak07039">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07072" name="ELT2peak07072">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07278" name="ELT2peak07278">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07279" name="ELT2peak07279">
+<matched-element start="267" stop="287" score="18.7439" pvalue="1.2e-07">
+<sequence>AGGGGGAGAAAAGAAGAAATA</sequence>
+<mem:qvalue>0.00471</mem:qvalue>
+</matched-element>
+<matched-element start="265" stop="285" score="12.2805" pvalue="2.73e-05">
+<sequence>ATAGGGGGAGAAAAGAAGAAA</sequence>
+<mem:qvalue>0.0518</mem:qvalue>
+</matched-element>
+<matched-element start="264" stop="284" score="11.9512" pvalue="3.34e-05">
+<sequence>CATAGGGGGAGAAAAGAAGAA</sequence>
+<mem:qvalue>0.0589</mem:qvalue>
+</matched-element>
+<matched-element start="268" stop="288" score="10.9634" pvalue="5.91e-05">
+<sequence>GGGGGAGAAAAGAAGAAATAG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07338" name="ELT2peak07338">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07345" name="ELT2peak07345">
+<matched-element start="24" stop="44" score="14.2683" pvalue="7.14e-06">
+<sequence>GCGAGTACAGAGGAAACAAAG</sequence>
+<mem:qvalue>0.0273</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07346" name="ELT2peak07346">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07398" name="ELT2peak07398">
+<matched-element start="223" stop="203" score="20.1707" pvalue="2.12e-08">
+<sequence>GACGGTGCAAAGGTGGAGGAG</sequence>
+<mem:qvalue>0.00225</mem:qvalue>
+</matched-element>
+<matched-element start="215" stop="195" score="16.4268" pvalue="1.24e-06">
+<sequence>AAAGGTGGAGGAGGAGCAGAA</sequence>
+<mem:qvalue>0.00937</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07399" name="ELT2peak07399">
+<matched-element start="250" stop="270" score="14.9756" pvalue="4.17e-06">
+<sequence>GAAAATGGAGAGGTGACAGGA</sequence>
+<mem:qvalue>0.0192</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07403" name="ELT2peak07403">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07481" name="ELT2peak07481">
+<matched-element start="201" stop="181" score="10.622" pvalue="7.12e-05">
+<sequence>AGAAGTGGAGAATGGGCAACA</sequence>
+<mem:qvalue>0.085</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07482" name="ELT2peak07482">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07483" name="ELT2peak07483">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07545" name="ELT2peak07545">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07546" name="ELT2peak07546">
+<matched-element start="67" stop="47" score="18.6585" pvalue="1.32e-07">
+<sequence>GGTGGTAGAAAGGTGGCAAAA</sequence>
+<mem:qvalue>0.00479</mem:qvalue>
+</matched-element>
+<matched-element start="78" stop="58" score="15.9756" pvalue="1.84e-06">
+<sequence>GACGGCAAAAAGGTGGTAGAA</sequence>
+<mem:qvalue>0.012</mem:qvalue>
+</matched-element>
+<matched-element start="45" stop="25" score="15.8171" pvalue="2.1e-06">
+<sequence>GGTGAGAAGAAGGTGGAAAAA</sequence>
+<mem:qvalue>0.0132</mem:qvalue>
+</matched-element>
+<matched-element start="103" stop="83" score="13.5976" pvalue="1.15e-05">
+<sequence>GGAAGGCGAAAAATGGCGATA</sequence>
+<mem:qvalue>0.0343</mem:qvalue>
+</matched-element>
+<matched-element start="56" stop="36" score="13.3415" pvalue="1.37e-05">
+<sequence>GGTGGCAAAAAGGTGAGAAGA</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="112" stop="132" score="13.3171" pvalue="1.4e-05">
+<sequence>GGTGGGAGAAAGTAGGCACGA</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="48" stop="28" score="12.5854" pvalue="2.26e-05">
+<sequence>AAAGGTGAGAAGAAGGTGGAA</sequence>
+<mem:qvalue>0.0483</mem:qvalue>
+</matched-element>
+<matched-element start="24" stop="4" score="12.5244" pvalue="2.35e-05">
+<sequence>AGGTGTACAGAAGGTGCGAAG</sequence>
+<mem:qvalue>0.0495</mem:qvalue>
+</matched-element>
+<matched-element start="57" stop="37" score="12.0732" pvalue="3.1e-05">
+<sequence>AGGTGGCAAAAAGGTGAGAAG</sequence>
+<mem:qvalue>0.0566</mem:qvalue>
+</matched-element>
+<matched-element start="111" stop="131" score="11.1098" pvalue="5.45e-05">
+<sequence>AGGTGGGAGAAAGTAGGCACG</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+<matched-element start="58" stop="38" score="10.9146" pvalue="6.07e-05">
+<sequence>AAGGTGGCAAAAAGGTGAGAA</sequence>
+<mem:qvalue>0.0778</mem:qvalue>
+</matched-element>
+<matched-element start="46" stop="26" score="10.061" pvalue="9.56e-05">
+<sequence>AGGTGAGAAGAAGGTGGAAAA</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07613" name="ELT2peak07613">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07614" name="ELT2peak07614">
+<matched-element start="251" stop="271" score="13.2073" pvalue="1.5e-05">
+<sequence>GAGAGTGGAAAAAGAGTACTA</sequence>
+<mem:qvalue>0.0387</mem:qvalue>
+</matched-element>
+<matched-element start="139" stop="159" score="11.5244" pvalue="4.3e-05">
+<sequence>GTTGGTGGAGAGAGTGAGAGA</sequence>
+<mem:qvalue>0.0681</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07647" name="ELT2peak07647">
+<matched-element start="300" stop="280" score="13.2805" pvalue="1.43e-05">
+<sequence>CGGGAGAAAAAAGCGAAGAGA</sequence>
+<mem:qvalue>0.0372</mem:qvalue>
+</matched-element>
+<matched-element start="355" stop="335" score="12.4756" pvalue="2.42e-05">
+<sequence>AAAAGGGAGGAGAGGGAGCAG</sequence>
+<mem:qvalue>0.0499</mem:qvalue>
+</matched-element>
+<matched-element start="172" stop="152" score="12.2927" pvalue="2.71e-05">
+<sequence>AGCAATGAAAAAGAAGAGGGA</sequence>
+<mem:qvalue>0.0517</mem:qvalue>
+</matched-element>
+<matched-element start="301" stop="281" score="12.2927" pvalue="2.71e-05">
+<sequence>GCGGGAGAAAAAAGCGAAGAG</sequence>
+<mem:qvalue>0.0517</mem:qvalue>
+</matched-element>
+<matched-element start="356" stop="336" score="12.2317" pvalue="2.82e-05">
+<sequence>AAAAAGGGAGGAGAGGGAGCA</sequence>
+<mem:qvalue>0.0526</mem:qvalue>
+</matched-element>
+<matched-element start="369" stop="349" score="11.8902" pvalue="3.47e-05">
+<sequence>GAAAATGCAAAGAAAAAAGGG</sequence>
+<mem:qvalue>0.0604</mem:qvalue>
+</matched-element>
+<matched-element start="363" stop="343" score="11.2317" pvalue="5.09e-05">
+<sequence>GCAAAGAAAAAAGGGAGGAGA</sequence>
+<mem:qvalue>0.0745</mem:qvalue>
+</matched-element>
+<matched-element start="354" stop="334" score="11.0488" pvalue="5.64e-05">
+<sequence>AAAGGGAGGAGAGGGAGCAGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="362" stop="342" score="11.0488" pvalue="5.64e-05">
+<sequence>CAAAGAAAAAAGGGAGGAGAG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="169" stop="149" score="10.4146" pvalue="7.95e-05">
+<sequence>AATGAAAAAGAAGAGGGAGTG</sequence>
+<mem:qvalue>0.0897</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07648" name="ELT2peak07648">
+<matched-element start="274" stop="294" score="10.3415" pvalue="8.26e-05">
+<sequence>ACTGATAAGAAAACGGAAATA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+<matched-element start="486" stop="466" score="10.2195" pvalue="8.81e-05">
+<sequence>AAGGGCGGGAGAAAGAAATTG</sequence>
+<mem:qvalue>0.0922</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07653" name="ELT2peak07653">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07662" name="ELT2peak07662">
+<matched-element start="52" stop="32" score="17.0366" pvalue="7.04e-07">
+<sequence>AGAGAGAGAGAAAAGGAAATG</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="58" stop="38" score="15.7317" pvalue="2.26e-06">
+<sequence>AGAGTGAGAGAGAGAGAAAAG</sequence>
+<mem:qvalue>0.014</mem:qvalue>
+</matched-element>
+<matched-element start="56" stop="36" score="14.6951" pvalue="5.18e-06">
+<sequence>AGTGAGAGAGAGAGAAAAGGA</sequence>
+<mem:qvalue>0.0216</mem:qvalue>
+</matched-element>
+<matched-element start="59" stop="39" score="10.8537" pvalue="6.28e-05">
+<sequence>GAGAGTGAGAGAGAGAGAAAA</sequence>
+<mem:qvalue>0.0785</mem:qvalue>
+</matched-element>
+<matched-element start="68" stop="48" score="10.5366" pvalue="7.45e-05">
+<sequence>GTTGACGGAGAGAGTGAGAGA</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07676" name="ELT2peak07676">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07677" name="ELT2peak07677">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07718" name="ELT2peak07718">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07727" name="ELT2peak07727">
+<matched-element start="396" stop="416" score="12.2439" pvalue="2.8e-05">
+<sequence>AAAAGGGGAAAGTAGAAAATG</sequence>
+<mem:qvalue>0.0526</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07728" name="ELT2peak07728">
+<matched-element start="306" stop="326" score="13.5366" pvalue="1.2e-05">
+<sequence>ACGAAGAGAAAAAAGAAGGTG</sequence>
+<mem:qvalue>0.0349</mem:qvalue>
+</matched-element>
+<matched-element start="277" stop="297" score="12.4756" pvalue="2.42e-05">
+<sequence>AACTAGGAAAAGTGGGTGGAG</sequence>
+<mem:qvalue>0.0499</mem:qvalue>
+</matched-element>
+<matched-element start="288" stop="308" score="10.878" pvalue="6.19e-05">
+<sequence>GTGGGTGGAGAAACCGAAACG</sequence>
+<mem:qvalue>0.0781</mem:qvalue>
+</matched-element>
+<matched-element start="302" stop="322" score="10.3537" pvalue="8.21e-05">
+<sequence>CGAAACGAAGAGAAAAAAGAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07763" name="ELT2peak07763">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07764" name="ELT2peak07764">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07775" name="ELT2peak07775">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07776" name="ELT2peak07776">
+<matched-element start="323" stop="303" score="10.9878" pvalue="5.83e-05">
+<sequence>AACGACACAAAAATGAAAGTA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07783" name="ELT2peak07783">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07784" name="ELT2peak07784">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07823" name="ELT2peak07823">
+<matched-element start="319" stop="339" score="10.878" pvalue="6.19e-05">
+<sequence>GGACGCCAAGAAAAAGAGAAG</sequence>
+<mem:qvalue>0.0781</mem:qvalue>
+</matched-element>
+<matched-element start="142" stop="162" score="10.2927" pvalue="8.48e-05">
+<sequence>GAAAACAAAAAAGCGGAACTG</sequence>
+<mem:qvalue>0.0912</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07904" name="ELT2peak07904">
+<matched-element start="419" stop="399" score="11.7195" pvalue="3.84e-05">
+<sequence>AAATATAGAAAAGAAGTGGAA</sequence>
+<mem:qvalue>0.0635</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07905" name="ELT2peak07905">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07943" name="ELT2peak07943">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07944" name="ELT2peak07944">
+<matched-element start="379" stop="359" score="10.7195" pvalue="6.75e-05">
+<sequence>GGAAAGCAAGAAATGAAAGAA</sequence>
+<mem:qvalue>0.0831</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07945" name="ELT2peak07945">
+<matched-element start="197" stop="217" score="18.5" pvalue="1.58e-07">
+<sequence>GGGAAGGAAAAAAGGGGAGAA</sequence>
+<mem:qvalue>0.00495</mem:qvalue>
+</matched-element>
+<matched-element start="208" stop="228" score="17.1341" pvalue="6.41e-07">
+<sequence>AAGGGGAGAAAAAGCGAAGAG</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="190" stop="210" score="15.3902" pvalue="3e-06">
+<sequence>GGTGAGAGGGAAGGAAAAAAG</sequence>
+<mem:qvalue>0.0158</mem:qvalue>
+</matched-element>
+<matched-element start="198" stop="218" score="15.3415" pvalue="3.12e-06">
+<sequence>GGAAGGAAAAAAGGGGAGAAA</sequence>
+<mem:qvalue>0.0161</mem:qvalue>
+</matched-element>
+<matched-element start="206" stop="226" score="15.1585" pvalue="3.61e-06">
+<sequence>AAAAGGGGAGAAAAAGCGAAG</sequence>
+<mem:qvalue>0.0175</mem:qvalue>
+</matched-element>
+<matched-element start="196" stop="216" score="13.9756" pvalue="8.83e-06">
+<sequence>AGGGAAGGAAAAAAGGGGAGA</sequence>
+<mem:qvalue>0.0299</mem:qvalue>
+</matched-element>
+<matched-element start="195" stop="215" score="13.8537" pvalue="9.63e-06">
+<sequence>GAGGGAAGGAAAAAAGGGGAG</sequence>
+<mem:qvalue>0.031</mem:qvalue>
+</matched-element>
+<matched-element start="230" stop="250" score="13" pvalue="1.73e-05">
+<sequence>AGTGGTCGGGAGAAGAGAGAA</sequence>
+<mem:qvalue>0.0414</mem:qvalue>
+</matched-element>
+<matched-element start="193" stop="213" score="11.2927" pvalue="4.91e-05">
+<sequence>GAGAGGGAAGGAAAAAAGGGG</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+<matched-element start="199" stop="219" score="11.1098" pvalue="5.45e-05">
+<sequence>GAAGGAAAAAAGGGGAGAAAA</sequence>
+<mem:qvalue>0.0772</mem:qvalue>
+</matched-element>
+<matched-element start="200" stop="220" score="10.3171" pvalue="8.37e-05">
+<sequence>AAGGAAAAAAGGGGAGAAAAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+<matched-element start="158" stop="178" score="10.2317" pvalue="8.75e-05">
+<sequence>GAATGGAGGGAGGTAATCAAA</sequence>
+<mem:qvalue>0.0921</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07956" name="ELT2peak07956">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08063" name="ELT2peak08063">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08065" name="ELT2peak08065">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08080" name="ELT2peak08080">
+<matched-element start="282" stop="262" score="13.122" pvalue="1.59e-05">
+<sequence>GCCGGTGAAAGGGGGACAATA</sequence>
+<mem:qvalue>0.0398</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08098" name="ELT2peak08098">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08109" name="ELT2peak08109">
+<matched-element start="414" stop="434" score="10.5" pvalue="7.6e-05">
+<sequence>ATCTGTGGGAAATGAGGAGAA</sequence>
+<mem:qvalue>0.088</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08110" name="ELT2peak08110">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08111" name="ELT2peak08111">
+<matched-element start="277" stop="257" score="12.7195" pvalue="2.07e-05">
+<sequence>GACTACGGGAAAAAAGACGAA</sequence>
+<mem:qvalue>0.046</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08113" name="ELT2peak08113">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08117" name="ELT2peak08117">
+<matched-element start="276" stop="296" score="16.7805" pvalue="8.95e-07">
+<sequence>GGGCGGGCAGAGGAAGTAATA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="353" stop="333" score="11.0244" pvalue="5.71e-05">
+<sequence>AGACGTGGAGGAAAGAAAAGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="352" stop="332" score="10.1341" pvalue="9.2e-05">
+<sequence>GACGTGGAGGAAAGAAAAGGA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08134" name="ELT2peak08134">
+<matched-element start="377" stop="397" score="13.3293" pvalue="1.39e-05">
+<sequence>GGTTGTGAAAAAGCGAAAGAA</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="384" stop="404" score="11.8659" pvalue="3.52e-05">
+<sequence>AAAAAGCGAAAGAAGGAACAA</sequence>
+<mem:qvalue>0.061</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08184" name="ELT2peak08184">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08211" name="ELT2peak08211">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08227" name="ELT2peak08227">
+<matched-element start="316" stop="296" score="10.1585" pvalue="9.09e-05">
+<sequence>AGTTTGGAAGAGGAAGAGATA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08304" name="ELT2peak08304">
+<matched-element start="178" stop="198" score="11.1707" pvalue="5.26e-05">
+<sequence>GCGGTCGCAGAGGAATAAGAA</sequence>
+<mem:qvalue>0.0764</mem:qvalue>
+</matched-element>
+<matched-element start="180" stop="200" score="10.0122" pvalue="9.8e-05">
+<sequence>GGTCGCAGAGGAATAAGAAAG</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08318" name="ELT2peak08318">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08340" name="ELT2peak08340">
+<matched-element start="87" stop="67" score="10.6829" pvalue="6.89e-05">
+<sequence>AGTTGGACGGAGAAAGCCAAG</sequence>
+<mem:qvalue>0.0837</mem:qvalue>
+</matched-element>
+<matched-element start="83" stop="63" score="10.061" pvalue="9.56e-05">
+<sequence>GGACGGAGAAAGCCAAGAATA</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08341" name="ELT2peak08341">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08344" name="ELT2peak08344">
+<matched-element start="293" stop="273" score="13.6463" pvalue="1.11e-05">
+<sequence>GTGTAGGAGGAAAGGGAAAAA</sequence>
+<mem:qvalue>0.034</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08355" name="ELT2peak08355">
+<matched-element start="251" stop="231" score="11.2927" pvalue="4.91e-05">
+<sequence>GCATAGGAAGAAATTGAAAAA</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08386" name="ELT2peak08386">
+<matched-element start="166" stop="146" score="12.3049" pvalue="2.69e-05">
+<sequence>GATGATAGAGAGAGGGTCTAG</sequence>
+<mem:qvalue>0.0517</mem:qvalue>
+</matched-element>
+<matched-element start="417" stop="397" score="12.0122" pvalue="3.22e-05">
+<sequence>GAGAGTGAAAAACGAGGGAAA</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+<matched-element start="407" stop="387" score="10.3537" pvalue="8.21e-05">
+<sequence>AACGAGGGAAAATTGAAATGA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08396" name="ELT2peak08396">
+<matched-element start="90" stop="110" score="13.9146" pvalue="9.23e-06">
+<sequence>ACTCGGAGAAAGATGGTGAAG</sequence>
+<mem:qvalue>0.0308</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08425" name="ELT2peak08425">
+<matched-element start="86" stop="106" score="13.878" pvalue="9.47e-06">
+<sequence>AGCTGTAAAAAAGAGGAAAAA</sequence>
+<mem:qvalue>0.0309</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08426" name="ELT2peak08426">
+<matched-element start="278" stop="258" score="10.2439" pvalue="8.69e-05">
+<sequence>GAACAGGCGAAGAAAAGAATA</sequence>
+<mem:qvalue>0.0919</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08427" name="ELT2peak08427">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08445" name="ELT2peak08445">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08511" name="ELT2peak08511">
+<matched-element start="259" stop="239" score="10.1341" pvalue="9.2e-05">
+<sequence>GGGTTTGGAGAGTCAGCACGA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08515" name="ELT2peak08515">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08518" name="ELT2peak08518">
+<matched-element start="289" stop="269" score="16.5854" pvalue="1.07e-06">
+<sequence>ACGGACAGAAAAGTAGAAATA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08535" name="ELT2peak08535">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08544" name="ELT2peak08544">
+<matched-element start="261" stop="241" score="14.3415" pvalue="6.77e-06">
+<sequence>AGGTTTGAAAAGGCGGGAGGA</sequence>
+<mem:qvalue>0.0261</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08545" name="ELT2peak08545">
+<matched-element start="101" stop="81" score="13.8049" pvalue="9.97e-06">
+<sequence>AAGAATAGAAAATCGGAAGGG</sequence>
+<mem:qvalue>0.0317</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08558" name="ELT2peak08558">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08564" name="ELT2peak08564">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08573" name="ELT2peak08573">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08602" name="ELT2peak08602">
+<matched-element start="292" stop="272" score="11.5366" pvalue="4.27e-05">
+<sequence>GGGCATACAGAAAATGAAGTG</sequence>
+<mem:qvalue>0.0678</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08648" name="ELT2peak08648">
+<matched-element start="448" stop="428" score="13.3293" pvalue="1.39e-05">
+<sequence>ACTGAGGCAAGAGCGGCGAGG</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="438" stop="418" score="10.9146" pvalue="6.07e-05">
+<sequence>GAGCGGCGAGGAGTAAAACAG</sequence>
+<mem:qvalue>0.0778</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08658" name="ELT2peak08658">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08659" name="ELT2peak08659">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08660" name="ELT2peak08660">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08661" name="ELT2peak08661">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08662" name="ELT2peak08662">
+<matched-element start="235" stop="215" score="15.4268" pvalue="2.91e-06">
+<sequence>CAGTAGAGGAAAAAAGGAAAG</sequence>
+<mem:qvalue>0.0155</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08672" name="ELT2peak08672">
+<matched-element start="262" stop="242" score="19.8293" pvalue="3.29e-08">
+<sequence>AGGGATGGAGAGACGGAAAGA</sequence>
+<mem:qvalue>0.00225</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08673" name="ELT2peak08673">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08707" name="ELT2peak08707">
+<matched-element start="91" stop="111" score="11.6951" pvalue="3.89e-05">
+<sequence>AAGTGCGGGAAAAAAGCACGA</sequence>
+<mem:qvalue>0.064</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08798" name="ELT2peak08798">
+<matched-element start="169" stop="149" score="18.4268" pvalue="1.71e-07">
+<sequence>GAGGAGAGATAGAGAGAAGTG</sequence>
+<mem:qvalue>0.00502</mem:qvalue>
+</matched-element>
+<matched-element start="173" stop="153" score="14.5244" pvalue="5.9e-06">
+<sequence>AAGGGAGGAGAGATAGAGAGA</sequence>
+<mem:qvalue>0.0233</mem:qvalue>
+</matched-element>
+<matched-element start="163" stop="143" score="14.2561" pvalue="7.2e-06">
+<sequence>AGATAGAGAGAAGTGAGGAAG</sequence>
+<mem:qvalue>0.0273</mem:qvalue>
+</matched-element>
+<matched-element start="176" stop="156" score="13.5488" pvalue="1.19e-05">
+<sequence>AAGAAGGGAGGAGAGATAGAG</sequence>
+<mem:qvalue>0.0348</mem:qvalue>
+</matched-element>
+<matched-element start="165" stop="145" score="11.439" pvalue="4.52e-05">
+<sequence>AGAGATAGAGAGAAGTGAGGA</sequence>
+<mem:qvalue>0.0699</mem:qvalue>
+</matched-element>
+<matched-element start="174" stop="154" score="10.5244" pvalue="7.5e-05">
+<sequence>GAAGGGAGGAGAGATAGAGAG</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08811" name="ELT2peak08811">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08853" name="ELT2peak08853">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08932" name="ELT2peak08932">
+<matched-element start="236" stop="256" score="11.3049" pvalue="4.88e-05">
+<sequence>ACTAATAGGAAAAGAGAAATG</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08933" name="ELT2peak08933">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08934" name="ELT2peak08934">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08935" name="ELT2peak08935">
+<matched-element start="225" stop="245" score="15.5488" pvalue="2.63e-06">
+<sequence>ACCCGCGGAAAGTTGGGAGAA</sequence>
+<mem:qvalue>0.0147</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08995" name="ELT2peak08995">
+<matched-element start="122" stop="102" score="12.2317" pvalue="2.82e-05">
+<sequence>CGACTGGGGAGAGGGGGAGTG</sequence>
+<mem:qvalue>0.0526</mem:qvalue>
+</matched-element>
+<matched-element start="117" stop="97" score="11.4268" pvalue="4.55e-05">
+<sequence>GGGGAGAGGGGGAGTGCACAA</sequence>
+<mem:qvalue>0.0702</mem:qvalue>
+</matched-element>
+<matched-element start="115" stop="95" score="10.3415" pvalue="8.26e-05">
+<sequence>GGAGAGGGGGAGTGCACAAAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08996" name="ELT2peak08996">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08997" name="ELT2peak08997">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08998" name="ELT2peak08998">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08999" name="ELT2peak08999">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09009" name="ELT2peak09009">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09010" name="ELT2peak09010">
+<matched-element start="231" stop="211" score="12.878" pvalue="1.87e-05">
+<sequence>GGTGGGAGGAAAGCAACAATA</sequence>
+<mem:qvalue>0.0435</mem:qvalue>
+</matched-element>
+<matched-element start="234" stop="214" score="10.622" pvalue="7.12e-05">
+<sequence>AGCGGTGGGAGGAAAGCAACA</sequence>
+<mem:qvalue>0.085</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09064" name="ELT2peak09064">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09065" name="ELT2peak09065">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09174" name="ELT2peak09174">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09180" name="ELT2peak09180">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09181" name="ELT2peak09181">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09208" name="ELT2peak09208">
+<matched-element start="306" stop="326" score="13.4146" pvalue="1.31e-05">
+<sequence>GCCAACGAGAAAGTAGAAAAG</sequence>
+<mem:qvalue>0.0362</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09209" name="ELT2peak09209">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09210" name="ELT2peak09210">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09211" name="ELT2peak09211">
+<matched-element start="139" stop="159" score="12.939" pvalue="1.8e-05">
+<sequence>GAATGTGAAAAGGCAGGAGCA</sequence>
+<mem:qvalue>0.0425</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09240" name="ELT2peak09240">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09241" name="ELT2peak09241">
+<matched-element start="473" stop="453" score="11.378" pvalue="4.68e-05">
+<sequence>GGCGACGGGAAAAGTGGAGCA</sequence>
+<mem:qvalue>0.0717</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09242" name="ELT2peak09242">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09259" name="ELT2peak09259">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09260" name="ELT2peak09260">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09266" name="ELT2peak09266">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09267" name="ELT2peak09267">
+<matched-element start="409" stop="429" score="15.2317" pvalue="3.41e-06">
+<sequence>AAGAGTGAAGAAGGGGTGGGG</sequence>
+<mem:qvalue>0.017</mem:qvalue>
+</matched-element>
+<matched-element start="416" stop="436" score="14.878" pvalue="4.5e-06">
+<sequence>AAGAAGGGGTGGGGGGGGGGG</sequence>
+<mem:qvalue>0.0202</mem:qvalue>
+</matched-element>
+<matched-element start="421" stop="441" score="14.7073" pvalue="5.14e-06">
+<sequence>GGGGTGGGGGGGGGGGGGGCA</sequence>
+<mem:qvalue>0.0216</mem:qvalue>
+</matched-element>
+<matched-element start="424" stop="444" score="14.5244" pvalue="5.9e-06">
+<sequence>GTGGGGGGGGGGGGGGCACTA</sequence>
+<mem:qvalue>0.0233</mem:qvalue>
+</matched-element>
+<matched-element start="229" stop="249" score="11.439" pvalue="4.52e-05">
+<sequence>CGGGATAAAGAGGGATAAAAA</sequence>
+<mem:qvalue>0.0699</mem:qvalue>
+</matched-element>
+<matched-element start="412" stop="432" score="10.5488" pvalue="7.4e-05">
+<sequence>AGTGAAGAAGGGGTGGGGGGG</sequence>
+<mem:qvalue>0.0877</mem:qvalue>
+</matched-element>
+<matched-element start="411" stop="431" score="10.3415" pvalue="8.26e-05">
+<sequence>GAGTGAAGAAGGGGTGGGGGG</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09268" name="ELT2peak09268">
+<matched-element start="209" stop="189" score="17.2561" pvalue="5.7e-07">
+<sequence>AAAGAGGAAGAGACAGGAGAG</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="219" stop="199" score="16.5122" pvalue="1.14e-06">
+<sequence>GACCGGAGAGAAAGAGGAAGA</sequence>
+<mem:qvalue>0.00882</mem:qvalue>
+</matched-element>
+<matched-element start="217" stop="197" score="16.2805" pvalue="1.41e-06">
+<sequence>CCGGAGAGAAAGAGGAAGAGA</sequence>
+<mem:qvalue>0.01</mem:qvalue>
+</matched-element>
+<matched-element start="218" stop="198" score="12.9512" pvalue="1.78e-05">
+<sequence>ACCGGAGAGAAAGAGGAAGAG</sequence>
+<mem:qvalue>0.0424</mem:qvalue>
+</matched-element>
+<matched-element start="215" stop="195" score="12.5122" pvalue="2.36e-05">
+<sequence>GGAGAGAAAGAGGAAGAGACA</sequence>
+<mem:qvalue>0.0497</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09336" name="ELT2peak09336">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09408" name="ELT2peak09408">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09439" name="ELT2peak09439">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09458" name="ELT2peak09458">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09477" name="ELT2peak09477">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09478" name="ELT2peak09478">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09616" name="ELT2peak09616">
+<matched-element start="468" stop="488" score="12.3902" pvalue="2.55e-05">
+<sequence>GGTGGTGGAAAAAGAAAGTGG</sequence>
+<mem:qvalue>0.0507</mem:qvalue>
+</matched-element>
+<matched-element start="290" stop="270" score="12.0366" pvalue="3.17e-05">
+<sequence>GAGGGTAAAGAGAAAAGCATG</sequence>
+<mem:qvalue>0.0574</mem:qvalue>
+</matched-element>
+<matched-element start="264" stop="244" score="10.2561" pvalue="8.64e-05">
+<sequence>AAAGGCACAAAGTTGAAAAGG</sequence>
+<mem:qvalue>0.0919</mem:qvalue>
+</matched-element>
+<matched-element start="294" stop="274" score="10.2317" pvalue="8.75e-05">
+<sequence>AGTGGAGGGTAAAGAGAAAAG</sequence>
+<mem:qvalue>0.0921</mem:qvalue>
+</matched-element>
+<matched-element start="414" stop="394" score="10.0244" pvalue="9.74e-05">
+<sequence>GCGAGCAAAGGAATGAGAGTA</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09617" name="ELT2peak09617">
+<matched-element start="279" stop="259" score="13.1098" pvalue="1.61e-05">
+<sequence>AGGAGGAGAAAGTTAAAAGTG</sequence>
+<mem:qvalue>0.04</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09627" name="ELT2peak09627">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09628" name="ELT2peak09628">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09629" name="ELT2peak09629">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09659" name="ELT2peak09659">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09676" name="ELT2peak09676">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09677" name="ELT2peak09677">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09692" name="ELT2peak09692">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09729" name="ELT2peak09729">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09764" name="ELT2peak09764">
+<matched-element start="244" stop="264" score="17.9268" pvalue="2.91e-07">
+<sequence>GAGGGGCGAGAGATGAAAAAA</sequence>
+<mem:qvalue>0.0061</mem:qvalue>
+</matched-element>
+<matched-element start="243" stop="263" score="10.5122" pvalue="7.55e-05">
+<sequence>AGAGGGGCGAGAGATGAAAAA</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09827" name="ELT2peak09827">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09828" name="ELT2peak09828">
+<matched-element start="270" stop="250" score="13.8902" pvalue="9.39e-06">
+<sequence>GCGGGGACAAAAGAAGTGTGG</sequence>
+<mem:qvalue>0.0309</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09857" name="ELT2peak09857">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09858" name="ELT2peak09858">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09937" name="ELT2peak09937">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09938" name="ELT2peak09938">
+<matched-element start="258" stop="278" score="13.5976" pvalue="1.15e-05">
+<sequence>GAAAATGAAAAGACGGGAATA</sequence>
+<mem:qvalue>0.0343</mem:qvalue>
+</matched-element>
+<matched-element start="429" stop="449" score="10.5244" pvalue="7.5e-05">
+<sequence>AAGTGTGAGAAATTGGTAGTG</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09990" name="ELT2peak09990">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09991" name="ELT2peak09991">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10037" name="ELT2peak10037">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10058" name="ELT2peak10058">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10077" name="ELT2peak10077">
+<matched-element start="54" stop="74" score="11.3537" pvalue="4.74e-05">
+<sequence>GAATGTGGATGAAGAGGGATG</sequence>
+<mem:qvalue>0.0722</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10078" name="ELT2peak10078">
+<matched-element start="343" stop="363" score="10.9512" pvalue="5.95e-05">
+<sequence>AAGTGCGAAAAGTGAAGAAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="342" stop="362" score="10.0488" pvalue="9.62e-05">
+<sequence>AAAGTGCGAAAAGTGAAGAAA</sequence>
+<mem:qvalue>0.0958</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10119" name="ELT2peak10119">
+<matched-element start="399" stop="419" score="16.0732" pvalue="1.69e-06">
+<sequence>GAATATGCAAAGAAGGAAAAG</sequence>
+<mem:qvalue>0.0115</mem:qvalue>
+</matched-element>
+<matched-element start="478" stop="458" score="11.0244" pvalue="5.71e-05">
+<sequence>GCAAACAAAAAAGGGGAAACG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10120" name="ELT2peak10120">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10188" name="ELT2peak10188">
+<matched-element start="213" stop="193" score="12.8415" pvalue="1.92e-05">
+<sequence>CAAGATGAAAAGTAGGAAAGG</sequence>
+<mem:qvalue>0.0437</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10189" name="ELT2peak10189">
+<matched-element start="350" stop="370" score="12.1341" pvalue="2.99e-05">
+<sequence>ACGAGGAGGAAAAAGAGCAAG</sequence>
+<mem:qvalue>0.0554</mem:qvalue>
+</matched-element>
+<matched-element start="346" stop="366" score="10.6463" pvalue="7.03e-05">
+<sequence>ACACACGAGGAGGAAAAAGAG</sequence>
+<mem:qvalue>0.0847</mem:qvalue>
+</matched-element>
+<matched-element start="349" stop="369" score="10.6341" pvalue="7.07e-05">
+<sequence>CACGAGGAGGAAAAAGAGCAA</sequence>
+<mem:qvalue>0.0848</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10193" name="ELT2peak10193">
+<matched-element start="472" stop="492" score="10.3293" pvalue="8.32e-05">
+<sequence>AATAAGGGGAAAAATGAAGAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+<matched-element start="473" stop="493" score="10.061" pvalue="9.56e-05">
+<sequence>ATAAGGGGAAAAATGAAGAAA</sequence>
+<mem:qvalue>0.0956</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10194" name="ELT2peak10194">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10223" name="ELT2peak10223">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10224" name="ELT2peak10224">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10265" name="ELT2peak10265">
+<matched-element start="457" stop="477" score="15.2073" pvalue="3.47e-06">
+<sequence>GGCTGAGGAGAGGTGAAAGAG</sequence>
+<mem:qvalue>0.017</mem:qvalue>
+</matched-element>
+<matched-element start="348" stop="368" score="12.3415" pvalue="2.63e-05">
+<sequence>GGGGATGGGGAAATTGGGCAA</sequence>
+<mem:qvalue>0.0515</mem:qvalue>
+</matched-element>
+<matched-element start="349" stop="369" score="11.0244" pvalue="5.71e-05">
+<sequence>GGGATGGGGAAATTGGGCAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="461" stop="481" score="10.2439" pvalue="8.69e-05">
+<sequence>GAGGAGAGGTGAAAGAGCGAG</sequence>
+<mem:qvalue>0.0919</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10266" name="ELT2peak10266">
+<matched-element start="274" stop="254" score="17.3537" pvalue="5.18e-07">
+<sequence>GAAGAGGGAAAGACGGCAGCG</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="287" stop="267" score="13.2927" pvalue="1.42e-05">
+<sequence>GCCAGCAAAAAGGGAAGAGGG</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="283" stop="263" score="11.8415" pvalue="3.57e-05">
+<sequence>GCAAAAAGGGAAGAGGGAAAG</sequence>
+<mem:qvalue>0.0613</mem:qvalue>
+</matched-element>
+<matched-element start="282" stop="262" score="10.6341" pvalue="7.07e-05">
+<sequence>CAAAAAGGGAAGAGGGAAAGA</sequence>
+<mem:qvalue>0.0848</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10267" name="ELT2peak10267">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10268" name="ELT2peak10268">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10269" name="ELT2peak10269">
+<matched-element start="277" stop="297" score="13.9024" pvalue="9.31e-06">
+<sequence>GACAAGGGGAAAGTGAGGGTA</sequence>
+<mem:qvalue>0.0308</mem:qvalue>
+</matched-element>
+<matched-element start="278" stop="298" score="13.0244" pvalue="1.7e-05">
+<sequence>ACAAGGGGAAAGTGAGGGTAG</sequence>
+<mem:qvalue>0.0412</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10327" name="ELT2peak10327">
+<matched-element start="431" stop="451" score="10.4878" pvalue="7.65e-05">
+<sequence>GAATACGCGAAAACGGAATTG</sequence>
+<mem:qvalue>0.0881</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10435" name="ELT2peak10435">
+<matched-element start="384" stop="404" score="20.0122" pvalue="2.61e-08">
+<sequence>AGGGAGGGGGGGGGGGAAAGG</sequence>
+<mem:qvalue>0.00225</mem:qvalue>
+</matched-element>
+<matched-element start="380" stop="400" score="18.7927" pvalue="1.14e-07">
+<sequence>AACGAGGGAGGGGGGGGGGGA</sequence>
+<mem:qvalue>0.00471</mem:qvalue>
+</matched-element>
+<matched-element start="383" stop="403" score="17.3049" pvalue="5.44e-07">
+<sequence>GAGGGAGGGGGGGGGGGAAAG</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="382" stop="402" score="16.7805" pvalue="8.95e-07">
+<sequence>CGAGGGAGGGGGGGGGGGAAA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="381" stop="401" score="15.9878" pvalue="1.82e-06">
+<sequence>ACGAGGGAGGGGGGGGGGGAA</sequence>
+<mem:qvalue>0.012</mem:qvalue>
+</matched-element>
+<matched-element start="388" stop="408" score="15.622" pvalue="2.48e-06">
+<sequence>AGGGGGGGGGGGAAAGGCATG</sequence>
+<mem:qvalue>0.0146</mem:qvalue>
+</matched-element>
+<matched-element start="386" stop="406" score="12.4512" pvalue="2.46e-05">
+<sequence>GGAGGGGGGGGGGGAAAGGCA</sequence>
+<mem:qvalue>0.0503</mem:qvalue>
+</matched-element>
+<matched-element start="377" stop="397" score="11.061" pvalue="5.6e-05">
+<sequence>ACAAACGAGGGAGGGGGGGGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="379" stop="399" score="10.9878" pvalue="5.83e-05">
+<sequence>AAACGAGGGAGGGGGGGGGGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10436" name="ELT2peak10436">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10437" name="ELT2peak10437">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10456" name="ELT2peak10456">
+<matched-element start="365" stop="385" score="10.6829" pvalue="6.89e-05">
+<sequence>GGCGACAGGAGAAGAGTGATG</sequence>
+<mem:qvalue>0.0837</mem:qvalue>
+</matched-element>
+<matched-element start="368" stop="388" score="10.3293" pvalue="8.32e-05">
+<sequence>GACAGGAGAAGAGTGATGAAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+<matched-element start="306" stop="286" score="10.0488" pvalue="9.62e-05">
+<sequence>AGGTGGGAGTAAGAAGGATTA</sequence>
+<mem:qvalue>0.0958</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10457" name="ELT2peak10457">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10493" name="ELT2peak10493">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10551" name="ELT2peak10551">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10629" name="ELT2peak10629">
+<matched-element start="494" stop="474" score="13.0488" pvalue="1.67e-05">
+<sequence>GGACAGGAAAAAGAGGCAGCG</sequence>
+<mem:qvalue>0.0407</mem:qvalue>
+</matched-element>
+<matched-element start="353" stop="373" score="11.3902" pvalue="4.65e-05">
+<sequence>CGCAGAGCAAAAACGGAGGAG</sequence>
+<mem:qvalue>0.0714</mem:qvalue>
+</matched-element>
+<matched-element start="496" stop="476" score="10.8171" pvalue="6.4e-05">
+<sequence>AAGGACAGGAAAAAGAGGCAG</sequence>
+<mem:qvalue>0.0797</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10630" name="ELT2peak10630">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10680" name="ELT2peak10680">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10681" name="ELT2peak10681">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10682" name="ELT2peak10682">
+<matched-element start="361" stop="381" score="12.9878" pvalue="1.74e-05">
+<sequence>CGATGTCGAAAAATAGAAGGA</sequence>
+<mem:qvalue>0.0416</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10705" name="ELT2peak10705">
+<matched-element start="442" stop="462" score="9.9878" pvalue="9.92e-05">
+<sequence>GAGTTGGGATGAGTGAAAAAA</sequence>
+<mem:qvalue>0.0964</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10706" name="ELT2peak10706">
+<matched-element start="130" stop="110" score="10.5122" pvalue="7.55e-05">
+<sequence>AAGTGTGGAAAGAGTGTCATA</sequence>
+<mem:qvalue>0.0879</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10707" name="ELT2peak10707">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10837" name="ELT2peak10837">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10838" name="ELT2peak10838">
+<matched-element start="221" stop="201" score="14.2317" pvalue="7.33e-06">
+<sequence>ATGCAGGGATAGGCGGAAAAA</sequence>
+<mem:qvalue>0.0274</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10839" name="ELT2peak10839">
+<matched-element start="478" stop="498" score="14.061" pvalue="8.31e-06">
+<sequence>CCGGAGGAAAAAGAAACAAAA</sequence>
+<mem:qvalue>0.0287</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00175" name="ELT2peak00175">
+<matched-element start="406" stop="386" score="10.9634" pvalue="5.91e-05">
+<sequence>AAATGCGGAAAAAAAAAGAAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="404" stop="384" score="10.3171" pvalue="8.37e-05">
+<sequence>ATGCGGAAAAAAAAAGAAAAA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00190" name="ELT2peak00190">
+<matched-element start="351" stop="331" score="11.5854" pvalue="4.15e-05">
+<sequence>ATGGGAGGAGGAGTAGGAGAA</sequence>
+<mem:qvalue>0.0668</mem:qvalue>
+</matched-element>
+<matched-element start="343" stop="323" score="11.0854" pvalue="5.52e-05">
+<sequence>AGGAGTAGGAGAATGAGGGAG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="329" stop="309" score="10.1585" pvalue="9.09e-05">
+<sequence>GAGGGAGCAGAAACAGTCATG</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+<matched-element start="354" stop="334" score="9.97561" pvalue="9.98e-05">
+<sequence>GTGATGGGAGGAGGAGTAGGA</sequence>
+<mem:qvalue>0.0966</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00325" name="ELT2peak00325">
+<matched-element start="338" stop="358" score="13.5122" pvalue="1.22e-05">
+<sequence>GCGCTGGGAAAAGGAAAAAGA</sequence>
+<mem:qvalue>0.0353</mem:qvalue>
+</matched-element>
+<matched-element start="122" stop="142" score="9.9878" pvalue="9.92e-05">
+<sequence>AAAATGAGAGAATGAGAAAAG</sequence>
+<mem:qvalue>0.0964</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00332" name="ELT2peak00332">
+<matched-element start="403" stop="383" score="17.4756" pvalue="4.6e-07">
+<sequence>GCGAAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00831</mem:qvalue>
+</matched-element>
+<matched-element start="377" stop="357" score="17.3537" pvalue="5.18e-07">
+<sequence>AGAGAGAGAGAGAGAGAGAGG</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="401" stop="381" score="17.3293" pvalue="5.31e-07">
+<sequence>GAAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="379" stop="359" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="381" stop="361" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="383" stop="363" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="385" stop="365" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="387" stop="367" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="389" stop="369" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="391" stop="371" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="393" stop="373" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="395" stop="375" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="397" stop="377" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="399" stop="379" score="16.6098" pvalue="1.05e-06">
+<sequence>AGAGAGAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="407" stop="387" score="16.3537" pvalue="1.32e-06">
+<sequence>AAGGGCGAAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.00969</mem:qvalue>
+</matched-element>
+<matched-element start="375" stop="355" score="15.1463" pvalue="3.65e-06">
+<sequence>AGAGAGAGAGAGAGAGAGGCG</sequence>
+<mem:qvalue>0.0175</mem:qvalue>
+</matched-element>
+<matched-element start="408" stop="388" score="14.9146" pvalue="4.38e-06">
+<sequence>GAAGGGCGAAGAGAGAGAGAG</sequence>
+<mem:qvalue>0.02</mem:qvalue>
+</matched-element>
+<matched-element start="416" stop="396" score="14.8049" pvalue="4.77e-06">
+<sequence>GGGCGCGAGAAGGGCGAAGAG</sequence>
+<mem:qvalue>0.0206</mem:qvalue>
+</matched-element>
+<matched-element start="410" stop="390" score="14" pvalue="8.68e-06">
+<sequence>GAGAAGGGCGAAGAGAGAGAG</sequence>
+<mem:qvalue>0.0296</mem:qvalue>
+</matched-element>
+<matched-element start="409" stop="389" score="13.3415" pvalue="1.37e-05">
+<sequence>AGAAGGGCGAAGAGAGAGAGA</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="405" stop="385" score="13.2927" pvalue="1.42e-05">
+<sequence>GGGCGAAGAGAGAGAGAGAGA</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00373" name="ELT2peak00373">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00971" name="ELT2peak00971">
+<matched-element start="269" stop="249" score="16.0122" pvalue="1.78e-06">
+<sequence>GACTGTGGGGAGTCGGAGGAG</sequence>
+<mem:qvalue>0.012</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01401" name="ELT2peak01401">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01674" name="ELT2peak01674">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01679" name="ELT2peak01679">
+<matched-element start="401" stop="381" score="10.3293" pvalue="8.32e-05">
+<sequence>AGAGATCGAGAGAATGAGAGA</sequence>
+<mem:qvalue>0.0909</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01693" name="ELT2peak01693">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01714" name="ELT2peak01714">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01735" name="ELT2peak01735">
+<matched-element start="306" stop="286" score="10.4756" pvalue="7.7e-05">
+<sequence>AGAGAAAGAAAGATGGAATAA</sequence>
+<mem:qvalue>0.0881</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01751" name="ELT2peak01751">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01763" name="ELT2peak01763">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01765" name="ELT2peak01765">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02540" name="ELT2peak02540">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02656" name="ELT2peak02656">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02657" name="ELT2peak02657">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02658" name="ELT2peak02658">
+<matched-element start="257" stop="237" score="10.1341" pvalue="9.2e-05">
+<sequence>CGGTTTGCAGAAGAAAAGGAA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02787" name="ELT2peak02787">
+<matched-element start="379" stop="359" score="18" pvalue="2.7e-07">
+<sequence>GAGGAGGAGAAGGAGGTAAAG</sequence>
+<mem:qvalue>0.00604</mem:qvalue>
+</matched-element>
+<matched-element start="382" stop="362" score="16.2561" pvalue="1.44e-06">
+<sequence>AAGGAGGAGGAGAAGGAGGTA</sequence>
+<mem:qvalue>0.0101</mem:qvalue>
+</matched-element>
+<matched-element start="388" stop="368" score="13.3171" pvalue="1.4e-05">
+<sequence>GGAAATAAGGAGGAGGAGAAG</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+<matched-element start="385" stop="365" score="11.561" pvalue="4.21e-05">
+<sequence>AATAAGGAGGAGGAGAAGGAG</sequence>
+<mem:qvalue>0.0676</mem:qvalue>
+</matched-element>
+<matched-element start="376" stop="356" score="11.3293" pvalue="4.81e-05">
+<sequence>GAGGAGAAGGAGGTAAAGCAA</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+<matched-element start="386" stop="366" score="10.1341" pvalue="9.2e-05">
+<sequence>AAATAAGGAGGAGGAGAAGGA</sequence>
+<mem:qvalue>0.0939</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02897" name="ELT2peak02897">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03169" name="ELT2peak03169">
+<matched-element start="189" stop="209" score="10.9878" pvalue="5.83e-05">
+<sequence>AAAAATAGAAAGAAAAAAGAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="59" stop="39" score="10.939" pvalue="5.99e-05">
+<sequence>GAAGAAGAAAAAAAGGGAAGA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="60" stop="40" score="10.8293" pvalue="6.36e-05">
+<sequence>GGAAGAAGAAAAAAAGGGAAG</sequence>
+<mem:qvalue>0.0794</mem:qvalue>
+</matched-element>
+<matched-element start="61" stop="41" score="10.4146" pvalue="7.95e-05">
+<sequence>GGGAAGAAGAAAAAAAGGGAA</sequence>
+<mem:qvalue>0.0897</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03170" name="ELT2peak03170">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03486" name="ELT2peak03486">
+<matched-element start="235" stop="215" score="10.939" pvalue="5.99e-05">
+<sequence>AATTAGACAAAAATAGAGAGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="245" stop="225" score="10.4634" pvalue="7.75e-05">
+<sequence>GTGAGTGGAGAATTAGACAAA</sequence>
+<mem:qvalue>0.0884</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03502" name="ELT2peak03502">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03503" name="ELT2peak03503">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03504" name="ELT2peak03504">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03582" name="ELT2peak03582">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03676" name="ELT2peak03676">
+<matched-element start="311" stop="331" score="18.0488" pvalue="2.56e-07">
+<sequence>ACGGATGGAGAGCGGGGAAAA</sequence>
+<mem:qvalue>0.00604</mem:qvalue>
+</matched-element>
+<matched-element start="320" stop="340" score="11.3171" pvalue="4.84e-05">
+<sequence>GAGCGGGGAAAAAAGAGCACA</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+<matched-element start="318" stop="338" score="10.939" pvalue="5.99e-05">
+<sequence>GAGAGCGGGGAAAAAAGAGCA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04201" name="ELT2peak04201">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04506" name="ELT2peak04506">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04554" name="ELT2peak04554">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04596" name="ELT2peak04596">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04851" name="ELT2peak04851">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04854" name="ELT2peak04854">
+<matched-element start="317" stop="337" score="12.4024" pvalue="2.53e-05">
+<sequence>ACTGGGGCAAAAGACGCGGTG</sequence>
+<mem:qvalue>0.0507</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05381" name="ELT2peak05381">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05384" name="ELT2peak05384">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05454" name="ELT2peak05454">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05590" name="ELT2peak05590">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05625" name="ELT2peak05625">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05626" name="ELT2peak05626">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05779" name="ELT2peak05779">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05842" name="ELT2peak05842">
+<matched-element start="332" stop="312" score="10.939" pvalue="5.99e-05">
+<sequence>GAATAGAGAAAATAGACGGAG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="118" stop="98" score="10.1098" pvalue="9.32e-05">
+<sequence>AAAAATGGAAAGAATGTAGAA</sequence>
+<mem:qvalue>0.0947</mem:qvalue>
+</matched-element>
+<matched-element start="243" stop="223" score="10.0122" pvalue="9.8e-05">
+<sequence>GCTGATCGAGAATAGGCATAA</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05917" name="ELT2peak05917">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06179" name="ELT2peak06179">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06237" name="ELT2peak06237">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06240" name="ELT2peak06240">
+<matched-element start="228" stop="248" score="15.6341" pvalue="2.45e-06">
+<sequence>CAGAAGGGAAAAAGAGTAAAA</sequence>
+<mem:qvalue>0.0146</mem:qvalue>
+</matched-element>
+<matched-element start="292" stop="312" score="11.8171" pvalue="3.62e-05">
+<sequence>GACCGTAGAGAGAAGACGATA</sequence>
+<mem:qvalue>0.0615</mem:qvalue>
+</matched-element>
+<matched-element start="126" stop="146" score="10.3902" pvalue="8.05e-05">
+<sequence>ACCCGTGGAGGACTGGAAAGA</sequence>
+<mem:qvalue>0.0902</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06367" name="ELT2peak06367">
+<matched-element start="295" stop="275" score="11.8049" pvalue="3.65e-05">
+<sequence>GGCTGGAGAGGAGAGGTGCAA</sequence>
+<mem:qvalue>0.0617</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06637" name="ELT2peak06637">
+<matched-element start="279" stop="259" score="11.0244" pvalue="5.71e-05">
+<sequence>CAGAAAGGAGAGTGAGCAAGG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06873" name="ELT2peak06873">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07280" name="ELT2peak07280">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07281" name="ELT2peak07281">
+<matched-element start="185" stop="165" score="13.2927" pvalue="1.42e-05">
+<sequence>ATAGAGGGAGAAGCAACAGAG</sequence>
+<mem:qvalue>0.0371</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07344" name="ELT2peak07344">
+<matched-element start="266" stop="246" score="13.0854" pvalue="1.63e-05">
+<sequence>AAAGATGAAAAAATGGGGAGA</sequence>
+<mem:qvalue>0.0404</mem:qvalue>
+</matched-element>
+<matched-element start="265" stop="245" score="11.0122" pvalue="5.75e-05">
+<sequence>AAGATGAAAAAATGGGGAGAG</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07352" name="ELT2peak07352">
+<matched-element start="12" stop="32" score="13.561" pvalue="1.18e-05">
+<sequence>GCGCATACAGAAATGGAACAG</sequence>
+<mem:qvalue>0.0348</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07675" name="ELT2peak07675">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07729" name="ELT2peak07729">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07824" name="ELT2peak07824">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07957" name="ELT2peak07957">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08116" name="ELT2peak08116">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08228" name="ELT2peak08228">
+<matched-element start="234" stop="254" score="12.4146" pvalue="2.51e-05">
+<sequence>AGGTGCAAAGAGGAAAAAGTA</sequence>
+<mem:qvalue>0.0507</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08229" name="ELT2peak08229">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08272" name="ELT2peak08272">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08424" name="ELT2peak08424">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08428" name="ELT2peak08428">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08443" name="ELT2peak08443">
+<matched-element start="94" stop="114" score="10.0366" pvalue="9.68e-05">
+<sequence>AGCGTCGGAAAATTGAAAGTG</sequence>
+<mem:qvalue>0.096</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08517" name="ELT2peak08517">
+<matched-element start="247" stop="267" score="16.5854" pvalue="1.07e-06">
+<sequence>ACGGACAGAAAAGTAGAAATA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08601" name="ELT2peak08601">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08657" name="ELT2peak08657">
+<matched-element start="202" stop="222" score="15.9268" pvalue="1.91e-06">
+<sequence>AATTGTGAAGAGGTGGAAAAG</sequence>
+<mem:qvalue>0.0123</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08671" name="ELT2peak08671">
+<matched-element start="440" stop="460" score="21.4024" pvalue="3.73e-09">
+<sequence>GGGGGGGGGGGGGTGGGGGGG</sequence>
+<mem:qvalue>0.00175</mem:qvalue>
+</matched-element>
+<matched-element start="437" stop="457" score="19.8171" pvalue="3.34e-08">
+<sequence>GCGGGGGGGGGGGGGGTGGGG</sequence>
+<mem:qvalue>0.00225</mem:qvalue>
+</matched-element>
+<matched-element start="441" stop="461" score="18" pvalue="2.7e-07">
+<sequence>GGGGGGGGGGGGTGGGGGGGA</sequence>
+<mem:qvalue>0.00604</mem:qvalue>
+</matched-element>
+<matched-element start="439" stop="459" score="17.9024" pvalue="2.98e-07">
+<sequence>GGGGGGGGGGGGGGTGGGGGG</sequence>
+<mem:qvalue>0.0061</mem:qvalue>
+</matched-element>
+<matched-element start="432" stop="452" score="15.561" pvalue="2.6e-06">
+<sequence>CGGCAGCGGGGGGGGGGGGGG</sequence>
+<mem:qvalue>0.0147</mem:qvalue>
+</matched-element>
+<matched-element start="435" stop="455" score="15.2073" pvalue="3.47e-06">
+<sequence>CAGCGGGGGGGGGGGGGGTGG</sequence>
+<mem:qvalue>0.017</mem:qvalue>
+</matched-element>
+<matched-element start="438" stop="458" score="15.0854" pvalue="3.83e-06">
+<sequence>CGGGGGGGGGGGGGGTGGGGG</sequence>
+<mem:qvalue>0.0182</mem:qvalue>
+</matched-element>
+<matched-element start="430" stop="450" score="14.061" pvalue="8.31e-06">
+<sequence>GGCGGCAGCGGGGGGGGGGGG</sequence>
+<mem:qvalue>0.0287</mem:qvalue>
+</matched-element>
+<matched-element start="443" stop="463" score="11.8415" pvalue="3.57e-05">
+<sequence>GGGGGGGGGGTGGGGGGGAGA</sequence>
+<mem:qvalue>0.0613</mem:qvalue>
+</matched-element>
+<matched-element start="442" stop="462" score="11.4756" pvalue="4.42e-05">
+<sequence>GGGGGGGGGGGTGGGGGGGAG</sequence>
+<mem:qvalue>0.0693</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08708" name="ELT2peak08708">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08810" name="ELT2peak08810">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09011" name="ELT2peak09011">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09012" name="ELT2peak09012">
+<matched-element start="477" stop="457" score="12.8415" pvalue="1.92e-05">
+<sequence>GGAATGAGAAAGAGGGTGGAA</sequence>
+<mem:qvalue>0.0437</mem:qvalue>
+</matched-element>
+<matched-element start="494" stop="474" score="12.8415" pvalue="1.92e-05">
+<sequence>GGAATGAGAAAGAGGGTGGAA</sequence>
+<mem:qvalue>0.0437</mem:qvalue>
+</matched-element>
+<matched-element start="475" stop="455" score="12.4268" pvalue="2.5e-05">
+<sequence>AATGAGAAAGAGGGTGGAATG</sequence>
+<mem:qvalue>0.0506</mem:qvalue>
+</matched-element>
+<matched-element start="492" stop="472" score="12.4268" pvalue="2.5e-05">
+<sequence>AATGAGAAAGAGGGTGGAATG</sequence>
+<mem:qvalue>0.0506</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09179" name="ELT2peak09179">
+<matched-element start="279" stop="299" score="14.1098" pvalue="8.02e-06">
+<sequence>GCAGGGCGCGAGGCAGGAAAA</sequence>
+<mem:qvalue>0.0281</mem:qvalue>
+</matched-element>
+<matched-element start="280" stop="300" score="12.3049" pvalue="2.69e-05">
+<sequence>CAGGGCGCGAGGCAGGAAAAG</sequence>
+<mem:qvalue>0.0517</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09207" name="ELT2peak09207">
+<matched-element start="280" stop="300" score="20.1585" pvalue="2.15e-08">
+<sequence>GGTGGGGGGGGGGGGGGGGAG</sequence>
+<mem:qvalue>0.00225</mem:qvalue>
+</matched-element>
+<matched-element start="285" stop="305" score="19.378" pvalue="5.75e-08">
+<sequence>GGGGGGGGGGGGGGAGACAAG</sequence>
+<mem:qvalue>0.003</mem:qvalue>
+</matched-element>
+<matched-element start="279" stop="299" score="18.5854" pvalue="1.44e-07">
+<sequence>CGGTGGGGGGGGGGGGGGGGA</sequence>
+<mem:qvalue>0.00482</mem:qvalue>
+</matched-element>
+<matched-element start="278" stop="298" score="18.1463" pvalue="2.31e-07">
+<sequence>GCGGTGGGGGGGGGGGGGGGG</sequence>
+<mem:qvalue>0.00604</mem:qvalue>
+</matched-element>
+<matched-element start="283" stop="303" score="17.5488" pvalue="4.27e-07">
+<sequence>GGGGGGGGGGGGGGGGAGACA</sequence>
+<mem:qvalue>0.00804</mem:qvalue>
+</matched-element>
+<matched-element start="281" stop="301" score="17.2073" pvalue="5.98e-07">
+<sequence>GTGGGGGGGGGGGGGGGGAGA</sequence>
+<mem:qvalue>0.00852</mem:qvalue>
+</matched-element>
+<matched-element start="286" stop="306" score="16.9512" pvalue="7.63e-07">
+<sequence>GGGGGGGGGGGGGAGACAAGA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="284" stop="304" score="16.9146" pvalue="7.9e-07">
+<sequence>GGGGGGGGGGGGGGGAGACAA</sequence>
+<mem:qvalue>0.00853</mem:qvalue>
+</matched-element>
+<matched-element start="290" stop="310" score="14.1829" pvalue="7.6e-06">
+<sequence>GGGGGGGGGAGACAAGAAATG</sequence>
+<mem:qvalue>0.0277</mem:qvalue>
+</matched-element>
+<matched-element start="392" stop="412" score="14.0488" pvalue="8.38e-06">
+<sequence>GAATGGGGAAAATGCGGAGAG</sequence>
+<mem:qvalue>0.0288</mem:qvalue>
+</matched-element>
+<matched-element start="383" stop="403" score="13.4878" pvalue="1.24e-05">
+<sequence>AAGGTGCGAGAATGGGGAAAA</sequence>
+<mem:qvalue>0.0355</mem:qvalue>
+</matched-element>
+<matched-element start="314" stop="334" score="13.4146" pvalue="1.31e-05">
+<sequence>AGAGAGAGAGAAAACGAAGTG</sequence>
+<mem:qvalue>0.0362</mem:qvalue>
+</matched-element>
+<matched-element start="390" stop="410" score="12.6098" pvalue="2.22e-05">
+<sequence>GAGAATGGGGAAAATGCGGAG</sequence>
+<mem:qvalue>0.0481</mem:qvalue>
+</matched-element>
+<matched-element start="403" stop="423" score="12.4024" pvalue="2.53e-05">
+<sequence>ATGCGGAGAGAAATGAAAAAG</sequence>
+<mem:qvalue>0.0507</mem:qvalue>
+</matched-element>
+<matched-element start="288" stop="308" score="12.0976" pvalue="3.06e-05">
+<sequence>GGGGGGGGGGGAGACAAGAAA</sequence>
+<mem:qvalue>0.056</mem:qvalue>
+</matched-element>
+<matched-element start="382" stop="402" score="11.6951" pvalue="3.89e-05">
+<sequence>AAAGGTGCGAGAATGGGGAAA</sequence>
+<mem:qvalue>0.064</mem:qvalue>
+</matched-element>
+<matched-element start="51" stop="71" score="11.1951" pvalue="5.19e-05">
+<sequence>AGTTGGAAAGAGATGAGAAGA</sequence>
+<mem:qvalue>0.0756</mem:qvalue>
+</matched-element>
+<matched-element start="49" stop="69" score="11.0854" pvalue="5.52e-05">
+<sequence>GGAGTTGGAAAGAGATGAGAA</sequence>
+<mem:qvalue>0.0776</mem:qvalue>
+</matched-element>
+<matched-element start="401" stop="421" score="10.2073" pvalue="8.86e-05">
+<sequence>AAATGCGGAGAGAAATGAAAA</sequence>
+<mem:qvalue>0.0924</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09261" name="ELT2peak09261">
+<matched-element start="248" stop="268" score="15.3171" pvalue="3.18e-06">
+<sequence>GCAAAGACAGAAATGGCAGAG</sequence>
+<mem:qvalue>0.0161</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09626" name="ELT2peak09626">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09678" name="ELT2peak09678">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09693" name="ELT2peak09693">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09868" name="ELT2peak09868">
+<matched-element start="260" stop="280" score="15.6585" pvalue="2.4e-06">
+<sequence>GCGTGTGCAAAGAGTGAGGAG</sequence>
+<mem:qvalue>0.0146</mem:qvalue>
+</matched-element>
+<matched-element start="109" stop="129" score="13.5488" pvalue="1.19e-05">
+<sequence>AAAGAGGAAGAGACAAAAAAG</sequence>
+<mem:qvalue>0.0348</mem:qvalue>
+</matched-element>
+<matched-element start="97" stop="117" score="13.061" pvalue="1.66e-05">
+<sequence>ACCGACAAAAAGAAAGAGGAA</sequence>
+<mem:qvalue>0.0407</mem:qvalue>
+</matched-element>
+<matched-element start="262" stop="282" score="11.6585" pvalue="3.98e-05">
+<sequence>GTGTGCAAAGAGTGAGGAGGG</sequence>
+<mem:qvalue>0.0649</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09869" name="ELT2peak09869">
+<matched-element start="439" stop="459" score="10.6829" pvalue="6.89e-05">
+<sequence>ATGGGTAGGAAAACAAAAGAA</sequence>
+<mem:qvalue>0.0837</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09936" name="ELT2peak09936">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10011" name="ELT2peak10011">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10038" name="ELT2peak10038">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10050" name="ELT2peak10050">
+<matched-element start="274" stop="294" score="11.8537" pvalue="3.54e-05">
+<sequence>CGCTGACGAAAAGCGGGAAAA</sequence>
+<mem:qvalue>0.0613</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10059" name="ELT2peak10059">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10129" name="ELT2peak10129">
+<matched-element start="496" stop="476" score="11.7683" pvalue="3.73e-05">
+<sequence>GAGAACGCAAAGGAAAACAAA</sequence>
+<mem:qvalue>0.0624</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10187" name="ELT2peak10187">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10628" name="ELT2peak10628">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10708" name="ELT2peak10708">
+<matched-element start="437" stop="457" score="11.3537" pvalue="4.74e-05">
+<sequence>AAAAGTGGAAAATTGAGAGAA</sequence>
+<mem:qvalue>0.0722</mem:qvalue>
+</matched-element>
+<matched-element start="323" stop="303" score="11.3049" pvalue="4.88e-05">
+<sequence>AAGTGGCGATAGATAACAGTG</sequence>
+<mem:qvalue>0.0727</mem:qvalue>
+</matched-element>
+</scanned-sequence>
+<mem:has-qvalues>yes</mem:has-qvalues>
+</pattern>
+</cis-element-search>

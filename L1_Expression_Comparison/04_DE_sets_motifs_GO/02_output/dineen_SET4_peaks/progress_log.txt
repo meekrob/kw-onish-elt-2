@@ -1,0 +1,58 @@
+Invoking:
+  getsize 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.034884
+Invoking:
+  fasta-most -min 50 < 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 1> $metrics
+Finished invoke:
+  name: most_seqs  status: 0  time: 0.05127
+Invoking:
+  fasta-center -dna -len 100 < 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 1> 02_output/dineen_SET4_peaks/seqs-centered
+Finished invoke:
+  name: center_seqs  status: 0  time: 0.060999
+Invoking:
+  fasta-shuffle-letters 02_output/dineen_SET4_peaks/seqs-centered 02_output/dineen_SET4_peaks/seqs-shuffled -kmer 2 -tag -dinuc -dna -seed 1
+Finished invoke:
+  name: shuffle_seqs  status: 0  time: 0.01028
+Invoking:
+  fasta-get-markov -nostatus -nosummary -dna -m 1 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 02_output/dineen_SET4_peaks/background
+Finished invoke:
+  name: bg  status: 0  time: 0.009193
+Invoking:
+  meme 02_output/dineen_SET4_peaks/seqs-centered -oc 02_output/dineen_SET4_peaks/meme_out -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile 02_output/dineen_SET4_peaks/background -dna -searchsize 100000 -p 24 -revcomp -nostatus
+Finished invoke:
+  name: meme  status: 0  time: 41.71621
+Invoking:
+  dreme -verbosity 1 -oc 02_output/dineen_SET4_peaks/dreme_out -png -dna -p 02_output/dineen_SET4_peaks/seqs-centered -n 02_output/dineen_SET4_peaks/seqs-shuffled -e 0.05
+Finished invoke:
+  name: dreme  status: 0  time: 2.289431
+Invoking:
+  centrimo -seqlen 500 -verbosity 1 -oc 02_output/dineen_SET4_peaks/centrimo_out -bfile 02_output/dineen_SET4_peaks/background -score 5.0 -ethresh 10.0 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: centrimo  status: 0  time: 0.614088
+Invoking:
+  tomtom -verbosity 1 -oc 02_output/dineen_SET4_peaks/meme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/dineen_SET4_peaks/meme_out/meme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: meme_tomtom  status: 0  time: 2.793966
+Invoking:
+  tomtom -verbosity 1 -oc 02_output/dineen_SET4_peaks/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/dineen_SET4_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: dreme_tomtom  status: 0  time: 0.206203
+Invoking:
+  tomtom -verbosity 1 -text -thresh 0.1 02_output/dineen_SET4_peaks/combined.meme 02_output/dineen_SET4_peaks/combined.meme 1> 02_output/dineen_SET4_peaks/motif_alignment.txt
+Finished invoke:
+  name: align  status: 0  time: 0.040772
+Invoking:
+  spamo -verbosity 1 -oc 02_output/dineen_SET4_peaks/spamo_out_1 -bgfile 02_output/dineen_SET4_peaks/background -keepprimary -primary RCTGATAAGAA 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo1  status: 0  time: 1.714232
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/dineen_SET4_peaks/fimo_out_1 --bgfile 02_output/dineen_SET4_peaks/background --motif RCTGATAAGAA 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta
+Finished invoke:
+  name: fimo1  status: 0  time: 0.082968
+Writing output
+Invoking:
+  meme-chip_html_to_tsv 02_output/dineen_SET4_peaks/meme-chip.html 02_output/dineen_SET4_peaks/summary.tsv "meme-chip -oc 02_output/dineen_SET4_peaks -meme-p 24 -ccut 100 -fdesc description -order 1 -db motif_databases/CIS-BP/Caenorhabditis_elegans.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 01_input/dineen_SET4_peaks.fasta" 5.1.1 "Wed Jan 29 15\:00\:42 2020 -0800"
+Finished invoke:
+  name: summary  status: 0  time: 0.120096
+Done

@@ -1,0 +1,70 @@
+# DREME 5.1.1
+#     command: dreme -verbosity 1 -oc 02_output/bound_ClassC_peaks/dreme_out -png -dna -p 02_output/bound_ClassC_peaks/seqs-centered -n 02_output/bound_ClassC_peaks/seqs-shuffled -e 0.05
+#   positives: 375 from 02_output/bound_ClassC_peaks/seqs-centered (Wed Dec 02 07:03:24 UTC 2020)
+#   negatives: 375 from 02_output/bound_ClassC_peaks/seqs-shuffled (Wed Dec 02 07:03:24 UTC 2020)
+#        host: shas0110.rc.int.colorado.edu
+#        when: Wed Dec 02 07:08:30 UTC 2020
+
+MEME version 5.1.1
+
+ALPHABET "DNA" DNA-LIKE
+A "Adenine" CC0000 ~ T "Thymine" 008000
+C "Cytosine" 0000CC ~ G "Guanine" FFB300
+N "Any base" = ACGT
+X = ACGT
+. = ACGT
+V "Not T" = ACG
+H "Not G" = ACT
+D "Not C" = AGT
+B "Not A" = CGT
+M "Amino" = AC
+R "Purine" = AG
+W "Weak" = AT
+S "Strong" = CG
+Y "Pyrimidine" = CT
+K "Keto" = GT
+U = T
+END ALPHABET
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.318 C 0.193 G 0.170 T 0.319
+
+
+MOTIF TGATAAB DREME-1
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     TGATAAB    VTTATCA        138         19   5.8e-029   1.5e-024
+#          TGATAAG    CTTATCA         83          4   1.4e-022   3.7e-018
+#          TGATAAC    GTTATCA         35          6   1.4e-006   3.6e-002
+#          TGATAAT    ATTATCA         28          9   1.0e-003   2.6e+001
+
+letter-probability matrix: alength= 4 w= 7 nsites= 160 E= 1.5e-024
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.218750 0.581250 0.200000
+
+
+MOTIF CTGAWA DREME-2
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      CTGAWA     TWTCAG         90         35   4.1e-008   1.1e-003
+#           CTGATA     TATCAG         35          6   1.4e-006   3.5e-002
+#           CTGAAA     TTTCAG         59         30   7.3e-004   1.9e+001
+
+letter-probability matrix: alength= 4 w= 6 nsites= 102 E= 1.1e-003
+0.000000 1.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.647059 0.000000 0.000000 0.352941
+1.000000 0.000000 0.000000 0.000000
+
+
+# Stopping reason: E-value threshold exceeded
+#    Running time: 7.85 seconds

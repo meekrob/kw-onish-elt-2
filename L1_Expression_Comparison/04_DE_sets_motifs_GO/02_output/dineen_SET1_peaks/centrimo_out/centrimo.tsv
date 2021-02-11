@@ -1,0 +1,22 @@
+db_index	motif_id	motif_alt_id	consensus	E-value	adj_p-value	log_adj_p-value	bin_location	bin_width	total_width	sites_in_bin	total_sites	p_success	p-value	mult_tests
+   3	M0772_1.02	elt-7	NCTGATAACDNN	4.0e-11	   1.5e-13	         -29.53	         0.0	    183.0	        489	          99	        138	  0.37423	6.1e-16	       244
+   3	M0786_1.02	elt-6	VTGATAAN	6.2e-7	   2.3e-9	         -19.88	         0.0	    267.0	        493	         114	        139	  0.54158	9.4e-12	       246
+   3	M0788_1.02	end-3	NNWGATAASV	2.9e-5	   1.1e-7	         -16.02	         0.0	    127.0	        491	          71	        141	  0.25866	4.5e-10	       245
+   2	TGATRA	DREME-1	TGATAA	7.5e-4	   2.8e-6	         -12.78	         0.0	    253.0	        495	          83	        107	  0.51111	1.1e-8	       247
+   1	GSAAYGYTYMMCGTRCVCHACGSG	MEME-3	GSAAYGYTYMMCGTRCVCHACGSG	1.2e-2	   4.4e-5	         -10.03	         0.0	     67.0	        477	           9	         10	  0.14046	1.9e-7	       238
+   3	M4715_1.02	egl-27	YTGATAAG	2.1e-2	   7.9e-5	          -9.44	         0.0	    147.0	        493	          66	        129	  0.29817	3.2e-7	       246
+   3	M2335_1.02	elt-3	TGATAAGA	2.2e-2	   8.3e-5	          -9.40	         0.0	    125.0	        493	          65	        145	  0.25355	3.4e-7	       246
+   3	M0787_1.02	end-1	NNHGATADNN	6.4e-2	   2.4e-4	          -8.33	         0.0	    143.0	        491	          67	        137	  0.29124	9.9e-7	       245
+   1	RRWRAGDGAGRRARAHSRAGA	MEME-1	RRWRAGDGAGRRARAHSRAGA	3.3e-1	   1.2e-3	          -6.69	         0.0	     80.0	        480	          39	        115	  0.16667	5.2e-6	       239
+   3	M0499_1.02	egrh-3	RDGGGRG	9.7e-1	   3.6e-3	          -5.61	         0.0	    140.0	        494	          64	        141	  0.28340	1.5e-5	       246
+   3	M0344_1.02	jun-1	ATGACTCAY	2.0e0	   7.4e-3	          -4.91	         0.0	    268.0	        492	          93	        129	  0.54472	3.0e-5	       245
+   3	M0216_1.02	(hlh-15)_(Mus_musculus)_(DBD_0.74)	NGCAGCTGYN	2.3e0	   8.5e-3	          -4.77	         0.0	    181.0	        491	          73	        135	  0.36864	3.5e-5	       245
+   3	M0170_1.02	hlh-25	SACACGCG	2.9e0	   1.1e-2	          -4.51	         0.0	    263.0	        493	          93	        132	  0.53347	4.5e-5	       246
+   3	M1631_1.02	(mab-9)_(Mus_musculus)_(DBD_0.62)	DAGGTGTBAA	7.7e0	   2.9e-2	          -3.54	         0.0	     21.0	        491	          17	        141	  0.04277	1.2e-4	       245
+   3	M1425_1.02	nhr-42	NNYGTRVYNN	9.0e0	   3.4e-2	          -3.39	         0.0	     47.0	        491	          27	        133	  0.09572	1.4e-4	       245
+   3	M0172_1.02	hlh-12	AACAKCTG	9.7e0	   3.6e-2	          -3.31	         0.0	    187.0	        493	          72	        133	  0.37931	1.5e-4	       246
+   3	M4709_1.02	mdl-1	GTCACGTG	9.9e0	   3.7e-2	          -3.29	         0.0	     97.0	        493	          44	        132	  0.19675	1.5e-4	       246
+
+# CentriMo (Local Motif Enrichment Analysis): Version 5.1.1 compiled on May 28 2020 at 04:38:08
+# The format of this file is described at http://localhost:8080/doc/centrimo-output-format.html.
+# centrimo -seqlen 500 -verbosity 1 -oc 02_output/dineen_SET1_peaks/centrimo_out -bfile 02_output/dineen_SET1_peaks/background -score 5.0 -ethresh 10.0 02_output/dineen_SET1_peaks/dineen_SET1_peaks.fasta 02_output/dineen_SET1_peaks/meme_out/meme.xml 02_output/dineen_SET1_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

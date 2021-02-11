@@ -1,0 +1,17 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M2334_1.02	efl-1	HNHKSGCGSGAAAWT	4	1	.	.	.	2.80e-01	2	2	8	400	8.88e-08	7.99e-07
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M2334_1.02	efl-1	HNHKSGCGSGAAAWT	4	1	.	.	.	2.80e-01	2	6	10	400	2.58e-07	2.32e-06
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M1484_1.02	nhr-232	WTTGTGAYH	2	1	.	.	.	4.57e-01	23	4	6	97	1.41e-07	1.27e-06
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M1484_1.02	nhr-232	WTTGTGAYH	2	1	.	.	.	4.57e-01	23	1	4	97	2.99e-06	2.69e-05
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	Caenorhabditis_elegans	M1484_1.02	nhr-232	2.08e+00	20	4	9	355	6.54e-07	5.89e-06
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M0789_1.02	med-2	NGKATACYNH	1	2	.	.	.	5.41e-01	35	1	5	108	1.68e-07	1.52e-06
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M0254_1.02	Y44A6D.3	NTGCGCRRN	1	1	.	.	.	6.99e-01	0	2	8	461	2.18e-07	1.96e-06
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M0254_1.02	Y44A6D.3	NTGCGCRRN	1	1	.	.	.	6.99e-01	16	0	7	461	2.23e-06	2.01e-05
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M1511_1.02	mbr-1	NWGGCCCYYY	2	3	.	.	.	8.34e+00	54	5	8	331	2.59e-06	2.33e-05
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M4716_1.02	lin-39	CATCAATC	0	0	.	.	.	9.84e+00	33	8	8	168	3.13e-06	2.82e-05
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M4716_1.02	lin-39	CATCAATC	0	0	.	.	.	9.84e+00	33	5	6	168	3.57e-06	3.21e-05
+Caenorhabditis_elegans	M0491_1.02	T22C8.4	AGCAGGGG	Caenorhabditis_elegans	M4716_1.02	lin-39	CATCAATC	0	0	.	.	.	9.84e+00	33	7	6	168	3.57e-06	3.21e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_19 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0491_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

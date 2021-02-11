@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/01_input/
+/03_plots/
+/05_fromErin/
+RWC23_ELT2_ChIP_Clusters_Spencer_Gut_RNA.Rmd
+.DS_Store
+/04_DE_sets_motifs_GO/motif_databases/

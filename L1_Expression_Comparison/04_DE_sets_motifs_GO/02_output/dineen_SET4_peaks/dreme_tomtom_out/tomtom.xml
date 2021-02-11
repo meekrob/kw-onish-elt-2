@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<tomtom version="5.1.1" release="Wed Jan 29 15:00:42 2020 -0800">
+  <model>
+    <command_line>tomtom -verbosity 1 -oc 02_output/dineen_SET4_peaks/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/dineen_SET4_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme</command_line>
+    <distance_measure value="pearson"/>
+    <threshold type="evalue">1</threshold>
+    <alphabet name="DNA" like="dna">
+      <letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+      <letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+      <letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+      <letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+      <letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+      <letter id="V" symbol="V" equals="ACG" name="Not T"/>
+      <letter id="H" symbol="H" equals="ACT" name="Not G"/>
+      <letter id="D" symbol="D" equals="AGT" name="Not C"/>
+      <letter id="B" symbol="B" equals="CGT" name="Not A"/>
+      <letter id="M" symbol="M" equals="AC" name="Amino"/>
+      <letter id="R" symbol="R" equals="AG" name="Purine"/>
+      <letter id="W" symbol="W" equals="AT" name="Weak"/>
+      <letter id="S" symbol="S" equals="CG" name="Strong"/>
+      <letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+      <letter id="K" symbol="K" equals="GT" name="Keto"/>
+    </alphabet>
+    <strands>both</strands>
+    <background from="--query--" A="0.323" C="0.177" G="0.177" T="0.323"/>
+    <host>shas0804.rc.int.colorado.edu</host>
+    <when>Wed Dec  2 04:46:59 2020</when>
+  </model>
+  <query_dbs>
+    <db source="02_output/dineen_SET4_peaks/dreme_out/dreme.xml" name="dreme.xml" loaded="1" excluded="0" last_mod_date="Wed Dec  2 04:46:55 2020"/>
+  </query_dbs>
+  <target_dbs>
+    <db source="motif_databases/CIS-BP/Caenorhabditis_elegans.meme" name="Caenorhabditis_elegans" loaded="262" excluded="0" last_mod_date="Mon Nov 30 01:52:19 2020"/>
+  </target_dbs>
+  <queries>
+    <motif db="0" id="TGATAR" alt="DREME-1" length="6" nsites="95" evalue="1.1e-008">
+      <pos A="0.000339642" C="0.00018612" G="0.00018612" T="0.999288"/>
+      <pos A="0.000339642" C="0.00018612" G="0.999135" T="0.000339642"/>
+      <pos A="0.999288" C="0.00018612" G="0.00018612" T="0.000339642"/>
+      <pos A="0.000339642" C="0.00018612" G="0.00018612" T="0.999288"/>
+      <pos A="0.999288" C="0.00018612" G="0.00018612" T="0.000339642"/>
+      <pos A="0.841559" C="0.00018612" G="0.157915" T="0.000339642"/>
+    </motif>
+  </queries>
+  <targets>
+    <motif db="0" id="M0772_1.02" alt="elt-7" length="12" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084368_1.02">
+      <pos A="0.274786" C="0.172642" G="0.269795" T="0.282776"/>
+      <pos A="0.238745" C="0.490765" G="0.128609" T="0.141882"/>
+      <pos A="0.0735645" C="0.0602919" G="0.0602919" T="0.805851"/>
+      <pos A="0.0526281" C="0.0393555" G="0.855389" T="0.0526281"/>
+      <pos A="0.93784" C="0.0162955" G="0.0162955" T="0.0295681"/>
+      <pos A="0.0295681" C="0.0162955" G="0.0162955" T="0.93784"/>
+      <pos A="0.845602" C="0.0162955" G="0.0162955" T="0.121807"/>
+      <pos A="0.93784" C="0.0162955" G="0.0162955" T="0.0295681"/>
+      <pos A="0.10029" C="0.541506" G="0.257914" T="0.10029"/>
+      <pos A="0.316829" C="0.13105" G="0.31556" T="0.236561"/>
+      <pos A="0.304878" C="0.199367" G="0.199367" T="0.296387"/>
+      <pos A="0.233576" C="0.220304" G="0.220304" T="0.325815"/>
+    </motif>
+    <motif db="0" id="M0786_1.02" alt="elt-6" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084987_1.02">
+      <pos A="0.186287" C="0.335273" G="0.316685" T="0.161755"/>
+      <pos A="0.0771418" C="0.0359082" G="0.0233091" T="0.863641"/>
+      <pos A="0.0336991" C="0.0162082" G="0.919998" T="0.0300945"/>
+      <pos A="0.881954" C="0.0234673" G="0.0210355" T="0.0735436"/>
+      <pos A="0.0319245" C="0.0233355" G="0.01735" T="0.927391"/>
+      <pos A="0.733799" C="0.0624955" G="0.0248264" T="0.178879"/>
+      <pos A="0.672018" C="0.0555637" G="0.11714" T="0.155278"/>
+      <pos A="0.22058" C="0.282066" G="0.312994" T="0.18436"/>
+    </motif>
+    <motif db="0" id="M2335_1.02" alt="elt-3" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02">
+      <pos A="0.0293636" C="0.0160909" G="0.0160909" T="0.938455"/>
+      <pos A="0.0293636" C="0.0160909" G="0.925182" T="0.0293636"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.0293636" C="0.0160909" G="0.0160909" T="0.938455"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.238379" C="0.172223" G="0.560035" T="0.0293636"/>
+      <pos A="0.802469" C="0.0160909" G="0.152076" T="0.0293636"/>
+    </motif>
+    <motif db="0" id="M4715_1.02" alt="egl-27" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T086516_1.02">
+      <pos A="0.0293636" C="0.503104" G="0.145961" T="0.321572"/>
+      <pos A="0.0293636" C="0.0160909" G="0.0160909" T="0.938455"/>
+      <pos A="0.0293636" C="0.0160909" G="0.925182" T="0.0293636"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.0293636" C="0.0810264" G="0.0160909" T="0.873519"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.938455" C="0.0160909" G="0.0160909" T="0.0293636"/>
+      <pos A="0.0293636" C="0.178428" G="0.762845" T="0.0293636"/>
+    </motif>
+  </targets>
+  <matches>
+    <query idx="0">
+      <target idx="1" rc="n" off="1" pv="8.22e-05" ev="2.15e-02" qv="1.43e-02"/>
+      <target idx="2" rc="n" off="0" pv="8.22e-05" ev="2.15e-02" qv="1.43e-02"/>
+      <target idx="3" rc="n" off="1" pv="8.22e-05" ev="2.15e-02" qv="1.43e-02"/>
+      <target idx="0" rc="n" off="2" pv="1.92e-04" ev="5.02e-02" qv="2.51e-02"/>
+    </query>
+  </matches>
+  <runtime cycles="99786" seconds="0.100"/>
+</tomtom>

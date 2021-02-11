@@ -1,0 +1,24 @@
+# 1-order Markov frequencies from file 02_output/bound_ClassB_peaks/bound_ClassB_peaks.fasta
+# seqs: 372    min: 500    max: 500    avg: 500.0    sum: 186000    alph: DNA
+# order 0
+A 3.235e-01
+C 1.765e-01
+G 1.765e-01
+T 3.235e-01
+# order 1
+AA 1.294e-01
+AC 5.234e-02
+AG 5.092e-02
+AT 9.082e-02
+CA 6.570e-02
+CC 3.130e-02
+CG 2.854e-02
+CT 5.092e-02
+GA 6.051e-02
+GC 3.231e-02
+GG 3.130e-02
+GT 5.234e-02
+TA 6.792e-02
+TC 6.051e-02
+TG 6.570e-02
+TT 1.294e-01

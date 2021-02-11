@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Begin document body -->
+<fimo version="5.1.1" release="Wed Jan 29 15:00:42 2020 -0800">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation=  xmlns:fimo="http://noble.gs.washington.edu/schema/fimo"
+>
+<command-line>fimo --parse-genomic-coord --verbosity 1 --oc 02_output/dineen_SET6_peaks/fimo_out_5 --bgfile 02_output/dineen_SET6_peaks/background --motif M4709_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/dineen_SET6_peaks/dineen_SET6_peaks.fasta</command-line>
+<settings>
+<setting name="output directory">02_output/dineen_SET6_peaks/fimo_out_5</setting>
+<setting name="MEME file name">motif_databases/CIS-BP/Caenorhabditis_elegans.meme</setting>
+<setting name="sequence file name">02_output/dineen_SET6_peaks/dineen_SET6_peaks.fasta</setting>
+<setting name="background file name">02_output/dineen_SET6_peaks/background</setting>
+<setting name="allow clobber">true</setting>
+<setting name="compute q-values">true</setting>
+<setting name="parse genomic coord.">true</setting>
+<setting name="text only">false</setting>
+<setting name="scan both strands">true</setting>
+<setting name="output threshold">0.0001</setting>
+<setting name="threshold type">p-value</setting>
+<setting name="max stored scores">100000</setting>
+<setting name="pseudocount">0.1</setting>
+<setting name="verbosity">1</setting>
+<setting name="selected motif">M4709_1.02</setting>
+</settings>
+<sequence-data num-sequences="828" num-residues="413906" />
+<alphabet name="DNA" like="dna">
+<letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+<letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+<letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+<letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+<letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+<letter id="V" symbol="V" equals="ACG" name="Not T"/>
+<letter id="H" symbol="H" equals="ACT" name="Not G"/>
+<letter id="D" symbol="D" equals="AGT" name="Not C"/>
+<letter id="B" symbol="B" equals="CGT" name="Not A"/>
+<letter id="M" symbol="M" equals="AC" name="Amino"/>
+<letter id="R" symbol="R" equals="AG" name="Purine"/>
+<letter id="W" symbol="W" equals="AT" name="Weak"/>
+<letter id="S" symbol="S" equals="CG" name="Strong"/>
+<letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+<letter id="K" symbol="K" equals="GT" name="Keto"/>
+</alphabet>
+<motif name="M0114_1.02" alt="cfi-1" width="8" best-possible-match="TTTAATTA"/>
+<motif name="M0140_1.02" alt="Y116A8C.22" width="7" best-possible-match="AAAAAAT"/>
+<motif name="M0141_1.02" alt="hmg-12" width="12" best-possible-match="ATAAATAATTAA"/>
+<motif name="M0148_1.02" alt="bed-3" width="8" best-possible-match="ACTCTCGA"/>
+<motif name="M0168_1.02" alt="hlh-1" width="8" best-possible-match="GACAGCTG"/>
+<motif name="M0169_1.02" alt="hlh-27" width="8" best-possible-match="GACACGCG"/>
+<motif name="M0170_1.02" alt="hlh-25" width="8" best-possible-match="GACACGCG"/>
+<motif name="M0171_1.02" alt="hlh-26" width="9" best-possible-match="AACACGTGT"/>
+<motif name="M0172_1.02" alt="hlh-12" width="8" best-possible-match="AACATCTG"/>
+<motif name="M0173_1.02" alt="hlh-16" width="13" best-possible-match="TTACAATATGGTA"/>
+<motif name="M0177_1.02" alt="(hlh-8)_(Mus_musculus)_(DBD_0.60)" width="10" best-possible-match="ACCATATGTT"/>
+<motif name="M0179_1.02" alt="(aha-1)_(Mus_musculus)_(DBD_0.81)" width="12" best-possible-match="AATCACGTGCTT"/>
+<motif name="M0194_1.02" alt="(hlh-17)_(Mus_musculus)_(DBD_0.82)" width="10" best-possible-match="ACCATATGTT"/>
+<motif name="M0216_1.02" alt="(hlh-15)_(Mus_musculus)_(DBD_0.74)" width="10" best-possible-match="CGCAGCTGTA"/>
+<motif name="M0217_1.02" alt="(cnd-1)_(Mus_musculus)_(DBD_0.64)" width="10" best-possible-match="ACCATATGGT"/>
+<motif name="M0224_1.02" alt="(lin-32)_(Mus_musculus)_(DBD_0.66)" width="10" best-possible-match="ACCATATGTT"/>
+<motif name="M0226_1.02" alt="hlh-29" width="8" best-possible-match="CCACGCGT"/>
+<motif name="M0227_1.02" alt="mxl-3" width="8" best-possible-match="CCACGTGT"/>
+<motif name="M0228_1.02" alt="hlh-11" width="9" best-possible-match="ATCAGCTGA"/>
+<motif name="M0239_1.02" alt="ref-1" width="8" best-possible-match="GCACGTGT"/>
+<motif name="M0240_1.02" alt="hlh-30" width="8" best-possible-match="TCACGTGA"/>
+<motif name="M0249_1.02" alt="hlh-10" width="8" best-possible-match="CATATATG"/>
+<motif name="M0254_1.02" alt="Y44A6D.3" width="9" best-possible-match="GTGCGCGGT"/>
+<motif name="M0275_1.02" alt="atf-7" width="10" best-possible-match="GATGACGTCA"/>
+<motif name="M0276_1.02" alt="C27D6.4" width="10" best-possible-match="TGCCACGTGT"/>
+<motif name="M0281_1.02" alt="D1005.3" width="15" best-possible-match="AATTTATGAAATATA"/>
+<motif name="M0294_1.02" alt="(crh-1)_(Mus_musculus)_(DBD_0.70)" width="10" best-possible-match="GATGACGTAA"/>
+<motif name="M0323_1.02" alt="F17A9.3" width="13" best-possible-match="TGTTACGTAAATA"/>
+<motif name="M0324_1.02" alt="F23F12.9" width="10" best-possible-match="ATTACGTAAT"/>
+<motif name="M0325_1.02" alt="atf-6" width="9" best-possible-match="CTGACGTGG"/>
+<motif name="M0326_1.02" alt="atf-2" width="10" best-possible-match="ATTGCGCAAT"/>
+<motif name="M0339_1.02" alt="R07H5.10" width="8" best-possible-match="TATTTCAT"/>
+<motif name="M0340_1.02" alt="xbp-1" width="13" best-possible-match="TAGATTACGTGTA"/>
+<motif name="M0342_1.02" alt="atf-5" width="11" best-possible-match="GGATGACGTCA"/>
+<motif name="M0343_1.02" alt="skn-1" width="10" best-possible-match="ATGATGACAA"/>
+<motif name="M0344_1.02" alt="jun-1" width="9" best-possible-match="ATGACTCAT"/>
+<motif name="M0345_1.02" alt="T27F2.4" width="10" best-possible-match="ATTACGAATT"/>
+<motif name="M0346_1.02" alt="zip-3" width="9" best-possible-match="ATGACGTCA"/>
+<motif name="M0347_1.02" alt="W08E12.1" width="8" best-possible-match="TGACGTAA"/>
+<motif name="M0349_1.02" alt="Y51H4A.4" width="12" best-possible-match="ATTATTACGTAA"/>
+<motif name="M0350_1.02" alt="Y61A9LA.9" width="8" best-possible-match="ATTTATTT"/>
+<motif name="M0358_1.02" alt="ces-2" width="9" best-possible-match="ATTACATAA"/>
+<motif name="M0379_1.02" alt="B0310.2" width="10" best-possible-match="TTGAGGTAAA"/>
+<motif name="M0380_1.02" alt="ham-2" width="9" best-possible-match="AATAAGCAT"/>
+<motif name="M0381_1.02" alt="mnm-2" width="10" best-possible-match="AAGGATGCGC"/>
+<motif name="M0382_1.02" alt="die-1" width="10" best-possible-match="AATTTAAAAA"/>
+<motif name="M0383_1.02" alt="egrh-1" width="8" best-possible-match="CGTGGGCG"/>
+<motif name="M0384_1.02" alt="odd-2" width="9" best-possible-match="ACAGTAGCA"/>
+<motif name="M0385_1.02" alt="C46E10.8" width="10" best-possible-match="GGGTATAAAT"/>
+<motif name="M0386_1.02" alt="ref-2" width="10" best-possible-match="TCACAGCGGG"/>
+<motif name="M0387_1.02" alt="ztf-3" width="8" best-possible-match="TGTGTGTG"/>
+<motif name="M0388_1.02" alt="che-1" width="10" best-possible-match="TAGGGCTTCC"/>
+<motif name="M0389_1.02" alt="scrt-1" width="9" best-possible-match="GAAAGTGGA"/>
+<motif name="M0405_1.02" alt="(klf-1)_(Mus_musculus)_(DBD_0.79)" width="10" best-possible-match="TGGGCGTGGC"/>
+<motif name="M0445_1.02" alt="F10B5.3" width="10" best-possible-match="TTTCCCAGAA"/>
+<motif name="M0446_1.02" alt="ztf-2" width="10" best-possible-match="TTGTTTCAGG"/>
+<motif name="M0447_1.02" alt="F13H6.1" width="10" best-possible-match="AGTGGTCAAT"/>
+<motif name="M0448_1.02" alt="lin-48" width="8" best-possible-match="ATAACGGT"/>
+<motif name="M0449_1.02" alt="ztf-28" width="10" best-possible-match="GATGAAGCCT"/>
+<motif name="M0450_1.02" alt="ces-1" width="7" best-possible-match="CAACAGG"/>
+<motif name="M0451_1.02" alt="pag-3" width="10" best-possible-match="CAGTGATTTA"/>
+<motif name="M0452_1.02" alt="lsy-27" width="10" best-possible-match="GGTGAAGCTT"/>
+<motif name="M0453_1.02" alt="lsy-2" width="10" best-possible-match="AATACGGTAG"/>
+<motif name="M0454_1.02" alt="F52B5.7" width="8" best-possible-match="CTATGGGG"/>
+<motif name="M0455_1.02" alt="lsl-1" width="10" best-possible-match="TACGGTAGTT"/>
+<motif name="M0456_1.02" alt="klf-3" width="9" best-possible-match="TGGGCGTGG"/>
+<motif name="M0457_1.02" alt="F55C5.11" width="9" best-possible-match="TAGGTGACA"/>
+<motif name="M0458_1.02" alt="K02D7.2" width="7" best-possible-match="ACAGGTG"/>
+<motif name="M0459_1.02" alt="K11D2.4" width="10" best-possible-match="ATAAAAAAGT"/>
+<motif name="M0460_1.02" alt="M03D4.4" width="11" best-possible-match="CATGCATGATC"/>
+<motif name="M0461_1.02" alt="ztf-14" width="10" best-possible-match="TGGGTGGTCT"/>
+<motif name="M0487_1.02" alt="ztf-16" width="10" best-possible-match="TTTCTGGATT"/>
+<motif name="M0488_1.02" alt="eor-1" width="8" best-possible-match="GGGGGGTC"/>
+<motif name="M0489_1.02" alt="egl-43" width="10" best-possible-match="AGGATGAGCA"/>
+<motif name="M0490_1.02" alt="ztf-27" width="8" best-possible-match="TATTGGTG"/>
+<motif name="M0491_1.02" alt="T22C8.4" width="8" best-possible-match="AGCAGGGG"/>
+<motif name="M0492_1.02" alt="ztf-19" width="10" best-possible-match="TAGTGTAATA"/>
+<motif name="M0493_1.02" alt="lin-29" width="8" best-possible-match="GAAAAAAA"/>
+<motif name="M0494_1.02" alt="ztf-6" width="10" best-possible-match="GTTTCAGCAA"/>
+<motif name="M0495_1.02" alt="sptf-3" width="10" best-possible-match="AGGGGCGTGT"/>
+<motif name="M0496_1.02" alt="Y53H1A.2" width="10" best-possible-match="CGGTGGTCGT"/>
+<motif name="M0497_1.02" alt="slr-2" width="8" best-possible-match="TTGCAGTT"/>
+<motif name="M0498_1.02" alt="ztf-29" width="10" best-possible-match="GTTAAAGCCT"/>
+<motif name="M0499_1.02" alt="egrh-3" width="7" best-possible-match="GTGGGGG"/>
+<motif name="M0544_1.02" alt="ZC328.2" width="10" best-possible-match="TGCGTGGGCG"/>
+<motif name="M0545_1.02" alt="ztf-9" width="8" best-possible-match="TGACATGT"/>
+<motif name="M0546_1.02" alt="ZK337.2" width="8" best-possible-match="CGTGGGCG"/>
+<motif name="M0547_1.02" alt="syd-9" width="8" best-possible-match="GTACAGTA"/>
+<motif name="M0574_1.02" alt="ztf-11" width="8" best-possible-match="AAAGTTTG"/>
+<motif name="M0575_1.02" alt="mex-6" width="10" best-possible-match="TAATAATAAA"/>
+<motif name="M0579_1.02" alt="Y48G1C.6" width="10" best-possible-match="AACTTGCAGC"/>
+<motif name="M0584_1.02" alt="cey-1" width="9" best-possible-match="TAAGATAGA"/>
+<motif name="M0586_1.02" alt="ceh-48" width="9" best-possible-match="AATCGATAA"/>
+<motif name="M0616_1.02" alt="Y75B8A.6" width="7" best-possible-match="TTGCGGA"/>
+<motif name="M0622_1.02" alt="dmd-4" width="10" best-possible-match="ATGTATCAAT"/>
+<motif name="M0623_1.02" alt="mab-23" width="8" best-possible-match="AATTTTAT"/>
+<motif name="M0624_1.02" alt="C34D1.1" width="8" best-possible-match="AATGTTTC"/>
+<motif name="M0639_1.02" alt="dmd-5" width="10" best-possible-match="ACTGTATCAA"/>
+<motif name="M0640_1.02" alt="dmd-6" width="10" best-possible-match="AAATGTTACA"/>
+<motif name="M0642_1.02" alt="T22H9.4" width="10" best-possible-match="TGTTGAAAAT"/>
+<motif name="M0643_1.02" alt="dmd-3" width="8" best-possible-match="AATGTTTC"/>
+<motif name="M0644_1.02" alt="mab-3" width="10" best-possible-match="AATGTTGCGA"/>
+<motif name="M0645_1.02" alt="Y67D8A.3" width="6" best-possible-match="AAAGGT"/>
+<motif name="M0674_1.02" alt="efl-2" width="10" best-possible-match="TTGGCGCGCT"/>
+<motif name="M0687_1.02" alt="(tag-97)_(Mus_musculus)_(DBD_0.51)" width="10" best-possible-match="ACCCGGAAGT"/>
+<motif name="M0689_1.02" alt="(ast-1)_(Mus_musculus)_(DBD_0.59)" width="10" best-possible-match="AACCGGAAGT"/>
+<motif name="M0701_1.02" alt="(ets-4)_(Mus_musculus)_(DBD_0.61)" width="10" best-possible-match="AACCGGATGT"/>
+<motif name="M0706_1.02" alt="(C24A1.2)_(Mus_musculus)_(DBD_0.74)" width="10" best-possible-match="AACCGGAAGT"/>
+<motif name="M0712_1.02" alt="F19F10.1" width="9" best-possible-match="ACCGGAAGT"/>
+<motif name="M0715_1.02" alt="(fkh-6)_(Caenorhabditis_briggsae)_(DBD_0.49)" width="8" best-possible-match="GTAAACAA"/>
+<motif name="M0717_1.02" alt="(fkh-7)_(Homo_sapiens)_(DBD_0.74)" width="8" best-possible-match="GTAAACAA"/>
+<motif name="M0739_1.02" alt="let-381" width="8" best-possible-match="ATAAACAA"/>
+<motif name="M0741_1.02" alt="fkh-9" width="10" best-possible-match="ATAAAAACAA"/>
+<motif name="M0742_1.02" alt="lin-31" width="11" best-possible-match="ATGTAAACAAA"/>
+<motif name="M0748_1.02" alt="daf-16" width="10" best-possible-match="TTGTAAACAA"/>
+<motif name="M0772_1.02" alt="elt-7" width="12" best-possible-match="TCTGATAACAAT"/>
+<motif name="M0786_1.02" alt="elt-6" width="8" best-possible-match="CTGATAAG"/>
+<motif name="M0787_1.02" alt="end-1" width="10" best-possible-match="ACAGATAAGG"/>
+<motif name="M0788_1.02" alt="end-3" width="10" best-possible-match="AGAGATAAGA"/>
+<motif name="M0789_1.02" alt="med-2" width="10" best-possible-match="TGTATACTTT"/>
+<motif name="M0856_1.02" alt="ceh-52" width="9" best-possible-match="ATAACTCTA"/>
+<motif name="M0857_1.02" alt="C07E3.6" width="10" best-possible-match="AGTAATTAAG"/>
+<motif name="M0858_1.02" alt="ceh-53" width="8" best-possible-match="TTAATCCC"/>
+<motif name="M0859_1.02" alt="ceh-34" width="10" best-possible-match="TTGATACCTT"/>
+<motif name="M0860_1.02" alt="ceh-5" width="9" best-possible-match="GCTAATTAC"/>
+<motif name="M0861_1.02" alt="nsy-7" width="8" best-possible-match="TTAAGGTA"/>
+<motif name="M0862_1.02" alt="ceh-36" width="8" best-possible-match="TTAATCCC"/>
+<motif name="M0863_1.02" alt="ceh-37" width="8" best-possible-match="TTAATCCC"/>
+<motif name="M0864_1.02" alt="pal-1" width="8" best-possible-match="GTAATAAA"/>
+<motif name="M0869_1.02" alt="(egl-5)_(Caenorhabditis_briggsae)_(DBD_0.98)" width="10" best-possible-match="TTAATGAGTT"/>
+<motif name="M0870_1.02" alt="(dsc-1)_(Caenorhabditis_briggsae)_(DBD_0.91)" width="10" best-possible-match="ACTAATTAGT"/>
+<motif name="M0871_1.02" alt="(irx-1)_(Caenorhabditis_briggsae)_(DBD_0.93)" width="8" best-possible-match="ATTACATG"/>
+<motif name="M0883_1.02" alt="(ceh-10)_(Danio_rerio)_(DBD_0.81)" width="11" best-possible-match="ACTAATTAATT"/>
+<motif name="M0884_1.02" alt="(unc-4)_(Danio_rerio)_(DBD_0.74)" width="10" best-possible-match="ATTGTACAAT"/>
+<motif name="M0889_1.02" alt="(ttx-3)_(Homo_sapiens)_(DBD_0.89)" width="10" best-possible-match="TACTAATTAG"/>
+<motif name="M0892_1.02" alt="(ceh-2)_(Homo_sapiens)_(DBD_0.82)" width="10" best-possible-match="CCTAATTACC"/>
+<motif name="M0900_1.02" alt="(ceh-17)_(Homo_sapiens)_(DBD_0.70)" width="8" best-possible-match="TTAATTAG"/>
+<motif name="M0903_1.02" alt="(mab-5)_(Mus_musculus)_(DBD_0.75)" width="7" best-possible-match="TAATGGC"/>
+<motif name="M0904_1.02" alt="(php-3)_(Mus_musculus)_(DBD_0.70)" width="9" best-possible-match="TTTATTACC"/>
+<motif name="M0910_1.02" alt="(ceh-43)_(Mus_musculus)_(DBD_0.77)" width="9" best-possible-match="ATAATTGCT"/>
+<motif name="M0919_1.02" alt="(ttx-1)_(Mus_musculus)_(DBD_0.81)" width="8" best-possible-match="TTAATCCC"/>
+<motif name="M0923_1.02" alt="(alr-1)_(Mus_musculus)_(DBD_0.75)" width="8" best-possible-match="GCTAATTA"/>
+<motif name="M0928_1.02" alt="(ceh-8)_(Mus_musculus)_(DBD_0.74)" width="7" best-possible-match="TAATTAG"/>
+<motif name="M0931_1.02" alt="(lin-11)_(Mus_musculus)_(DBD_0.96)" width="9" best-possible-match="TAATTAATT"/>
+<motif name="M0937_1.02" alt="(ceh-32)_(Mus_musculus)_(DBD_0.88)" width="7" best-possible-match="TGATACC"/>
+<motif name="M0940_1.02" alt="(vab-15)_(Mus_musculus)_(DBD_0.84)" width="8" best-possible-match="ACCAATTA"/>
+<motif name="M0941_1.02" alt="(unc-30)_(Mus_musculus)_(DBD_0.84)" width="9" best-possible-match="TTAATCCCC"/>
+<motif name="M0952_1.02" alt="(ceh-33)_(Mus_musculus)_(DBD_0.78)" width="8" best-possible-match="TGATACCC"/>
+<motif name="M0960_1.02" alt="(lim-6)_(Mus_musculus)_(DBD_0.82)" width="8" best-possible-match="TTAATTAA"/>
+<motif name="M0961_1.02" alt="(ceh-31)_(Mus_musculus)_(DBD_0.81)" width="9" best-possible-match="CTAATTGGT"/>
+<motif name="M0971_1.02" alt="(unc-42)_(Mus_musculus)_(DBD_0.72)" width="8" best-possible-match="ATAATTGA"/>
+<motif name="M0982_1.02" alt="(ceh-13)_(Mus_musculus)_(DBD_0.72)" width="9" best-possible-match="TTAATTACC"/>
+<motif name="M0991_1.02" alt="(lim-7)_(Mus_musculus)_(DBD_0.79)" width="7" best-possible-match="TTAATTG"/>
+<motif name="M0999_1.02" alt="(cog-1)_(Mus_musculus)_(DBD_0.74)" width="9" best-possible-match="ATTAATTAC"/>
+<motif name="M1017_1.02" alt="(ceh-16)_(Mus_musculus)_(DBD_0.79)" width="8" best-possible-match="GCTAATTA"/>
+<motif name="M1039_1.02" alt="(ceh-1)_(Mus_musculus)_(DBD_0.86)" width="9" best-possible-match="GCTAATTGG"/>
+<motif name="M1043_1.02" alt="(mls-2)_(Mus_musculus)_(DBD_0.77)" width="10" best-possible-match="TTAATTGGTT"/>
+<motif name="M1050_1.02" alt="(ceh-20)_(Mus_musculus)_(DBD_0.88)" width="9" best-possible-match="CACATCAAA"/>
+<motif name="M1054_1.02" alt="(tab-1)_(Mus_musculus)_(DBD_0.88)" width="9" best-possible-match="TTAATTGGT"/>
+<motif name="M1085_1.02" alt="ceh-19" width="9" best-possible-match="TTAATTGGT"/>
+<motif name="M1086_1.02" alt="ceh-22" width="8" best-possible-match="GCACTTAA"/>
+<motif name="M1087_1.02" alt="ceh-24" width="9" best-possible-match="ACCACTTAA"/>
+<motif name="M1096_1.02" alt="(ceh-45)_(Drosophila_melanogaster)_(DBD_0.74)" width="8" best-possible-match="TTAATCCC"/>
+<motif name="M1109_1.02" alt="vab-7" width="8" best-possible-match="CTAATTAA"/>
+<motif name="M1110_1.02" alt="pha-2" width="10" best-possible-match="TAGCAATAGA"/>
+<motif name="M1118_1.02" alt="ceh-90" width="9" best-possible-match="CTTAAAACC"/>
+<motif name="M1119_1.02" alt="R06F6.6" width="10" best-possible-match="AGTAATTACT"/>
+<motif name="M1122_1.02" alt="T13C5.4" width="9" best-possible-match="TTAATTGGT"/>
+<motif name="M1123_1.02" alt="unc-62" width="9" best-possible-match="ACCTGTCAT"/>
+<motif name="M1128_1.02" alt="ceh-51" width="9" best-possible-match="AGCAATTAA"/>
+<motif name="M1142_1.02" alt="ZC123.3" width="11" best-possible-match="AATTAATTAGA"/>
+<motif name="M1143_1.02" alt="lim-4" width="9" best-possible-match="GCTAATTAA"/>
+<motif name="M1144_1.02" alt="ceh-23" width="10" best-possible-match="GACTAATTAA"/>
+<motif name="M1223_1.02" alt="(vab-3)_(Mus_musculus)_(DBD_0.93)" width="8" best-possible-match="TTAATTAG"/>
+<motif name="M1225_1.02" alt="eyg-1" width="9" best-possible-match="GATAATTGG"/>
+<motif name="M1226_1.02" alt="(ceh-6)_(Wuchereria_bancrofti)_(DBD_0.89)" width="8" best-possible-match="CTAATTAA"/>
+<motif name="M1229_1.02" alt="unc-86" width="8" best-possible-match="ATATGCAT"/>
+<motif name="M1244_1.02" alt="ceh-18" width="8" best-possible-match="TGCATAAT"/>
+<motif name="M1251_1.02" alt="hsf-1" width="8" best-possible-match="TTCTAGAA"/>
+<motif name="M1279_1.02" alt="C01G12.1" width="10" best-possible-match="TAACCGGTTA"/>
+<motif name="M1288_1.02" alt="T07C12.11" width="9" best-possible-match="CTTACGTAA"/>
+<motif name="M1289_1.02" alt="ZC416.1" width="8" best-possible-match="TTCCGCGT"/>
+<motif name="M1296_1.02" alt="unc-120" width="9" best-possible-match="CCTTATATG"/>
+<motif name="M1422_1.02" alt="(nhr-23)_(Aedes_aegypti)_(DBD_0.91)" width="7" best-possible-match="TGACCTC"/>
+<motif name="M1424_1.02" alt="nhr-154" width="10" best-possible-match="AATTGGTGCC"/>
+<motif name="M1425_1.02" alt="nhr-42" width="10" best-possible-match="ATTGTAACCT"/>
+<motif name="M1426_1.02" alt="nhr-46" width="9" best-possible-match="TTGATCTTT"/>
+<motif name="M1427_1.02" alt="nhr-168" width="10" best-possible-match="AATTGTTCTC"/>
+<motif name="M1428_1.02" alt="(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)" width="8" best-possible-match="TTGTGTCC"/>
+<motif name="M1431_1.02" alt="(unc-55)_(Danio_rerio)_(DBD_0.77)" width="9" best-possible-match="GTGACCTCT"/>
+<motif name="M1438_1.02" alt="(nhr-41)_(Mus_musculus)_(DBD_0.71)" width="10" best-possible-match="CGTGACCTTT"/>
+<motif name="M1450_1.02" alt="(nhr-6)_(Mus_musculus)_(DBD_0.76)" width="8" best-possible-match="TGACCTTT"/>
+<motif name="M1460_1.02" alt="nhr-36" width="10" best-possible-match="TTTGCTTCCG"/>
+<motif name="M1461_1.02" alt="daf-12" width="10" best-possible-match="TTTGCACTTT"/>
+<motif name="M1462_1.02" alt="nhr-177" width="8" best-possible-match="ATTCTCGA"/>
+<motif name="M1463_1.02" alt="nhr-182" width="10" best-possible-match="TTTTGTGTCC"/>
+<motif name="M1465_1.02" alt="sex-1" width="8" best-possible-match="TTGACCTT"/>
+<motif name="M1466_1.02" alt="nhr-142" width="8" best-possible-match="TTGTGACT"/>
+<motif name="M1467_1.02" alt="nhr-7" width="9" best-possible-match="TTGATCTTT"/>
+<motif name="M1468_1.02" alt="nhr-34" width="10" best-possible-match="TTTGATCTTT"/>
+<motif name="M1471_1.02" alt="(nhr-67)_(Drosophila_melanogaster)_(DBD_0.75)" width="12" best-possible-match="AAATTGACCTCA"/>
+<motif name="M1472_1.02" alt="(fax-1)_(Drosophila_pseudoobscura)_(DBD_0.89)" width="8" best-possible-match="TTGATCTC"/>
+<motif name="M1473_1.02" alt="nhr-3" width="10" best-possible-match="ATTGATCTTT"/>
+<motif name="M1474_1.02" alt="nhr-49" width="9" best-possible-match="TTGATCTCA"/>
+<motif name="M1476_1.02" alt="nhr-204" width="10" best-possible-match="TATTGGTCAC"/>
+<motif name="M1477_1.02" alt="nhr-1" width="8" best-possible-match="AGTGATCA"/>
+<motif name="M1478_1.02" alt="nhr-84" width="10" best-possible-match="TTTGTGACTA"/>
+<motif name="M1479_1.02" alt="nhr-66" width="10" best-possible-match="ATTGTGTAGT"/>
+<motif name="M1480_1.02" alt="nhr-216" width="9" best-possible-match="GTTCTGACC"/>
+<motif name="M1481_1.02" alt="odr-7" width="11" best-possible-match="TAATTGTAGTA"/>
+<motif name="M1482_1.02" alt="(nhr-79)_(Caenorhabditis_briggsae)_(DBD_0.86)" width="8" best-possible-match="GTGTAGCC"/>
+<motif name="M1483_1.02" alt="nhr-65" width="12" best-possible-match="AAATTTGTGTTC"/>
+<motif name="M1484_1.02" alt="nhr-232" width="9" best-possible-match="TTTGTGACT"/>
+<motif name="M1485_1.02" alt="nhr-145" width="8" best-possible-match="TTTGTGTC"/>
+<motif name="M1486_1.02" alt="nhr-86" width="8" best-possible-match="GTGTAGTC"/>
+<motif name="M1487_1.02" alt="nhr-122" width="10" best-possible-match="ATTGGAGTCT"/>
+<motif name="M1488_1.02" alt="nhr-70" width="10" best-possible-match="TTTGTAGCCT"/>
+<motif name="M1489_1.02" alt="nhr-5" width="12" best-possible-match="ATGTGTACTTTC"/>
+<motif name="M1498_1.02" alt="egl-38" width="11" best-possible-match="ACCGTGATCAC"/>
+<motif name="M1500_1.02" alt="npax-1" width="10" best-possible-match="ACTGGAACAG"/>
+<motif name="M1501_1.02" alt="pax-2" width="10" best-possible-match="ACGCGTGACG"/>
+<motif name="M1511_1.02" alt="mbr-1" width="10" best-possible-match="TTGGCCCCCC"/>
+<motif name="M1514_1.02" alt="ceh-26" width="10" best-possible-match="TTTAAGAAAT"/>
+<motif name="M1534_1.02" alt="daf-19" width="10" best-possible-match="CATAGCAACC"/>
+<motif name="M1542_1.02" alt="tag-347" width="10" best-possible-match="TTAATATTAA"/>
+<motif name="M1574_1.02" alt="sma-4" width="11" best-possible-match="AGTGTCTGGAC"/>
+<motif name="M1577_1.02" alt="sem-2" width="10" best-possible-match="AAAAACAATG"/>
+<motif name="M1599_1.02" alt="(sox-3)_(Mus_musculus)_(DBD_0.93)" width="9" best-possible-match="ATTGTTTTT"/>
+<motif name="M1609_1.02" alt="egl-13" width="10" best-possible-match="AAAACAATAG"/>
+<motif name="M1610_1.02" alt="gei-3" width="8" best-possible-match="TCATTCAT"/>
+<motif name="M1611_1.02" alt="pop-1" width="10" best-possible-match="CCTTTGTTGT"/>
+<motif name="M1623_1.02" alt="(tbx-2)_(Nasonia_vitripennis)_(DBD_0.69)" width="8" best-possible-match="TCACACCT"/>
+<motif name="M1624_1.02" alt="tbx-38" width="10" best-possible-match="AAGGTGTGAA"/>
+<motif name="M1631_1.02" alt="(mab-9)_(Mus_musculus)_(DBD_0.62)" width="10" best-possible-match="AAGGTGTGAA"/>
+<motif name="M1635_1.02" alt="tbx-43" width="10" best-possible-match="AAGGTGTGAA"/>
+<motif name="M1636_1.02" alt="tbx-33" width="9" best-possible-match="ATCTTCACA"/>
+<motif name="M1637_1.02" alt="tbx-39" width="12" best-possible-match="TGTACCAAGTTA"/>
+<motif name="M1638_1.02" alt="tbx-40" width="11" best-possible-match="TGTACCAAGTT"/>
+<motif name="M1641_1.02" alt="(tbp-1)_(Mus_musculus)_(DBD_0.82)" width="7" best-possible-match="ATATAAA"/>
+<motif name="M1672_1.02" alt="athp-1" width="10" best-possible-match="AAATTAATTT"/>
+<motif name="M1884_1.02" alt="(mef-2)_(Homo_sapiens)_(DBD_0.94)" width="15" best-possible-match="AGCTAAAAATAGCAT"/>
+<motif name="M2005_1.02" alt="(ceh-9)_(Drosophila_melanogaster)_(DBD_0.81)" width="7" best-possible-match="TTAATTG"/>
+<motif name="M2032_1.02" alt="(ceh-12)_(Drosophila_melanogaster)_(DBD_0.72)" width="7" best-possible-match="GTAATTA"/>
+<motif name="M2067_1.02" alt="lin-14" width="6" best-possible-match="GTGTTC"/>
+<motif name="M2286_1.02" alt="(nhr-64)_(Homo_sapiens)_(DBD_0.70)" width="15" best-possible-match="TGGACTTTGAACTCT"/>
+<motif name="M2331_1.02" alt="blmp-1" width="11" best-possible-match="AAAAGTGAAAA"/>
+<motif name="M2333_1.02" alt="dpy-27" width="16" best-possible-match="TTATCGCGCAGGGAGA"/>
+<motif name="M2334_1.02" alt="efl-1" width="15" best-possible-match="CGCGCGCGCGAAATT"/>
+<motif name="M2335_1.02" alt="elt-3" width="8" best-possible-match="TGATAAGA"/>
+<motif name="M2337_1.02" alt="gei-11" width="12" best-possible-match="GTGTCGGCCGCT"/>
+<motif name="M2339_1.02" alt="pha-4" width="10" best-possible-match="AAAGTAAACA"/>
+<motif name="M2372_1.02" alt="(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)" width="11" best-possible-match="CGCGCTGAGCC"/>
+<motif name="M4709_1.02" alt="mdl-1" width="8" best-possible-match="GTCACGTG"/>
+<motif name="M4713_1.02" alt="elt-1" width="11" best-possible-match="GATAAGCATCT"/>
+<motif name="M4715_1.02" alt="egl-27" width="8" best-possible-match="CTGATAAG"/>
+<motif name="M4716_1.02" alt="lin-39" width="8" best-possible-match="CATCAATC"/>
+<motif name="M4717_1.02" alt="ceh-28" width="8" best-possible-match="AATCGATA"/>
+<motif name="M4719_1.02" alt="nhr-25" width="8" best-possible-match="TGACCTTG"/>
+<motif name="M4840_1.02" alt="(Y38H8A.5)_(Drosophila_melanogaster)_(DBD_0.81)" width="11" best-possible-match="AAATGAGCAAC"/>
+<motif name="M4937_1.02" alt="(nhr-85)_(Drosophila_melanogaster)_(DBD_0.79)" width="11" best-possible-match="TGACCCACATA"/>
+<motif name="M4966_1.02" alt="(hlh-13)_(Drosophila_melanogaster)_(DBD_0.66)" width="11" best-possible-match="TGACAGGTGTT"/>
+<motif name="M5158_1.02" alt="(pax-1)_(Drosophila_melanogaster)_(DBD_0.75)" width="19" best-possible-match="CAAAAGCAATCAACCGTGA"/>
+<background source="02_output/dineen_SET6_peaks/background">
+<value letter="A">0.325</value>
+<value letter="C">0.175</value>
+<value letter="G">0.175</value>
+<value letter="T">0.325</value>
+</background>
+<cisml-file>cisml.xml</cisml-file>
+</fimo>
