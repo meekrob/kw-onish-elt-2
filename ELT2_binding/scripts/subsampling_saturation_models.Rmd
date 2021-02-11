@@ -1,0 +1,154 @@
+---
+title: "read subsampling"
+author: "Deekrob"
+date: "10/9/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r }
+
+##        ##
+##        ##
+##   LE   ##
+##        ##
+##        ##
+
+read.table(textConnection("
+ 2 1121
+ 2.5 1484 
+ 3 1744 
+ 3.5 1919 
+ 4 2138
+ 4.5 2356 
+ 5 2662
+ 5.5 2734
+ 6 3057
+ 6.5 3177 
+ 8.799602  3906 
+   ")) -> LE.df
+colnames(LE.df) <- c("depth_millions","intervals_called")
+# fit exponential model
+# initial parameters
+theta.0 <- max(LE.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=LE.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+model <- nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = LE.df, start = start)
+summary(model)
+fitted_alpha = coef(model)['alpha']
+fitted_beta = coef(model)['beta']
+fitted_theta = coef(model)['theta']
+theoretical_95 = .95 * fitted_theta
+sequencing_depth_for_95 = log((theoretical_95-fitted_theta)/fitted_alpha)/fitted_beta
+
+
+
+plot(LE.df$depth_millions, LE.df$intervals_called,main="LE Sequencing Depth Saturation Curve", ylim=c(0,6800),xlim=c(1,10),xlab="Millions of reads aligned",ylab="Reproducible Peaks Called")
+lines(seq(1,12,by=.5), predict(model, list(depth_millions= seq(1,12,by=.5))), col = 'skyblue', lwd = 3)
+abline(h=coef(model)['theta'], lty=3, col='grey')
+points(LE.df[11,],pch="x")
+text(5,1250, pos=4,
+  sprintf("observed called peaks: %d\n %.1f%% of theoretical maximum",
+          LE.df[11,2], 
+          100* LE.df[11,2]/coef(model)['theta']),
+  cex=.9
+)
+points(4.8,1300,pch="x")
+points(4.8,1300)
+
+points(4.8,600)
+text(5,500, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+
+
+##        ##
+##        ##
+##   L1   ##
+##        ##
+##        ##
+(L1.df=data.frame( depth_millions=c(seq(2,6.5,by=.5),7.081766), intervals_called=c(1860,1970,2274,2278,2436,2626,2600,2667,2638,2784,2815)))
+
+# fit exponential model
+# initial parameters
+theta.0 <- max(L1.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=L1.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+model <- nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = L1.df, start = start)
+summary(model)
+
+
+plot(L1.df$depth_millions, L1.df$intervals_called,main="L1 Sequencing Depth Saturation Curve", ylim=c(0,3000),xlim=c(1,10),xlab="Millions of reads aligned",ylab="Reproducible Peaks Called")
+lines(seq(1,12,by=.5), predict(model, list(depth_millions= seq(1,12,by=.5))), col = 'skyblue', lwd = 3)
+abline(h=coef(model)['theta'], lty=3, col='grey')
+points(L1.df[11,],pch="x")
+text(5,1250, pos=4,
+  sprintf("observed called peaks: %d\n %.1f%% of theoretical maximum",
+          L1.df[11,2], 
+          100* L1.df[11,2]/coef(model)['theta']),
+  cex=.9
+)
+points(4.8,1300,pch="x")
+points(4.8,1300)
+
+points(4.8,600)
+text(5,500, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+
+
+##        ##
+##        ##
+##   L3   ##
+##        ##
+##        ##
+
+read.table(textConnection("
+2 7409 L3_2M.narrowPeak
+2.5 7749 L3_2.5M.narrowPeak
+3 8366 L3_3M.narrowPeak
+3.5 8640 L3_3.5M.narrowPeak
+4 9059 L3_4M.narrowPeak
+4.5 9283 L3_4.5M.narrowPeak
+5 9564 L3_5M.narrowPeak
+5.5 9710 L3_5.5M.narrowPeak
+6 9847 L3_6M.narrowPeak 
+6.5 10151 L3_6.5M.narrowPeak
+6.780756 10144 L3.narrowPeak
+  ")) -> L3.df
+colnames(L3.df) <- c("depth_millions","intervals_called","filename")
+
+ # fit exponential model
+# initial parameters
+theta.0 <- max(L3.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=L3.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+model <- nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = L3.df, start = start)
+summary(model)
+
+
+plot(L3.df$depth_millions, L3.df$intervals_called,main="L3 Sequencing Depth Saturation Curve", ylim=c(0,11000),xlim=c(1,10),xlab="Millions of reads aligned",ylab="Reproducible Peaks Called")
+lines(seq(1,12,by=.5), predict(model, list(depth_millions= seq(1,12,by=.5))), col = 'skyblue', lwd = 3)
+abline(h=coef(model)['theta'], lty=3, col='grey')
+points(L3.df[11,],pch="x")
+text(5,3500, pos=4,
+  sprintf("observed called peaks: %d\n %.1f%% of theoretical maximum",
+          L3.df[11,2], 
+          100* L3.df[11,2]/coef(model)['theta']),
+  cex=.9
+)
+points(4.8,4000,pch="x")
+points(4.8,4000)
+
+points(4.8,2000)
+text(5,2100, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+```
+

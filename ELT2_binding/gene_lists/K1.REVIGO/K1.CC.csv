@@ -1,0 +1,8 @@
+term_ID,description,frequency,plot_X,plot_Y,plot_size,log10 p-value,uniqueness,dispensability,representative,eliminated
+GO:0005576,"extracellular region",2.375%, 3.695, 4.290,5.369,-2.1135,0.701,0.000,5576,0
+GO:0005604,"basement membrane",0.041%, 3.662,-4.207,3.610,-2.3872,0.695,0.000,5604,0
+GO:0005747,"mitochondrial respiratory chain complex I",0.040%,-5.771,-1.132,3.592,-1.5768,0.385,0.000,5747,0
+GO:1990047,"spindle matrix",0.001%,-5.071, 4.539,1.881,-1.4089,0.515,0.224,1990047,0
+GO:0005796,"Golgi lumen",0.003%,-4.012, 0.897,2.441,-1.4089,0.450,0.240,5796,0
+GO:0071203,"WASH complex",0.016%,-4.802,-4.288,3.204,-1.4089,0.499,0.310,71203,0
+GO:0005760,"gamma DNA polymerase complex",0.008%,-5.984, 0.304,2.875,-1.4089,0.389,0.504,5760,0

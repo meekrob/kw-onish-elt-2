@@ -1,0 +1,15 @@
+###### BEGIN R SCRIPT #######
+# Command "make_bigWigCorrelate_pheatmapRscript.bash LE_input.bw LE_1.bw LE_2.bw L1_input.bw L1_1.bw L1_2.bw L3_input.bw L3_1.bw L3_2.bw"
+require(stringr)
+require(pheatmap)
+k=c(0.7738, 0.750221, 0.913165, 0.756966, 0.667626, 0.648481, 0.638949, 0.823581, 0.820008, 0.596177, 0.565443, 0.794202, 0.794696, 0.526245, 0.929187, 0.731392, 0.62647, 0.609012, 0.636516, 0.536025, 0.477932, 0.320234, 0.644227, 0.654906, 0.299823, 0.832948, 0.876977, 0.275548, 0.273892, 0.612252, 0.624012, 0.267264, 0.797901, 0.837079, 0.240646, 0.97418)
+# load values as an upper triangular matrix
+kmx = matrix(1, 9,9)
+kmx[upper.tri(kmx, diag = F)] <- k
+kmx = kmx * t(kmx) # use the identity in the lower triangle to reflect the upper triangle
+#rcnames=str_split("LE_input.bw LE_1.bw LE_2.bw L1_input.bw L1_1.bw L1_2.bw L3_input.bw L3_1.bw L3_2.bw", ' ')[[1]]
+rcnames=c("LE (input)","LE (rep. 1)","LE (rep. 2)","L1 (input)", "L1 (rep. 1)", "L1 (rep. 2)","L3 (input)","L3 (rep. 1)", "L3 (rep. 2)")
+rownames(kmx)<-rcnames
+colnames(kmx)<-rcnames
+pheatmap(kmx,main="modENCODE")
+###### END R SCRIPT #######
