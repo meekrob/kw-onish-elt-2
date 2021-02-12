@@ -1,0 +1,27 @@
+<tool id="Phasogram" name="Make phasogram" version="1.0.0">
+  <description>of dyads</description>
+  <command interpreter="bash">galaxyToolRunner.sh nucleosomes.Phasogram -i $input -m $max -o $output</command>
+  <inputs>
+    <param name="input" type="data" format="bigwig,wig" label="Dyads (Big)Wig file" />
+    <param name="max" type="integer" value="1000" label="Maximum phase shift (bp)" />
+  </inputs>
+  <outputs>
+    <data name="output" format="tabular" />
+  </outputs>
+  
+  <help>
+
+This tool calculates the phase distribution of sequencing data. It can be used to identify genome-wide periodicities. Phase counts are aggregated for each base pair across the genome. This is equivalent to summing the autocovariance of a sliding window across the genome. The tool is a reimplementation of the algorithm described in (Valouev et al. 2011).
+
+.. class:: infomark
+
+**TIP:** If your dataset does not appear in the pulldown menu, it means that it is not in Wig or BigWig format. Use "edit attributes" to set the correct format if it was not detected correctly.
+
+-----
+
+**Citation**
+
+Valouev A, Johnson SM, Boyd SD, Smith CL, Fire AZ and Sidow A (2011) Determinants of nucleosome organization in primary human cells. Nature 474: 516–520
+
+  </help>
+</tool>

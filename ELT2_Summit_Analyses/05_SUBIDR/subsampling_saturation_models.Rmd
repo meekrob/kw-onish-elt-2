@@ -1,0 +1,218 @@
+---
+title: "read subsampling"
+author: "Deekrob"
+date: "10/9/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(stringr)
+library(reshape2)
+library(ggplot2)
+```
+
+## R Markdown
+```{r base-data}
+# via  wc -l {LE,L1,L3}.narrowPeak in 05_IDR
+3889 -> LE_npeaks
+5063 -> L1_npeaks
+10342 -> L3_npeaks
+
+# via for fname in {LE,L1,L3}_{1,2}.bam; do echo -n "$fname  <- "; samtools view -c $fname; done
+# in 03_ALIGN
+LE_1.bam  <- 11609553
+LE_2.bam  <- 9576959
+L1_1.bam  <- 35002087
+L1_2.bam  <- 24742945
+L3_1.bam  <- 10259451
+L3_2.bam  <- 9484677
+
+LE.reads = mean(c(LE_1.bam,LE_2.bam))
+L1.reads = mean(c(L1_1.bam,L1_2.bam))
+L3.reads = mean(c(L3_1.bam,L3_2.bam))
+```
+
+```{r LE-simulation}
+
+##        ##
+##        ##
+##   LE   ##
+##        ##
+##        ##
+LE_df = data.frame()
+for (pct in seq(30,95,by=5)) {
+  fname = sprintf("LE_%d.narrowPeak",pct)
+  cmd = sprintf("wc -l %s", fname)
+  np = as.integer(str_split(system(cmd,intern=T), " ")[[1]][1])
+  LE_df = rbind(LE_df, data.frame(frac=pct/100,nreads=round(LE.reads*(pct/100)), npeaks=np))
+}
+LE_df = rbind( data.frame(frac=1, nreads=LE.reads, npeaks=LE_npeaks), LE_df)
+
+LE.df = data.frame(depth_millions=LE_df$nreads/1e6, intervals_called=LE_df$npeaks)
+
+# fit exponential model
+# initial parameters
+theta.0 <- max(LE.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=LE.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+tryCatch({
+  model=nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = LE.df, start = start)
+    summary(model)
+  fitted_alpha = coef(model)['alpha']
+  fitted_beta = coef(model)['beta']
+  fitted_theta = coef(model)['theta']
+  theoretical_95 = .95 * fitted_theta
+  sequencing_depth_for_95 = log((theoretical_95-fitted_theta)/fitted_alpha)/fitted_beta
+},
+         error=function(cond) {print("could not fit exponential curve");
+                               print(cond)})
+
+
+model.LE = lm(intervals_called ~ depth_millions, data=LE.df)
+
+plot(LE.df$depth_millions, LE.df$intervals_called,main="LE Sequencing Depth Saturation Curve",xlab="Millions of reads aligned",ylab="Reproducible Peaks Called")
+
+lines(seq(1,12,by=.5), predict(model.LE, list(depth_millions= seq(1,12,by=.5))), col = 'skyblue', lwd = 3)
+#abline(h=coef(model.LE.0)['theta'], lty=3, col='grey')
+points(LE.df[1,],pch="x")
+text(7.9,1650, pos=4,
+  sprintf("observed called peaks: %d\n (can't fit exponential)",
+          LE.df[1,2]),
+  cex=.9
+)
+points(7.9,1700,pch="x")
+points(7.9,1700)
+
+points(7.9,1700)
+text(7.9,900, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+
+```
+
+```{r L1-simulation}
+
+##        ##
+##        ##
+##   L1   ##
+##        ##
+##        ##
+L1_df = data.frame()
+for (pct in seq(30,95,by=5)) {
+  fname = sprintf("L1_%d.narrowPeak",pct)
+  print(fname)
+  cmd = sprintf("wc -l %s", fname)
+  np = as.integer(str_split(system(cmd,intern=T), " ")[[1]][1])
+  L1_df = rbind(L1_df, data.frame(frac=pct/100,nreads=round(L1.reads*(pct/100)), npeaks=np))
+}
+L1_df = rbind( data.frame(frac=1, nreads=L1.reads, npeaks=L1_npeaks), L1_df)
+
+L1.df = data.frame(depth_millions=L1_df$nreads/1e6, intervals_called=L1_df$npeaks)
+
+# fit exponential model
+# initial parameters
+theta.0 <- max(L1.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=L1.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+model.L1 <- nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = L1.df, start = start)
+summary(model.L1)
+
+
+plot(L1.df$depth_millions, L1.df$intervals_called,main="L1 Sequencing Depth Saturation Curve", 
+     ylim=c(0,  coef(model.L1)['theta'] + 100),
+     xlim=c(1,30),
+     xlab="Millions of reads aligned",
+     ylab="Reproducible Peaks Called")
+lines(seq(1,30,by=.5), predict(model.L1, list(depth_millions= seq(1,30,by=.5))), col = 'skyblue', lwd = 3)
+abline(h=coef(model.L1)['theta'], lty=3, col='grey')
+points(L1.df[1,],pch="x")
+text(5,1250, pos=4,
+  sprintf("observed called peaks: %d\n %.1f%% of theoretical maximum",
+          L1.df[1,2], 
+          100* L1.df[1,2]/coef(model.L1)['theta']),
+  cex=.9
+)
+# points(4.8,1300,pch="x")
+# points(4.8,1300)
+# 
+# points(4.8,600)
+text(5,500, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+```
+
+```{r L3-simulation}
+
+##        ##
+##        ##
+##   L3   ##
+##        ##
+##        ##
+L3_df = data.frame()
+for (pct in seq(30,95,by=5)) {
+  fname = sprintf("L3_%d.narrowPeak",pct)
+  print(fname)
+  cmd = sprintf("wc -l %s", fname)
+  np = as.integer(str_split(system(cmd,intern=T), " ")[[1]][1])
+  L3_df = rbind(L3_df, data.frame(frac=pct/100,nreads=round(L3.reads*(pct/100)), npeaks=np))
+}
+L3_df = rbind( data.frame(frac=1, nreads=L3.reads, npeaks=L3_npeaks), L3_df)
+
+L3.df = data.frame(depth_millions=L3_df$nreads/1e6, intervals_called=L3_df$npeaks)
+
+ # fit exponential model
+# initial parameters
+theta.0 <- max(L3.df$intervals_called) * 1.1
+model.0 <- lm(log(- intervals_called + theta.0) ~ depth_millions, data=L3.df)
+alpha.0 <- -exp(coef(model.0)[1])
+beta.0 <- coef(model.0)[2]
+start <- list(alpha = alpha.0, beta = beta.0, theta = theta.0)
+model.L3 <- nls(intervals_called ~ alpha * exp(beta * depth_millions) + theta , data = L3.df, start = start)
+summary(model.L3)
+
+
+plot(L3.df$depth_millions, L3.df$intervals_called,main="L3 Sequencing Depth Saturation Curve", ylim=c(0,11000),xlim=c(1,11),xlab="Millions of reads aligned",ylab="Reproducible Peaks Called")
+lines(seq(1,11,by=.5), predict(model.L3, list(depth_millions= seq(1,11,by=.5))), col = 'skyblue', lwd = 3)
+abline(h=coef(model.L3)['theta'], lty=3, lwd=2,col='grey')
+points(L3.df[1,],pch="x")
+text(5,3500, pos=4,
+  sprintf("observed called peaks: %d\n %.1f%% of theoretical maximum",
+          L3.df[1,2], 
+          100* L3.df[1,2]/coef(model.L3)['theta']),
+  cex=.9
+)
+points(4.8,4000,pch="x")
+points(4.8,4000)
+
+points(4.8,2000)
+text(5,2100, pos=4, sprintf("peak calling/IDR after \nsubsampling"),cex=.9)
+```
+```{r all-in-one}
+df = data.frame(frac=LE_df$frac)
+df$LE.predict = predict(model.LE, list(depth_millions=LE_df$nreads/1e6))
+df$L1.predict = predict(model.L1, list(depth_millions=L1_df$nreads/1e6))
+df$L3.predict = predict(model.L3, list(depth_millions=L3_df$nreads/1e6))
+
+df_plottable = data.frame(frac.aligned=LE_df$frac)
+
+
+df_plottable$LE.predict.frac = df$LE.predict / (LE.df$intervals_called[1])
+df_plottable$L1.predict.frac = df$L1.predict / (L1.df$intervals_called[1])
+df_plottable$L3.predict.frac = df$L3.predict / (L3.df$intervals_called[1])
+df_plottable$LE.IDR.frac = LE.df$intervals_called / (LE.df$intervals_called[1])
+df_plottable$L1.IDR.frac = L1.df$intervals_called / (L1.df$intervals_called[1])
+df_plottable$L3.IDR.frac = L3.df$intervals_called / (L3.df$intervals_called[1])
+
+
+ggplot(df_plottable, aes(x=frac.aligned,y=LE.IDR.frac)) + 
+  geom_point(color="purple") + 
+  geom_line(aes(x=frac.aligned,y=LE.predict.frac),color="purple") +
+  geom_line(aes(x=frac.aligned,y=L1.predict.frac), color="green") + 
+  geom_point(aes(x=frac.aligned,y=L1.IDR.frac),color="green") +
+  geom_hline(yintercept = coef(model.L1)['theta']/L1.df$intervals_called[1], color="green") +
+  geom_line(aes(x=frac.aligned,y=L3.predict.frac), color="orange") + 
+  geom_point(aes(x=frac.aligned,y=L3.IDR.frac),color="orange") +
+  geom_hline(yintercept = coef(model.L3)['theta']/L3.df$intervals_called[1], color="orange") +
+  xlim(c(0.2,1.5)) + ylim(c(0,1.2))
+```

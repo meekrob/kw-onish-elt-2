@@ -1,0 +1,43 @@
+<tool id="BaseAlignCounts" name="Calculate coverage" version="2.0.0">
+  <description>of sequencing reads</description>
+  <command interpreter="bash">galaxyToolRunner.sh ngs.BaseAlignCounts -i $input -a ${chromInfo} -x $X -o $output</command>
+  <inputs>
+    <param name="input" type="data" format="sam,bam,bed,bedgraph" label="Sequencing reads" />
+    <param name="X" type="integer" value="-1" label="In silico extension (-1 for fragment length)" />
+  </inputs>
+  <outputs>
+    <data name="output" format="wig" />
+  </outputs>
+  <tests>
+  </tests>
+  <help>
+        
+This tool produces a new Wig file with the number of reads/intervals overlapping each base pair. Reads can be artificially extended to match known fragment lengths. If you wish to count the number of reads starting at each base pair, set the read extension to 1. If you wish to count the number of intervals overlapping each base pair, set the extension to -1.
+
+-----
+  
+.. class:: warningmark
+
+This tool requires sequencing reads in SAM, BAM, Bed, or BedGraph format. If you are artificially extending reads, ensure that the strand is set correctly in SAM, BAM, and Bed files.
+
+.. class:: warningmark
+
+Paired-end reads are considered to be the entire fragment (the distance from the 5' end of mate 1 to the 5' end of mate 2) if the extension is set to -1.
+
+.. class:: infomark
+
+If you would like to convert valued interval data (e.g. BedGraph files from microarrays) to Wig format, use the Converters -> Interval to Wig converter.
+
+.. class:: infomark
+
+**TIP:** If you are going to be using reads in SAM format for multiple analyses, it is often more efficient to first convert it into BAM format using NGS: SAM Tools -> SAM-to-BAM.
+
+-----
+
+**Syntax**
+
+- **Sequencing reads** are mapped reads from a high-throughput sequencing experiment.
+- **In silico extension:** Reads will be artificially extended from their 5' end to be this length.
+
+  </help>
+</tool>
