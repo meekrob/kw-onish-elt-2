@@ -1,4 +1,0 @@
-
-# FIMO (Find Individual Motif Occurrences): Version 5.1.1 compiled on May 28 2020 at 04:38:09
-# The format of this file is described at http://localhost:8080/doc/fimo-output-format.html.
-# fimo --parse-genomic-coord --verbosity 1 --oc 02_output/bound_ClassA_peaks/fimo_out_4 --bgfile 02_output/bound_ClassA_peaks/background --motif AAAATRT 02_output/bound_ClassA_peaks/dreme_out/dreme.xml 02_output/bound_ClassA_peaks/bound_ClassA_peaks.fasta

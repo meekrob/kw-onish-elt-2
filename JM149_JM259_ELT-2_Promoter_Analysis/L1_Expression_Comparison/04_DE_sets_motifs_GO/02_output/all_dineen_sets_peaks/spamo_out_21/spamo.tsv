@@ -1,9 +1,0 @@
-prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
-dreme.xml	TACBGTA	DREME-11	TACTGTA	Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	1	1	.	.	.	8.56e-01	1	0	4	52	2.70e-07	2.43e-06
-dreme.xml	TACBGTA	DREME-11	TACTGTA	Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	1	1	.	.	.	8.56e-01	1	4	4	52	4.04e-06	3.64e-05
-dreme.xml	TACBGTA	DREME-11	TACTGTA	Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	1	1	.	.	.	8.56e-01	1	5	4	52	4.04e-06	3.64e-05
-dreme.xml	TACBGTA	DREME-11	TACTGTA	Caenorhabditis_elegans	M0379_1.02	B0310.2	NTGAGGDWNN	1	4	.	.	.	6.15e+00	2	5	5	91	1.91e-06	1.71e-05
-
-# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
-# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
-# spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_21 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary TACBGTA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

@@ -1,9 +1,0 @@
-Query_ID	Target_ID	Optimal_offset	p-value	E-value	q-value	Overlap	Query_consensus	Target_consensus	Orientation
-TTATCR	M2335_1.02	2	5.83515e-07	0.000152881	0.000304953	6	TTATCA	TCTTATCA	-
-TTATCR	M4715_1.02	1	5.9383e-06	0.00155583	0.00155172	6	TTATCA	CTTATCAG	-
-TTATCR	M0772_1.02	4	1.3856e-05	0.00363027	0.00241377	6	TTATCA	ATTGTTATCAGA	-
-TTATCR	M0786_1.02	1	6.91077e-05	0.0181062	0.00902915	6	TTATCA	CTTATCAG	-
-
-# Tomtom (Motif Comparison Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:17
-# The format of this file is described at http://localhost:8080/doc/tomtom-output-format.html.
-# tomtom -verbosity 1 -oc 02_output/bound_ClassA_peaks/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/bound_ClassA_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

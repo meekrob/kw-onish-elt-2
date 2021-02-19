@@ -1,8 +1,0 @@
-term_ID,description,frequency,plot_X,plot_Y,plot_size,log10 p-value,uniqueness,dispensability,representative,eliminated
-GO:0005576,"extracellular region",4.393%,-4.947,-0.015,2.695,-1.5331,0.707,0.000,5576,0
-GO:0005882,"intermediate filament",0.169%, 3.805,-6.239,1.301,-2.3279,0.592,0.000,5882,0
-GO:0043235,"receptor complex",0.231%,-1.768, 5.253,1.431,-1.5935,0.695,0.000,43235,0
-GO:0045121,"membrane raft",0.701%,-3.051,-5.824,1.903,-5.2676,0.685,0.000,45121,0
-GO:0005764,"lysosome",0.852%, 5.108, 3.695,1.987,-2.2441,0.568,0.110,5764,0
-GO:0005938,"cell cortex",0.914%, 5.929, 0.811,2.017,-1.4510,0.524,0.280,5938,0
-GO:0098839,"postsynaptic density membrane",0.062%, 5.682,-3.060,0.903,-1.3893,0.527,0.310,98839,0

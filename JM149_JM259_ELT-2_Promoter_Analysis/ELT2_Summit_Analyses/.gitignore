@@ -1,7 +1,0 @@
-*.fastq
-*.bam
-*.bai
-*.out
-*.jobs.*
-*.png
-05_SUBIDR/

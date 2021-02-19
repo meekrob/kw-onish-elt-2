@@ -1,4 +1,0 @@
-###stage rep1 rep2 input
-#LE LE_1.fastq LE_2.fastq LE_input.fastq 
-L1 L1_1.fastq L1_2.fastq L1_input.fastq 
-#L3 L3_1.fastq L3_2.fastq L3_input.fastq 

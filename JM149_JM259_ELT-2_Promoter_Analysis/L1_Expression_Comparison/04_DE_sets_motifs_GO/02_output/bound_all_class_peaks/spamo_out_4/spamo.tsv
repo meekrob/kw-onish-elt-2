@@ -1,9 +1,0 @@
-prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
-Caenorhabditis_elegans	M0346_1.02	zip-3	RTGAYGTVA	Caenorhabditis_elegans	M0350_1.02	Y61A9LA.9	ATTTATTT	0	0	.	.	.	2.82e+00	118	2	9	735	8.94e-07	8.04e-06
-Caenorhabditis_elegans	M0346_1.02	zip-3	RTGAYGTVA	Caenorhabditis_elegans	M0616_1.02	Y75B8A.6	HHKCGGW	2	1	.	.	.	5.48e+00	54	0	8	625	1.70e-06	1.53e-05
-Caenorhabditis_elegans	M0346_1.02	zip-3	RTGAYGTVA	Caenorhabditis_elegans	M1438_1.02	(nhr-41)_(Mus_musculus)_(DBD_0.71)	NNTGACCYYD	2	1	.	.	.	6.76e+00	84	8	13	444	2.14e-06	1.93e-05
-Caenorhabditis_elegans	M0346_1.02	zip-3	RTGAYGTVA	Caenorhabditis_elegans	M1438_1.02	(nhr-41)_(Mus_musculus)_(DBD_0.71)	NNTGACCYYD	2	1	.	.	.	6.76e+00	84	5	9	444	3.59e-06	3.23e-05
-
-# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
-# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
-# spamo -verbosity 1 -oc 02_output/bound_all_class_peaks/spamo_out_4 -bgfile 02_output/bound_all_class_peaks/background -keepprimary -primary M0346_1.02 02_output/bound_all_class_peaks/bound_all_class_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/bound_all_class_peaks/meme_out/meme.xml 02_output/bound_all_class_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

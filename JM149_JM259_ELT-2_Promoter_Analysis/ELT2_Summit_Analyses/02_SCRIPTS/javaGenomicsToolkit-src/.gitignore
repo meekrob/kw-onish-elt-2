@@ -1,9 +1,0 @@
-bin
-build
-reports
-docs
-*.class
-*.log
-.DS_Store
-*.wig.idx
-*.tbi

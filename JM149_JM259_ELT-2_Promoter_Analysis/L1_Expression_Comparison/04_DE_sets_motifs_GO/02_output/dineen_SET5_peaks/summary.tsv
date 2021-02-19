@@ -1,7 +1,0 @@
-MOTIF_INDEX	MOTIF_SOURCE	MOTIF_ID	ALT_ID	CONSENSUS	WIDTH	SITES	E-VALUE	E-VALUE_SOURCE	MOST_SIMILAR_MOTIF_SOURCE	MOST_SIMILAR_MOTIF	URL
-1	MEME	TBYKYCTYVTTYTCT	MEME-1	TBYKYCTYVTTYTCT	15	73	1.3e-009	MEME	 	 	 
-2	MEME	GYWRRGRGCDGCGGBKCCGGC	MEME-2	GYWRRGRGCDGCGGBKCCGGC	21	7	1.2e-003	MEME	motif_databases/CIS-BP/Caenorhabditis_elegans.meme	M0491_1.02 (T22C8.4)	http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T061501_1.02
-
-# MEME-ChIP (Motif Analysis of Large Nucleotide Datasets): Version 5.1.1 released on Wed Jan 29 15:00:42 2020 -0800
-# The format of this file is described at http://localhost:8080/doc/meme-chip-output-format.html
-# meme-chip -oc 02_output/dineen_SET5_peaks -meme-p 24 -ccut 100 -fdesc description -order 1 -db motif_databases/CIS-BP/Caenorhabditis_elegans.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 01_input/dineen_SET5_peaks.fasta
