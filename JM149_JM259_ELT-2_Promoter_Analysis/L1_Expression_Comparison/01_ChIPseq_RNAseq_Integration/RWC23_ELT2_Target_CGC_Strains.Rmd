@@ -1,0 +1,174 @@
+---
+title: "RWC23_ELT2_Target_CGC_Strains"
+author: "RTPW"
+date: "9/13/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For this analysis to work the file `RWC23_ELT2_Regulated_Genes.Rmd` must be run
+
+# Fish out the genes that change the most and look for CGC stains
+
+
+```{r}
+cgc_strains <- readLines("./01_input/200608_cgc-strains.txt")
+
+cgc_strains <- str_trim(cgc_strains)
+head(cgc_strains, n = 40)
+
+total_strains <- sum(str_count(cgc_strains, pattern = "-----------------------------------------------------------------------------"))
+
+counter = 1
+cgc_strains_df <- data.frame(stringsAsFactors = FALSE)
+for (i in 1:(total_strains)){
+  to_append <- data.frame(string = str_c(c(cgc_strains[(counter+1):(counter+8)]), collapse = "\t"), stringsAsFactors = FALSE)
+  cgc_strains_df <- bind_rows(cgc_strains_df, to_append)
+  counter <- counter + 9
+}
+
+# cgc_strains_list <- str_split(cgc_strains_df$string, pattern = "\t")
+# 
+# str(cgc_strains_list)
+# cgc_strains_df$string[str_detect(cgc_strains_df$string, pattern = "elt-2")]
+```
+
+Set up quick and dirty way to cross-reference the CGC list to ELT-2/ELT-7 differential expression list. Prioritize genes with high variance between the different elt-2/elt-7 deletion genotypes. Spot check the strains on CGC to ensure they are protein::GFP worms and nothing extra. Also visualize the gene on the genome browser to see RNA changes.
+
+```{r}
+variance_per_gene <-  as.data.frame(matrix_select(dynamic_counts_matrix, l1_bound_list$WBGeneID)) %>% rownames_to_column(var = "WBGeneID") %>% 
+    merge(bound_only_sets, by = "WBGeneID") %>% 
+    pivot_longer(wt_sorted_1:elt2Delt7D_sorted_3, names_to = "sample", values_to = "rlogCount") %>%
+    group_by(WBGeneID, set) %>%
+    summarise(variance = var(rlogCount))
+
+paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+variance_per_gene <- getBM(
+  mart = paramart,
+  filter = c("wbps_gene_id"),
+  value = variance_per_gene$WBGeneID,
+  attributes = c('wbps_gene_id', 'external_gene_id')
+) %>% inner_join(variance_per_gene, by = c("wbps_gene_id" = "WBGeneID"))
+
+variance_per_gene %>% mutate(cgc_count = 
+                               sum(str_count(cgc_strains_df$string, pattern = "gfp"))
+                             ) %>% arrange(desc(cgc_count))
+
+cgc_count_column <- c()
+for (i in variance_per_gene$external_gene_id){
+  cgc_count_column <- append(cgc_count_column, sum(str_count(cgc_strains_df$string, pattern = paste(i, "(?![:digit:])", sep = "")
+                                                             )))
+}
+
+variance_per_gene <- variance_per_gene %>% mutate(cgc_count = cgc_count_column)
+variance_per_gene%>% head
+```
+
+SET descriptions do not apply now, sets changed with rematting of L1 peaks to genes
+<!-- SET1 genes are up in wildtype but down in elt-2 (-) and do not change with elt-7 (-) single or double. In other words, activated alone by ELT-2 -->
+
+```{r}
+variance_per_gene %>% filter(set == "SET1") %>% arrange(desc(variance))
+```
+
+```{r}
+variance_per_gene %>% filter(set == "SET1", external_gene_id == "ets-4")
+```
+SET1 strains to order: OP509 (ets-4).  
+
+
+strain CL2122 (mtl-2)
+
+<!-- SET2 genes go up only in elt-2 (-) -->
+
+```{r}
+variance_per_gene %>% filter(set == "SET2") %>% arrange(desc(variance)) %>% filter(cgc_count > 1)
+```
+
+SET2 options:
+
+OP563	C. elegans	unc-119(tm4063) III; wgIs563. Hide Description
+wgIs563 [cebp-1::TY1::EGFP::3xFLAG + unc-119(+)]. TY1::EGFP::3xFLAG tag inserted in frame at C-terminus of coding sequence by recombineering. Expression of transgene confirmed by GFP. References: Sarov M, et al. Nat Methods (2006) 10:839-44. Zhong, M, et al. PLoS Genet (2010) 6(2):e1000848. Strain was constructed as part of the Regulatory Element Project, part of modENCODE (http://www.modencode.org).
+
+NK2422	C. elegans	him-4(qy33[him-4::mNG+loxP]) X. Hide Description
+Superficially wild-type. CRISPR/Cas9 insertion of mNeonGreen. Insertion site verified by PCR and sequencing.
+
+
+SET2 genes to order: 
+
+<!-- SET3 genes go up in elt-2 (-) and go up a little higher in elt-2 (-);elt-7 (-) -->
+
+```{r}
+variance_per_gene %>% filter(set == "SET3") %>% arrange(desc(variance))
+```
+
+```{r}
+variance_per_gene %>% filter(set == "SET3", external_gene_id == "pqm-1")
+```
+
+
+SET3 order: OP201 (pqm-1)
+
+<!-- SET4 genes only go down in elt-2 (-);elt-7 (-) -->
+
+```{r}
+variance_per_gene %>% filter(set == "SET4") %>% arrange(desc(variance))
+```
+
+```{r}
+variance_per_gene %>% filter(set == "SET4", external_gene_id == "mtl-2")
+```
+
+
+SET4 cgc strain: CL2122 (mtl-2)
+
+Make a plot with these genes annotated.  
+
+"cebp-1", "him-4"
+
+```{r}
+sapply(c(1:nrow(genes_to_test)),
+       function(x){which(rownames(dynamic_counts_matrix_scaled_bound_only) == genes_to_test$wbps_gene_id[x])}
+)
+
+```
+
+
+```{r}
+library(dplyr)
+genes_to_test <- variance_per_gene %>% filter(external_gene_id %in% c("ets-4", "cebp-1", "mtl-2", "pqm-1", "zip-10")) %>% dplyr::select(wbps_gene_id, external_gene_id)
+
+Ha_bound_only_test_gene <- Ha_bound_only +
+  rowAnnotation(foo = anno_mark(
+    at = sapply(c(1:nrow(genes_to_test)),
+                function(x) {
+                  which(
+                    rownames(dynamic_counts_matrix_scaled_bound_only) == genes_to_test$wbps_gene_id[x]
+                  )
+                }),
+    labels = genes_to_test$external_gene_id
+  ))
+
+Ha_bound_only_test_gene
+
+pdf(file = "./03_plots/16_ELT2_DE_Genes_ELT2bound_Test_Genes_Annotated_20-12-11.pdf", width = 5, height = 5)
+Ha_bound_only_test_gene
+dev.off()
+```
+
+```{r}
+write_csv(
+  (variance_per_gene %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/all_DE_genes.csv")
+write_csv(
+  (variance_per_gene %>% filter(set == "SET1") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set1_DE_genes.csv")
+write_csv(
+  (variance_per_gene %>% filter(set == "SET2") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set2_DE_genes.csv")
+write_csv(
+  (variance_per_gene %>% filter(set == "SET3") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set3_DE_genes.csv")
+write_csv(
+  (variance_per_gene %>% filter(set == "SET4") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set4_DE_genes.csv")
+```
+

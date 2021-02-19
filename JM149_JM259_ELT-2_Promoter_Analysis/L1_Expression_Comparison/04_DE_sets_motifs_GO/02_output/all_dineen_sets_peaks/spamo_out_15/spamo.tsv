@@ -1,0 +1,13 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	dreme.xml	TACBGTA	DREME-11	TACTGTA	0	0	.	.	.	2.45e-01	137	1	5	92	7.60e-08	6.84e-07
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	dreme.xml	TACBGTA	DREME-11	TACTGTA	0	0	.	.	.	2.45e-01	137	4	5	92	2.15e-06	1.93e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	dreme.xml	TACBGTA	DREME-11	TACTGTA	0	0	.	.	.	2.45e-01	137	6	5	92	2.15e-06	1.93e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	Caenorhabditis_elegans	M1463_1.02	nhr-182	DWBYGTGTCC	3	0	.	.	.	5.93e+00	2	8	20	945	1.86e-06	1.68e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	Caenorhabditis_elegans	M4715_1.02	egl-27	YTGATAAG	0	0	.	.	.	7.17e+00	45	3	9	828	2.27e-06	2.05e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	Caenorhabditis_elegans	M0169_1.02	hlh-27	GACAYGCG	0	0	.	.	.	7.44e+00	5	2	8	637	2.36e-06	2.12e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	Caenorhabditis_elegans	M0586_1.02	ceh-48	DWYCRATAN	2	1	.	.	.	7.45e+00	83	5	7	235	2.33e-06	2.10e-05
+Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	Caenorhabditis_elegans	M0384_1.02	odd-2	MCRGTAGCN	0	1	.	.	.	9.30e+00	102	6	9	430	2.96e-06	2.66e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_15 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0674_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

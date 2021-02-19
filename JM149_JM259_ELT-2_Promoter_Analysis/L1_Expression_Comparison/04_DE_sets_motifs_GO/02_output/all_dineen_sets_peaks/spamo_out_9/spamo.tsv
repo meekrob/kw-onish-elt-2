@@ -1,0 +1,38 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	meme.xml	TTCTTATCART	MEME-1	TTCTTATCART	1	0	.	.	.	1.70e-02	15	8	32	1464	5.39e-09	4.85e-08
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	meme.xml	TTCTTATCART	MEME-1	TTCTTATCART	1	0	.	.	.	1.70e-02	15	5	21	1464	1.53e-08	1.37e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	meme.xml	TTCTTATCART	MEME-1	TTCTTATCART	1	0	.	.	.	1.70e-02	15	7	20	1464	6.32e-08	5.69e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	meme.xml	TTCTTATCART	MEME-1	TTCTTATCART	1	0	.	.	.	1.70e-02	15	3	13	1464	3.82e-07	3.44e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TTCTTATCART	MEME-1	1.79e+00	17	8	31	1784	5.53e-07	4.97e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TTCTTATCART	MEME-1	1.79e+00	17	6	20	1784	7.81e-07	7.03e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TTCTTATCART	MEME-1	1.79e+00	17	7	20	1784	7.81e-07	7.03e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0786_1.02	elt-6	VTGATAAN	1	1	Caenorhabditis_elegans	TTCTTATCART	MEME-1	1.79e+00	17	2	13	1784	2.26e-06	2.03e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0387_1.02	ztf-3	TGTGTGTG	0	0	.	.	.	5.19e-02	0	0	15	1523	1.62e-08	1.46e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0387_1.02	ztf-3	TGTGTGTG	0	0	.	.	.	5.19e-02	0	8	31	1523	2.94e-08	2.65e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0387_1.02	ztf-3	TGTGTGTG	0	0	.	.	.	5.19e-02	0	5	20	1523	9.31e-08	8.38e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0387_1.02	ztf-3	TGTGTGTG	0	0	.	.	.	5.19e-02	2	0	13	1523	5.01e-07	4.51e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1483_1.02	nhr-65	NDATTTGTGTYN	2	2	Caenorhabditis_elegans	M0387_1.02	ztf-3	1.91e-01	3	5	20	1479	5.97e-08	5.37e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1483_1.02	nhr-65	NDATTTGTGTYN	2	2	Caenorhabditis_elegans	M0387_1.02	ztf-3	1.91e-01	3	0	14	1479	6.63e-08	5.97e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1483_1.02	nhr-65	NDATTTGTGTYN	2	2	Caenorhabditis_elegans	M0387_1.02	ztf-3	1.91e-01	1	0	13	1479	3.67e-07	3.30e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	Caenorhabditis_elegans	M0387_1.02	ztf-3	3.43e-01	0	5	21	1700	1.06e-07	9.53e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	Caenorhabditis_elegans	M0387_1.02	ztf-3	3.43e-01	2	5	19	1700	1.36e-06	1.23e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	Caenorhabditis_elegans	M0387_1.02	ztf-3	3.43e-01	0	0	13	1700	1.37e-06	1.24e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	Caenorhabditis_elegans	M0387_1.02	ztf-3	3.43e-01	0	8	28	1700	3.89e-06	3.50e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0772_1.02	elt-7	NCTGATAACDNN	2	3	.	.	.	9.55e-02	17	6	23	1837	2.97e-08	2.67e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0772_1.02	elt-7	NCTGATAACDNN	2	3	.	.	.	9.55e-02	17	2	14	1837	7.26e-07	6.53e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0772_1.02	elt-7	NCTGATAACDNN	2	3	.	.	.	9.55e-02	17	8	31	1837	1.11e-06	9.99e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	dreme.xml	STTATCR	DREME-1	CTTATCA	0	0	dreme.xml	M0772_1.02	elt-7	1.95e+00	17	5	15	1035	6.09e-07	5.48e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	dreme.xml	STTATCR	DREME-1	CTTATCA	0	0	dreme.xml	M0772_1.02	elt-7	1.95e+00	17	3	10	1035	2.06e-06	1.86e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M2335_1.02	elt-3	TGATAAGA	0	0	.	.	.	9.97e-02	17	6	21	1552	3.12e-08	2.81e-07
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M2335_1.02	elt-3	TGATAAGA	0	0	.	.	.	9.97e-02	17	2	14	1552	1.16e-07	1.04e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M2335_1.02	elt-3	TGATAAGA	0	0	.	.	.	9.97e-02	17	8	27	1552	2.67e-06	2.41e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	3	2	.	.	.	4.91e-01	11	8	33	1856	1.50e-07	1.35e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	3	2	.	.	.	4.91e-01	11	4	20	1856	1.25e-06	1.12e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M0674_1.02	efl-2	DDBGCGSGBN	3	2	.	.	.	4.91e-01	10	5	19	1856	4.03e-06	3.62e-05
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	dreme.xml	BTGATAR	DREME-2	BTGATAA	0	0	.	.	.	1.13e+00	16	6	18	1390	3.53e-07	3.18e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	dreme.xml	BTGATAR	DREME-2	BTGATAA	0	0	.	.	.	1.13e+00	16	2	12	1390	9.62e-07	8.65e-06
+Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	Caenorhabditis_elegans	M1438_1.02	(nhr-41)_(Mus_musculus)_(DBD_0.71)	NNTGACCYYD	2	1	.	.	.	9.98e+00	61	2	9	870	3.16e-06	2.84e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_9 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M1428_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

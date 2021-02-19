@@ -1,0 +1,47 @@
+<tool id="WigSubtract" name="Subtract" version="1.1.0">
+  <description>two (Big)Wig files</description>
+  <command interpreter="bash">galaxyToolRunner.sh wigmath.Subtract -m $minuend -s $subtrahend -o $output</command>
+  <inputs>
+    <param format="bigwig,wig" name="minuend" type="data" label="File 1 (minuend / top)" />
+    <param format="bigwig,wig" name="subtrahend" type="data" label="File 2 (subtrahend / bottom)" />
+  </inputs>
+  <outputs>
+    <data format="wig" name="output" metadata_source="minuend" />
+  </outputs>
+  <tests>
+    <!--<test>
+	    <param name="minuend" value="wigmath.input1"/>
+	    <param name="subtrahend" value="wigmath.input2"/>
+	    <param name="dbkey" value="sacCer2"/>
+	    <output name="output" file="difference.output"/>
+	  </test>
+	  <test>
+	    <param name="minuend" value="wigmath.input1.bw"/>
+	    <param name="subtrahend" value="wigmath.input2"/>
+	    <param name="dbkey" value="sacCer2"/>
+	    <output name="output" file="difference.output"/>
+	  </test>
+	  <test>
+	    <param name="minuend" value="wigmath.input1"/>
+	    <param name="subtrahend" value="wigmath.input2.bw"/>
+	    <param name="dbkey" value="sacCer2"/>
+	    <output name="output" file="difference.output"/>
+	  </test>
+	  <test>
+	    <param name="minuend" value="wigmath.input1.bw"/>
+	    <param name="subtrahend" value="wigmath.input2.bw"/>
+	    <param name="dbkey" value="sacCer2"/>
+	    <output name="output" file="difference.output"/>
+	  </test>-->
+  </tests>
+  
+  <help>
+    
+This tool will subtract the values in one Wig file from another, base pair by base pair.
+    
+.. class:: infomark
+
+**TIP:** If your dataset does not appear in the pulldown menu, it means that it is not in Wig or BigWig format. Use "edit attributes" to set the correct format if it was not detected correctly.
+    
+  </help>
+</tool>

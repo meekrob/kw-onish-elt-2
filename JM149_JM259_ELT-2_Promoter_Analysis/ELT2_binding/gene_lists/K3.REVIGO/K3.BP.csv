@@ -1,0 +1,35 @@
+term_ID,description,frequency,plot_X,plot_Y,plot_size,log10 p-value,uniqueness,dispensability,representative,eliminated
+GO:0008286,"insulin receptor signaling pathway",0.203%,-0.090,-5.342,1.301,-1.4153,0.736,0.000,8286,0
+GO:0043401,"steroid hormone mediated signaling pathway",2.939%,null,null,2.441,-1.5669,0.711,0.681,8286,1
+GO:0035196,"production of miRNAs involved in gene silencing by miRNA",0.139%,null,null,1.146,-1.6817,0.539,0.788,8286,1
+GO:0006412,"translation",3.709%,-5.127, 3.097,2.542,-6.5086,0.672,0.018,6412,0
+GO:0006334,"nucleosome assembly",0.235%, 0.382, 6.505,1.362,-3.2007,0.730,0.019,6334,0
+GO:0051123,"RNA polymerase II transcriptional preinitiation complex assembly",0.224%,null,null,1.342,-2.5243,0.612,0.815,6334,1
+GO:0006607,"NLS-bearing protein import into nucleus",0.086%, 5.848,-3.409,0.954,-1.6811,0.856,0.028,6607,0
+GO:0006606,"protein import into nucleus",0.449%,null,null,1.633,-1.4116,0.851,0.863,6607,1
+GO:0008340,"determination of adult lifespan",2.373%, 5.502, 2.430,2.348,-3.6576,0.832,0.038,8340,0
+GO:0046716,"muscle cell cellular homeostasis",0.053%, 3.773,-1.065,0.778,-2.2154,0.846,0.070,46716,0
+GO:0000727,"double-strand break repair via break-induced replication",0.053%,-4.623,-1.919,0.778,-2.1018,0.639,0.190,727,0
+GO:0007212,"dopamine receptor signaling pathway",0.203%,-4.619,-5.231,1.301,-1.8492,0.800,0.194,7212,0
+GO:0007041,"lysosomal transport",0.096%, 5.012,-4.407,1.000,-1.6807,0.915,0.200,7041,0
+GO:0070536,"protein K63-linked deubiquitination",0.021%,-2.874, 7.069,0.477,-1.6811,0.849,0.217,70536,0
+GO:0046686,"response to cadmium ion",0.192%, 1.575,-6.126,1.279,-2.1029,0.851,0.255,46686,0
+GO:0040034,"regulation of development, heterochronic",0.182%, 4.538, 3.876,1.255,-1.3792,0.828,0.271,40034,0
+GO:0030866,"cortical actin cytoskeleton organization",0.107%, 0.878, 7.190,1.041,-1.6811,0.803,0.319,30866,0
+GO:0042594,"response to starvation",0.385%,-2.486,-5.866,1.568,-1.6304,0.815,0.327,42594,0
+GO:0000398,"mRNA splicing, via spliceosome",1.240%,-6.297, 2.064,2.068,-3.5528,0.722,0.337,398,0
+GO:0000462,"maturation of SSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)",0.353%,null,null,1.531,-2.4089,0.623,0.598,398,1
+GO:0000028,"ribosomal small subunit assembly",0.128%,null,null,1.114,-2.0670,0.776,0.836,398,1
+GO:0045944,"positive regulation of transcription from RNA polymerase II promoter",2.084%,-4.210, 1.496,2.292,-2.0487,0.638,0.414,45944,0
+GO:0045727,"positive regulation of translation",0.171%,null,null,1.230,-1.4166,0.649,0.701,45944,1
+GO:1902975,"mitotic DNA replication initiation",0.011%,-6.667, 0.253,0.301,-1.6811,0.720,0.416,1902975,0
+GO:0006267,"pre-replicative complex assembly involved in nuclear cell cycle DNA replication",0.011%,null,null,0.301,-1.6811,0.613,0.787,1902975,1
+GO:0006123,"mitochondrial electron transport, cytochrome c to oxygen",0.096%,-5.818, 3.734,1.000,-1.6811,0.746,0.416,6123,0
+GO:0009792,"embryo development ending in birth or egg hatching",2.800%, 5.010, 2.638,2.420,-3.0969,0.831,0.438,9792,0
+GO:0045887,"positive regulation of synaptic growth at neuromuscular junction",0.096%, 2.453, 3.570,1.000,-1.4887,0.633,0.464,45887,0
+GO:0002119,"nematode larval development",4.468%, 5.259, 3.108,2.622,-1.6696,0.827,0.479,2119,0
+GO:0001732,"formation of cytoplasmic translation initiation complex",0.011%,-2.976, 4.335,0.301,-1.7359,0.644,0.508,1732,0
+GO:0034976,"response to endoplasmic reticulum stress",1.101%,-2.348,-5.140,2.017,-1.4887,0.747,0.510,34976,0
+GO:0006974,"cellular response to DNA damage stimulus",2.009%,null,null,2.276,-1.4195,0.739,0.730,34976,1
+GO:0071897,"DNA biosynthetic process",0.299%,-6.054, 0.934,1.462,-1.4872,0.716,0.520,71897,0
+GO:0031098,"stress-activated protein kinase signaling cascade",0.182%,-2.824,-4.785,1.255,-1.3880,0.732,0.568,31098,0

@@ -1,0 +1,51 @@
+# DREME 5.1.1
+#     command: dreme -verbosity 1 -oc 02_output/bound_ClassB_peaks/dreme_out -png -dna -p 02_output/bound_ClassB_peaks/seqs-centered -n 02_output/bound_ClassB_peaks/seqs-shuffled -e 0.05
+#   positives: 372 from 02_output/bound_ClassB_peaks/seqs-centered (Wed Dec 02 06:57:54 UTC 2020)
+#   negatives: 372 from 02_output/bound_ClassB_peaks/seqs-shuffled (Wed Dec 02 06:57:54 UTC 2020)
+#        host: shas0110.rc.int.colorado.edu
+#        when: Wed Dec 02 07:02:53 UTC 2020
+
+MEME version 5.1.1
+
+ALPHABET "DNA" DNA-LIKE
+A "Adenine" CC0000 ~ T "Thymine" 008000
+C "Cytosine" 0000CC ~ G "Guanine" FFB300
+N "Any base" = ACGT
+X = ACGT
+. = ACGT
+V "Not T" = ACG
+H "Not G" = ACT
+D "Not C" = AGT
+B "Not A" = CGT
+M "Amino" = AC
+R "Purine" = AG
+W "Weak" = AT
+S "Strong" = CG
+Y "Pyrimidine" = CT
+K "Keto" = GT
+U = T
+END ALPHABET
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.320 C 0.180 G 0.180 T 0.319
+
+
+MOTIF TGATAA DREME-1
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      TGATAA     TTATCA        167         34   1.1e-029   2.9e-025
+#           TGATAA     TTATCA        167         34   1.1e-029   2.9e-025
+
+letter-probability matrix: alength= 4 w= 6 nsites= 203 E= 2.9e-025
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+
+
+# Stopping reason: E-value threshold exceeded
+#    Running time: 5.35 seconds

@@ -1,0 +1,83 @@
+= Java Genomics Toolkit
+
+This is a collection of applications for genomics data processing, primarily high-throughput next-generation sequencing. There is a particular focus on processing data in Wiggle format, since many other tools already cover SAM, BAM, FastQ, etc. However, Wiggle/BigWig formats provide a compact way to store numerical data resulting from ChIP-seq and MNase-seq experiments. Common computations provided in this toolkit include adding, subtracting, dividing, multiplying, log-transforming, averaging, Z-scoring, and smoothing Wig files. There are also tools for processing MNase-seq (nucleosome) data, creating heatmap matrices, computing basic statistics on intervals in the genome, and KMeans clustering.
+
+All tools are designed to process data in pieces so that memory requirements never exceed ~1GB, regardless of genome size. Tools are intended to be modular, so that multiple tools can easily be strung together into ad hoc pipelines or workflows in Galaxy. For example, a common pipeline for our ChIP-seq experiments is: 1) map reads with bowtie, 2) calculate coverage of sequencing reads, 3) normalize by subtracting input, 4) Z-score the normalized coverage, 5) correlate replicates, 6) average multiple replicates, and 7) make a heatmap of the final result.
+
+https://preview.ibb.co/jjAtbQ/workflow.png
+
+Tools may be run from the command-line or from Galaxy (http://getgalaxy.org).
+
+This toolkit requires Java 7, available at http://www.oracle.com/technetwork/java/javase/downloads/index.html.
+
+== Available Tools
+
+For a list of available tools, see http://palpant.us/java-genomics-toolkit or search for java-genomics-toolkit in the Galaxy Tool Shed (http://toolshed.g2.bx.psu.edu) to see the tools in action.
+
+== Loading the Tools into Galaxy
+
+One-click installation is available for your local Galaxy instance through the Galaxy Tool Shed (http://toolshed.g2.bx.psu.edu).
+	
+Configuration files are provided for loading the applications into Galaxy manually. Unzip or check out the java-genomics-toolkit distribution into Galaxy's "tools" folder, and add the supplied toolConf entries to your toolConf.xml file.
+
+== Command-Line Usage
+
+Applications can be run on the command-line, and the toolRunner.sh script is provided for convenience. toolRunner.sh sets up the correct classpath and allows tools to be run using their short name (e.g. converters.IntervalToWig). Calling any script without arguments will display the help, as well as the missing mandatory arguments:
+
+  $ > ./toolRunner.sh wigmath.Add
+  $ Usage: <main class> [options] Input files
+  $   Options:
+  $   * -o, --output   Output file
+
+Mandatory arguments are denoted with a (*).
+
+Other tools require more input:
+
+  $ > ./toolRunner.sh ngs.Autocorrelation
+  $ Usage: <main class> [options]
+  $   Options:
+  $   * -i, --input    Input file
+  $   * -l, --loci     Genomic loci (Bed format)
+  $   -m, --max        Autocorrelation limit (bp)
+  $                    Default: 200
+  $   * -o, --output   Output file
+
+=== Log transform a Wig file with base 2
+
+  $ > ./toolRunner.sh wigmath.LogTransform --input input.wig --base 2 --output output.log2.wig
+
+=== List all available tools
+
+  $ > ./toolRunner.sh list
+  
+=== Downloading the toolkit
+
+The recommended way to download the toolkit is to checkout the source code with git:
+
+  $ > git clone https://github.com/timpalpant/java-genomics-toolkit.git
+  
+since then updates may be easily retrieved with
+
+  $ > git pull
+  
+To build the tools from source, call the ant build script
+
+  $ > ant
+  
+Precompiled binaries that include JRE7 and are ready-to-use are available for Linux i586 and x64 platforms from the downloads tab.
+
+== Adding new assemblies
+
+By default, java-genomics-toolkit loads assembly information from chromosome length files in the resources/assemblies directory (or from tool-data resources if loaded into Galaxy). If you would like to use assemblies that are not available, you can either specify the full path to a custom *.len file (see the examples in the resources directory for format), or you can copy your *.len file into the resources directory to refer to it by shortcut, e.g.
+
+  $ > ./toolRunner.sh ngs.BaseAlignCounts -i reads.bam -x 250 -a /path/to/my/sacCer4.len -o counts.wig
+  
+or
+
+  $ > ./toolRunner.sh ngs.BaseAlignCounts -i reads.bam -x 250 -a sacCer4 -o counts.wig
+  
+if sacCer4.len is available in the resources/assemblies/ directory.
+
+== Java Genomics IO
+
+Those wishing to write their own scripts may be interested in https://github.com/timpalpant/java-genomics-io, the toolkit upon which these applications are built.

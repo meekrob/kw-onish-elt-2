@@ -1,0 +1,2491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:cis="http://zlab.bu.edu/schema/cisml" xmlns:fimo="http://noble.gs.washington.edu/schema/cisml" xmlns:mem="http://noble.gs.washington.edu/meme">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>FIMO Results</title>
+<style type="text/css">
+td.left {text-align: left;}
+td.right {text-align: right; padding-right: 1cm;}
+</style>
+</head>
+<body color="#000000">
+<a name="top_buttons"></a>
+<hr>
+<table summary="buttons" align="left" cellspacing="0">
+<tr>
+<td bgcolor="#00FFFF"><a href="#database_and_motifs"><b>Database and Motifs</b></a></td>
+<td bgcolor="#DDFFDD"><a href="#sec_i"><b>High-scoring Motif Occurences</b></a></td>
+<td bgcolor="#DDDDFF"><a href="#debugging_information"><b>Debugging Information</b></a></td>
+<td bgcolor="#FFDD00"><a href="fimo.tsv""><b>Results in TSV Format</b></a></td>
+<td bgcolor="#FFDDFF"><a href="fimo.gff""><b>Results in GFF3 Format</b></a></td>
+</tr>
+</table>
+<br/>
+<br/>
+<hr/>
+<center><big><b>FIMO - Motif search tool</b></big></center>
+<hr>
+<p>
+FIMO version 5.1.1, (Release date: Wed Jan 29 15:00:42 2020 -0800)
+</p>
+<p>
+For further information on how to interpret these results please access <a href="http://localhost:8080/doc/fimo-output-format.html">http://localhost:8080/doc/fimo-output-format.html</a>.<br>
+To get a copy of the FIMO software please access <a href="http://meme-suite.org">http://meme-suite.org</a>
+
+</p>
+<p>If you use FIMO in your research, please cite the following paper:<br>
+Charles E. Grant, Timothy L. Bailey, and William Stafford Noble,
+"FIMO: Scanning for occurrences of a given motif",
+<i>Bioinformatics</i>, <b>27</b>(7):1017-1018, 2011.
+<a href="http://bioinformatics.oxfordjournals.org/content/27/7/1017">[full text]</a></p>
+<hr>
+<center><big><b><a name="database_and_motifs">DATABASE AND MOTIFS</a></b></big></center>
+<hr>
+<div style="padding-left: 0.75in; line-height: 1em; font-family: monospace;">
+<p>
+  DATABASE 02_output/bound_ClassB_peaks/bound_ClassB_peaks.fasta
+  <br />
+  Database contains 372 sequences, 186000 residues
+</p>
+<p>
+  MOTIFS 02_output/bound_ClassB_peaks/meme_out/meme.xml (DNA)
+  <table>
+    <thead>
+      <tr>
+        <th style="border-bottom: 1px dashed;">MOTIF</th>
+        <th style="border-bottom: 1px dashed; padding-left: 1em;">WIDTH</th>
+        <th style="border-bottom: 1px dashed; padding-left: 1em;text-align:left;" >
+         BEST POSSIBLE MATCH
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:right;">ACTGATAAGA</td>
+        <td style="text-align:right;padding-left: 1em;">10</td>
+        <td style="text-align:left;padding-left: 1em;">ACTGATAAGA</td>
+       </tr>
+      <tr>
+        <td style="text-align:right;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+        <td style="text-align:right;padding-left: 1em;">28</td>
+        <td style="text-align:left;padding-left: 1em;">AAGGAGAGAAAAGAAGAAAAAGAGAAAA</td>
+       </tr>
+      <tr>
+        <td style="text-align:right;">SGCAAASBSKGGVNRSAWCGCRGCWSTM</td>
+        <td style="text-align:right;padding-left: 1em;">28</td>
+        <td style="text-align:left;padding-left: 1em;">GGCAAACGCGGGATGGATCGCAGCAGTA</td>
+       </tr>
+    </tbody>
+  </table>
+</p>
+<p>
+Random model letter frequencies (02_output/bound_ClassB_peaks/background):
+<br/>
+
+A 0.323 C 0.177 G 0.177 T 0.323 </p>
+</div>
+<hr>
+<center><big><b><a name="sec_i">SECTION I: HIGH-SCORING MOTIF OCCURENCES</a></b></big></center>
+<hr>
+<ul>
+<li>
+There were 209 motif occurences with a p-value less than 0.0001.
+
+The full set of motif occurences can be seen in the
+TSV (tab-delimited values) output file
+<a href="fimo.tsv">fimo.tsv</a>, 
+the GFF3 file 
+<a href="fimo.gff">fimo.gff</a> 
+which may be suitable for uploading to the 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTables">UCSC Genome Table Browser</a>
+(assuming the FASTA input sequences included genomic coordinates in UCSC or Galaxy format),
+or the XML file 
+<a href="fimo.xml">fimo.xml</a>.
+</li>
+<li>
+The <i>p</i>-value of a motif occurrence is defined as the
+probability of a random sequence of the same length as the motif
+matching that position of the sequence with as good or better a score.
+</li>
+<li>
+The score for the match of a position in a sequence to a motif
+is computed by summing the appropriate entries from each column of
+the position-dependent scoring matrix that represents the motif.
+</li>
+<li>
+The q-value of a motif occurrence is defined as the
+false discovery rate if the occurrence is accepted as significant.
+</li>
+<li>The table is sorted by increasing <i>p</i>-value.</li>
+</ul>
+<table border="1">
+<thead>
+<tr>
+<th>Motif ID</th>
+<th>Alt ID</th>
+<th>Sequence Name</th>
+<th>Strand</th>
+<th>Start</th>
+<th>End</th>
+<th>p-value</th>
+<th>q-value</th>
+<th>Matched Sequence</th>
+</tr>
+</thead>
+<tbody>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07279</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">267</td>
+      <td style="text-align:left;">294</td>
+      <td style="text-align:left;">1.2e-12</td>
+      <td style="text-align:left;">4.05e-07</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGGGGAGAAAAGAAGAAATAGAGTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02156</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">229</td>
+      <td style="text-align:left;">256</td>
+      <td style="text-align:left;">9.33e-11</td>
+      <td style="text-align:left;">1.58e-05</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGGGGTGAAAAGAAGAAAAAAAGAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08517</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">247</td>
+      <td style="text-align:left;">274</td>
+      <td style="text-align:left;">6.55e-10</td>
+      <td style="text-align:left;">5.54e-05</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACGGACAGAAAAGTAGAAATAGATAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08518</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">262</td>
+      <td style="text-align:left;">289</td>
+      <td style="text-align:left;">6.55e-10</td>
+      <td style="text-align:left;">5.54e-05</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACGGACAGAAAAGTAGAAATAGATAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00969</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">215</td>
+      <td style="text-align:left;">242</td>
+      <td style="text-align:left;">1.75e-09</td>
+      <td style="text-align:left;">0.000119</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGAGGGAGGAAAAGAAATATAGAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09804</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">251</td>
+      <td style="text-align:left;">278</td>
+      <td style="text-align:left;">9.79e-09</td>
+      <td style="text-align:left;">0.000552</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAACGGGGAACAGACGCACAATAGCAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06129</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">213</td>
+      <td style="text-align:left;">240</td>
+      <td style="text-align:left;">2.31e-08</td>
+      <td style="text-align:left;">0.00111</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGGGGCGGAAAAGAAACAGAAGTTTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">208</td>
+      <td style="text-align:left;">235</td>
+      <td style="text-align:left;">4.98e-08</td>
+      <td style="text-align:left;">0.0021</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGGGGAGAAAAAGCGAAGAGCAGTGGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08598</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">248</td>
+      <td style="text-align:left;">275</td>
+      <td style="text-align:left;">7.73e-08</td>
+      <td style="text-align:left;">0.00291</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGCGCAGAAGACTAGAACAGTGGACAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08177</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">154</td>
+      <td style="text-align:left;">181</td>
+      <td style="text-align:left;">9.21e-08</td>
+      <td style="text-align:left;">0.00311</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGGGGGAAAGCAAGAAGAAGGTGAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07771</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">273</td>
+      <td style="text-align:left;">300</td>
+      <td style="text-align:left;">1.03e-07</td>
+      <td style="text-align:left;">0.00317</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGCAAGAAGAATGGAACAAGATAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06990</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">241</td>
+      <td style="text-align:left;">268</td>
+      <td style="text-align:left;">1.15e-07</td>
+      <td style="text-align:left;">0.00324</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGCAGGAGCAGAAGATGAGCAGAATA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07295</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">233</td>
+      <td style="text-align:left;">260</td>
+      <td style="text-align:left;">1.36e-07</td>
+      <td style="text-align:left;">0.00355</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGAGTGAGATGTGGCAAAAGGTAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak04294</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">267</td>
+      <td style="text-align:left;">294</td>
+      <td style="text-align:left;">1.52e-07</td>
+      <td style="text-align:left;">0.00367</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTGCGAAAGCGGCCGAAAAGGAGTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09835</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">220</td>
+      <td style="text-align:left;">247</td>
+      <td style="text-align:left;">2.95e-07</td>
+      <td style="text-align:left;">0.00573</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGGCATGAGCAAACGCAATAGTATAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03892</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">210</td>
+      <td style="text-align:left;">237</td>
+      <td style="text-align:left;">3.02e-07</td>
+      <td style="text-align:left;">0.00573</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGGCAGAGAAAACAAAAAGTGAGAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">244</td>
+      <td style="text-align:left;">271</td>
+      <td style="text-align:left;">3.05e-07</td>
+      <td style="text-align:left;">0.00573</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGAAGGAGAAGAAAAAAAGATGAAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02984</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">270</td>
+      <td style="text-align:left;">297</td>
+      <td style="text-align:left;">3.05e-07</td>
+      <td style="text-align:left;">0.00573</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATCCGGGAGAAGGCAGCCAAGAGAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10723</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">410</td>
+      <td style="text-align:left;">437</td>
+      <td style="text-align:left;">3.89e-07</td>
+      <td style="text-align:left;">0.00663</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGAGAGAGAAAAAGAGGAGAGAATCAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08747</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">236</td>
+      <td style="text-align:left;">263</td>
+      <td style="text-align:left;">3.92e-07</td>
+      <td style="text-align:left;">0.00663</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGCGATAAGAAGAAGAACTGGAAGCAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02298</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">360</td>
+      <td style="text-align:left;">387</td>
+      <td style="text-align:left;">4.98e-07</td>
+      <td style="text-align:left;">0.00794</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACCGAAAGCAATAGGAAAAGTTGGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09165</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">238</td>
+      <td style="text-align:left;">265</td>
+      <td style="text-align:left;">5.17e-07</td>
+      <td style="text-align:left;">0.00794</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGACGGAGAACAAGACCTACATAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10637</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">222</td>
+      <td style="text-align:left;">249</td>
+      <td style="text-align:left;">5.72e-07</td>
+      <td style="text-align:left;">0.00842</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCGACGGAAGAAAAGCAATGGGAGGTG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07677</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">208</td>
+      <td style="text-align:left;">235</td>
+      <td style="text-align:left;">7.52e-07</td>
+      <td style="text-align:left;">0.0106</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGCAGTGACAAGAATGAAAATAGTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08178</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">221</td>
+      <td style="text-align:left;">248</td>
+      <td style="text-align:left;">8.9e-07</td>
+      <td style="text-align:left;">0.0117</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAGACGGAGCAGTGGGTATAGGTGTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00970</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">262</td>
+      <td style="text-align:left;">289</td>
+      <td style="text-align:left;">8.96e-07</td>
+      <td style="text-align:left;">0.0117</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACACGAAAAAAGAAGAAATATGGGAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09011</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">239</td>
+      <td style="text-align:left;">266</td>
+      <td style="text-align:left;">1.09e-06</td>
+      <td style="text-align:left;">0.0137</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATCAGGGAAGAACATAAAAAGGTGGGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06936</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">210</td>
+      <td style="text-align:left;">237</td>
+      <td style="text-align:left;">1.26e-06</td>
+      <td style="text-align:left;">0.0152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTAGGTGAGTAGTAGAACAAGGGCTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06837</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">247</td>
+      <td style="text-align:left;">274</td>
+      <td style="text-align:left;">1.61e-06</td>
+      <td style="text-align:left;">0.0187</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGAGAGTGAAAAGAAGCAGACAACCGGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02931</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">225</td>
+      <td style="text-align:left;">252</td>
+      <td style="text-align:left;">1.72e-06</td>
+      <td style="text-align:left;">0.0187</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGGCGATGAGCAGGAGGATAAGTTCAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">398</td>
+      <td style="text-align:left;">425</td>
+      <td style="text-align:left;">1.72e-06</td>
+      <td style="text-align:left;">0.0187</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATCACTGTGCAAGAGAAAACGAGAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05087</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">147</td>
+      <td style="text-align:left;">174</td>
+      <td style="text-align:left;">1.84e-06</td>
+      <td style="text-align:left;">0.0195</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAACACAGAGAGGGGGAAGAACAACAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">78</td>
+      <td style="text-align:left;">105</td>
+      <td style="text-align:left;">1.93e-06</td>
+      <td style="text-align:left;">0.0198</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGACAAAAGAGACGAACAAAAAACAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03154</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">176</td>
+      <td style="text-align:left;">203</td>
+      <td style="text-align:left;">2.32e-06</td>
+      <td style="text-align:left;">0.0231</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATCCGGGAGAACTGGATCAGGACCGTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06874</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">256</td>
+      <td style="text-align:left;">283</td>
+      <td style="text-align:left;">2.41e-06</td>
+      <td style="text-align:left;">0.0233</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCACCCAGAGAGCACGCAGAGCACAGAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07378</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">91</td>
+      <td style="text-align:left;">118</td>
+      <td style="text-align:left;">2.5e-06</td>
+      <td style="text-align:left;">0.0235</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTGAGGAAAGAAAAGCAAAGGAAAATT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09267</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">217</td>
+      <td style="text-align:left;">244</td>
+      <td style="text-align:left;">2.58e-06</td>
+      <td style="text-align:left;">0.0236</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAAACAGAACACGGGATAAAGAGGGAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07769</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">189</td>
+      <td style="text-align:left;">216</td>
+      <td style="text-align:left;">2.74e-06</td>
+      <td style="text-align:left;">0.0242</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAACAATGAAAAGAGGCACAGAGAAGTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">86</td>
+      <td style="text-align:left;">113</td>
+      <td style="text-align:left;">2.85e-06</td>
+      <td style="text-align:left;">0.0242</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATGGAAAAGAAGAAGATATGGAAAATA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">190</td>
+      <td style="text-align:left;">217</td>
+      <td style="text-align:left;">2.94e-06</td>
+      <td style="text-align:left;">0.0242</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTGAGAGGGAAGGAAAAAAGGGGAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10637</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">343</td>
+      <td style="text-align:left;">370</td>
+      <td style="text-align:left;">2.94e-06</td>
+      <td style="text-align:left;">0.0242</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGACGAGGAAGAGACGGAGACAGCTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03587</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">130</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">3.1e-06</td>
+      <td style="text-align:left;">0.025</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGAAGGAGAAATCTCGAAAAAGAAGAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03452</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">404</td>
+      <td style="text-align:left;">431</td>
+      <td style="text-align:left;">3.38e-06</td>
+      <td style="text-align:left;">0.0266</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGACACAGAGATAAGAAACAATAGAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">215</td>
+      <td style="text-align:left;">242</td>
+      <td style="text-align:left;">3.48e-06</td>
+      <td style="text-align:left;">0.0267</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CATCCGAAAAGAGTAGAAAAATGACGTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">247</td>
+      <td style="text-align:left;">274</td>
+      <td style="text-align:left;">3.76e-06</td>
+      <td style="text-align:left;">0.0281</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAAGAGAAGGAGAAGAAAAAAAGATGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">310</td>
+      <td style="text-align:left;">337</td>
+      <td style="text-align:left;">3.83e-06</td>
+      <td style="text-align:left;">0.0281</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGCAAAAAGGAGAAAAAAAGAAAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09804</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">170</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">4.38e-06</td>
+      <td style="text-align:left;">0.0309</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CATGGGAAAACAGAAGAAAAGTGGATTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05284</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">216</td>
+      <td style="text-align:left;">243</td>
+      <td style="text-align:left;">4.49e-06</td>
+      <td style="text-align:left;">0.0309</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCGGGAGTGCAATAGAAAACCAATGTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06694</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">280</td>
+      <td style="text-align:left;">307</td>
+      <td style="text-align:left;">4.54e-06</td>
+      <td style="text-align:left;">0.0309</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGGACTGTCGAGGGGAAATGTGGTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08519</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">91</td>
+      <td style="text-align:left;">118</td>
+      <td style="text-align:left;">4.56e-06</td>
+      <td style="text-align:left;">0.0309</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACTCCCGAAGAAAAGGCAAAAAATTGGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07403</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">277</td>
+      <td style="text-align:left;">304</td>
+      <td style="text-align:left;">4.84e-06</td>
+      <td style="text-align:left;">0.0321</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGCACAGAAAAAAATAAAACAAAAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09834</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">458</td>
+      <td style="text-align:left;">485</td>
+      <td style="text-align:left;">4.95e-06</td>
+      <td style="text-align:left;">0.0322</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAACAGGGAGAAGCAAGAAAATGGGTAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10682</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">378</td>
+      <td style="text-align:left;">405</td>
+      <td style="text-align:left;">5.12e-06</td>
+      <td style="text-align:left;">0.0327</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGACGAGAAAAAAAAAACAACGCTGTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03892</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">212</td>
+      <td style="text-align:left;">239</td>
+      <td style="text-align:left;">5.71e-06</td>
+      <td style="text-align:left;">0.0357</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGCAGAGAAAACAAAAAGTGAGAGAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">334</td>
+      <td style="text-align:left;">361</td>
+      <td style="text-align:left;">5.81e-06</td>
+      <td style="text-align:left;">0.0357</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGAGAGAGACGACGATAAAGTGGAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03230</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">146</td>
+      <td style="text-align:left;">173</td>
+      <td style="text-align:left;">6.25e-06</td>
+      <td style="text-align:left;">0.0377</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGATGAGAACAAGAAATAATTTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09261</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">124</td>
+      <td style="text-align:left;">151</td>
+      <td style="text-align:left;">6.36e-06</td>
+      <td style="text-align:left;">0.0377</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACGGGGAGTACAATAGGAATGGTTTGTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09836</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">454</td>
+      <td style="text-align:left;">481</td>
+      <td style="text-align:left;">6.8e-06</td>
+      <td style="text-align:left;">0.0396</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACACAGGAAAAGGCAGAAAAAGTTCAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10050</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">283</td>
+      <td style="text-align:left;">310</td>
+      <td style="text-align:left;">7.3e-06</td>
+      <td style="text-align:left;">0.0414</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGCGGGAAAACCAAGAAAAATTCAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00650</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">390</td>
+      <td style="text-align:left;">417</td>
+      <td style="text-align:left;">7.43e-06</td>
+      <td style="text-align:left;">0.0414</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAAAAAAGAACAAAGAAAATGGAGCGGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">305</td>
+      <td style="text-align:left;">332</td>
+      <td style="text-align:left;">7.47e-06</td>
+      <td style="text-align:left;">0.0414</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAAGGAGAAAAAAAGAAAAAAAATTAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05847</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">271</td>
+      <td style="text-align:left;">298</td>
+      <td style="text-align:left;">8.02e-06</td>
+      <td style="text-align:left;">0.0433</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGCAAAAAGAAGCCGATCAAAAAAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09834</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">366</td>
+      <td style="text-align:left;">393</td>
+      <td style="text-align:left;">8.06e-06</td>
+      <td style="text-align:left;">0.0433</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAAACGAAGAAGAAAAAGAAGAAGTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09804</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">371</td>
+      <td style="text-align:left;">398</td>
+      <td style="text-align:left;">8.28e-06</td>
+      <td style="text-align:left;">0.0438</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCGGAAAAGGGGAGGAAAAATGGTTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03452</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">402</td>
+      <td style="text-align:left;">429</td>
+      <td style="text-align:left;">8.51e-06</td>
+      <td style="text-align:left;">0.0443</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACACAGAGATAAGAAACAATAGAGAAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02822</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">394</td>
+      <td style="text-align:left;">421</td>
+      <td style="text-align:left;">8.7e-06</td>
+      <td style="text-align:left;">0.0446</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGGGAAAAATAGAAGGAAAACGAATAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00969</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">223</td>
+      <td style="text-align:left;">250</td>
+      <td style="text-align:left;">9.63e-06</td>
+      <td style="text-align:left;">0.0486</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGAAAAGAAATATAGAAAAACAAGAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05413</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">325</td>
+      <td style="text-align:left;">352</td>
+      <td style="text-align:left;">1.13e-05</td>
+      <td style="text-align:left;">0.0551</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGGTGTGAAGTCGAACATGAGGAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09834</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">372</td>
+      <td style="text-align:left;">399</td>
+      <td style="text-align:left;">1.14e-05</td>
+      <td style="text-align:left;">0.0551</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGAAGAAAAAGAAGAAGTGAACCTAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03442</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">306</td>
+      <td style="text-align:left;">333</td>
+      <td style="text-align:left;">1.14e-05</td>
+      <td style="text-align:left;">0.0551</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGAAAAAGAGAGAGACATAGAGAAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06736</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">351</td>
+      <td style="text-align:left;">378</td>
+      <td style="text-align:left;">1.17e-05</td>
+      <td style="text-align:left;">0.0558</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACTGCCAGAAAAAAGGAAAATGATTAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09065</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">98</td>
+      <td style="text-align:left;">125</td>
+      <td style="text-align:left;">1.2e-05</td>
+      <td style="text-align:left;">0.0562</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CACCACTGAAAAATCAAACAAAAGTGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09868</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">109</td>
+      <td style="text-align:left;">136</td>
+      <td style="text-align:left;">1.22e-05</td>
+      <td style="text-align:left;">0.0565</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAGGAAGAGACAAAAAAGCATAAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak11013</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">188</td>
+      <td style="text-align:left;">215</td>
+      <td style="text-align:left;">1.25e-05</td>
+      <td style="text-align:left;">0.057</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACAGCGTGACGACAATCAATGTGTTGAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">227</td>
+      <td style="text-align:left;">1.35e-05</td>
+      <td style="text-align:left;">0.0605</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAAAGAGAGAAAGAGACGAATTGTAGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09868</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">105</td>
+      <td style="text-align:left;">132</td>
+      <td style="text-align:left;">1.36e-05</td>
+      <td style="text-align:left;">0.0605</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAAAGAGGAAGAGACAAAAAAGCAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08993</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">152</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">1.44e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACAGAAAGAAAACTCGCTGACCAGGATC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03892</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">300</td>
+      <td style="text-align:left;">327</td>
+      <td style="text-align:left;">1.48e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAAACGGATGGGTGGAAAAAGAGAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03230</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">152</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">1.48e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGAGGAAGAGGATGAGAACAAGAAATAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02931</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">56</td>
+      <td style="text-align:left;">83</td>
+      <td style="text-align:left;">1.49e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CATCCGAGAACGAACTCAATAGTGTGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09869</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">114</td>
+      <td style="text-align:left;">141</td>
+      <td style="text-align:left;">1.51e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCACGGGAGCAATCTCAAAGGACTATA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">311</td>
+      <td style="text-align:left;">338</td>
+      <td style="text-align:left;">1.51e-05</td>
+      <td style="text-align:left;">0.0624</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGAGCAAAAAGGAGAAAAAAAGAAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10839</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">286</td>
+      <td style="text-align:left;">313</td>
+      <td style="text-align:left;">1.66e-05</td>
+      <td style="text-align:left;">0.067</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGCCGTGATAAGAAGACAAGGTCCAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07380</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">35</td>
+      <td style="text-align:left;">62</td>
+      <td style="text-align:left;">1.66e-05</td>
+      <td style="text-align:left;">0.067</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCAGGAGAGAAGGAGAAAACCGTAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">323</td>
+      <td style="text-align:left;">350</td>
+      <td style="text-align:left;">1.69e-05</td>
+      <td style="text-align:left;">0.0672</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGACGATAAAGTGGAGCAAAAAGGAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07627</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">303</td>
+      <td style="text-align:left;">330</td>
+      <td style="text-align:left;">1.76e-05</td>
+      <td style="text-align:left;">0.0691</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAACCTGAAAACAATAAAAATTTTAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08109</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">420</td>
+      <td style="text-align:left;">447</td>
+      <td style="text-align:left;">1.83e-05</td>
+      <td style="text-align:left;">0.0711</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGGAAATGAGGAGAAAGCATATGCGGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03449</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">50</td>
+      <td style="text-align:left;">77</td>
+      <td style="text-align:left;">2.01e-05</td>
+      <td style="text-align:left;">0.0772</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTGAATGTAAAGAGAAAAAATGACAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06562</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">438</td>
+      <td style="text-align:left;">465</td>
+      <td style="text-align:left;">2.06e-05</td>
+      <td style="text-align:left;">0.0782</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTGAAGGAGAACGGAAATAACAACAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09834</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">18</td>
+      <td style="text-align:left;">45</td>
+      <td style="text-align:left;">2.23e-05</td>
+      <td style="text-align:left;">0.0839</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACAAGATGTAAAAGAGAAAACGGAAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10261</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">326</td>
+      <td style="text-align:left;">353</td>
+      <td style="text-align:left;">2.31e-05</td>
+      <td style="text-align:left;">0.0859</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGGCAAAAATGTGGCAGTCGGCAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09804</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">140</td>
+      <td style="text-align:left;">167</td>
+      <td style="text-align:left;">2.34e-05</td>
+      <td style="text-align:left;">0.0862</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGGACGTGAAAAATGAAACTAGTCGGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06248</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">290</td>
+      <td style="text-align:left;">317</td>
+      <td style="text-align:left;">2.4e-05</td>
+      <td style="text-align:left;">0.0873</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCAGCAGAAATGAAAGAATACGAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06990</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">247</td>
+      <td style="text-align:left;">274</td>
+      <td style="text-align:left;">2.45e-05</td>
+      <td style="text-align:left;">0.088</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTAGAAAAAGCAGGAGCAGAAGATGAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02985</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">160</td>
+      <td style="text-align:left;">187</td>
+      <td style="text-align:left;">2.53e-05</td>
+      <td style="text-align:left;">0.0895</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAACATGAAAACTAGAAGTAAAAACAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">193</td>
+      <td style="text-align:left;">2.54e-05</td>
+      <td style="text-align:left;">0.0895</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGGCCGGGAGAGAGGGCTGTGGTTCGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03676</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">321</td>
+      <td style="text-align:left;">348</td>
+      <td style="text-align:left;">2.57e-05</td>
+      <td style="text-align:left;">0.0895</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCGGGGAAAAAAGAGCACACATAGGGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06244</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">310</td>
+      <td style="text-align:left;">337</td>
+      <td style="text-align:left;">2.6e-05</td>
+      <td style="text-align:left;">0.0898</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGACTAAAGAGGAAAACTGATTAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02156</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">237</td>
+      <td style="text-align:left;">264</td>
+      <td style="text-align:left;">2.65e-05</td>
+      <td style="text-align:left;">0.0906</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGGAGGGGAGGGGGTGAAAAGAAGAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10050</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">275</td>
+      <td style="text-align:left;">302</td>
+      <td style="text-align:left;">2.82e-05</td>
+      <td style="text-align:left;">0.0953</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCTGACGAAAAGCGGGAAAACCAAGAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06934</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">138</td>
+      <td style="text-align:left;">165</td>
+      <td style="text-align:left;">2.9e-05</td>
+      <td style="text-align:left;">0.0961</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGGAAAAAAAGAGAAGGAATGAGTTCAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03641</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">398</td>
+      <td style="text-align:left;">425</td>
+      <td style="text-align:left;">2.9e-05</td>
+      <td style="text-align:left;">0.0961</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGCCTGTGTAGAAACAGAAGTGATAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09834</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">369</td>
+      <td style="text-align:left;">396</td>
+      <td style="text-align:left;">2.99e-05</td>
+      <td style="text-align:left;">0.0983</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGAAGAAGAAAAAGAAGAAGTGAACC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01830</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">224</td>
+      <td style="text-align:left;">251</td>
+      <td style="text-align:left;">3.04e-05</td>
+      <td style="text-align:left;">0.0988</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGAGCAGGAGAAACAGAACTGATAACAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">227</td>
+      <td style="text-align:left;">3.12e-05</td>
+      <td style="text-align:left;">0.101</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGGAAAAAAGGGGAGAAAAAGCGAAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01673</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">137</td>
+      <td style="text-align:left;">164</td>
+      <td style="text-align:left;">3.19e-05</td>
+      <td style="text-align:left;">0.102</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCCCGTGAACAAGAAAATAAATTGAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05087</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">139</td>
+      <td style="text-align:left;">166</td>
+      <td style="text-align:left;">3.25e-05</td>
+      <td style="text-align:left;">0.103</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGGGGAAGAACAACAGAGCTAGCGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05412</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">335</td>
+      <td style="text-align:left;">362</td>
+      <td style="text-align:left;">3.33e-05</td>
+      <td style="text-align:left;">0.104</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CATAAGGAAACAAAAGAAAAGAAGACGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09836</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">453</td>
+      <td style="text-align:left;">480</td>
+      <td style="text-align:left;">3.44e-05</td>
+      <td style="text-align:left;">0.107</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACACAGGAAAAGGCAGAAAAAGTTCAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03168</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">335</td>
+      <td style="text-align:left;">362</td>
+      <td style="text-align:left;">3.48e-05</td>
+      <td style="text-align:left;">0.107</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATGACGCAAAAAGGGAAAAGGGGGTAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07783</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">75</td>
+      <td style="text-align:left;">102</td>
+      <td style="text-align:left;">3.5e-05</td>
+      <td style="text-align:left;">0.107</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCAGCATGACAAGGGGAATAATATGCAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06748</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">470</td>
+      <td style="text-align:left;">497</td>
+      <td style="text-align:left;">3.58e-05</td>
+      <td style="text-align:left;">0.108</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAAGCAGAAAAAGTCGAAAAATGTTTTG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08658</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">343</td>
+      <td style="text-align:left;">370</td>
+      <td style="text-align:left;">3.76e-05</td>
+      <td style="text-align:left;">0.113</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATGCGGGAGAAGTGCAACAGTTAGAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05344</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">237</td>
+      <td style="text-align:left;">264</td>
+      <td style="text-align:left;">3.88e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGCGCCGGTGGGGGAACAAAAATGAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02155</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">254</td>
+      <td style="text-align:left;">281</td>
+      <td style="text-align:left;">3.94e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATGAGGGAGAAATGGCATTGAGTCATT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak04093</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">344</td>
+      <td style="text-align:left;">371</td>
+      <td style="text-align:left;">3.96e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CATACCGAAGAGCAAGCATAATAGAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06248</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">316</td>
+      <td style="text-align:left;">343</td>
+      <td style="text-align:left;">4.01e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAAAAAAAGAAAGAGAAGAGTACACAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06694</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">360</td>
+      <td style="text-align:left;">387</td>
+      <td style="text-align:left;">4.01e-05</td>
+      <td style="text-align:left;">0.115</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGTAGAGGAAATAGAGAAATAGTGAAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02118</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">445</td>
+      <td style="text-align:left;">472</td>
+      <td style="text-align:left;">4.19e-05</td>
+      <td style="text-align:left;">0.118</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACAGTGAAAACAGGATGTAGAAATTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02822</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">403</td>
+      <td style="text-align:left;">430</td>
+      <td style="text-align:left;">4.19e-05</td>
+      <td style="text-align:left;">0.118</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAAAGAAAAAAGGGAAAAATAGAAGGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06248</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">299</td>
+      <td style="text-align:left;">326</td>
+      <td style="text-align:left;">4.44e-05</td>
+      <td style="text-align:left;">0.123</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATGAAAGAATACGAAAAAAAAAAAAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07298</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">341</td>
+      <td style="text-align:left;">368</td>
+      <td style="text-align:left;">4.44e-05</td>
+      <td style="text-align:left;">0.123</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACAATGAGAAAAAGAAAATGAGCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08430</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">170</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">4.46e-05</td>
+      <td style="text-align:left;">0.123</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAACGTGACAAAGCGCCAAACAAAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09626</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">122</td>
+      <td style="text-align:left;">149</td>
+      <td style="text-align:left;">4.56e-05</td>
+      <td style="text-align:left;">0.124</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCTGCCTATCAAGAAACAAAAGGGAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03630</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">299</td>
+      <td style="text-align:left;">326</td>
+      <td style="text-align:left;">4.64e-05</td>
+      <td style="text-align:left;">0.126</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCCCCTGTGGGGACAGAATGGGTGGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06129</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">338</td>
+      <td style="text-align:left;">365</td>
+      <td style="text-align:left;">4.7e-05</td>
+      <td style="text-align:left;">0.126</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCGAAAGAAAAAGACAGAAAGTAAAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06935</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">473</td>
+      <td style="text-align:left;">500</td>
+      <td style="text-align:left;">4.72e-05</td>
+      <td style="text-align:left;">0.126</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAGCGAGGTGCAAACGACGAGTATGTGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08794</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">404</td>
+      <td style="text-align:left;">431</td>
+      <td style="text-align:left;">4.85e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGGGAAGAAGTGTAACATTACATAGAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">197</td>
+      <td style="text-align:left;">224</td>
+      <td style="text-align:left;">4.91e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGGAAGGAAAAAAGGGGAGAAAAAGCGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07423</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">51</td>
+      <td style="text-align:left;">78</td>
+      <td style="text-align:left;">4.98e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCTCTCTGAAAACAGGAAAAATAATGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10330</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">188</td>
+      <td style="text-align:left;">5e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGCAAAAAATGTCGCAAAAAATCCGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02822</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">402</td>
+      <td style="text-align:left;">429</td>
+      <td style="text-align:left;">5.02e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAAAAAAGGGAAAAATAGAAGGAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06996</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">153</td>
+      <td style="text-align:left;">180</td>
+      <td style="text-align:left;">5.04e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TGCGGGAGAAGAGACGAAGAGTTCTCAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09940</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">47</td>
+      <td style="text-align:left;">74</td>
+      <td style="text-align:left;">5.06e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACAGAGAAAAGAGAAGAATAGATACTGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06741</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">155</td>
+      <td style="text-align:left;">182</td>
+      <td style="text-align:left;">5.11e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGTGGGAGAAAAAAATAAGGAAAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03892</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">214</td>
+      <td style="text-align:left;">241</td>
+      <td style="text-align:left;">5.2e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAGAGAAAACAAAAAGTGAGAGAAGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01988</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">124</td>
+      <td style="text-align:left;">151</td>
+      <td style="text-align:left;">5.24e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATGAGAGAGGAGGCAAAATGGAAGCCA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00650</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">412</td>
+      <td style="text-align:left;">439</td>
+      <td style="text-align:left;">5.31e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGCGGCGGTGAAAAAAGACTCGTAAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03153</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">353</td>
+      <td style="text-align:left;">380</td>
+      <td style="text-align:left;">5.33e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAAGAGAAAAAAGAAAAATTGTTTCAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06207</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">357</td>
+      <td style="text-align:left;">384</td>
+      <td style="text-align:left;">5.33e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACCGAAAAAAGGAAAGAAATAATTGAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09267</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">235</td>
+      <td style="text-align:left;">262</td>
+      <td style="text-align:left;">5.43e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAGGGATAAAAATCAATAGATTGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08764</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">201</td>
+      <td style="text-align:left;">228</td>
+      <td style="text-align:left;">5.43e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAACAAAAATGGACGAAAAGGATCAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05976</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">32</td>
+      <td style="text-align:left;">59</td>
+      <td style="text-align:left;">5.45e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAGCCAGAACGGCAAGCAAAAGTAGGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08565</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">438</td>
+      <td style="text-align:left;">465</td>
+      <td style="text-align:left;">5.47e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAGAGAGGGGAAGAGAAAGACGTGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08565</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">432</td>
+      <td style="text-align:left;">459</td>
+      <td style="text-align:left;">5.5e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGGGAAGAGAAAGACGTGGGGCGCC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09869</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">442</td>
+      <td style="text-align:left;">469</td>
+      <td style="text-align:left;">5.55e-05</td>
+      <td style="text-align:left;">0.128</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTAGGAAAACAAAAGAAATACTCTTAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02930</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">133</td>
+      <td style="text-align:left;">160</td>
+      <td style="text-align:left;">5.69e-05</td>
+      <td style="text-align:left;">0.131</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGAAGGAGATCCAACAAACAATGGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07380</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">27</td>
+      <td style="text-align:left;">54</td>
+      <td style="text-align:left;">5.76e-05</td>
+      <td style="text-align:left;">0.131</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGAAGGATGCAGGAGAGAAGGAGAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05412</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">167</td>
+      <td style="text-align:left;">194</td>
+      <td style="text-align:left;">5.79e-05</td>
+      <td style="text-align:left;">0.131</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAAGACAGTGAAGTGTCCATGCATTGAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07278</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">70</td>
+      <td style="text-align:left;">97</td>
+      <td style="text-align:left;">5.91e-05</td>
+      <td style="text-align:left;">0.133</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGATCTGAGCAAACGCAAAAGTGTTAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06433</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">161</td>
+      <td style="text-align:left;">188</td>
+      <td style="text-align:left;">6.07e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAACACTGAAAAAGGTAAATAAATGATA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03032</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">112</td>
+      <td style="text-align:left;">139</td>
+      <td style="text-align:left;">6.14e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGCCGAAAAACGGCAAAAATCGATAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08658</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">337</td>
+      <td style="text-align:left;">364</td>
+      <td style="text-align:left;">6.14e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACGCAGGATGCGGGAGAAGTGCAACAGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00971</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">258</td>
+      <td style="text-align:left;">285</td>
+      <td style="text-align:left;">6.2e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATGAGTGATAAGAAAGACTGTGGGGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08933</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">314</td>
+      <td style="text-align:left;">341</td>
+      <td style="text-align:left;">6.22e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGTAAATAAACAATGGAAAAATATTGGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06432</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">165</td>
+      <td style="text-align:left;">192</td>
+      <td style="text-align:left;">6.28e-05</td>
+      <td style="text-align:left;">0.136</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACGCTGAGAAATGAAGAAAAGTACAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05086</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">422</td>
+      <td style="text-align:left;">449</td>
+      <td style="text-align:left;">6.38e-05</td>
+      <td style="text-align:left;">0.137</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTGAAGAAAATCTGGAAGAATAGGTAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03449</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">392</td>
+      <td style="text-align:left;">419</td>
+      <td style="text-align:left;">6.41e-05</td>
+      <td style="text-align:left;">0.137</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGAAAAATGAAGAAGGAAAACTTGAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01988</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">201</td>
+      <td style="text-align:left;">228</td>
+      <td style="text-align:left;">6.46e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAAAAGAAATAGAATAAATAGAATGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02388</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">111</td>
+      <td style="text-align:left;">138</td>
+      <td style="text-align:left;">6.52e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGAGCAAAGGGGTCTAATAGGGGAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06749</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">46</td>
+      <td style="text-align:left;">73</td>
+      <td style="text-align:left;">6.6e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACAGAAAAAAGAAGACTAAATTCAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09804</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">120</td>
+      <td style="text-align:left;">147</td>
+      <td style="text-align:left;">6.6e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTCGGAGGAAAGTAGACAACGAAAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01751</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">15</td>
+      <td style="text-align:left;">42</td>
+      <td style="text-align:left;">6.71e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGGACTGAAACGTGAAAGAGTAAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak11012</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">290</td>
+      <td style="text-align:left;">317</td>
+      <td style="text-align:left;">6.71e-05</td>
+      <td style="text-align:left;">0.138</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGGAAAGTGCAAGAGAACTTGTGGAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09616</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">398</td>
+      <td style="text-align:left;">425</td>
+      <td style="text-align:left;">6.77e-05</td>
+      <td style="text-align:left;">0.139</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">TAGCGCAGAAGGCGAGCAAAGGAATGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06748</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">11</td>
+      <td style="text-align:left;">38</td>
+      <td style="text-align:left;">7.03e-05</td>
+      <td style="text-align:left;">0.143</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACGCCGGAAAAAGCTCTCAAAAATCGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">201</td>
+      <td style="text-align:left;">228</td>
+      <td style="text-align:left;">7.18e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGAAAAAAGGGGAGAAAAAGCGAAGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06693</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">293</td>
+      <td style="text-align:left;">320</td>
+      <td style="text-align:left;">7.18e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGTGGAAGCGAAACAGGAATATGGAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07945</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">198</td>
+      <td style="text-align:left;">225</td>
+      <td style="text-align:left;">7.3e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGAAGGAAAAAAGGGGAGAAAAAGCGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03153</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">32</td>
+      <td style="text-align:left;">59</td>
+      <td style="text-align:left;">7.33e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCTGGAAGAAAAAAGGGTATCTTTGAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07403</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">279</td>
+      <td style="text-align:left;">306</td>
+      <td style="text-align:left;">7.33e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCACAGAAAAAAATAAAACAAAAAACAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08662</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">386</td>
+      <td style="text-align:left;">413</td>
+      <td style="text-align:left;">7.36e-05</td>
+      <td style="text-align:left;">0.145</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGAAAAAACTGCGGAAATGGTTAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak10050</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">284</td>
+      <td style="text-align:left;">311</td>
+      <td style="text-align:left;">7.54e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGCGGGAAAACCAAGAAAAATTCAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03032</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">179</td>
+      <td style="text-align:left;">206</td>
+      <td style="text-align:left;">7.64e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACGAGGGAGCAGGAACAGTTGTTTGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06997</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">379</td>
+      <td style="text-align:left;">406</td>
+      <td style="text-align:left;">7.64e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGCGCCTGTGTAAAAAAAAAGTATAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09857</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">96</td>
+      <td style="text-align:left;">123</td>
+      <td style="text-align:left;">7.67e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCCGGAGAAAAAACATCAAAGCATTTAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09012</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">457</td>
+      <td style="text-align:left;">484</td>
+      <td style="text-align:left;">7.7e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGGTGGAATGAGAAAGAGGGTGGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02822</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">397</td>
+      <td style="text-align:left;">424</td>
+      <td style="text-align:left;">7.73e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAAAGGGAAAAATAGAAGGAAAACGAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02820</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">111</td>
+      <td style="text-align:left;">138</td>
+      <td style="text-align:left;">7.77e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTCGGGGGGAAAGCGAACAGATGAAAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02228</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">23</td>
+      <td style="text-align:left;">50</td>
+      <td style="text-align:left;">7.83e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAGGCATGAGCAACTGAAGAGAAGAGAT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07379</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">322</td>
+      <td style="text-align:left;">349</td>
+      <td style="text-align:left;">7.86e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GTTGACAGACAAGAAGGAGAAGTTAAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02844</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">336</td>
+      <td style="text-align:left;">363</td>
+      <td style="text-align:left;">7.89e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GGTGAGAGAGTGCAGAGAAACGAGAGTG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak01682</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">214</td>
+      <td style="text-align:left;">241</td>
+      <td style="text-align:left;">7.93e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACCAAAACCTGAAGCCAAACAAGAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08177</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">35</td>
+      <td style="text-align:left;">62</td>
+      <td style="text-align:left;">7.99e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACAATGAAAAGAGTATATGGAAATTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08934</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">78</td>
+      <td style="text-align:left;">105</td>
+      <td style="text-align:left;">8.09e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">ACACACTGAAAAGTAGAATAATCAAAGC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">304</td>
+      <td style="text-align:left;">331</td>
+      <td style="text-align:left;">8.09e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAGGAGAAAAAAAGAAAAAAAATTATG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">302</td>
+      <td style="text-align:left;">329</td>
+      <td style="text-align:left;">8.12e-05</td>
+      <td style="text-align:left;">0.147</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGGAGAAAAAAAGAAAAAAAATTATGTT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09307</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">253</td>
+      <td style="text-align:left;">280</td>
+      <td style="text-align:left;">8.22e-05</td>
+      <td style="text-align:left;">0.148</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CAACTAAAAAGAGAAGGAGAAGAAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06427</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">364</td>
+      <td style="text-align:left;">391</td>
+      <td style="text-align:left;">8.39e-05</td>
+      <td style="text-align:left;">0.15</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGCAGAAAATAGGAGCATTGTGACGGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02258</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">157</td>
+      <td style="text-align:left;">184</td>
+      <td style="text-align:left;">8.5e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACCACGAACAAATAGAAAAAGTTGTTG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak00969</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">217</td>
+      <td style="text-align:left;">244</td>
+      <td style="text-align:left;">8.64e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGAGGGAGGAAAAGAAATATAGAAAAAC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06562</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">441</td>
+      <td style="text-align:left;">468</td>
+      <td style="text-align:left;">8.64e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGGAGAACGGAAATAACAACAAAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08178</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">274</td>
+      <td style="text-align:left;">301</td>
+      <td style="text-align:left;">8.67e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CCAAAAAGAAAGCAATCAAAACAACAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03501</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">303</td>
+      <td style="text-align:left;">330</td>
+      <td style="text-align:left;">8.67e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAGGAGAAAAAAAGAAAAAAAATTATGT</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02156</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">240</td>
+      <td style="text-align:left;">267</td>
+      <td style="text-align:left;">8.74e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAACGGAGGGGAGGGGGTGAAAAGAAGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09869</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">339</td>
+      <td style="text-align:left;">366</td>
+      <td style="text-align:left;">8.74e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AAAAAGGAAAAAAGAGGTATGAACAAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak05533</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">91</td>
+      <td style="text-align:left;">118</td>
+      <td style="text-align:left;">8.78e-05</td>
+      <td style="text-align:left;">0.151</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AGTCCAAAAATAGTGGCAATATATCCGA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02258</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">382</td>
+      <td style="text-align:left;">409</td>
+      <td style="text-align:left;">8.96e-05</td>
+      <td style="text-align:left;">0.152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCAGACGGAAAAAGAAAATACCTGACTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09856</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">311</td>
+      <td style="text-align:left;">338</td>
+      <td style="text-align:left;">9.03e-05</td>
+      <td style="text-align:left;">0.152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAAGAAAAACGAGAAGACATAAAGCTTC</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09678</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">449</td>
+      <td style="text-align:left;">476</td>
+      <td style="text-align:left;">9.03e-05</td>
+      <td style="text-align:left;">0.152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACCACAGAAATCTGTAAGTAGGTTCAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06523</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">388</td>
+      <td style="text-align:left;">415</td>
+      <td style="text-align:left;">9.07e-05</td>
+      <td style="text-align:left;">0.152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GACAAGTAAAAGAAGGAAATGAGATAAA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak06248</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">307</td>
+      <td style="text-align:left;">334</td>
+      <td style="text-align:left;">9.1e-05</td>
+      <td style="text-align:left;">0.152</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATACGAAAAAAAAAAAAGAAAGAGAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak07749</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">70</td>
+      <td style="text-align:left;">97</td>
+      <td style="text-align:left;">9.29e-05</td>
+      <td style="text-align:left;">0.155</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">CGCAGAAGAGAGAACAAATAGGATAGTA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09267</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">406</td>
+      <td style="text-align:left;">433</td>
+      <td style="text-align:left;">9.4e-05</td>
+      <td style="text-align:left;">0.156</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAGAAGAGTGAAGAAGGGGTGGGGGGGG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak03890</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">235</td>
+      <td style="text-align:left;">262</td>
+      <td style="text-align:left;">9.56e-05</td>
+      <td style="text-align:left;">0.157</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AATGGAGAAGCACTCGATAAGATCCGAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02119</td>
+      <td style="text-align:center;">-</td>
+      <td style="text-align:left;">200</td>
+      <td style="text-align:left;">227</td>
+      <td style="text-align:left;">9.59e-05</td>
+      <td style="text-align:left;">0.157</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GATGGGAGAGAAACAAACTAGAAACAAG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak02118</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">436</td>
+      <td style="text-align:left;">463</td>
+      <td style="text-align:left;">9.63e-05</td>
+      <td style="text-align:left;">0.157</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">AACACGGAAAAACAGTGAAAACAGGATG</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak08430</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">19</td>
+      <td style="text-align:left;">46</td>
+      <td style="text-align:left;">9.83e-05</td>
+      <td style="text-align:left;">0.16</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GAACACAAAAAAACAACAAAATTAAATA</td>
+   </tr>
+    <tr>
+      <td style="text-align:left;">RRRGVSDGARMAGWAGAAAAAGRKDRAM</td>
+      <td style="text-align:left;">MEME-2</td>
+      <td style="text-align:left;">ELT2peak09938</td>
+      <td style="text-align:center;">+</td>
+      <td style="text-align:left;">47</td>
+      <td style="text-align:left;">74</td>
+      <td style="text-align:left;">9.91e-05</td>
+      <td style="text-align:left;">0.16</td>
+      <td style="text-align:left;font-size:x-large;font-family:monospace;">GCGGACAGTGAGCCAGCAGAAGTAATTC</td>
+   </tr>
+</tbody>
+</table>
+
+<hr>
+<center><big><b><a name="debugging_information">DEBUGGING INFORMATION</a></b></big></center>
+<hr>
+<p>
+Command line:
+</p>
+<pre>
+fimo --parse-genomic-coord --verbosity 1 --oc 02_output/bound_ClassB_peaks/fimo_out_2 --bgfile 02_output/bound_ClassB_peaks/background --motif RRRGVSDGARMAGWAGAAAAAGRKDRAM 02_output/bound_ClassB_peaks/meme_out/meme.xml 02_output/bound_ClassB_peaks/bound_ClassB_peaks.fasta
+</pre>
+<p>
+Settings:
+</p>
+<pre>
+<table>
+  <tr>
+    <td style="padding-right: 2em">output_directory = 02_output/bound_ClassB_peaks/fimo_out_2</td>
+    <td style="padding-left: 5em; padding-right: 2em">MEME file name = 02_output/bound_ClassB_peaks/meme_out/meme.xml</td>
+    <td style="padding-left: 5em; padding-right: 2em">sequence file name = 02_output/bound_ClassB_peaks/bound_ClassB_peaks.fasta</td>
+  </tr>  <tr>
+    <td style="padding-right: 2em">background file name = 02_output/bound_ClassB_peaks/background</td>
+    <td style="padding-left: 5em; padding-right: 2em">alphabet = DNA</td>
+    <td style="padding-left: 5em; padding-right: 2em">max stored scores = 100000</td>
+  </tr>  <tr>
+    <td style="padding-right: 2em">allow clobber = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">compute q-values = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">parse genomic coord. = true</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">text only = false</td>
+    <td style="padding-left: 5em; padding-right: 2em">scan both strands = true</td>
+    <td style="padding-left: 5em; padding-right: 2em">max strand = false</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">threshold type = p-value</td>
+    <td style="padding-left: 5em; padding-right: 2em">output theshold = 0.0001</td>
+    <td style="padding-left: 5em; padding-right: 2em">pseudocount = 0.1</td>
+  </tr>
+  <tr>
+    <td style="padding-right: 2em">alpha = 1</td>
+    <td style="padding-left: 5em; padding-right: 2em">verbosity = 1</td>
+    <td style="padding-left: 5em; padding-right: 2em"></td>
+  </tr>
+
+</table>
+</pre>
+<p>
+This information can be useful in the event you wish to report a
+problem with the FIMO software.
+</p>
+<hr>
+<span style="background-color: #DDDDFF"><a href="#top_buttons"><b>Go to top</b></a></span>
+</body>
+</html>

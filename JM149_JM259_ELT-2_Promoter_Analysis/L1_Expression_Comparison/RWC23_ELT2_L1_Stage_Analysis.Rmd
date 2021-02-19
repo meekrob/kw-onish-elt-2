@@ -1,0 +1,1219 @@
+---
+title: "ELT-2 L1 Stage Analysis"
+author: "Robert Williams"
+date: "1/5/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Startup
+
+## Install Packages
+
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# BiocManager::install()
+# BiocManager::install("biomaRt")
+# install.packages("tidyverse")
+# install.packages("readxl")
+# BiocManager::install("ComplexHeatmap")
+# install.packages("matrixStats")
+# install.packages("pheatmap")
+# install.packages("RVAideMemoire")
+# install.packages("dendextend")
+# install.packages("binom")
+# BiocManager::install("clusterProfiler")
+# BiocManager::install("org.Ce.eg.db")
+```
+
+
+## Load Package Libraries
+
+```{r echo=FALSE}
+library(biomaRt)
+library(tidyverse)
+library(readxl)
+library(ComplexHeatmap)
+library(matrixStats)
+library(pheatmap)
+library(RVAideMemoire)
+library(dendextend)
+library(binom)
+library(circlize)
+library(lubridate)
+library(clusterProfiler)
+library("org.Ce.eg.db")
+library(DESeq2)
+library(readxl)
+```
+
+## Source functions
+
+```{r}
+source("./RWC23_Functions.R")
+```
+
+
+# Background and Rationale
+
+# Figure 1: ELT-2 regulates genes through activation and repression
+## Question: How are genes regulated by ELT-2? Is this regulation dependent on binding?
+
+Load ELT-2 (-) vs WT dataset
+
+```{r}
+dineen_nishimura_counts <-
+  read_xlsx(path = "01_ChIPseq_RNAseq_Integration/01_input/Table_S2_rlog_Stabilized_Read_Counts.xlsx",
+            sheet = "Sheet1")
+
+dineen_nishimura_counts_matrix <- dineen_nishimura_counts %>%
+  column_to_rownames(var = "WBGeneID")  %>%
+  data.matrix()
+
+dineen_nishimura_counts_matrix %>% head
+
+# resWtV2 <- read_excel("01_ChIPseq_RNAseq_Integration/01_input/Table_S3_Pairwise_Comparison.xlsx", 
+#     sheet = "2017-07-12_resWtV2", skip = 2, na = "NA")
+
+```
+## Perform ELT-2 Deletion vs WT RNA-seq Analysis
+
+```{r}
+e2e7_raw_matrix <- read.csv(file = "01_ChIPseq_RNAseq_Integration/01_input/Table_S1_Raw_Read_Counts.csv") %>%
+  column_to_rownames(var = "WBGeneID")  %>%
+  data.matrix()
+head(e2e7_raw_matrix)
+coldata <- data.frame(condition = c(rep("wt", 4), rep("elt7D", 3), rep("elt2D", 4), rep("elt2Delt7D", 3)))
+rownames(coldata) <- colnames(e2e7_raw_matrix)
+all(rownames(coldata) == colnames(e2e7_raw_matrix))
+```
+
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = e2e7_raw_matrix,
+                                   colData = coldata,
+                                   design = ~ condition)
+keep <- rowSums(counts(dds)) >=10
+dds <- dds[keep,]
+dds
+```
+Make DESeq `dds` object
+```{r}
+dds <- DESeq(dds)
+resultsNames(dds)
+```
+
+Make differential expression results
+```{r}
+resWtV2_dds <- results(dds, contrast = c("condition", "elt2D", "wt"))
+head(resWtV2_dds)
+```
+
+
+```{r}
+resWtV2 <- as.data.frame(resWtV2_dds) %>% rownames_to_column(var = "WBGeneID")
+head(resWtV2)
+resWtV2_IDs <- bitr(resWtV2$WBGeneID,
+     fromType = "WORMBASE",
+     toType = c("ENTREZID", "SYMBOL"),
+     OrgDb = org.Ce.eg.db)
+resWtV2 <- resWtV2 %>% left_join(resWtV2_IDs, by = c("WBGeneID" = "WORMBASE")) %>% arrange(WBGeneID)
+head(resWtV2)
+```
+
+
+# ELT-2 (-) vs WT MA plot
+Filter for log2(FC) > 2 and baseMean > 10
+```{r}
+ggplot(resWtV2 %>% filter(baseMean > 2), aes(x = log10(baseMean), y = log2FoldChange)) +
+  geom_point(aes(color = padj < 0.05)) +
+    geom_text(data = resWtV2 %>% filter(SYMBOL %in% c("elt-2", "pqm-1", "nuc-1", "ego-1", "cpr-6", "asp-1", "vha-6", "ifb-1", "ifb-2", "cpz-2", "haf-4", "haf-9", "elo-2", "elo-5", "elo-6", "trx-1", "pho-1", "mtl-2", "bre-1", "bre-5", "rab-5", "rab-7", "rab-11")), aes(x = log10(baseMean), y = log2FoldChange, label = SYMBOL))
+
+plotMA(resWtV2_dds)
+```
+Determine ELT-2 repressed genes. WT is the numerator in this comparison, and ELT-2 mutatnt is the denomenator
+```{r}
+resWtV2_repressed <- results(dds, contrast = c("condition", "elt2D", "wt"), lfcThreshold = 1, altHypothesis = "greater")
+resWtV2_activated <- results(dds, contrast = c("condition", "elt2D", "wt"),lfcThreshold = 1, altHypothesis = "less")
+resWtV2_independent <- results(dds, contrast = c("condition", "elt2D", "wt"),lfcThreshold = 1, altHypothesis = "lessAbs")
+plotMA(resWtV2_repressed)
+plotMA(resWtV2_activated)
+plotMA(resWtV2_independent)
+resWtV2_repressed_df <- resWtV2_repressed %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+resWtV2_activated_df <- resWtV2_activated %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+resWtV2_independent_df <- resWtV2_independent %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+```
+
+```{r}
+elt2_reg_categories <-
+  data.frame(
+    WBGeneID = (resWtV2_repressed_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    RegType = "Repressed",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (resWtV2_activated_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    RegType = "Activated",
+    stringsAsFactors = FALSE
+  )) %>% bind_rows(data.frame(
+    WBGeneID = (resWtV2_independent_df %>% filter(padj < 0.05))$WBGeneID,
+    RegType = "Independent",
+    stringsAsFactors = FALSE
+  ))
+nrow(elt2_reg_categories)
+table(elt2_reg_categories$RegType)
+
+```
+## Figure 1A. MA plot of 3 distinct ELT-2 regulation categories. Activated genes are downregulated compared to wildtype in the absence of ELT-2, Repressed genes are upregulated compared to wildtype in the absence of ELT-2, and independent genes do not change between wildtype and ELT-2 deletion conditions.
+```{r}
+ggplot(
+  resWtV2 %>% right_join(elt2_reg_categories, by = "WBGeneID"),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = resWtV2, colour = "grey", alpha = 0.04)+
+  geom_point(alpha = 0.4, aes(colour = RegType))+
+  geom_hline(linetype = "dashed", aes(yintercept = 1)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -1))+
+   theme_bw()
+```
+
+ELT-2 binding data
+
+```{r}
+elt2_GRange <- readRDS("01_ChIPseq_RNAseq_Integration/01_input/201228_annotatedPeaks.rds")
+elt2_peaks <- as.data.frame(mcols(elt2_GRange))
+# elt2_peaks <- elt2_peaks %>% dplyr::rename(k4labels = "cluster.description", feature = "WBGeneID")
+elt2_peaks <- elt2_peaks %>% dplyr::rename(cluster.description = k4labels, WBGeneID = feature)
+
+elt2_cluster_names <- c("Embryo_Specific",
+                        "Larval",
+                        "Increasing",
+                        "L3_High",
+                        "Not_Changing")
+
+elt2_peaks$cluster.description <-
+  factor(
+    elt2_peaks$cluster.description,
+    levels = c(
+      "LE-specific",
+      "Post-embryonic",
+      "Increasing",
+      "L3-high",
+      "Not-changing or not IDR-passing"
+    ),
+    labels = elt2_cluster_names
+  )
+
+elt2_peaks %>% head
+```
+Make a set of genes with ELT-2 binding detected in the L1 stage.  
+```{r}
+elt2_detected_in_L1 <-
+  elt2_peaks %>% dplyr::select(WBGeneID, L1_IDR) %>% filter(L1_IDR == 1) %>% dplyr::select(WBGeneID) %>% unique()
+
+elt2_detected_in_L1 %>% head
+elt2_detected_in_L1 %>% dim
+
+```
+
+
+Make a matrix for complex heatmap. Filter based on ELT-2 regulator categories generated above.
+
+```{r}
+resWtV2 %>% filter(WBGeneID %in% elt2_reg_categories$WBGeneID) %>% arrange(WBGeneID) %>% dplyr::select(WBGeneID)
+
+wtVs2_counts <- dineen_nishimura_counts %>%
+  dplyr::select(WBGeneID,
+                starts_with("wt_sorted"),
+                starts_with("elt2D_sorted")) %>%
+  filter(WBGeneID %in% (elt2_reg_categories %>% filter( RegType != "Independent"))$WBGeneID) %>%
+  arrange(WBGeneID) %>%
+  column_to_rownames(var = "WBGeneID")  %>%
+  data.matrix()
+
+head(wtVs2_counts)
+nrow(wtVs2_counts)
+
+```
+
+Row scale and center the rlog transformed counts
+
+```{r}
+scaled_counts <- t(apply(unlist(wtVs2_counts), 1, scale, center = TRUE, scale = TRUE))
+rownames(scaled_counts) <- rownames(wtVs2_counts)
+colnames(scaled_counts) <- colnames(wtVs2_counts)
+head(scaled_counts)
+```
+# ELT-2 (-) vs WT Clustered Heatmap
+Make a heatmap
+```{r}
+set.seed(66669)
+# kclus <- kmeans(scaled_counts, 2)
+
+
+scaled_counts_set <- (elt2_reg_categories %>% filter(RegType != "Independent") %>% arrange(WBGeneID))
+# scaled_counts_set <-
+#   data.frame(
+#     WBGeneID = rownames(scaled_counts),
+#     set = paste("Class", kclus$cluster, sep = ""),
+#     stringsAsFactors = FALSE
+#   )
+# scaled_counts_set[scaled_counts_set$set == "Class1", "set"] <- "ELT2_Repressed"
+# scaled_counts_set[scaled_counts_set$set == "Class2", "set"] <- "ELT2_Activated"
+
+
+Heatmap(scaled_counts,
+        col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = FALSE,
+  row_split = scaled_counts_set$RegType)
+
+
+```
+
+
+```{r}
+elt2_detected_in_L1 %>% dim
+
+elt2_L1_anno <-
+  data.frame(
+    WBGeneID = rownames(wtVs2_counts),
+    elt2_detected_in_L1 = ifelse(
+      test = rownames(wtVs2_counts) %in% elt2_detected_in_L1$WBGeneID,
+      yes = "bound",
+      no = "not_bound"
+    ),
+    stringsAsFactors = FALSE
+  )
+
+elt2_L1_anno %>% head()
+```
+## ELT-2 (-) vs WT Clustered Heatmap, bound split
+## Figure 1B: Genes differentially expressed in ELT-2 deletion are direct and indirect
+Split based on ELT-2 binding in L1 stage
+```{r fig.width=4, fig.height=5}
+
+Heatmap(name = "Row Normalized\nRead Counts",
+  scaled_counts,
+        col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = FALSE,
+  row_split = elt2_L1_anno$elt2_detected_in_L1)
+
+```
+
+# Compare Cluster Gene Ontology Biological Process
+Make data structure
+```{r}
+geneList <- (resWtV2 %>% filter(padj < 0.05))$log2FoldChange
+names(geneList) <- (resWtV2 %>% filter(padj < 0.05))$ENTREZID
+geneList <- sort(geneList, decreasing = TRUE)
+head(geneList)
+gene <- names(geneList)[abs(geneList) > 2]
+head(gene)
+wtV2_compareCluster <- data.frame(WORMBASE = rownames(scaled_counts), stringsAsFactors = FALSE) %>% left_join(resWtV2_IDs, by = "WORMBASE") %>% left_join(elt2_L1_anno, by = c("WORMBASE" = "WBGeneID")) %>% left_join(scaled_counts_set, by = c("WORMBASE" = "WBGeneID"))
+head(wtV2_compareCluster)
+```
+perform Gene Ontology Biological Process compareCluster analysis
+```{r fig.width=10, fig.height=5}
+formula_res_BP <- compareCluster(WORMBASE~RegType+elt2_detected_in_L1, data = wtV2_compareCluster, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(formula_res_BP, x=~elt2_detected_in_L1, showCategory = 10) + ggplot2::facet_grid(~RegType) + ggtitle("Gene Ontology Biological Process")
+# View(as.data.frame(formula_res_BP))
+```
+```{r}
+formula_res_CC <- compareCluster(WORMBASE~RegType+elt2_detected_in_L1, data = wtV2_compareCluster, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "CC",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(formula_res_CC, x=~elt2_detected_in_L1, showCategory = 5) + ggplot2::facet_grid(~RegType) + ggtitle("Gene Ontology Cellular Component")
+
+View(as.data.frame(formula_res_CC))
+```
+
+```{r}
+formula_res_MF <- compareCluster(WORMBASE~RegType+elt2_detected_in_L1, data = wtV2_compareCluster, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "MF",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(formula_res_MF, x=~elt2_detected_in_L1, showCategory = 5) + ggplot2::facet_grid(~RegType)
+```
+
+
+```{r}
+c_eK<- compareCluster(geneClusters = ENTREZID~RegType+elt2_detected_in_L1, data = wtV2_compareCluster, fun="enrichKEGG", organism = "cel", pvalueCutoff = 0.05, keyType = "ncbi-geneid", pAdjustMethod = "BH", minGSSize = 5, maxGSSize = 150)
+dotplot(c_eK, x=~elt2_detected_in_L1, showCategory = 5) + ggplot2::facet_grid(~RegType)
+
+# View(as.data.frame(c_eK))
+```
+
+
+## Explore: Examples of direct activation and repression by ELT-2
+## Question: Are activated and repressed genes directly bound? How can a single transcription factor do both jobs?
+
+
+```{r}
+rlog_df <- as.data.frame(wtVs2_counts) %>% rownames_to_column(var = "WORMBASE") %>% pivot_longer(wt_sorted_1:elt2D_sorted_4, names_to = "sample", values_to = "rlog_counts") %>% separate(sample, into = c("sample", NA, "rep"))
+rlog_df$sample <- factor(rlog_df$sample, levels = c("wt", "elt2D"))
+rlog_df
+```
+
+## rlog Counts of Gene Ontology Biological Process
+
+```{r}
+cc_BP_df <- as.data.frame(formula_res_BP) %>% dplyr::select(RegType, elt2_detected_in_L1, Description, geneID) %>% separate_rows(geneID, sep = "/") 
+cc_BP_df <- cc_BP_df %>% left_join(bitr(cc_BP_df$geneID, fromType = "SYMBOL", toType = "WORMBASE", OrgDb = org.Ce.eg.db), by = c("geneID" = "SYMBOL"))
+cc_BP_df
+```
+Make plotting function
+```{r}
+rlog_point <- function(r_df, mydf, description, myset, binding){
+  ggplot(
+    r_df %>% 
+      inner_join(mydf %>% 
+                   filter(Description == description,
+                          RegType == myset, 
+                          elt2_detected_in_L1 == binding), 
+                 by = "WORMBASE"),
+    aes(x = sample, rlog_counts)
+    ) +
+    geom_point() +
+    theme_bw() +
+    facet_wrap(~geneID)
+}
+
+```
+
+
+```{r}
+rlog_point(rlog_df, cc_BP_df, "defense response", "Activated", "bound")
+```
+example is irg-3
+
+
+```{r}
+rlog_point(rlog_df, cc_BP_df, "lipid metabolic process", "Activated", "bound")
+```
+example is lipases lipl-5 (shown to be starvation induced, we see depletion in elt2D), lipl-2, or haf-4 (lysosome membrane)
+```{r}
+rlog_point(rlog_df, cc_BP_df, "defense response", "Repressed", "bound")
+```
+
+example is clec-62 (c type lecin) or zip-10 (neuron and intestine tf)
+
+```{r}
+rlog_point(rlog_df, cc_BP_df, "gamete generation", "Repressed", "not_bound")
+```
+example is glh-1 or pgl-1 (p granule proteins)
+
+# Figure 1C: Examples of direct activation and repression by ELT-2
+
+```{r}
+rlog_df %>% filter(WORMBASE %in% 
+                     c(unique((cc_BP_df %>% filter(geneID == "irg-3"))$WORMBASE),
+                       unique((cc_BP_df %>% filter(geneID == "zip-10"))$WORMBASE)
+                     )
+) %>% 
+  left_join(cc_BP_df %>% dplyr::select(WORMBASE, geneID), by = "WORMBASE") %>%
+  ggplot(aes(x = sample, y = rlog_counts, fill = sample)) +
+  geom_boxplot() +
+  geom_point()+
+  theme_classic() +
+  facet_wrap(~geneID)
+```
+
+## rlog Counts of Gene Ontology Cellular Component
+
+```{r}
+cc_CC_df <- as.data.frame(formula_res_CC) %>% dplyr::select(RegType, elt2_detected_in_L1, Description, geneID) %>% separate_rows(geneID, sep = "/") 
+cc_CC_df <- cc_CC_df %>% left_join(bitr(cc_CC_df$geneID, fromType = "SYMBOL", toType = "WORMBASE", OrgDb = org.Ce.eg.db), by = c("geneID" = "SYMBOL"))
+cc_CC_df
+```
+   
+```{r}
+rlog_point(rlog_df, cc_CC_df, "lysosome", "Activated", "bound")
+```
+```{r}
+rlog_point(rlog_df, cc_CC_df, "membrane raft", "Activated", "bound")
+```
+
+
+# Figure 2: L1 Intestine RNA-seq experimental design and FACS data
+does not include analysis from here
+
+# Figure 3: RNA-seq of dissociated C. elegans cells identified L1 stage intestine specific and intestine depleted genes
+## Defining intestine specific and depleted genes
+
+Read in the counts data
+
+```{r}
+countsData_L1 <- read.table(file = "../RWC24_L1_Intestine_RNAseq/03_output/all.counts", header = FALSE, row.names = 1, skip = 2)
+head(countsData_L1)
+```
+
+Read in and print metadata file
+```{r}
+metadata_L1 <- read.table(file = "../RWC24_L1_Intestine_RNAseq/RWP26_metadata.tsv", header = FALSE, stringsAsFactors = FALSE)
+colnames(metadata_L1) <- c("Filename.Fwd", "Filename.Rev", "names", "rep", "type")
+head(metadata_L1)
+```
+
+
+Factorize metadata
+```{r}
+metadata_L1$names <- factor(
+  metadata_L1$names,
+  levels = c(
+    "wholeL1_rep1",
+    "wholeL1_rep2",
+    "allCells_rep1",
+    "allCells_rep2",
+    "gfpPlus_rep1",
+    "gfpPlus_rep2",
+    "gfpMinus_rep1",
+    "gfpMinusCells_rep2"
+  )
+)
+metadata_L1$type <-
+  factor(metadata_L1$type, levels = c("gutless", "gut", "cells", "whole"))
+```
+Name `countsData` headers
+```{r}
+colnames(countsData_L1) <- c("chr", "start", "stop", "strand", "length", as.vector(metadata_L1$names))
+head(countsData_L1)
+```
+
+# Add embryo intestine FACS data
+
+Read in the counts data
+
+```{r}
+embryo_counts <- read.delim(file = "../RWC25_Embryo_Intestine_FACS/all.counts", sep = " ")
+head(embryo_counts)
+colnames(embryo_counts[6:15])
+```
+
+```{r}
+metadata_embryo <- read.table(file = "../RWC25_Embryo_Intestine_FACS/RWP27_metadata.tsv", header = FALSE, stringsAsFactors = FALSE)
+colnames(metadata_embryo) <- c("Filename.Fwd", "Filename.Rev", "names")
+
+rep <- c(1,1,1,2,2,2,2,3,3,3)
+type <- c("cells", "gut", "gutless", "whole", "cells", "gut", "gutless", "whole", "gut", "gutless")
+metadata_embryo <- cbind(metadata_embryo, rep, type)
+metadata_embryo$type <-
+  factor(metadata_embryo$type, levels = c("gutless", "gut", "cells", "whole"))
+metadata_embryo$stage <- "embryo"
+metadata_embryo
+```
+
+
+Generate a table called "cts" out of the countsData table. Subset the countsData.
+```{r}
+cts <- as.matrix(countsData %>% dplyr::select(metadata1$names))
+head(cts)
+```
+
+Reorganize the metadata table so the names2 column are now headers
+
+```{r}
+rownames(metadata1)<- metadata1$names
+coldata <- metadata1[,c("names", "rep", "type")]
+rownames(coldata) <- as.vector(metadata1$names)
+coldata
+```
+
+Check that the names match  --> Should be TRUE
+
+```{r}
+all(rownames(coldata) == colnames(cts))
+```
+
+```{r}
+dds_int <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ type)
+keep <- rowSums(counts(dds_int)) >=10
+dds_int <- dds[keep,]
+dds_int
+```
+
+```{r}
+dds_int <- DESeq(dds_int)
+resultsNames(dds_int)
+```
+
+# Figure 3A: Sample distance matrix show that FACS sorted intestine cells are distinct from other samples
+
+```{r}
+library("RColorBrewer")
+rld <- rlog(dds_int, blind=FALSE)
+sampleDists <- dist(t(assay(rld)))
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- paste(rld$names, rld$type, sep="-")
+colnames(sampleDistMatrix) <- paste(rld$names, rld$type, sep="-")
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists,
+         color=colors)
+```
+
+
+```{r}
+res_int <- results(dds_int, contrast = c("type", "gut", "gutless"))
+head(res_int)
+```
+
+Write results output file.  
+
+```{r}
+res_int_df <- as.data.frame(res_int) %>% rownames_to_column(var = "WBGeneID")
+```
+
+## Define Intestine Expression Sets: Specific, Shared, and Depleted
+
+```{r}
+plotMA(res_int, ylim = c(-11,11), alpha = 0.05)
+```
+```{r}
+resLFC <- lfcShrink(dds_int, coef = "type_gut_vs_gutless")
+resApeglm <- lfcShrink(dds_int, coef = "type_gut_vs_gutless", type = "apeglm")
+resAsh <- lfcShrink(dds_int, coef = "type_gut_vs_gutless", type = "ashr")
+```
+
+```{r}
+par(mfrow = c(1,3), mar = c(4,4,2,1))
+plotMA(resLFC, ylim=c(-10,10), main = "normal")
+plotMA(resApeglm, ylim=c(-10,10), main = "apeglm")
+plotMA(resAsh, ylim=c(-10,10), main = "ashr")
+```
+
+```{r}
+res_int_specific <- results(dds_int, contrast = c("type", "gut", "gutless"), lfcThreshold = 1, altHypothesis = "greater")
+res_int_depleted <- results(dds_int, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "less")
+res_int_shared <- results(dds_int, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "lessAbs")
+
+res_int_specific_df <- res_int_specific %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+res_int_depleted_df <- res_int_depleted %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+res_int_shared_df <- res_int_shared %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+
+```
+
+```{r}
+par(mfrow = c(1,3), mar = c(4,4,2,1))
+plotMA(res_int_specific, ylim=c(-10,10), main = "intestine specific")
+plotMA(res_int_depleted, ylim=c(-10,10), main = "intestine depleted")
+plotMA(res_int_shared, ylim=c(-10,10), main = "intestine shared")
+```
+
+```{r}
+int_exp_categories <-
+  data.frame(
+    WBGeneID = (res_int_specific_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    ExpType = "Specific",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (res_int_depleted_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    ExpType = "Depleted",
+    stringsAsFactors = FALSE
+  ))
+```
+
+# Figure 3B: Defining intestine specific genes and intestine depleted genes
+```{r}
+ggplot(
+  res_int_df %>% right_join(int_exp_categories, by = "WBGeneID"),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_int_df, colour = "grey", alpha = 0.04)+
+  geom_point(alpha = 0.4, aes(colour = ExpType))+
+  geom_hline(linetype = "dashed", aes(yintercept = 1)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -1))+
+   theme_bw()
+```
+
+# Figure 3C: Rlog stabilized read count values of example genes
+
+```{r}
+res_int_rlog <- as.data.frame(assay(rld)) %>% rownames_to_column(var = "WBGeneID") %>% dplyr::select(WBGeneID, contains("whole"), contains("all"), contains("plus"), contains("minus")) %>% dplyr::rename(gfpMinus_rep2="gfpMinusCells_rep2")
+
+res_int_rlog_df <- res_int_rlog%>% pivot_longer(wholeL1_rep1:gfpMinus_rep2,names_to = "sample", values_to = "rlog_counts")%>% separate(sample, into = c("sample","rep"))
+head(res_int_rlog_df)
+
+res_int_rlog_df$sample <- factor(res_int_rlog_df$sample, levels = c("wholeL1", "allCells", "gfpPlus", "gfpMinus"))
+```
+
+Add gene symbols
+```{r}
+res_int_rlog_df <- res_int_rlog_df %>% left_join(bitr(res_int_rlog_df$WBGeneID,
+     fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db), by = c("WBGeneID" = "WORMBASE"))
+head(res_int_rlog_df)
+```
+
+```{r}
+unique((res_int_rlog_df %>% filter(SYMBOL == "elt-2"))$WBGeneID)
+res_int_rlog_df %>% filter(WBGeneID %in% 
+                     c(unique((res_int_rlog_df %>% filter(SYMBOL == "elt-2"))$WBGeneID),
+                       unique((res_int_rlog_df %>% filter(SYMBOL == "ges-1"))$WBGeneID)
+                     )
+) %>%
+  ggplot(aes(x = sample, y = rlog_counts, fill = sample)) +
+  geom_boxplot() +
+  geom_point()+
+  theme_classic() +
+  facet_wrap(~SYMBOL)
+```
+
+
+
+# Figure 4: Intestine depleted genes are upregulated in the absence of ELT-2
+## Q: Are there intestine expressed genes that are not bound and differentially expressed in elt-2(-)?
+
+```{r}
+
+int_exp_categories
+elt2_reg_categories
+# int_elt2 <- int_exp_categories %>% left_join(elt2_reg_categories %>% filter(RegType != "Independent"), by = "WBGeneID") %>% replace_na(list(RegType = "Unregulated"))
+
+int_elt2 <- int_exp_categories %>% left_join(elt2_reg_categories, by = "WBGeneID") %>% drop_na()
+int_elt2
+int_elt2$elt2_detected_in_L1 <- ifelse(test = int_elt2$WBGeneID %in% elt2_detected_in_L1$WBGeneID,
+                                       yes = "bound",
+                                       no = "not_bound")
+unique(int_elt2$ExpType)
+int_elt2$ExpType <- factor(int_elt2$ExpType, c("Specific", "Depleted"))
+```
+
+# Figure 4A: Mapping ELT-2 regulated genes to intestine expression
+```{r fig.width=8, fig.height=3}
+
+res_int_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent")))) %>%
+ggplot(
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_int_df %>% filter(abs(log2FoldChange) >1, padj < 0.05), colour = "grey", alpha = 0.05)+
+  geom_point(alpha = 0.2, aes(colour = RegType))+
+  geom_hline(linetype = "dashed", aes(yintercept = 1)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -1))+
+   theme_bw() + facet_grid(.~RegType) +
+  ggtitle("Intestine Expressed Genes")
+
+res_int_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent"))))
+```
+
+```{r}
+int_elt2_percent <- int_elt2 %>% filter(ExpType == "Specific") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/sum(ngene)) %>% mutate(ExpType = "Specific")
+
+int_elt2_percent <- int_elt2_percent %>% bind_rows(int_elt2 %>% filter(ExpType == "Depleted") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/sum(ngene)) %>% mutate(ExpType = "Depleted"))
+
+int_elt2_percent$RegType <- factor(int_elt2_percent$RegType, levels = c("Activated", "Repressed", "Independent"))
+int_elt2_percent
+# int_elt2_percent %>% summarise(sum(percent))
+```
+
+# Figure 4B: Quantifying the percent of Differentially Expressed Intestine Genes Regulated by ELT-2
+
+```{r}
+ggplot(int_elt2_percent,
+       aes(x = ExpType, y = percent, fill = RegType)) +
+  geom_bar(stat = "identity", position = position_stack(reverse = TRUE)) + theme_classic() + 
+  geom_text(aes(label = paste0(round(percent, digits = 1), "%")), position = position_stack(vjust = 0.5, reverse = TRUE))+
+  ggtitle("Percent of Differentially Expressed Intestine Genes Regulated by ELT-2") + 
+  scale_y_continuous(breaks = seq(0, 110, by = 10), limits = c(0,100)) +
+  xlab("Intestine Expression Category") +
+  ylab("Percent of Intestine Category") +
+  coord_flip()
+```
+
+A different way of showing the same thing
+
+```{r}
+int_totals <- table(int_exp_categories$ExpType)
+int_totals[2]
+
+int_elt2_percent_t <- int_elt2 %>% filter(ExpType == "Specific") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/int_totals[2]) %>% mutate(ExpType = "Specific") 
+
+int_elt2_percent_t <- int_elt2_percent_t %>% bind_rows(int_elt2 %>% filter(ExpType == "Depleted") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/int_totals[1]) %>% mutate(ExpType = "Depleted")) 
+
+int_elt2_percent_t %>% ggplot(aes(x = RegType, y = percent, fill = ExpType)) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+```{r}
+int_elt2_percent_t %>% ggplot(aes(x = ExpType, y = ngene)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~RegType) +
+  theme_classic()
+```
+
+
+# Figure 5A: Gene ontology terms associated with intesitne specific or depelted genes regulated or ELT-2 regulated genes
+Make pretty way to associate GO terms to MA plot
+```{r fig.width=10, fig.height=6}
+int_elt2_BP <- compareCluster(WBGeneID~ExpType+RegType, data = int_elt2, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(int_elt2_BP, x=~ExpType, showCategory = 10) + ggplot2::facet_grid(~RegType) + ggtitle("Gene Ontology Biological Process")
+# View(as.data.frame(formula_res_BP))
+```
+
+```{r}
+as.data.frame(int_elt2_BP) %>% filter(
+  Description %in% c(
+    "defense response",
+    "innate immune response",
+    "peroxisome organization",
+    "regulation of membrane potential",
+    "gamete generation",
+    "synapsis"
+  )
+) %>% dplyr::select(ExpType, RegType, ID, Description, GeneRatio, p.adjust) %>% rowwise() %>% mutate(GeneRatio = eval(parse(text = GeneRatio))) %>%
+  ggplot(aes(x = ExpType, y = Description)) + geom_point(aes(size = GeneRatio, color = -log10(p.adjust))) + scale_color_gradient(low = "pink", high = "dark red") + scale_size(breaks = c(0.1, 0.2, 0.3)) +
+  theme_classic() + facet_wrap( ~ RegType)
+```
+
+```{r fig.width=10, fig.height=6}
+int_elt2_CC <- compareCluster(WBGeneID~ExpType+RegType, data = int_elt2, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "CC",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(int_elt2_CC, x=~ExpType, showCategory = 10) + ggplot2::facet_grid(~RegType) + ggtitle("Gene Ontology Cellular Component")
+# View(as.data.frame(formula_res_BP))
+```
+
+```{r}
+as.data.frame(int_elt2_CC) %>% filter(
+  Description %in%
+    c(
+      "lysosome",
+      "vacuole",
+      "peroxisome",
+      "neuron projection",
+      "P granule",
+      "apical part of cell"
+    )
+) %>%
+  dplyr::select(ExpType, RegType, ID, Description, GeneRatio, p.adjust) %>% rowwise() %>% mutate(GeneRatio = eval(parse(text = GeneRatio))) %>%
+  ggplot(aes(x = ExpType, y = Description)) +
+  geom_point(aes(size = GeneRatio, color = -log10(p.adjust))) + scale_color_gradient(low = "light green", high = "dark green") + scale_size(breaks = c(0.1, 0.2)) +  theme_classic() + facet_wrap(~RegType)
+```
+
+
+# Figure 5: ELT-7 overcompensates ELT-2 bound genes
+## Question: How does ELT-7 contribute to ELT-2 regulation?
+
+```{r}
+dynamic_regulated_genes <-
+  read.table(file = "01_ChIPseq_RNAseq_Integration/01_input/2017-11-20_all_changing_genes_0.1alpha_0.8lfc.txt",
+             quote = "",
+             header = FALSE)
+colnames(dynamic_regulated_genes) <- "WBGeneID"
+
+dynamic_counts_matrix <-
+  matrix_select(dineen_nishimura_counts_matrix,
+                dynamic_regulated_genes$WBGeneID)
+
+dynamic_counts_matrix_scaled <-
+  t(apply(unlist(dynamic_counts_matrix), 1, scale))
+
+rownames(dynamic_counts_matrix_scaled) <-
+  rownames(dynamic_counts_matrix)
+colnames(dynamic_counts_matrix_scaled) <-
+  colnames(dynamic_counts_matrix)
+dynamic_counts_matrix_scaled %>% head
+
+dynamic_counts_matrix_scaled_ascend <-
+  dynamic_counts_matrix_scaled[order(rownames(dynamic_counts_matrix_scaled)),]
+```
+
+
+```{r fig.width=4, fig.height=5}
+
+e2e7_L1_anno <-
+  data.frame(
+    WBGeneID = rownames(dynamic_counts_matrix_scaled_ascend),
+    elt2_detected_in_L1 = ifelse(
+      test = rownames(dynamic_counts_matrix_scaled_ascend) %in% elt2_detected_in_L1$WBGeneID,
+      yes = "bound",
+      no = "not_bound"
+    ),
+    stringsAsFactors = FALSE
+  )
+
+l1_e2e7_bound_list <-
+  e2e7_L1_anno %>% filter(elt2_detected_in_L1 == "bound") %>% dplyr::select(WBGeneID) %>% arrange(WBGeneID)
+
+dynamic_counts_matrix_scaled_bound_only <-
+  matrix_select(dynamic_counts_matrix_scaled_ascend, l1_e2e7_bound_list$WBGeneID)
+
+set.seed(11)
+kclus <- kmeans(dynamic_counts_matrix_scaled_bound_only, 4)
+bound_only_sets <-
+  data.frame(
+    WBGeneID = rownames(dynamic_counts_matrix_scaled_bound_only),
+    set = paste("Class", kclus$cluster, sep = ""),
+    stringsAsFactors = FALSE
+  )
+bound_only_sets[bound_only_sets$set == "Class1", "set"] <- "ClassC"
+bound_only_sets[bound_only_sets$set == "Class2", "set"] <- "ClassA"
+bound_only_sets[bound_only_sets$set == "Class3", "set"] <- "ClassD"
+bound_only_sets[bound_only_sets$set == "Class4", "set"] <- "ClassB"
+bound_only_sets$set <- factor(bound_only_sets$set, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+head(bound_only_sets)
+table(bound_only_sets$set)
+nrow(bound_only_sets)
+
+Ha_bound_only <-
+  RNA_heatmap2(mat = dynamic_counts_matrix_scaled_bound_only,
+              column_split = RNA_column_order,
+              row_split = bound_only_sets$set)
+Ha_bound_only
+```
+Intestine MA plot of elt-2/elt-7 bound differential expression classes
+
+```{r fig.width=5, fig.height=5}
+bound_only_sets
+bound_only_sets %>% left_join(res_int_df %>% filter(padj < 0.05, abs(log2FoldChange) >1))
+ggplot(
+  bound_only_sets %>% left_join(res_int_df, by = "WBGeneID"),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_int_df, colour = "grey", alpha = 0.04)+
+  geom_point(alpha = 0.4, aes(colour = padj < 0.05))+
+  geom_hline(linetype = "dashed", aes(yintercept = 2)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -2))+
+  facet_grid(set ~.) + theme_bw() #+ guides(colour = FALSE)
+```
+
+
+```{r}
+boundgenedf <- bitr(bound_only_sets$WBGeneID,
+     fromType = "WORMBASE",
+     toType = "ENTREZID",
+     OrgDb = org.Ce.eg.db)
+boundgenedf
+bound_only_entrez <- bound_only_sets %>% left_join(boundgenedf, by = c("WBGeneID" = "WORMBASE"))
+bound_compareCluster_entrez <- list(
+  ClassA = (bound_only_entrez %>% filter(set == "ClassA"))$ENTREZID,
+  ClassB = (bound_only_entrez %>% filter(set == "ClassB"))$ENTREZID,
+  ClassC = (bound_only_entrez %>% filter(set == "ClassC"))$ENTREZID,
+  ClassD = (bound_only_entrez %>% filter(set == "ClassD"))$ENTREZID
+)
+```
+
+## GO Term Biological Process for bound classes
+
+```{r fig.width=8, fig.height=3}
+go_bp_bound <- compareCluster(geneClusters = bound_compareCluster, fun="enrichGO", OrgDb = org.Ce.eg.db, keyType = 'WORMBASE', ont = "BP", readable = TRUE)
+head(go_bp_bound)
+```
+```{r fig.width=8, fig.height=3}
+dotplot(go_bp_bound, showCategory = 5) + ggtitle("Gene Ontology Biological Process")
+# View(as.data.frame(go_cc_bound))
+```
+
+## GO Term Cellular Componenet for bound classes
+
+```{r fig.width=6, fig.height=4}
+go_cc_bound <- compareCluster(geneClusters = bound_compareCluster, fun="enrichGO", OrgDb = org.Ce.eg.db, keyType = 'WORMBASE', ont = "CC", readable = TRUE)
+head(go_cc_bound)
+dotplot(go_cc_bound, showCategory = 5)+ ggtitle("Gene Ontology Cellular Component")
+# View(as.data.frame(go_cc_bound))
+```
+
+# Figure 6: Overexpression of the elt-2 promoter in the absence of ELT-2 protein is ELT-7 dependent
+
+```{r}
+sheets <- c("Rep1_ELT-2_RNAi",  "Rep1_L4440_RNAi", "Rep2_ELT-2_RNAi",  "Rep2_L4440_RNAi", "Rep3_ELT-2_RNAi",  "Rep3_L4440_RNAi")
+
+
+image_df_JM259 <- data.frame()
+for(sheet in sheets) {
+ toappend <- read_excel("./JM259_Reps123_elt-2_Promoter_ImageJ_Analysis.xlsx", sheet = sheet)
+ toappend <- toappend %>% mutate(experiment = sheet)
+ toappend$worm <- as.character(toappend$worm)
+ image_df_JM259 <- bind_rows(image_df_JM259, toappend)
+}
+image_df_JM259$strain <- "JM259"
+
+image_df_JM149 <- data.frame()
+for(sheet in sheets) {
+ toappend <- read_excel("./JM149_Reps123_elt-2_Promoter_ImageJ_Analysis.xlsx", sheet = sheet)
+ toappend <- toappend %>% mutate(experiment = sheet)
+ toappend$worm <- as.character(toappend$worm)
+ image_df_JM149 <- bind_rows(image_df_JM149, toappend)
+}
+
+image_df_JM149$strain <- "JM149"
+
+
+image_df<- image_df_JM149 %>% bind_rows(image_df_JM259)
+image_df <- image_df %>% filter(life_stage == "L1")
+head(image_df)
+```
+```{r}
+image_df$treatment <- factor(image_df$treatment, levels = c("L4440", "ELT-2"))
+image_df <- image_df %>%
+  mutate(ID = paste(strain, experiment, life_stage, worm, sep = "_"))
+```
+
+Calculate corrected total cell fluorescence (CTCF)
+
+```{r}
+background_df<- image_df %>%
+  group_by(strain, treatment, worm, measurement_type, life_stage, experiment, ID) %>%
+  summarize(Mean_Background = mean(mean)) %>% 
+  filter(measurement_type == "background") %>%
+  ungroup() %>%
+  dplyr::select(ID, Mean_Background)
+background_df
+```
+```{r}
+image_ctcf <- image_df %>%
+  filter(measurement_type == "GFP") %>%
+  dplyr::select(strain, ID, treatment, worm, area, life_stage, experiment, intDen) %>%
+  inner_join(background_df, by = "ID") %>%
+  rowwise() %>%
+  mutate(CTCF = intDen - (area*Mean_Background) )
+image_ctcf
+```
+Plot the results
+# Figure 6A: Overexpression of ELT-2 promoter is ELT-7 dependent
+
+```{r}
+library(ggpubr)
+ggplot(image_ctcf, aes(treatment, CTCF/area)) + 
+  geom_boxplot() +
+  geom_jitter(aes(fill = strain, color = treatment)) +
+  facet_grid(.~strain) +
+  labs(
+    title = "Overexpression of ELT-2 promoter is ELT-7 dependent",
+    x = "RNAi Treatment",
+    y = "Corrected Total Cell \nFluorescence (A.U.)"
+  ) +
+  stat_compare_means(comparisons = list(c("L4440", "ELT-2")), method = "t.test") +
+  scale_x_discrete(labels = c("L4440", "ELT-2"))+
+  theme_classic() +
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    axis.text.x = element_text(size = 15),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 18),
+    axis.title.y = element_text(size=18),
+    plot.title = element_text(hjust = 0.5, size = 18)
+    ) 
+  
+```
+
+# Figure 6B: Foldchange of ELT-2 promoter expression
+To see how much brighter ELT-2 is compared to L4440
+
+```{r}
+mean_ctcf <-
+  image_ctcf %>%
+  group_by(strain, treatment) %>%
+  summarise(avgCTCF = mean(CTCF), sdCTCF = sd(CTCF))
+
+mean_ctcf <-
+  mean_ctcf %>% pivot_wider(names_from = treatment,
+                            values_from = c(avgCTCF, sdCTCF))
+mean_ctcf
+```
+
+```{r}
+library(mratios)
+image_ctcf %>%filter(life_stage=='L1' & treatment == 'ELT-2', strain == "JM149") %>% dplyr::select(CTCF) -> JM149_numerator
+image_ctcf %>% filter(life_stage=='L1' & treatment == 'L4440', strain == "JM149") %>% dplyr::select(CTCF) -> JM149_denominator
+ttestratio(JM149_numerator[[1]], JM149_denominator[[1]]) -> L1_ttest_ratio_JM149
+
+image_ctcf %>%filter(life_stage=='L1' & treatment == 'ELT-2', strain == "JM259") %>% dplyr::select(CTCF) -> JM259_numerator
+image_ctcf %>% filter(life_stage=='L1' & treatment == 'L4440', strain == "JM259") %>% dplyr::select(CTCF) -> JM259_denominator
+ttestratio(JM259_numerator[[1]], JM259_denominator[[1]]) -> L1_ttest_ratio_JM259
+    
+mean_ctcf$lower = c(L1_ttest_ratio_JM149$conf.int[1], L1_ttest_ratio_JM259$conf.int[1])
+mean_ctcf$upper = c(L1_ttest_ratio_JM149$conf.int[2], L1_ttest_ratio_JM259$conf.int[2])
+```
+
+# Figure 6B: Relative change in ELT-2 promoter fluorescence
+```{r}
+ggplot(mean_ctcf, aes(x = strain, y = `avgCTCF_ELT-2`/avgCTCF_L4440)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+  labs(title = "elt-2 Promoter Relative Fluorescence") +
+  theme_classic()+
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+    axis.text.x = element_text(size = 16),
+    axis.text.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size=20),
+    plot.title = element_text(hjust = 0.5, size = 20)
+    ) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  ylab("Relative Fluorescence")
+ 
+```
+
+
+
+# OLD CODE BELOW
+
+# Figure 5: ELT-2 binding does not predict intestine expression
+OR: Intestine depleted genes are upregulated in the absence of ELT-2
+## Question: Is ELT-2 responsible for expression of all intestine expressed geens?
+
+```{r}
+L1FACS_rlog <- read.csv(file = "../RWC24_L1_Intestine_RNAseq/04_DEseq2/200607_RWC24_L1intestineFACS_rlogCounts.csv") %>% dplyr::select(-X)
+
+res_gutVnogut <- read.csv(file = "../RWC24_L1_Intestine_RNAseq/04_DEseq2/200511_L1_intestine_FACS_gut_vs_gutless.csv", stringsAsFactors = FALSE) %>% dplyr::rename(WBGeneID = X) %>% filter(baseMean > 1)
+
+gutVelt2 <- resWtV2 %>% left_join(res_gutVnogut, by = c("WBGeneID"), suffix = c(".wV2", ".gVng")) %>% filter(padj.wV2 < 0.05 & padj.gVng < 0.05, abs(log2FoldChange.wV2) > 2 & abs(log2FoldChange.gVng) > 2) %>% left_join(elt2_L1_anno, by = "WBGeneID")
+
+ggplot(
+  gutVelt2,
+  aes(x = log2FoldChange.gVng, y = log2FoldChange.wV2)
+) +
+  geom_point(aes(color = elt2_detected_in_L1)) +
+  theme_bw()
+```
+
+Compare cluster of intestine RNA-seq vs elt-2(-) RNA-seq
+
+```{r}
+gutVelt2_compareCluster <- data.frame(
+  WORMBASE = gutVelt2$WBGeneID,
+  Intestine = ifelse(gutVelt2$WBGeneID %in% (gutVelt2 %>% filter(log2FoldChange.gVng > 2))$WBGeneID, yes = "Expressed", no = "Depleted"),
+  ELT2 = ifelse(gutVelt2$WBGeneID %in% (gutVelt2 %>% filter(log2FoldChange.wV2 > 2))$WBGeneID, yes = "ELT2_repressed", no = "ELT2_activated"),
+  stringsAsFactors = FALSE)
+
+gutVelt2_compareCluster
+```
+
+```{r}
+gutVelt2_res_BP <- compareCluster(WORMBASE~Intestine+ELT2, data = gutVelt2_compareCluster, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(gutVelt2_res_BP, x=~Intestine) + ggplot2::facet_grid(~ELT2)
+# View(as.data.frame(gutVelt2_res))
+```
+
+```{r}
+gutVelt2_res_CC <- compareCluster(WORMBASE~Intestine+ELT2, data = gutVelt2_compareCluster, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "CC",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(gutVelt2_res_CC, x=~Intestine) + ggplot2::facet_grid(~ELT2)
+# View(as.data.frame(gutVelt2_res_CC))
+```
+
+
+# Figure 6: ELT-2 represses intestine expressed transcription factors
+## Question: How are downstream transcription factors regulated by ELT-2?
+
+```{r}
+wTF3.0 <-
+  read.csv("01_ChIPseq_RNAseq_Integration/01_input/TF3-0_namesonly.txt",
+           sep = "\t",
+           header = TRUE) %>% dplyr::select(Sequence.name:DBD)
+wTF3.0
+```
+
+```{r}
+tf_bound_anno <-
+  data.frame(WBGeneID = rownames(dynamic_counts_matrix_scaled_bound_only), stringsAsFactors = FALSE) %>% 
+  left_join(res_gutVnogut, by = "WBGeneID") %>% dplyr::select(WBGeneID, log2FoldChange, padj) %>% filter(abs(log2FoldChange) > 2, padj < 0.05, WBGeneID %in% wTF3.0$WBGeneID)
+
+tf_bound_anno$expression <- ifelse(test = tf_bound_anno$WBGeneID %in% (tf_bound_anno %>% filter(log2FoldChange > 2))$WBGeneID,
+       yes = "enriched",
+       no = "depleted")
+tf_bound_anno
+dynamic_counts_matrix_scaled_bound_tf <- matrix_select(dynamic_counts_matrix_scaled_bound_only, tf_bound_anno$WBGeneID)
+
+dynamic_counts_matrix_scaled_bound_tf_symbol <- dynamic_counts_matrix_scaled_bound_tf
+rownames(dynamic_counts_matrix_scaled_bound_tf_symbol) <- bitr(rownames(dynamic_counts_matrix_scaled_bound_tf),
+     fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db)$SYMBOL
+
+
+col_fun <- colorRamp2(c(-4,0,6), c("blue","white", "red"))
+row_ha <- rowAnnotation(log2IntestineRNA = tf_bound_anno$log2FoldChange, col = list(log2IntestineRNA = col_fun))
+Heatmap(
+  dynamic_counts_matrix_scaled_bound_tf_symbol,
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = TRUE,
+  row_names_side = "left",
+  show_column_names = TRUE,
+  row_split = tf_bound_anno$expression,
+  row_names_gp = gpar(fontsize = 11),
+  right_annotation = row_ha
+) 
+```
+
+```{r}
+
+ggplot(
+  res_gutVnogut %>% filter(WBGeneID %in% tf_bound_anno$WBGeneID, padj < 0.05),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_gutVnogut, colour = "grey", alpha = 0.04)+
+  geom_point(alpha = 0.4, aes(colour = padj < 0.05))+
+  geom_hline(linetype = "dashed", aes(yintercept = 2)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -2))+
+   theme_bw() #+ guides(colour = FALSE)
+```
+
+```{r}
+res_gutVnogut
+resWtV2
+dineen_nishimura_counts
+L1FACS_rlog
+
+ggplot(wtV2_compareCluster %>% left_join(res_gutVnogut, by = c("WORMBASE" = "WBGeneID"))%>% filter(padj < 0.05),
+       aes(x = set, y = log2FoldChange)) +
+  geom_violin() +
+  facet_grid(.~elt2_detected_in_L1) + theme_bw()
+```

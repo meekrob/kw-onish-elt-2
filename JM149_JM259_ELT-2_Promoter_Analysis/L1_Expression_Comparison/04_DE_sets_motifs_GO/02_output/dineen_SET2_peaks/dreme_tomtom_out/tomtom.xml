@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<tomtom version="5.1.1" release="Wed Jan 29 15:00:42 2020 -0800">
+  <model>
+    <command_line>tomtom -verbosity 1 -oc 02_output/dineen_SET2_peaks/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/dineen_SET2_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme</command_line>
+    <distance_measure value="pearson"/>
+    <threshold type="evalue">1</threshold>
+    <alphabet name="DNA" like="dna">
+      <letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+      <letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+      <letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+      <letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+      <letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+      <letter id="V" symbol="V" equals="ACG" name="Not T"/>
+      <letter id="H" symbol="H" equals="ACT" name="Not G"/>
+      <letter id="D" symbol="D" equals="AGT" name="Not C"/>
+      <letter id="B" symbol="B" equals="CGT" name="Not A"/>
+      <letter id="M" symbol="M" equals="AC" name="Amino"/>
+      <letter id="R" symbol="R" equals="AG" name="Purine"/>
+      <letter id="W" symbol="W" equals="AT" name="Weak"/>
+      <letter id="S" symbol="S" equals="CG" name="Strong"/>
+      <letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+      <letter id="K" symbol="K" equals="GT" name="Keto"/>
+    </alphabet>
+    <strands>both</strands>
+    <background from="--query--" A="0.31019" C="0.18981" G="0.18981" T="0.31019"/>
+    <host>shas0804.rc.int.colorado.edu</host>
+    <when>Wed Dec  2 04:34:26 2020</when>
+  </model>
+  <query_dbs>
+    <db source="02_output/dineen_SET2_peaks/dreme_out/dreme.xml" name="dreme.xml" loaded="4" excluded="0" last_mod_date="Wed Dec  2 04:34:22 2020"/>
+  </query_dbs>
+  <target_dbs>
+    <db source="motif_databases/CIS-BP/Caenorhabditis_elegans.meme" name="Caenorhabditis_elegans" loaded="262" excluded="0" last_mod_date="Mon Nov 30 01:52:19 2020"/>
+  </target_dbs>
+  <queries>
+    <motif db="0" id="ATTTTCH" alt="DREME-4" length="7" nsites="167" evalue="1.8e-002">
+      <pos A="0.999587" C="0.000113591" G="0.000113591" T="0.000185631"/>
+      <pos A="0.000185631" C="0.000113591" G="0.000113591" T="0.999587"/>
+      <pos A="0.000185631" C="0.000113591" G="0.000113591" T="0.999587"/>
+      <pos A="0.000185631" C="0.000113591" G="0.000113591" T="0.999587"/>
+      <pos A="0.000185631" C="0.000113591" G="0.000113591" T="0.999587"/>
+      <pos A="0.000185631" C="0.999515" G="0.000113591" T="0.000185631"/>
+      <pos A="0.38319" C="0.257445" G="0.000113591" T="0.359252"/>
+    </motif>
+    <motif db="0" id="CTGAWAA" alt="DREME-2" length="7" nsites="114" evalue="3.3e-006">
+      <pos A="0.000271858" C="0.99929" G="0.000166354" T="0.000271858"/>
+      <pos A="0.000271858" C="0.000166354" G="0.000166354" T="0.999395"/>
+      <pos A="0.000271858" C="0.000166354" G="0.99929" T="0.000271858"/>
+      <pos A="0.999395" C="0.000166354" G="0.000166354" T="0.000271858"/>
+      <pos A="0.59624" C="0.000166354" G="0.000166354" T="0.403427"/>
+      <pos A="0.999395" C="0.000166354" G="0.000166354" T="0.000271858"/>
+      <pos A="0.999395" C="0.000166354" G="0.000166354" T="0.000271858"/>
+    </motif>
+    <motif db="0" id="GCGTCTCY" alt="DREME-3" length="8" nsites="26" evalue="5.7e-003">
+      <pos A="0.00118847" C="0.000727243" G="0.996896" T="0.00118847"/>
+      <pos A="0.00118847" C="0.996896" G="0.000727243" T="0.00118847"/>
+      <pos A="0.00118847" C="0.000727243" G="0.996896" T="0.00118847"/>
+      <pos A="0.00118847" C="0.000727243" G="0.000727243" T="0.997357"/>
+      <pos A="0.00118847" C="0.996896" G="0.000727243" T="0.00118847"/>
+      <pos A="0.00118847" C="0.000727243" G="0.000727243" T="0.997357"/>
+      <pos A="0.00118847" C="0.996896" G="0.000727243" T="0.00118847"/>
+      <pos A="0.00118847" C="0.268927" G="0.000727243" T="0.729158"/>
+    </motif>
+    <motif db="0" id="TGATAASR" alt="DREME-1" length="8" nsites="138" evalue="3.0e-021">
+      <pos A="0.000224612" C="0.000137444" G="0.000137444" T="0.9995"/>
+      <pos A="0.000224612" C="0.000137444" G="0.999413" T="0.000224612"/>
+      <pos A="0.9995" C="0.000137444" G="0.000137444" T="0.000224612"/>
+      <pos A="0.000224612" C="0.000137444" G="0.000137444" T="0.9995"/>
+      <pos A="0.9995" C="0.000137444" G="0.000137444" T="0.000224612"/>
+      <pos A="0.9995" C="0.000137444" G="0.000137444" T="0.000224612"/>
+      <pos A="0.000224612" C="0.297023" G="0.702527" T="0.000224612"/>
+      <pos A="0.717096" C="0.000137444" G="0.282542" T="0.000224612"/>
+    </motif>
+  </queries>
+  <targets>
+    <motif db="0" id="M0169_1.02" alt="hlh-27" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T012789_1.02">
+      <pos A="0.152166" C="0.141223" G="0.678413" T="0.028199"/>
+      <pos A="0.661808" C="0.265189" G="0.0448037" T="0.028199"/>
+      <pos A="0.028199" C="0.926346" G="0.0172555" T="0.028199"/>
+      <pos A="0.915117" C="0.0172555" G="0.0394282" T="0.028199"/>
+      <pos A="0.028199" C="0.593752" G="0.0172555" T="0.360794"/>
+      <pos A="0.116891" C="0.0172555" G="0.837655" T="0.028199"/>
+      <pos A="0.028199" C="0.830653" G="0.0172555" T="0.123893"/>
+      <pos A="0.028199" C="0.0172555" G="0.926346" T="0.028199"/>
+    </motif>
+    <motif db="0" id="M0170_1.02" alt="hlh-25" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T012790_1.02">
+      <pos A="0.179714" C="0.269781" G="0.484427" T="0.0660781"/>
+      <pos A="0.607522" C="0.213334" G="0.0974691" T="0.0816754"/>
+      <pos A="0.028199" C="0.857009" G="0.0249601" T="0.0898327"/>
+      <pos A="0.906474" C="0.0172555" G="0.0480719" T="0.028199"/>
+      <pos A="0.028199" C="0.648996" G="0.0172555" T="0.305549"/>
+      <pos A="0.143762" C="0.0172555" G="0.810784" T="0.028199"/>
+      <pos A="0.0444327" C="0.731541" G="0.0334891" T="0.190536"/>
+      <pos A="0.0672999" C="0.046581" G="0.848145" T="0.0379745"/>
+    </motif>
+    <motif db="0" id="M0642_1.02" alt="T22H9.4" length="10" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T075350_1.02">
+      <pos A="0.11627" C="0.0961528" G="0.0614301" T="0.726147"/>
+      <pos A="0.0320718" C="0.0190482" G="0.918679" T="0.0302009"/>
+      <pos A="0.0308254" C="0.0197791" G="0.0182919" T="0.931104"/>
+      <pos A="0.137633" C="0.102482" G="0.0357101" T="0.724175"/>
+      <pos A="0.219084" C="0.033241" G="0.710703" T="0.0369718"/>
+      <pos A="0.603032" C="0.342338" G="0.0187091" T="0.0359209"/>
+      <pos A="0.930428" C="0.0190501" G="0.0191801" T="0.0313409"/>
+      <pos A="0.815315" C="0.0252473" G="0.0214691" T="0.137968"/>
+      <pos A="0.423794" C="0.0880937" G="0.105525" T="0.382587"/>
+      <pos A="0.301085" C="0.173131" G="0.154129" T="0.371654"/>
+    </motif>
+    <motif db="0" id="M0772_1.02" alt="elt-7" length="12" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084368_1.02">
+      <pos A="0.273622" C="0.173806" G="0.27096" T="0.281612"/>
+      <pos A="0.23758" C="0.491929" G="0.129774" T="0.140717"/>
+      <pos A="0.0723999" C="0.0614564" G="0.0614564" T="0.804686"/>
+      <pos A="0.0514636" C="0.0405201" G="0.856554" T="0.0514636"/>
+      <pos A="0.936675" C="0.0174601" G="0.0174601" T="0.0284036"/>
+      <pos A="0.0284036" C="0.0174601" G="0.0174601" T="0.936675"/>
+      <pos A="0.844437" C="0.0174601" G="0.0174601" T="0.120643"/>
+      <pos A="0.936675" C="0.0174601" G="0.0174601" T="0.0284036"/>
+      <pos A="0.0991254" C="0.542671" G="0.259078" T="0.0991254"/>
+      <pos A="0.315664" C="0.132215" G="0.316725" T="0.235396"/>
+      <pos A="0.303714" C="0.200532" G="0.200532" T="0.295223"/>
+      <pos A="0.232412" C="0.221468" G="0.221468" T="0.324651"/>
+    </motif>
+    <motif db="0" id="M0786_1.02" alt="elt-6" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084987_1.02">
+      <pos A="0.185123" C="0.336437" G="0.317849" T="0.16059"/>
+      <pos A="0.0759772" C="0.0370728" G="0.0244737" T="0.862476"/>
+      <pos A="0.0325345" C="0.0173728" G="0.921163" T="0.0289299"/>
+      <pos A="0.880789" C="0.0246319" G="0.0222001" T="0.072379"/>
+      <pos A="0.0307599" C="0.0245001" G="0.0185146" T="0.926226"/>
+      <pos A="0.732634" C="0.0636601" G="0.025991" T="0.177714"/>
+      <pos A="0.670854" C="0.0567282" G="0.118305" T="0.154114"/>
+      <pos A="0.219415" C="0.283231" G="0.314158" T="0.183195"/>
+    </motif>
+    <motif db="0" id="M0787_1.02" alt="end-1" length="10" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084989_1.02">
+      <pos A="0.284852" C="0.217136" G="0.263845" T="0.234167"/>
+      <pos A="0.245697" C="0.260044" G="0.252868" T="0.241391"/>
+      <pos A="0.306894" C="0.295951" G="0.109102" T="0.288053"/>
+      <pos A="0.0804299" C="0.0721646" G="0.771471" T="0.0759345"/>
+      <pos A="0.850034" C="0.0242946" G="0.0569628" T="0.068709"/>
+      <pos A="0.0670854" C="0.0697464" G="0.0460637" T="0.817104"/>
+      <pos A="0.656594" C="0.0550882" G="0.0467191" T="0.241599"/>
+      <pos A="0.388685" C="0.190977" G="0.213126" T="0.207211"/>
+      <pos A="0.178166" C="0.290515" G="0.316248" T="0.21507"/>
+      <pos A="0.275038" C="0.225505" G="0.295566" T="0.203892"/>
+    </motif>
+    <motif db="0" id="M0788_1.02" alt="end-3" length="10" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T084990_1.02">
+      <pos A="0.31545" C="0.204115" G="0.24778" T="0.232655"/>
+      <pos A="0.217053" C="0.230187" G="0.296189" T="0.256571"/>
+      <pos A="0.4789" C="0.184726" G="0.050731" T="0.285644"/>
+      <pos A="0.0885836" C="0.0624391" G="0.767755" T="0.0812227"/>
+      <pos A="0.834469" C="0.0186219" G="0.0634291" T="0.083479"/>
+      <pos A="0.103823" C="0.0512355" G="0.023781" T="0.82116"/>
+      <pos A="0.841149" C="0.0271373" G="0.0195273" T="0.112186"/>
+      <pos A="0.615323" C="0.082311" G="0.185469" T="0.116897"/>
+      <pos A="0.177039" C="0.224287" G="0.405981" T="0.192693"/>
+      <pos A="0.338259" C="0.214958" G="0.295018" T="0.151764"/>
+    </motif>
+    <motif db="0" id="M2335_1.02" alt="elt-3" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T085093_1.02">
+      <pos A="0.028199" C="0.0172555" G="0.0172555" T="0.93729"/>
+      <pos A="0.028199" C="0.0172555" G="0.926346" T="0.028199"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.028199" C="0.0172555" G="0.0172555" T="0.93729"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.237214" C="0.173387" G="0.561199" T="0.028199"/>
+      <pos A="0.801304" C="0.0172555" G="0.153241" T="0.028199"/>
+    </motif>
+    <motif db="0" id="M4715_1.02" alt="egl-27" length="8" nsites="1"
+        url="http://cisbp.ccbr.utoronto.ca/TFreport.php?searchTF=T086516_1.02">
+      <pos A="0.028199" C="0.504268" G="0.147126" T="0.320407"/>
+      <pos A="0.028199" C="0.0172555" G="0.0172555" T="0.93729"/>
+      <pos A="0.028199" C="0.0172555" G="0.926346" T="0.028199"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.028199" C="0.082191" G="0.0172555" T="0.872354"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.93729" C="0.0172555" G="0.0172555" T="0.028199"/>
+      <pos A="0.028199" C="0.179593" G="0.764009" T="0.028199"/>
+    </motif>
+  </targets>
+  <matches>
+    <query idx="3">
+      <target idx="7" rc="n" off="0" pv="2.85e-07" ev="7.47e-05" qv="1.48e-04"/>
+      <target idx="8" rc="n" off="1" pv="6.53e-05" ev="1.71e-02" qv="1.40e-02"/>
+      <target idx="4" rc="n" off="1" pv="8.07e-05" ev="2.11e-02" qv="1.40e-02"/>
+      <target idx="6" rc="n" off="2" pv="1.95e-04" ev="5.12e-02" qv="2.09e-02"/>
+      <target idx="3" rc="n" off="2" pv="2.01e-04" ev="5.26e-02" qv="2.09e-02"/>
+      <target idx="5" rc="n" off="2" pv="3.58e-04" ev="9.39e-02" qv="3.11e-02"/>
+    </query>
+    <query idx="1">
+      <target idx="8" rc="n" off="0" pv="4.65e-04" ev="1.22e-01" qv="1.29e-01"/>
+      <target idx="4" rc="n" off="0" pv="7.16e-04" ev="1.88e-01" qv="1.29e-01"/>
+      <target idx="3" rc="n" off="1" pv="7.40e-04" ev="1.94e-01" qv="1.29e-01"/>
+    </query>
+    <query idx="2">
+      <target idx="0" rc="y" off="1" pv="1.53e-03" ev="4.01e-01" qv="4.48e-01"/>
+      <target idx="1" rc="y" off="1" pv="1.71e-03" ev="4.48e-01" qv="4.48e-01"/>
+    </query>
+    <query idx="0">
+      <target idx="2" rc="y" off="0" pv="3.74e-03" ev="9.79e-01" qv="1.00e+00"/>
+    </query>
+  </matches>
+  <runtime cycles="276994" seconds="0.277"/>
+</tomtom>

@@ -1,0 +1,33 @@
+<tool id="WigAvg" name="Average" version="1.1.0">
+  <description>multiple (Big)Wig files</description>
+  <command interpreter="bash">
+    galaxyToolRunner.sh wigmath.Average -o $output $file1 $file2
+      #for $input in $inputs
+        ${input.file}
+      #end for
+  </command>
+  <inputs>
+      <param name="file1" label="(Big)Wig file 1" type="data" format="bigwig,wig" />
+      <param name="file2" label="(Big)Wig file 2" type="data" format="bigwig,wig" />
+      <repeat name="inputs" title="Additional (Big)Wig file">
+        <param name="file" type="data" format="bigwig,wig" />
+      </repeat>
+  </inputs>
+  <outputs>
+      <data format="wig" name="output" />
+  </outputs>
+  <tests>
+	  <!-- TODO -->
+  </tests>
+
+
+<help>
+
+This tool will average the values of the provided Wig files, base pair by base pair.
+
+.. class:: infomark
+
+**TIP:** If your dataset does not appear in the pulldown menu, it means that it is not in Wig or BigWig format. Use "edit attributes" to set the correct format if it was not detected correctly.
+
+</help>
+</tool>

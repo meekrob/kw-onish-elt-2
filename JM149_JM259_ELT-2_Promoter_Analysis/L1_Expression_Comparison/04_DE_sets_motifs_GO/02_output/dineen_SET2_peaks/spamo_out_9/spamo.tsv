@@ -1,0 +1,12 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M1096_1.02	(ceh-45)_(Drosophila_melanogaster)_(DBD_0.74)	HTAATCCB	1	1	.	.	.	1.44e+00	86	3	3	18	4.56e-07	4.10e-06
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M1096_1.02	(ceh-45)_(Drosophila_melanogaster)_(DBD_0.74)	HTAATCCB	1	1	.	.	.	1.44e+00	86	5	3	18	3.58e-06	3.22e-05
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M1096_1.02	(ceh-45)_(Drosophila_melanogaster)_(DBD_0.74)	HTAATCCB	1	1	.	.	.	1.44e+00	86	7	3	18	3.58e-06	3.22e-05
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M1109_1.02	vab-7	CTAATTAA	0	0	.	.	.	2.00e+00	103	0	4	65	6.45e-07	5.81e-06
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M0862_1.02	ceh-36	NTAATCCN	1	1	.	.	.	3.99e+00	86	3	3	25	1.27e-06	1.15e-05
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M0941_1.02	(unc-30)_(Mus_musculus)_(DBD_0.84)	HTAATCCNN	1	2	.	.	.	3.99e+00	86	3	3	25	1.27e-06	1.15e-05
+Caenorhabditis_elegans	M2372_1.02	(D1081.8)_(Arabidopsis_thaliana)_(DBD_0.89)	SSCGCTGAGCN	Caenorhabditis_elegans	M1438_1.02	(nhr-41)_(Mus_musculus)_(DBD_0.71)	NNTGACCYYD	2	1	.	.	.	5.03e+00	20	7	6	147	1.62e-06	1.46e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/dineen_SET2_peaks/spamo_out_9 -bgfile 02_output/dineen_SET2_peaks/background -keepprimary -primary M2372_1.02 02_output/dineen_SET2_peaks/dineen_SET2_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/dineen_SET2_peaks/meme_out/meme.xml 02_output/dineen_SET2_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

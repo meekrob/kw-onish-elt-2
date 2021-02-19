@@ -1,0 +1,378 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!-- Document definition -->
+<!-- http://zlab.bu.edu/~phaverty/SupplementalData/CisML/cisml.dtd -->
+<!DOCTYPE cis-element-search[
+<!ELEMENT cis-element-search (program-name, parameters, (pattern | multi-pattern-scan)*)>
+<!ELEMENT program-name (#PCDATA)>
+<!ELEMENT parameters (
+  pattern-file, 
+  sequence-file, 
+  background-seq-file?,
+  pattern-pvalue-cutoff?,
+  sequence-pvalue-cutoff?,
+  site-pvalue-cutoff?,
+  sequence-filtering,
+  ANY*
+ )>
+<!ELEMENT command-line (#PCDATA)>
+<!ELEMENT pattern-file (#PCDATA)>
+<!ELEMENT sequence-file (#PCDATA)>
+<!ELEMENT background-seq-file (#PCDATA)>
+<!ELEMENT pattern-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-pvalue-cutoff (#PCDATA)>
+<!ELEMENT site-pvalue-cutoff (#PCDATA)>
+<!ELEMENT sequence-filtering EMPTY>
+<!ELEMENT multi-pattern-scan (pattern+, ANY*)>
+<!ELEMENT pattern (scanned-sequence+, ANY*)>
+<!ELEMENT scanned-sequence (matched-element*, ANY*)>
+<!ELEMENT matched-element (sequence)>
+<!ELEMENT sequence (#PCDATA)>
+<!ATTLIST cis-element-search
+xmlns:xsi CDATA #IMPLIED
+xmlns:mem CDATA #IMPLIED
+xsi:schemaLocation CDATA #IMPLIED
+>
+<!ATTLIST sequence-filtering
+on-off CDATA #REQUIRED
+type CDATA #IMPLIED
+>
+<!ATTLIST multi-pattern-scan
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+>
+<!ATTLIST pattern
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+pvalue CDATA #IMPLIED
+score CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST scanned-sequence
+accession CDATA #REQUIRED
+name CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+length CDATA #IMPLIED
+db CDATA #IMPLIED
+lsid CDATA #IMPLIED
+>
+<!ATTLIST matched-element
+start CDATA #REQUIRED
+stop CDATA #REQUIRED
+score CDATA #IMPLIED
+pvalue CDATA #IMPLIED
+clusterid CDATA #IMPLIED
+>
+
+]>
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>fimo</program-name>
+<parameters>
+<command-line>fimo --parse-genomic-coord --verbosity 1 --oc 02_output/dineen_SET1_peaks/fimo_out_2 --bgfile 02_output/dineen_SET1_peaks/background --motif TGATRA 02_output/dineen_SET1_peaks/dreme_out/dreme.xml 02_output/dineen_SET1_peaks/dineen_SET1_peaks.fasta</command-line>
+<pattern-file>02_output/dineen_SET1_peaks/dreme_out/dreme.xml</pattern-file>
+<sequence-file>02_output/dineen_SET1_peaks/dineen_SET1_peaks.fasta</sequence-file>
+<site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
+<sequence-filtering on-off="off"/>
+</parameters>
+<pattern accession="TGATRA" name="DREME-1">
+<scanned-sequence accession="ELT2peak00050" name="ELT2peak00050">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00051" name="ELT2peak00051">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00052" name="ELT2peak00052">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00058" name="ELT2peak00058">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00302" name="ELT2peak00302">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00460" name="ELT2peak00460">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00466" name="ELT2peak00466">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00467" name="ELT2peak00467">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01371" name="ELT2peak01371">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01447" name="ELT2peak01447">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01448" name="ELT2peak01448">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01465" name="ELT2peak01465">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01473" name="ELT2peak01473">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01474" name="ELT2peak01474">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01518" name="ELT2peak01518">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01680" name="ELT2peak01680">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01681" name="ELT2peak01681">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01857" name="ELT2peak01857">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01947" name="ELT2peak01947">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01948" name="ELT2peak01948">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02065" name="ELT2peak02065">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02097" name="ELT2peak02097">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02098" name="ELT2peak02098">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02148" name="ELT2peak02148">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02412" name="ELT2peak02412">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02849" name="ELT2peak02849">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02904" name="ELT2peak02904">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02905" name="ELT2peak02905">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03007" name="ELT2peak03007">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03008" name="ELT2peak03008">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03009" name="ELT2peak03009">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03072" name="ELT2peak03072">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03073" name="ELT2peak03073">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03159" name="ELT2peak03159">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03244" name="ELT2peak03244">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03245" name="ELT2peak03245">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03280" name="ELT2peak03280">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03429" name="ELT2peak03429">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03430" name="ELT2peak03430">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03786" name="ELT2peak03786">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04479" name="ELT2peak04479">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04559" name="ELT2peak04559">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04698" name="ELT2peak04698">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04729" name="ELT2peak04729">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05094" name="ELT2peak05094">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05136" name="ELT2peak05136">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05212" name="ELT2peak05212">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05258" name="ELT2peak05258">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05259" name="ELT2peak05259">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05347" name="ELT2peak05347">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05348" name="ELT2peak05348">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05385" name="ELT2peak05385">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05520" name="ELT2peak05520">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05744" name="ELT2peak05744">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05745" name="ELT2peak05745">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05949" name="ELT2peak05949">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06002" name="ELT2peak06002">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06446" name="ELT2peak06446">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06812" name="ELT2peak06812">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06902" name="ELT2peak06902">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06922" name="ELT2peak06922">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06930" name="ELT2peak06930">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06931" name="ELT2peak06931">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06932" name="ELT2peak06932">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07054" name="ELT2peak07054">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07325" name="ELT2peak07325">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07353" name="ELT2peak07353">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07391" name="ELT2peak07391">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07694" name="ELT2peak07694">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07996" name="ELT2peak07996">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak07997" name="ELT2peak07997">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08222" name="ELT2peak08222">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08245" name="ELT2peak08245">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08257" name="ELT2peak08257">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08278" name="ELT2peak08278">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08279" name="ELT2peak08279">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08394" name="ELT2peak08394">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08444" name="ELT2peak08444">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08496" name="ELT2peak08496">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08668" name="ELT2peak08668">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08670" name="ELT2peak08670">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08692" name="ELT2peak08692">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08766" name="ELT2peak08766">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08824" name="ELT2peak08824">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08830" name="ELT2peak08830">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08831" name="ELT2peak08831">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08832" name="ELT2peak08832">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08833" name="ELT2peak08833">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08834" name="ELT2peak08834">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08835" name="ELT2peak08835">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08836" name="ELT2peak08836">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08856" name="ELT2peak08856">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09218" name="ELT2peak09218">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09278" name="ELT2peak09278">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09279" name="ELT2peak09279">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09432" name="ELT2peak09432">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09575" name="ELT2peak09575">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09601" name="ELT2peak09601">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09619" name="ELT2peak09619">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09915" name="ELT2peak09915">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09917" name="ELT2peak09917">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10044" name="ELT2peak10044">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10045" name="ELT2peak10045">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10498" name="ELT2peak10498">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10830" name="ELT2peak10830">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11004" name="ELT2peak11004">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11005" name="ELT2peak11005">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11006" name="ELT2peak11006">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11007" name="ELT2peak11007">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11008" name="ELT2peak11008">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11009" name="ELT2peak11009">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak00250" name="ELT2peak00250">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak01825" name="ELT2peak01825">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02104" name="ELT2peak02104">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02105" name="ELT2peak02105">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02848" name="ELT2peak02848">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak02903" name="ELT2peak02903">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03281" name="ELT2peak03281">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak03907" name="ELT2peak03907">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04282" name="ELT2peak04282">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04674" name="ELT2peak04674">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak04675" name="ELT2peak04675">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05301" name="ELT2peak05301">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05349" name="ELT2peak05349">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05534" name="ELT2peak05534">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05564" name="ELT2peak05564">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak05722" name="ELT2peak05722">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak06497" name="ELT2peak06497">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08221" name="ELT2peak08221">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08248" name="ELT2peak08248">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08837" name="ELT2peak08837">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08838" name="ELT2peak08838">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08839" name="ELT2peak08839">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08840" name="ELT2peak08840">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08897" name="ELT2peak08897">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08898" name="ELT2peak08898">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak08899" name="ELT2peak08899">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak09574" name="ELT2peak09574">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10499" name="ELT2peak10499">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10500" name="ELT2peak10500">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10501" name="ELT2peak10501">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10502" name="ELT2peak10502">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10509" name="ELT2peak10509">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10642" name="ELT2peak10642">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak10966" name="ELT2peak10966">
+</scanned-sequence>
+<scanned-sequence accession="ELT2peak11010" name="ELT2peak11010">
+</scanned-sequence>
+<mem:has-qvalues>yes</mem:has-qvalues>
+</pattern>
+</cis-element-search>

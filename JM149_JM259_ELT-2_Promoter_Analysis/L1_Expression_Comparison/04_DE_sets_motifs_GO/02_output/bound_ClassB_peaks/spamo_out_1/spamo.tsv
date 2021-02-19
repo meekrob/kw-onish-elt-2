@@ -1,0 +1,6 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+meme.xml	ACTGATAAGA	MEME-1	ACTGATAAGA	Caenorhabditis_elegans	M2334_1.02	efl-1	HNHKSGCGSGAAAWT	4	1	.	.	.	5.27e+00	51	4	6	146	1.75e-06	1.58e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/bound_ClassB_peaks/spamo_out_1 -bgfile 02_output/bound_ClassB_peaks/background -keepprimary -primary ACTGATAAGA 02_output/bound_ClassB_peaks/bound_ClassB_peaks.fasta 02_output/bound_ClassB_peaks/meme_out/meme.xml 02_output/bound_ClassB_peaks/meme_out/meme.xml 02_output/bound_ClassB_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

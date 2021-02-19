@@ -1,0 +1,24 @@
+# 1-order Markov frequencies from file 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta
+# seqs: 128    min: 500    max: 500    avg: 500.0    sum: 64000    alph: DNA
+# order 0
+A 3.249e-01
+C 1.751e-01
+G 1.751e-01
+T 3.249e-01
+# order 1
+AA 1.304e-01
+AC 5.269e-02
+AG 5.052e-02
+AT 9.129e-02
+CA 6.600e-02
+CC 3.024e-02
+CG 2.826e-02
+CT 5.052e-02
+GA 6.050e-02
+GC 3.166e-02
+GG 3.024e-02
+GT 5.269e-02
+TA 6.817e-02
+TC 6.050e-02
+TG 6.600e-02
+TT 1.304e-01

@@ -1,0 +1,22 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	3	5	5	44	5.63e-08	5.07e-07
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	3	0	4	44	1.33e-07	1.20e-06
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	1	8	5	44	1.61e-06	1.45e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	3	8	5	44	1.61e-06	1.45e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	1	4	4	44	2.02e-06	1.81e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	3	4	4	44	2.02e-06	1.81e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0545_1.02	ztf-9	TGACATGT	0	0	.	.	.	1.79e-01	1	6	4	44	2.02e-06	1.81e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M1428_1.02	(nhr-134)_(Caenorhabditis_briggsae)_(DBD_0.70)	BTGTGWCY	1	1	Caenorhabditis_elegans	M0545_1.02	ztf-9	4.73e-01	0	0	6	193	1.47e-07	1.32e-06
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M1501_1.02	pax-2	AMSCGTGACG	0	0	Caenorhabditis_elegans	M0545_1.02	ztf-9	2.00e+00	5	1	4	64	6.41e-07	5.77e-06
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M1484_1.02	nhr-232	WTTGTGAYH	2	1	Caenorhabditis_elegans	M0545_1.02	ztf-9	2.04e+00	0	0	3	20	6.35e-07	5.72e-06
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M1279_1.02	C01G12.1	NNDCCGGHNN	3	3	.	.	.	2.01e-01	27	4	5	46	6.17e-08	5.56e-07
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M1279_1.02	C01G12.1	NNDCCGGHNN	3	3	.	.	.	2.01e-01	27	8	5	46	1.76e-06	1.58e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M2334_1.02	efl-1	HNHKSGCGSGAAAWT	4	1	Caenorhabditis_elegans	M1279_1.02	C01G12.1	3.96e+00	22	5	5	81	1.28e-06	1.15e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M2334_1.02	efl-1	HNHKSGCGSGAAAWT	4	1	Caenorhabditis_elegans	M1279_1.02	C01G12.1	3.96e+00	22	8	6	81	2.91e-06	2.62e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0385_1.02	C46E10.8	GGNYVDRAAT	0	0	Caenorhabditis_elegans	M1279_1.02	C01G12.1	6.76e+00	23	0	3	29	2.19e-06	1.97e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0217_1.02	(cnd-1)_(Mus_musculus)_(DBD_0.64)	DCCATATGKB	1	1	.	.	.	5.77e+00	3	4	4	43	1.84e-06	1.65e-05
+dreme.xml	AGACGCAG	DREME-8	AGACGCAG	Caenorhabditis_elegans	M0575_1.02	mex-6	NAATAATAAR	1	1	.	.	.	9.67e+00	140	5	4	49	3.10e-06	2.79e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/bound_all_class_peaks/spamo_out_13 -bgfile 02_output/bound_all_class_peaks/background -keepprimary -primary AGACGCAG 02_output/bound_all_class_peaks/bound_all_class_peaks.fasta 02_output/bound_all_class_peaks/dreme_out/dreme.xml 02_output/bound_all_class_peaks/meme_out/meme.xml 02_output/bound_all_class_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

@@ -1,0 +1,44 @@
+<dreme version="5.1.1" release="Wed Jan 29 15:00:42 2020 -0800">
+  <model>
+    <command_line>dreme -verbosity 1 -oc 02_output/bound_ClassB_peaks/dreme_out -png -dna -p 02_output/bound_ClassB_peaks/seqs-centered -n 02_output/bound_ClassB_peaks/seqs-shuffled -e 0.05</command_line>
+    <positives name="seqs-centered" count="372" file="02_output/bound_ClassB_peaks/seqs-centered" last_mod_date="Wed Dec 02 06:57:54 UTC 2020" />
+    <negatives name="seqs-shuffled" count="372" from="file" file="02_output/bound_ClassB_peaks/seqs-shuffled" last_mod_date="Wed Dec 02 06:57:54 UTC 2020" />
+    <alphabet name="DNA" like="dna">
+      <letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+      <letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+      <letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+      <letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+      <letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+      <letter id="V" symbol="V" equals="ACG" name="Not T"/>
+      <letter id="H" symbol="H" equals="ACT" name="Not G"/>
+      <letter id="D" symbol="D" equals="AGT" name="Not C"/>
+      <letter id="B" symbol="B" equals="CGT" name="Not A"/>
+      <letter id="M" symbol="M" equals="AC" name="Amino"/>
+      <letter id="R" symbol="R" equals="AG" name="Purine"/>
+      <letter id="W" symbol="W" equals="AT" name="Weak"/>
+      <letter id="S" symbol="S" equals="CG" name="Strong"/>
+      <letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+      <letter id="K" symbol="K" equals="GT" name="Keto"/>
+    </alphabet>
+    <strands>both</strands>
+    <background A="0.320" C="0.180" G="0.180" T="0.319" from="dataset"/>
+    <stop evalue="0.05"/>
+    <ngen>100</ngen>
+    <add_pv_thresh>0.01</add_pv_thresh>
+    <seed>1</seed>
+    <host>shas0110.rc.int.colorado.edu</host>
+    <when>Wed Dec 02 07:02:53 UTC 2020</when>
+  </model>
+  <motifs>
+    <motif id="m01" alt="DREME-1" seq="TGATAA" length="6" nsites="203" p="167" n="34" pvalue="1.1e-029" evalue="2.9e-025" unerased_evalue="2.9e-025">
+      <pos A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos A="0.000000" C="0.000000" G="1.000000" T="0.000000"/>
+      <pos A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <match seq="TGATAA" p="167" n="34" pvalue="1.1e-029" evalue="2.9e-025"/>
+    </motif>
+  </motifs>
+  <run_time cpu="5.17" real="5.35" stop="evalue"/>
+</dreme>

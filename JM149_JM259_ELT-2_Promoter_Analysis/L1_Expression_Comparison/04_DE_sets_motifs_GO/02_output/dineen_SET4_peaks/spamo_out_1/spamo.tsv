@@ -1,0 +1,7 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+meme.xml	RCTGATAAGAA	MEME-1	RCTGATAAGAA	Caenorhabditis_elegans	M0173_1.02	hlh-16	NNMCAATATGGNN	3	2	.	.	.	8.59e+00	120	0	3	32	2.83e-06	2.55e-05
+meme.xml	RCTGATAAGAA	MEME-1	RCTGATAAGAA	Caenorhabditis_elegans	M1623_1.02	(tbx-2)_(Nasonia_vitripennis)_(DBD_0.69)	TSACACCT	0	0	.	.	.	9.05e+00	57	8	4	25	2.99e-06	2.69e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/dineen_SET4_peaks/spamo_out_1 -bgfile 02_output/dineen_SET4_peaks/background -keepprimary -primary RCTGATAAGAA 02_output/dineen_SET4_peaks/dineen_SET4_peaks.fasta 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/meme_out/meme.xml 02_output/dineen_SET4_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

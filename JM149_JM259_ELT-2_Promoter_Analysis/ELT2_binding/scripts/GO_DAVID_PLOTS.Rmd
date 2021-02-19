@@ -1,0 +1,249 @@
+---
+title: "GO DAVID PLOTS"
+author: "Deekrob"
+date: "10/16/2020"
+output: pdf_document
+---
+```{r install-webapi-from-source }
+# download from: https://bioconductor.org/packages/3.1/bioc/src/contrib/DAVIDQuery_1.28.0.tar.gz
+#install.packages("~/work/onish_ChIP_R_Analysis/DAVIDQuery_1.28.0.tar.gz", repos = NULL, type = "source")
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(pheatmap)
+library(reshape2)
+library(ggplot2)
+```
+
+
+```{r plotDavid}
+source('plotDAVID.R')
+```
+
+```{r k1_using_func}
+k1_anno_cluster = read.table('k1_Genes/developmental_protein.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.1=plotDavid(k1_anno_cluster,"Developmental Protein","Embryo")
+pdf(file="k1_Genes/developmental_protein.pdf")
+tileplot.1
+dev.off()
+```
+
+
+```{r k1-immune-related}
+k1_anno_cluster = read.table('k1_Genes/immunoglob.screenshot.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.2=plotDavid(k1_anno_cluster,"Immunoglobulin","Embryo",xaxis.size = 12, yaxis.size = 12)
+pdf(file="k1_Genes/immunoglob.pdf")
+tileplot.2
+dev.off()
+```
+
+```{r k1-glycoprotein}
+k1_anno_cluster = read.table('k1_Genes/disulfide_bond.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.3=plotDavid(k1_anno_cluster,"Disulfide","Embryo")
+pdf(file="k1_Genes/disulfide.pdf")
+tileplot.3
+dev.off()
+```
+```{r k1-axon}
+k1_anno_cluster = read.table('k1_Genes/axon.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.4=plotDavid(k1_anno_cluster,"Axon","Embryo",xaxis.size = 12, yaxis.size = 12)
+pdf(file="k1_Genes/axon.pdf")
+tileplot.4
+dev.off()
+```
+```{r all_embryo}
+pdf(file="k1_Genes/allEmbryoClusters.pdf")
+tileplot.1
+tileplot.2
+tileplot.3
+tileplot.4
+dev.off()
+```
+
+```{r k2-ATP-binding}
+k2_anno_cluster = read.delim('k2_Genes/ATP-binding.cluster.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.5=plotDavid(k2_anno_cluster,"ATP-binding","Larval",xaxis.size=3,yaxis.size=5)
+pdf(file="k2_Genes/ATP-binding.pdf", width=10)
+tileplot.5
+dev.off()
+```
+```{r k2-clectin}
+k2_anno_cluster = read.delim('k2_Genes/c-lectin.cluster.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.6=plotDavid(k2_anno_cluster,"c-lectin","Larval",xaxis.size=3)
+pdf(file="k2_Genes/c-lectin.pdf", width=10)
+tileplot.6
+dev.off()
+```
+```{r k2-lipid}
+k2_anno_cluster = read.delim('k2_Genes/oxidoreductase.cluster.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.7=plotDavid(k2_anno_cluster,"Lipid metabolism","Larval",xaxis.size=6)
+pdf(file="k2_Genes/lipidMetab.pdf", width=10)
+tileplot.7
+dev.off()
+```
+```{r k2-NHR}
+k2_anno_cluster = read.delim('k2_Genes/nhr.cluster.highest-stringency.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.8=plotDavid(k2_anno_cluster,"NHRs","Larval",xaxis.size=6)
+pdf(file="k2_Genes/NHRs.pdf", width=10)
+tileplot.8
+dev.off()
+```
+```{r k2-signalling}
+k2_anno_cluster = read.delim('k2_Genes/signalling.cluster.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.9=plotDavid(k2_anno_cluster,"Signalling","Larval",xaxis.size=.5,yaxis.size=1)
+pdf(file="k2_Genes/Signalling.pdf",width=10)
+tileplot.9
+dev.off()
+```
+
+```{r all-k2}
+pdf(file="k2_Genes/allLarvalClusters.pdf")
+tileplot.5
+tileplot.6
+tileplot.7
+tileplot.8
+tileplot.9
+dev.off()
+```
+```{r k3-actin_binding}
+k3_anno_cluster = read.delim('k3_Genes/actin_binding.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.10=plotDavid(k3_anno_cluster,"Actin-binding","L3")
+pdf(file="k3_Genes/ActingBinding.pdf",width=10)
+tileplot.10
+dev.off()
+```
+```{r k3-amino-acid-synthesis}
+k3_anno_cluster = read.delim('k3_Genes/amino_acid_synthesis.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.12=plotDavid(k3_anno_cluster,"Amino Acid Synthesis","L3")
+pdf(file="k3_Genes/amino_acid_synthesis.pdf",width=10)
+tileplot.12
+dev.off()
+```
+```{r k3-ANK}
+k3_anno_cluster = read.delim('k3_Genes/ANK.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.13=plotDavid(k3_anno_cluster,"ANK","L3")
+pdf(file="k3_Genes/ANK.pdf",width=10)
+tileplot.13
+dev.off()
+```
+```{r k3-chaperones}
+k3_anno_cluster = read.delim('k3_Genes/chaperones.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.14=plotDavid(k3_anno_cluster,"Chaperones","L3")
+pdf(file="k3_Genes/chaperones.pdf")
+tileplot.14
+dev.off()
+```
+```{r k3-development}
+k3_anno_cluster = read.delim('k3_Genes/development.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k3_anno_cluster)
+tileplot.15=plotDavid(k3_anno_cluster[(num-150):num,],
+                      sprintf("Developmental proteins\n (150 out of %d)",num),
+                      "L3",
+                      xaxis.size = 1,
+                      yaxis.size = 1,
+                      )
+pdf(file=sprintf("k3_Genes/development.pdf"))
+tileplot.15
+dev.off()
+```
+```{r k3-glycosyltransferase}
+k3_anno_cluster = read.delim('k3_Genes/glycosyltransferase.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.16=plotDavid(k3_anno_cluster,"glycosyltransferase","L3")
+pdf(file="k3_Genes/glycosyltransferase.pdf")
+tileplot.16
+dev.off()
+```
+```{r k3-golgi}
+k3_anno_cluster = read.delim('k3_Genes/golgi.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.17=plotDavid(k3_anno_cluster,"golgi","L3")
+pdf(file="k3_Genes/golgi.pdf")
+tileplot.17
+dev.off()
+```
+```{r k3-immune_ILR.txt}
+k3_anno_cluster = read.delim('k3_Genes/immune_ILR.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+tileplot.18=plotDavid(k3_anno_cluster,"Immune and insulin-like receptor","L3")
+pdf(file="k3_Genes/immune_ILR.pdf")
+tileplot.18
+dev.off()
+```
+```{r k3-kinases}
+k3_anno_cluster = read.delim('k3_Genes/kinases.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k3_anno_cluster)
+tileplot.19=plotDavid(k3_anno_cluster[(num-75):num,],
+                      sprintf("Kinases (75 out of %d)",num),
+                      "L3",
+                      xaxis.size = 4,
+                      yaxis.size = 4)
+pdf(file="k3_Genes/kinases.pdf")
+tileplot.19
+dev.off()
+```
+```{r k3-kinases}
+k3_anno_cluster = read.delim('k3_Genes/kinases.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k3_anno_cluster)
+tileplot.19=plotDavid(k3_anno_cluster[(num-75):num,],
+                      sprintf("Kinases (75 out of %d)",num),
+                      "L3",
+                      xaxis.size = 4,
+                      yaxis.size = 4)
+pdf(file="k3_Genes/kinases.pdf")
+tileplot.19
+dev.off()
+```
+```{r k4-lysosome}
+k4_anno_cluster = read.delim('k4_Genes/lysosome.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.20=plotDavid(k4_anno_cluster,
+                      "Lysosome",
+                      "Increasing in Development",
+                      xaxis.size = 4,
+                      yaxis.size = 4)
+pdf(file="k4_Genes/lysosome.pdf")
+tileplot.20
+dev.off()
+```
+```{r k4-saposin}
+k4_anno_cluster = read.delim('k4_Genes/SaPosin.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "SaPosin",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/SaPosin.pdf")
+tileplot.21
+dev.off()
+```
+
+```{r k4-oxidoreductase}
+k4_anno_cluster = read.delim('k4_Genes/oxidoreductase.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "Oxidoreductase",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/oxidoreductase.pdf")
+tileplot.21
+dev.off()
+```
+```{r k4-mapk}
+k4_anno_cluster = read.delim('k4_Genes/mapk.txt', header=T,sep="\t",skipNul=T,row.names = 1, check.names=F)
+num=nrow(k4_anno_cluster)
+tileplot.21=plotDavid(k4_anno_cluster,
+                      "MAPK",
+                      "Increasing in Development",
+                      xaxis.size = 8,
+                      yaxis.size = 8)
+pdf(file="k4_Genes/mapk.pdf")
+tileplot.21
+dev.off()
+```
+
+```{r }
+
+```
+
+
+

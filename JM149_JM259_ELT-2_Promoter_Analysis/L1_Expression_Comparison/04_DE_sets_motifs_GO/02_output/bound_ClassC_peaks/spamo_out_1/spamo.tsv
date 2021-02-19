@@ -1,0 +1,8 @@
+prim_db	prim_id	prim_alt	prim_cons	sec_db	sec_id	sec_alt	sec_cons	trim_left	trim_right	red_db	red_id	red_alt	E-value	gap	orient	count	total	adj_p-value	p-value
+meme.xml	TCTTATCARTW	MEME-1	TCTTATCARTW	Caenorhabditis_elegans	M5158_1.02	(pax-1)_(Drosophila_melanogaster)_(DBD_0.75)	NNNVNNMANHVAASCRTGA	7	0	.	.	.	2.21e+00	134	2	5	141	7.38e-07	6.64e-06
+meme.xml	TCTTATCARTW	MEME-1	TCTTATCARTW	Caenorhabditis_elegans	M1574_1.02	sma-4	NNTGTCTGGVN	2	2	.	.	.	2.44e+00	82	1	5	148	7.88e-07	7.09e-06
+meme.xml	TCTTATCARTW	MEME-1	TCTTATCARTW	Caenorhabditis_elegans	M1467_1.02	nhr-7	KTGRTCTTT	1	0	.	.	.	6.75e+00	75	3	5	182	2.21e-06	1.99e-05
+
+# SpaMo (Spaced Motif Analysis Tool): Version 5.1.1 compiled on May 28 2020 at 04:38:15
+# The format of this file is described at http://localhost:8080/doc/spamo-output-format.html.
+# spamo -verbosity 1 -oc 02_output/bound_ClassC_peaks/spamo_out_1 -bgfile 02_output/bound_ClassC_peaks/background -keepprimary -primary TCTTATCARTW 02_output/bound_ClassC_peaks/bound_ClassC_peaks.fasta 02_output/bound_ClassC_peaks/meme_out/meme.xml 02_output/bound_ClassC_peaks/meme_out/meme.xml 02_output/bound_ClassC_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme

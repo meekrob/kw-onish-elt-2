@@ -1,0 +1,33 @@
+term_ID,description,frequency,plot_X,plot_Y,plot_size,log10 p-value,uniqueness,dispensability,representative,eliminated
+GO:0007399,"nervous system development",3.292%, 6.247,-0.460,2.490,-2.6990,0.707,0.000,7399,0
+GO:0010862,"positive regulation of pathway-restricted SMAD protein phosphorylation",0.053%,-2.957,-2.253,0.778,-2.1938,0.518,0.034,10862,0
+GO:0060395,"SMAD protein signal transduction",0.053%,null,null,0.778,-2.1938,0.711,0.739,10862,1
+GO:0030150,"protein import into mitochondrial matrix",0.150%, 1.436, 5.669,1.176,-2.3468,0.692,0.038,30150,0
+GO:0007274,"neuromuscular synaptic transmission",0.139%, 0.491,-7.415,1.146,-1.7423,0.807,0.162,7274,0
+GO:0071108,"protein K48-linked deubiquitination",0.032%,-6.727,-3.524,0.602,-1.7399,0.850,0.216,71108,0
+GO:0000381,"regulation of alternative mRNA splicing, via spliceosome",0.192%,-5.701, 3.775,1.279,-1.6716,0.768,0.237,381,0
+GO:0048730,"epidermis morphogenesis",0.064%, 6.666, 2.019,0.845,-1.7399,0.795,0.268,48730,0
+GO:0009190,"cyclic nucleotide biosynthetic process",0.566%,-5.071, 1.455,1.732,-2.1938,0.725,0.284,9190,0
+GO:0008355,"olfactory learning",0.267%, 5.044,-2.746,1.415,-1.6757,0.748,0.316,8355,0
+GO:0010696,"positive regulation of spindle pole body separation",0.043%,-1.142, 4.293,0.699,-2.1938,0.660,0.328,10696,0
+GO:0000723,"telomere maintenance",0.278%,-2.878, 5.133,1.431,-2.0757,0.681,0.332,723,0
+GO:0042074,"cell migration involved in gastrulation",0.064%, 5.421, 1.982,0.845,-1.4622,0.707,0.351,42074,0
+GO:0006437,"tyrosyl-tRNA aminoacylation",0.021%,-6.329, 1.589,0.477,-2.1938,0.765,0.362,6437,0
+GO:0035335,"peptidyl-tyrosine dephosphorylation",1.208%,-6.704,-1.271,2.057,-2.1805,0.811,0.376,35335,0
+GO:0072321,"chaperone-mediated protein transport",0.011%, 2.898, 6.735,0.301,-2.1938,0.809,0.409,72321,0
+GO:0032968,"positive regulation of transcription elongation from RNA polymerase II promoter",0.096%,-4.110, 2.964,1.000,-1.7399,0.691,0.435,32968,0
+GO:0008584,"male gonad development",0.064%, 6.493,-1.016,0.845,-2.3468,0.754,0.475,8584,0
+GO:0030970,"retrograde protein transport, ER to cytosol",0.032%, 0.488, 0.348,0.602,-1.4622,0.612,0.498,30970,0
+GO:0035023,"regulation of Rho protein signal transduction",0.235%,-1.465,-5.241,1.362,-1.4685,0.690,0.520,35023,0
+GO:0061404,"positive regulation of transcription from RNA polymerase II promoter in response to increased salt",0.053%,-2.576, 1.069,0.778,-1.4622,0.633,0.523,61404,0
+GO:0008045,"motor neuron axon guidance",0.203%, 3.929, 0.392,1.301,-2.6990,0.550,0.532,8045,0
+GO:0002225,"positive regulation of antimicrobial peptide production",0.021%,-2.430,-2.802,0.477,-1.4622,0.683,0.542,2225,0
+GO:1905488,"positive regulation of anterior/posterior axon guidance",0.053%,null,null,0.778,-1.3979,0.440,0.725,2225,1
+GO:1905342,"positive regulation of protein localization to kinetochore",0.075%, 0.651, 4.475,0.903,-1.7399,0.659,0.559,1905342,0
+GO:1903394,"protein localization to kinetochore involved in kinetochore assembly",0.053%,null,null,0.778,-1.7399,0.677,0.958,1905342,1
+GO:0008543,"fibroblast growth factor receptor signaling pathway",0.086%, 1.516,-4.940,0.954,-1.4622,0.680,0.572,8543,0
+GO:0006265,"DNA topological change",0.064%,-2.565, 5.672,0.845,-1.4622,0.724,0.576,6265,0
+GO:0048013,"ephrin receptor signaling pathway",0.032%, 0.721,-6.040,0.602,-1.4622,0.724,0.603,48013,0
+GO:0010754,"negative regulation of cGMP-mediated signaling",0.053%,-2.033,-5.573,0.778,-1.4622,0.709,0.605,10754,0
+GO:0007419,"ventral cord development",0.729%, 6.341,-0.225,1.839,-1.8539,0.671,0.614,7419,0
+GO:0031103,"axon regeneration",0.214%, 3.028,-0.045,1.322,-1.4622,0.555,0.678,31103,0

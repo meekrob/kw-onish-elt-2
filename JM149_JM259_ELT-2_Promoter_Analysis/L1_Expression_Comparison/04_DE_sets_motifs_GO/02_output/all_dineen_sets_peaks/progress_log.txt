@@ -1,0 +1,218 @@
+Invoking:
+  getsize 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.134624
+Invoking:
+  fasta-most -min 50 < 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 1> $metrics
+Finished invoke:
+  name: most_seqs  status: 0  time: 0.075274
+Invoking:
+  fasta-center -dna -len 100 < 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 1> 02_output/all_dineen_sets_peaks/seqs-centered
+Finished invoke:
+  name: center_seqs  status: 0  time: 0.102747
+Invoking:
+  fasta-shuffle-letters 02_output/all_dineen_sets_peaks/seqs-centered 02_output/all_dineen_sets_peaks/seqs-shuffled -kmer 2 -tag -dinuc -dna -seed 1
+Finished invoke:
+  name: shuffle_seqs  status: 0  time: 0.022734
+Invoking:
+  fasta-get-markov -nostatus -nosummary -dna -m 1 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/background
+Finished invoke:
+  name: bg  status: 0  time: 0.017242
+Invoking:
+  meme 02_output/all_dineen_sets_peaks/seqs-centered -oc 02_output/all_dineen_sets_peaks/meme_out -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile 02_output/all_dineen_sets_peaks/background -dna -searchsize 100000 -p 24 -revcomp -nostatus
+Finished invoke:
+  name: meme  status: 0  time: 1450.081375
+Invoking:
+  dreme -verbosity 1 -oc 02_output/all_dineen_sets_peaks/dreme_out -png -dna -p 02_output/all_dineen_sets_peaks/seqs-centered -n 02_output/all_dineen_sets_peaks/seqs-shuffled -e 0.05
+Finished invoke:
+  name: dreme  status: 0  time: 169.878887
+Invoking:
+  centrimo -seqlen 500 -verbosity 1 -oc 02_output/all_dineen_sets_peaks/centrimo_out -bfile 02_output/all_dineen_sets_peaks/background -score 5.0 -ethresh 10.0 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: centrimo  status: 0  time: 6.698256
+Invoking:
+  tomtom -verbosity 1 -oc 02_output/all_dineen_sets_peaks/meme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/all_dineen_sets_peaks/meme_out/meme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: meme_tomtom  status: 0  time: 1.493316
+Invoking:
+  tomtom -verbosity 1 -oc 02_output/all_dineen_sets_peaks/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: dreme_tomtom  status: 0  time: 0.711461
+Invoking:
+  tomtom -verbosity 1 -text -thresh 0.1 02_output/all_dineen_sets_peaks/combined.meme 02_output/all_dineen_sets_peaks/combined.meme 1> 02_output/all_dineen_sets_peaks/motif_alignment.txt
+Finished invoke:
+  name: align  status: 0  time: 2.797727
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_1 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary TTCTTATCART 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo1  status: 0  time: 30.976377
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_2 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GAGAGRVRGAGRSRGAGRGVG 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo2  status: 0  time: 23.356718
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_3 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0346_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo3  status: 0  time: 23.552371
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_4 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary TTTTTYBHMWTTTTY 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo4  status: 0  time: 34.432044
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_5 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GGMGS 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo5  status: 0  time: 26.748295
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_6 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M4709_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo6  status: 0  time: 22.164989
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_7 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary AAAVTG 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo7  status: 0  time: 38.057485
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_8 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GAGACRCA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo8  status: 0  time: 3.050033
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_9 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M1428_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo9  status: 0  time: 31.715868
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_10 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary AAATAK 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo10  status: 0  time: 27.06907
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_11 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0495_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo11  status: 0  time: 16.982947
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_12 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M1624_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo12  status: 0  time: 18.080317
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_13 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0496_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo13  status: 0  time: 0.246095
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_14 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GAAAACKM 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo14  status: 0  time: 4.864521
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_15 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0674_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo15  status: 0  time: 20.820417
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_16 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0226_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo16  status: 0  time: 16.444287
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_17 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0344_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo17  status: 0  time: 19.516288
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_18 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary GGRGAGA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo18  status: 0  time: 4.730824
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_19 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary M0491_1.02 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo19  status: 0  time: 12.548307
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_20 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary TGACGTCA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo20  status: 0  time: 1.465366
+Invoking:
+  spamo -verbosity 1 -oc 02_output/all_dineen_sets_peaks/spamo_out_21 -bgfile 02_output/all_dineen_sets_peaks/background -keepprimary -primary TACBGTA 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml motif_databases/CIS-BP/Caenorhabditis_elegans.meme
+Finished invoke:
+  name: spamo21  status: 0  time: 3.442735
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_1 --bgfile 02_output/all_dineen_sets_peaks/background --motif TTCTTATCART 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo1  status: 0  time: 0.357503
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_2 --bgfile 02_output/all_dineen_sets_peaks/background --motif GAGAGRVRGAGRSRGAGRGVG 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo2  status: 0  time: 0.40391
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_3 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0346_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo3  status: 0  time: 0.38281
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_4 --bgfile 02_output/all_dineen_sets_peaks/background --motif TTTTTYBHMWTTTTY 02_output/all_dineen_sets_peaks/meme_out/meme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo4  status: 0  time: 0.604712
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_5 --bgfile 02_output/all_dineen_sets_peaks/background --motif GGMGS 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo5  status: 0  time: 0.309226
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_6 --bgfile 02_output/all_dineen_sets_peaks/background --motif M4709_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo6  status: 0  time: 0.376251
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_7 --bgfile 02_output/all_dineen_sets_peaks/background --motif AAAVTG 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo7  status: 0  time: 0.368039
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_8 --bgfile 02_output/all_dineen_sets_peaks/background --motif GAGACRCA 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo8  status: 0  time: 0.320997
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_9 --bgfile 02_output/all_dineen_sets_peaks/background --motif M1428_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo9  status: 0  time: 0.377412
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_10 --bgfile 02_output/all_dineen_sets_peaks/background --motif AAATAK 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo10  status: 0  time: 0.289429
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_11 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0495_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo11  status: 0  time: 0.39118
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_12 --bgfile 02_output/all_dineen_sets_peaks/background --motif M1624_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo12  status: 0  time: 0.55484
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_13 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0496_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo13  status: 0  time: 0.399083
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_14 --bgfile 02_output/all_dineen_sets_peaks/background --motif GAAAACKM 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo14  status: 0  time: 0.319784
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_15 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0674_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo15  status: 0  time: 0.394221
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_16 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0226_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo16  status: 0  time: 0.374467
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_17 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0344_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo17  status: 0  time: 0.383443
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_18 --bgfile 02_output/all_dineen_sets_peaks/background --motif GGRGAGA 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo18  status: 0  time: 0.315881
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_19 --bgfile 02_output/all_dineen_sets_peaks/background --motif M0491_1.02 motif_databases/CIS-BP/Caenorhabditis_elegans.meme 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo19  status: 0  time: 0.669535
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_20 --bgfile 02_output/all_dineen_sets_peaks/background --motif TGACGTCA 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo20  status: 0  time: 0.314537
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc 02_output/all_dineen_sets_peaks/fimo_out_21 --bgfile 02_output/all_dineen_sets_peaks/background --motif TACBGTA 02_output/all_dineen_sets_peaks/dreme_out/dreme.xml 02_output/all_dineen_sets_peaks/all_dineen_sets_peaks.fasta
+Finished invoke:
+  name: fimo21  status: 0  time: 0.299102
+Writing output
+Invoking:
+  meme-chip_html_to_tsv 02_output/all_dineen_sets_peaks/meme-chip.html 02_output/all_dineen_sets_peaks/summary.tsv "meme-chip -oc 02_output/all_dineen_sets_peaks -meme-p 24 -ccut 100 -fdesc description -order 1 -db motif_databases/CIS-BP/Caenorhabditis_elegans.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 01_input/all_dineen_sets_peaks.fasta" 5.1.1 "Wed Jan 29 15\:00\:42 2020 -0800"
+Finished invoke:
+  name: summary  status: 0  time: 0.259747
+Done

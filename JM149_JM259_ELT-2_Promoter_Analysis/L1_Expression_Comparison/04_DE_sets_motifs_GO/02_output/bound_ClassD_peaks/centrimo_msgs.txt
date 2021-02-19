@@ -1,0 +1,3 @@
+Skipping sequence ELT2peak08897 as its length (428) does not match the expected length (500).
+Warning: 4/267 motifs were skipped due to the score threshold (5.00).
+         Consider decreasing the score threshold.
