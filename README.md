@@ -5,3 +5,4 @@ git subtree add --prefix=JM149_JM259_ELT-2_Promoter_Analysis git@github.com:izab
 ``
 
 It seems like you can just repeat this command if that repository is updated.
+I followed this: https://stackoverflow.com/questions/1425892/how-do-you-merge-two-git-repositories
