@@ -62,7 +62,7 @@ elt2_GRange
 elt2_df <- as.data.frame(elt2_GRange)
 
 dineen_set_summit <-
-  elt2_df %>% full_join(dineen_nishimura_sets_ascend, by = c("feature" = "WBGeneID")) %>% filter(!is.na(set)) %>% select(seqnames:end, name, feature, set, LE_summit:L3_summit) %>% rowwise() %>% mutate(peak_summit = round(mean(
+  elt2_df %>% full_join(dineen_nishimura_sets_ascend, by = c("feature" = "WBGeneID")) %>% filter(!is.na(set)) %>% dplyr::select(seqnames:end, name, feature, set, LE_summit:L3_summit) %>% rowwise() %>% mutate(peak_summit = round(mean(
     c(LE_summit, L1_summit, L3_summit), na.rm = TRUE
   ))) %>% mutate(
     summit_start = start + peak_summit - 250,
@@ -118,10 +118,10 @@ for(set in setnames){
 subset based on dineen sets and get WBGeneIDs
 
 ```{r}
-write.table(as.data.frame(mcols(dineen_GRange)) %>% rownames_to_column() %>% select(feature),
+write.table(as.data.frame(mcols(dineen_GRange)) %>% rownames_to_column() %>% dplyr::select(feature),
             file = "dineen_allset_WBGeneID.csv", col.names = FALSE, row.names = FALSE)
 
-tmp <- as.data.frame(mcols(dineen_GRange)) %>% rownames_to_column() %>% filter(dineen_set == "SET1") %>% select(feature)
+tmp <- as.data.frame(mcols(dineen_GRange)) %>% rownames_to_column() %>% filter(dineen_set == "SET1") %>% dplyr::select(feature)
 write.table(tmp$feature, file = "dineen_SET1_WBGeneID.csv", col.names = FALSE, row.names = FALSE)
 ```
 
@@ -345,10 +345,6 @@ head(c_eG_bound)
 dotplot(c_eG_bound, showCategory = NULL)
 ```
 
-```{r}
-c_eG_bound_simplify <- simplify(c_eG_bound, cutoff=0.4, by="p.adjust", select_fun=min)
-dotplot(c_eG_bound_simplify, showCategory = NULL, by = "count")
-```
 
 ## Enriched pathways for all bound and differentially expressed genes
 
@@ -486,7 +482,7 @@ as.data.frame(setReadable(kk2, OrgDb = org.Ce.eg.db, keyType = "ENTREZID"))
 as.data.frame(setReadable(kk2, OrgDb = org.Ce.eg.db, keyType = "ENTREZID")) %>% filter(Description == "Lysosome") %>% dplyr::select(core_enrichment)
 ```
 ```{r}
-browseKEGG(kk2, "cel03050")
+# browseKEGG(kk2, "cel03050")
 ```
 
 
@@ -507,7 +503,7 @@ gseGO_wtv2 <- gseGO(
 )
 dotplot(gseGO_wtv2)
 enrichplot::gseaplot2(gseGO_wtv2, geneSetID = 6:10)
-dotplot(simplify(gseGO_wtv2, cutoff = 0.01))
+dotplot(clusterProfiler::simplify(gseGO_wtv2, cutoff = 0.01))
 gseGO_wtv2.df <- as.data.frame(setReadable(gseGO_wtv2, OrgDb = org.Ce.eg.db, keyType = "ENTREZID"))
 gseGO_wtv2.df %>% dplyr::filter(Description == "oogenesis")
 gseGO_wtv2.df %>% dplyr::filter(Description == "meiotic nuclear division")
@@ -542,14 +538,28 @@ formula_res <- compareCluster(WORMBASE~set+elt2_detected_in_L1, data = dineenset
                 readable = TRUE,
                 keyType = 'WORMBASE')
 dotplot(formula_res, x=~elt2_detected_in_L1, showCategory = 5) + ggplot2::facet_grid(~set)
-ggsave(file = "Dineen_sets_compareCluster_enrichGO_BiologicalProcess_201216.pdf", width = 10, height = 7, useDingbats = FALSE)
+# ggsave(file = "Dineen_sets_compareCluster_enrichGO_BiologicalProcess_201216.pdf", width = 10, height = 7, useDingbats = FALSE)
 ```
 
+```{r fig.width=4, fig.height=5.5}
+library(stringr)
+
+as.data.frame(formula_res) %>%
+    filter(Description %in% c("innate immune response", "gamete generation", "defense response to Gram-positive bacterium")) %>%
+    rowwise() %>% 
+    mutate(GeneRatio = eval(parse(text = GeneRatio))) %>%
+ggplot(aes(x = elt2_detected_in_L1, y = Description)) + 
+  geom_point(aes(size = GeneRatio, color = -log10(p.adjust))) + scale_color_gradient(low = "grey", high = "black") + theme_bw() + facet_grid(set~.) + 
+  xlab("L1 Stage ELT-2 Binding") +
+  ylab("Gene Ontology Biological Process Term") +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 20))
+
+ggsave("./Dineen_sets_Bound_compareCluster_Biological_Process_210116.pdf", width = 4, height = 5.5)
+```
 
 
 # ELT-2 clusters clusterProfiler
 
-TODO
 
 ```{r}
 elt2_peaks

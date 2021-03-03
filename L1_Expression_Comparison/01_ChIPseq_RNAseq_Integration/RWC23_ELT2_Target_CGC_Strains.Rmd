@@ -39,10 +39,13 @@ for (i in 1:(total_strains)){
 Set up quick and dirty way to cross-reference the CGC list to ELT-2/ELT-7 differential expression list. Prioritize genes with high variance between the different elt-2/elt-7 deletion genotypes. Spot check the strains on CGC to ensure they are protein::GFP worms and nothing extra. Also visualize the gene on the genome browser to see RNA changes.
 
 ```{r}
+bound_only_class <- read.csv(file = "./02_output/Bound_Genes_Class_Assignments.csv",header = TRUE, stringsAsFactors = FALSE)
+bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+
 variance_per_gene <-  as.data.frame(matrix_select(dynamic_counts_matrix, l1_bound_list$WBGeneID)) %>% rownames_to_column(var = "WBGeneID") %>% 
-    merge(bound_only_sets, by = "WBGeneID") %>% 
+    merge(bound_only_class, by = "WBGeneID") %>% 
     pivot_longer(wt_sorted_1:elt2Delt7D_sorted_3, names_to = "sample", values_to = "rlogCount") %>%
-    group_by(WBGeneID, set) %>%
+    group_by(WBGeneID, class) %>%
     summarise(variance = var(rlogCount))
 
 paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
@@ -71,13 +74,13 @@ SET descriptions do not apply now, sets changed with rematting of L1 peaks to ge
 <!-- SET1 genes are up in wildtype but down in elt-2 (-) and do not change with elt-7 (-) single or double. In other words, activated alone by ELT-2 -->
 
 ```{r}
-variance_per_gene %>% filter(set == "SET1") %>% arrange(desc(variance))
+variance_per_gene %>% filter(set == "ClassA") %>% arrange(desc(variance))
 ```
 
 ```{r}
-variance_per_gene %>% filter(set == "SET1", external_gene_id == "ets-4")
+variance_per_gene %>% filter(set == "ClassA", external_gene_id == "ets-4")
 ```
-SET1 strains to order: OP509 (ets-4).  
+ClassA strains to order: OP509 (ets-4).  
 
 
 strain CL2122 (mtl-2)
@@ -85,10 +88,10 @@ strain CL2122 (mtl-2)
 <!-- SET2 genes go up only in elt-2 (-) -->
 
 ```{r}
-variance_per_gene %>% filter(set == "SET2") %>% arrange(desc(variance)) %>% filter(cgc_count > 1)
+variance_per_gene %>% filter(set == "ClassB") %>% arrange(desc(variance)) %>% filter(cgc_count > 1)
 ```
 
-SET2 options:
+ClassB options:
 
 OP563	C. elegans	unc-119(tm4063) III; wgIs563. Hide Description
 wgIs563 [cebp-1::TY1::EGFP::3xFLAG + unc-119(+)]. TY1::EGFP::3xFLAG tag inserted in frame at C-terminus of coding sequence by recombineering. Expression of transgene confirmed by GFP. References: Sarov M, et al. Nat Methods (2006) 10:839-44. Zhong, M, et al. PLoS Genet (2010) 6(2):e1000848. Strain was constructed as part of the Regulatory Element Project, part of modENCODE (http://www.modencode.org).
@@ -102,11 +105,11 @@ SET2 genes to order:
 <!-- SET3 genes go up in elt-2 (-) and go up a little higher in elt-2 (-);elt-7 (-) -->
 
 ```{r}
-variance_per_gene %>% filter(set == "SET3") %>% arrange(desc(variance))
+variance_per_gene %>% filter(set == "ClassC") %>% arrange(desc(variance))
 ```
 
 ```{r}
-variance_per_gene %>% filter(set == "SET3", external_gene_id == "pqm-1")
+variance_per_gene %>% filter(set == "ClassC", external_gene_id == "pqm-1")
 ```
 
 
@@ -115,11 +118,11 @@ SET3 order: OP201 (pqm-1)
 <!-- SET4 genes only go down in elt-2 (-);elt-7 (-) -->
 
 ```{r}
-variance_per_gene %>% filter(set == "SET4") %>% arrange(desc(variance))
+variance_per_gene %>% filter(set == "ClassD") %>% arrange(desc(variance))
 ```
 
 ```{r}
-variance_per_gene %>% filter(set == "SET4", external_gene_id == "mtl-2")
+variance_per_gene %>% filter(set == "ClassD", external_gene_id == "mtl-2")
 ```
 
 
@@ -152,6 +155,8 @@ Ha_bound_only_test_gene <- Ha_bound_only +
     labels = genes_to_test$external_gene_id
   ))
 
+Ha_bound_only
+
 Ha_bound_only_test_gene
 
 pdf(file = "./03_plots/16_ELT2_DE_Genes_ELT2bound_Test_Genes_Annotated_20-12-11.pdf", width = 5, height = 5)
@@ -160,15 +165,15 @@ dev.off()
 ```
 
 ```{r}
-write_csv(
-  (variance_per_gene %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/all_DE_genes.csv")
-write_csv(
-  (variance_per_gene %>% filter(set == "SET1") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set1_DE_genes.csv")
-write_csv(
-  (variance_per_gene %>% filter(set == "SET2") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set2_DE_genes.csv")
-write_csv(
-  (variance_per_gene %>% filter(set == "SET3") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set3_DE_genes.csv")
-write_csv(
-  (variance_per_gene %>% filter(set == "SET4") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set4_DE_genes.csv")
+# write_csv(
+#   (variance_per_gene %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/all_DE_genes.csv")
+# write_csv(
+#   (variance_per_gene %>% filter(set == "SET1") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set1_DE_genes.csv")
+# write_csv(
+#   (variance_per_gene %>% filter(set == "SET2") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set2_DE_genes.csv")
+# write_csv(
+#   (variance_per_gene %>% filter(set == "SET3") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set3_DE_genes.csv")
+# write_csv(
+#   (variance_per_gene %>% filter(set == "SET4") %>% select(wbps_gene_id) %>% rename(wbps_gene_id = "Wormbase ID")),"./02_output/set4_DE_genes.csv")
 ```
 

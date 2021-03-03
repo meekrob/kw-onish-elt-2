@@ -55,6 +55,8 @@ library(dendextend)
 library(binom)
 library(circlize)
 library(lubridate)
+library("org.Ce.eg.db")
+library(clusterProfiler)
 ```
 
 # Background and Rationale
@@ -168,12 +170,18 @@ dineen_nishimura_clusters <-
             sheet = "dataset")
 
 dineen_nishimura_sets <-
-  dineen_nishimura_clusters %>% select(WBGeneID, set)
+  dineen_nishimura_clusters %>% dplyr::select(WBGeneID, set)
 dineen_nishimura_sets_ascend <-
   arrange(dineen_nishimura_sets, WBGeneID)
 dineen_nishimura_sets_ascend$set <-
   toupper(dineen_nishimura_sets_ascend$set)
 dineen_nishimura_sets_ascend %>% head
+```
+
+Count the number of genes in each set
+
+```{r}
+table(dineen_nishimura_sets_ascend$set)
 ```
 
 ## Load ELT-2 ChIP-seq binding annotations
@@ -184,12 +192,15 @@ dineen_nishimura_sets_ascend %>% head
 # temp_peaks <- mcols(readRDS("/Users/rtpw/Dropbox/01_GITHUBREPO/RWC23_elt2_regulated_genes/01_ChIPseq_RNAseq_Integration/01_input/201019_annotatedPeaks.rds"))
 # write.csv(temp_peaks, file = "./01_input/201019_annotatedPeaks.csv")
 library(GenomicRanges)
-elt2_GRange <- readRDS("./01_input/201109_annotatedPeaks.rds")
-elt2_peaks <- as.data.frame(mcols(readRDS("./01_input/201109_annotatedPeaks.rds")))
+# elt2_GRange <- readRDS("./01_input/201109_annotatedPeaks.rds")
+# elt2_peaks <- as.data.frame(mcols(readRDS("./01_input/201109_annotatedPeaks.rds")))
 
-# elt2_peaks <- elt2_peaks %>% rename(cluster.description = k4labels, WBGeneID = feature)
+elt2_GRange <- readRDS("./01_input/201228_annotatedPeaks.rds")
+elt2_peaks <- as.data.frame(mcols(elt2_GRange))
+
+elt2_peaks <- elt2_peaks %>% dplyr::rename(cluster.description = k4labels, WBGeneID = feature)
 # use this to rename the columns when knitting
-elt2_peaks <- elt2_peaks %>% rename(k4labels = "cluster.description", feature = "WBGeneID")
+# elt2_peaks <- elt2_peaks %>% rename(k4labels = "cluster.description", feature = "WBGeneID")
 
 elt2_cluster_names <- c("Embryo_Specific",
                         "Larval",
@@ -216,14 +227,14 @@ elt2_peaks %>% head
 Output the number of ELT-2 peaks within each binding class.
 
 ```{r}
-table(mcols(readRDS(file = "./01_input/201109_annotatedPeaks.rds"))$k4labels)
+table(elt2_peaks$cluster.description)
 ```
 
 Make a set of genes with ELT-2 binding detected in the L1 stage.  
 
 ```{r}
 elt2_detected_in_L1 <-
-  elt2_peaks %>% select(WBGeneID, L1_IDR) %>% filter(L1_IDR == 1) %>% select(WBGeneID) %>% unique()
+  elt2_peaks %>% dplyr::select(WBGeneID, L1_IDR) %>% filter(L1_IDR == 1) %>% dplyr::select(WBGeneID) %>% unique()
 
 elt2_detected_in_L1 %>% head
 elt2_detected_in_L1 %>% dim
@@ -255,7 +266,7 @@ spencerLEgenes <-
 colnames(spencerLEgenes) <-
   str_c("spencer_LE_", colnames(spencerLEgenes))
 spencer_LE_subset <-
-  spencerLEgenes %>% select(spencer_LE_ID,
+  spencerLEgenes %>% dplyr::select(spencer_LE_ID,
                             spencer_LE_AveExpr,
                             spencer_LE_adj_P_Val,
                             spencer_LE_FC)
@@ -274,7 +285,7 @@ spencerL2genes <-
 colnames(spencerL2genes) <-
   str_c("spencer_L2_", colnames(spencerL2genes))
 spencer_L2_subset <- spencerL2genes %>%
-  select(spencer_L2_ID,
+  dplyr::select(spencer_L2_ID,
          spencer_L2_AveExpr,
          spencer_L2_adj_P_Val,
          spencer_L2_FC)
@@ -333,11 +344,11 @@ Add expression set and column labels.
 RNA_column_order <-
   factor(c(
     rep("WT", 4),
-    rep("elt7D", 3),
-    rep("elt2D", 4),
-    rep("elt7Delt2D", 3)
+    rep("elt-7(tm840)", 3),
+    rep("elt-2(ca15)", 4),
+    rep("elt-7(tm840); elt-2(ca15)", 3)
   ),
-  levels = c("WT", "elt7D", "elt2D", "elt7Delt2D"))
+  levels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840); elt-2(ca15)"))
 RNA_column_order
 ```
 
@@ -387,7 +398,7 @@ Ha <- Heatmap(
   column_split = RNA_column_order,
   bottom_annotation = HeatmapAnnotation(
     foo = anno_block(
-      labels = c("WT", "elt7D", "elt2D", "elt7D;elt2D"),
+      labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
       labels_gp = gpar(cex = .8),
       gp = gpar(border = NA, lty = "blank")
       ),
@@ -427,8 +438,8 @@ elt2_L1_anno <-
     WBGeneID = rownames(dynamic_counts_matrix_scaled_ascend),
     elt2_detected_in_L1 = ifelse(
       test = rownames(dynamic_counts_matrix_scaled_ascend) %in% elt2_detected_in_L1$WBGeneID,
-      yes = "bound",
-      no = "not.bound"
+      yes = "Direct",
+      no = "Indirect"
     ),
     stringsAsFactors = FALSE
   )
@@ -442,7 +453,7 @@ Incorporate this into a heatmap annotation
 Ha_L1chip <-
   Ha + rowAnnotation(L1bound = elt2_L1_anno$elt2_detected_in_L1,
                      col = list(L1bound = c(
-                       "bound" = "green", "not.bound" = "black"
+                       "Direct" = "green", "Indirect" = "black"
                      )))
 
 Ha_L1chip
@@ -529,7 +540,7 @@ colnames(clust_L1bound_prop_ggplot) <- c("SET", "Status", "Freq")
 
 clust_L1bound_prop_ggplot$Status <-
   factor(clust_L1bound_prop_ggplot$Status,
-         levels = c("not.bound", "bound"))
+         levels = c("Indirect", "Direct"))
 
 clust_L1bound_prop_ggplot$SET <-
   factor(
@@ -537,11 +548,11 @@ clust_L1bound_prop_ggplot$SET <-
     levels = c("SET6", "SET5", "SET4", "SET3", "SET2", "SET1")
   )
 
-clust_L1bound_colors <- c("bound" = "green", "not.bound" = "black")
+clust_L1bound_colors <- c("Direct" = "green", "Indirect" = "black")
 
 l1bound_percents <-
   ggplot(
-    clust_L1bound_prop_ggplot %>% filter(Status == "bound"),
+    clust_L1bound_prop_ggplot %>% filter(Status == "Direct"),
     aes(
       x = SET,
       y = Freq,
@@ -573,7 +584,7 @@ myggsave(plot = l1bound_percents,
 
 This plot shows that all of the differential expression sets have less than 50% of genes bound by ELT-2.  
 
-Rather than viewing percentages of genes bound, what is the number of "bound" vs "not.bound" per cluster?  
+Rather than viewing percentages of genes bound, what is the number of "Direct" vs "Indirect" per cluster?  
 
 ```{r}
 clust_L1bound_counts_ggplot <- as.data.frame(clust_L1bound_counts)
@@ -1002,21 +1013,20 @@ if (plot == TRUE){
   myPDFplot(
     plot = HA_bound_split,
     name = "05c_DE_Heatmap_L1elt2bound_split",
-    height = 6.5, width = 6,
+    width = 6, height = 4,
     plotdir = plotdir
   )
 }
 ```
 
 ```{r}
+
 RNA_heatmap2(
   dynamic_counts_matrix_scaled_ascend,
   column_split = RNA_column_order,
   row_split = elt2_L1_anno$elt2_detected_in_L1
-) +
-  elt2_l1_row_annotation(elt2_L1_anno) +
-  binding_cluster_row_annotation(chip_annotation_present_absent)
-
+) + binding_cluster_row_annotation(chip_annotation_present_absent)+
+  elt2_l1_row_annotation(elt2_L1_anno)
 
 ```
 
@@ -1024,7 +1034,7 @@ RNA_heatmap2(
 
 ```{r}
 l1_bound_list <-
-  elt2_L1_anno %>% filter(elt2_detected_in_L1 == "bound") %>% select(WBGeneID) %>% arrange(WBGeneID)
+  elt2_L1_anno %>% filter(elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID) %>% arrange(WBGeneID)
 
 dynamic_counts_matrix_scaled_bound_only <-
   matrix_select(dynamic_counts_matrix_scaled_ascend, l1_bound_list$WBGeneID)
@@ -1040,48 +1050,92 @@ bound_only_elt2_clust_anno <-
 bound_only_elt2_clust_anno %>% head()
 ```
 
-Assign k-means clusters for rows before plotting
+Do this once: Assign k-means clusters for rows before plotting
 
 ```{r}
-set.seed(421)
-kclus <- kmeans(dynamic_counts_matrix_scaled_bound_only, 4)
-bound_only_sets <-
-  data.frame(
-    WBGeneID = rownames(dynamic_counts_matrix_scaled_bound_only),
-    set = paste("Class", kclus$cluster, sep = ""),
-    stringsAsFactors = FALSE
-  )
-bound_only_sets[bound_only_sets$set == "Class1", "set"] <- "ClassC"
-bound_only_sets[bound_only_sets$set == "Class2", "set"] <- "ClassB"
-bound_only_sets[bound_only_sets$set == "Class3", "set"] <- "ClassA"
-bound_only_sets[bound_only_sets$set == "Class4", "set"] <- "ClassD"
-bound_only_sets
-bound_only_sets$set <- factor(bound_only_sets$set, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
-head(bound_only_sets)
-```
-```{r}
-table(bound_only_sets$set)
-```
-
-```{r}
-nrow(bound_only_sets)
+# set.seed(421)
+# kclus <- kmeans(dynamic_counts_matrix_scaled_bound_only, 4)
+# bound_only_class <-
+#   data.frame(
+#     WBGeneID = rownames(dynamic_counts_matrix_scaled_bound_only),
+#     class = paste("Class", kclus$cluster, sep = ""),
+#     stringsAsFactors = FALSE
+#   )
+# bound_only_class[bound_only_class$class == "Class1", "class"] <- "ClassC"
+# bound_only_class[bound_only_class$class == "Class2", "class"] <- "ClassD"
+# bound_only_class[bound_only_class$class == "Class3", "class"] <- "ClassB"
+# bound_only_class[bound_only_class$class == "Class4", "class"] <- "ClassA"
+# bound_only_class
+# bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+# head(bound_only_class)
 ```
 
 
-Draw heatmap and check that set assignment is correct.  
+
+Write the bound class assignments to a file
+```{r}
+# write.csv(x = bound_only_class, file = "./02_output/Bound_Genes_Class_Assignments.csv", quote = FALSE, row.names = FALSE)
+```
+
+
+Read in the bound class gene assignments file
+
+```{r}
+bound_only_class <- read.csv(file = "./02_output/Bound_Genes_Class_Assignments.csv",header = TRUE, stringsAsFactors = FALSE)
+bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+head(bound_only_class)
+```
+```{r}
+table(bound_only_class$class)
+```
+
+```{r}
+nrow(bound_only_class)
+```
+
+Draw heatmap and check that class assignment is correct.  
 
 
 ```{r}
 Ha_bound_only <-
   RNA_heatmap2(mat = dynamic_counts_matrix_scaled_bound_only,
               column_split = RNA_column_order,
-              row_split = bound_only_sets$set)
+              row_split = bound_only_class$class)
 
 Ha_bound_only
 if (plot == TRUE){
   myPDFplot(
     plot = Ha_bound_only,
-    name = "09a_DE_Heatmap_L1elt2boundOnly",
+    name = "6a_ELT2_DE_Genes_ELT2bound",
+    height = 6.5, width = 6,
+    plotdir = plotdir
+  )
+}
+```
+
+```{r}
+genes_to_test <- bitr(c("ets-4", "cebp-1", "mtl-2", "pqm-1", "zip-10"),
+     fromType = "SYMBOL",
+     toType = "WORMBASE",
+     OrgDb = org.Ce.eg.db)
+
+ Ha_bound_only_gene_anno <- Ha_bound_only +
+  rowAnnotation(foo = anno_mark(
+    at = unlist(lapply(c(1:nrow(genes_to_test)),
+                function(x) {
+                  which(
+                    rownames(dynamic_counts_matrix_scaled_bound_only) == genes_to_test$WORMBASE[x]
+                  )
+                })),
+    labels = genes_to_test$SYMBOL
+  ))
+ 
+ Ha_bound_only_gene_anno
+ 
+if (plot == TRUE){
+  myPDFplot(
+    plot = Ha_bound_only_gene_anno,
+    name = "6b_ELT2_DE_Genes_ELT2bound_Test_Genes_Annotated",
     height = 6.5, width = 6,
     plotdir = plotdir
   )
@@ -1090,9 +1144,10 @@ if (plot == TRUE){
 
 
 
+
 ```{r}
 Ha_bound_only +
-  rowAnnotation(sets = bound_only_sets$set)
+  rowAnnotation(class = bound_only_class$class)
 
 ```
 
@@ -1100,7 +1155,7 @@ Ha_bound_only +
 
 bound_only_annotation <-
   merge(bound_only_elt2_clust_anno,
-        bound_only_sets,
+        bound_only_class,
         by.x = "WBGeneID",
         by.y = "WBGeneID")
 bound_only_annotation_ascend <-
@@ -1172,7 +1227,7 @@ if (plot == TRUE){
 
 ```{r}
 bound_only_exprclust_bindclust <-
-  merge(bound_only_sets,
+  merge(bound_only_class,
         chip_annotation_present_absent,
         by.x = "WBGeneID",
         by.y = "WBGeneID")
@@ -1185,24 +1240,24 @@ Make a dataframe that addresses the question:
 
 ```{r}
 
-bound_only_expressionSet_per_BindingCluster <- data.frame()
+bound_only_expressionclass_per_BindingCluster <- data.frame()
 for (i in elt2_cluster_names) {
   toappend <-
-    table(bound_only_exprclust_bindclust$set,
+    table(bound_only_exprclust_bindclust$class,
           bound_only_exprclust_bindclust[[i]]) %>%
     as.data.frame.matrix() %>%
-    rownames_to_column(var = "set") %>%
+    rownames_to_column(var = "class") %>%
     mutate(ELT2_cluster = i,
            percent = present / (present + absent))
-  bound_only_expressionSet_per_BindingCluster <-
-    bind_rows(bound_only_expressionSet_per_BindingCluster, toappend)
+  bound_only_expressionclass_per_BindingCluster <-
+    bind_rows(bound_only_expressionclass_per_BindingCluster, toappend)
 }
 
-bound_only_expressionSet_per_BindingCluster$ELT2_cluster <-
-  factor(bound_only_expressionSet_per_BindingCluster$ELT2_cluster,
+bound_only_expressionclass_per_BindingCluster$ELT2_cluster <-
+  factor(bound_only_expressionclass_per_BindingCluster$ELT2_cluster,
          levels = elt2_cluster_names)
 
-bound_only_expressionSet_per_BindingCluster
+bound_only_expressionclass_per_BindingCluster
 ```
 
 
@@ -1210,8 +1265,8 @@ Make a plot that addresses the question: What is the percentage of genes with an
 
 ```{r}
 bound_percent_plot <- ggplot(
-  bound_only_expressionSet_per_BindingCluster,
-  aes(x = set,
+  bound_only_expressionclass_per_BindingCluster,
+  aes(x = class,
       y = present,
       fill = ELT2_cluster)
 ) +
@@ -1223,26 +1278,26 @@ bound_percent_plot
 
 if (plot == TRUE){
 myggsave(plot = bound_percent_plot, 
-         name = "10a_Bound_Only_Cluster_percent_present_per_Set",
+         name = "10a_Bound_Only_Cluster_percent_present_per_class",
          height = 3,
          width = 5,
          plotdir = plotdir)
 }
 ```
 
-## What is the percentage of genes within each Expression Set that are associated with an ELT-2 binding cluster?
+## What is the percentage of genes within each Expression class that are associated with an ELT-2 binding cluster?
 
 ```{r}
 bound_percent_plot_inverse <- ggplot(
-  bound_only_expressionSet_per_BindingCluster,
-  aes(x = ELT2_cluster, y = present, fill = set)
+  bound_only_expressionclass_per_BindingCluster,
+  aes(x = ELT2_cluster, y = present, fill = class)
 ) +
   geom_bar(stat = "identity", position = "fill") +
   theme_classic()
 bound_percent_plot_inverse
 if (plot == TRUE){
 myggsave(plot = bound_percent_plot_inverse, 
-         name = "10b_Bound_Only_Set_percent_present_per_Cluster",
+         name = "10b_Bound_Only_class_percent_present_per_Cluster",
          height = 3,
          width = 5,
          plotdir = plotdir)
@@ -1255,14 +1310,14 @@ First, calculate the percentage of each ELT-2 binding category against the total
 
 ```{r}
 bound_only_percent_bound_per_ELT2_cluster <-
-  bound_only_expressionSet_per_BindingCluster %>% group_by(ELT2_cluster) %>% summarise(percent = sum(present) /
+  bound_only_expressionclass_per_BindingCluster %>% group_by(ELT2_cluster) %>% summarise(percent = sum(present) /
                                                                               nrow(dynamic_counts_matrix_scaled))
 ```
 
 Next calculate the the 95% Confidence Interval with the Bionomial Test.
 
 ```{r}
-bound_only_expressionSet_per_BindingCluster %>% group_by(set, ELT2_cluster) %>% summarise(percent = present /
+bound_only_expressionclass_per_BindingCluster %>% group_by(class, ELT2_cluster) %>% summarise(percent = present /
                                                                                  (present + absent))
 
 ```
@@ -1272,13 +1327,13 @@ Calculate the binomial pvalue and confidence intervals.
 ```{r}
 # Add a column for the background percentage of ELT2 binding clusters per the whole expression dataset
 bound_only_expression_binding_stats <-
-  bound_only_expressionSet_per_BindingCluster %>% group_by(ELT2_cluster) %>% mutate(background_percent = sum(present) /
+  bound_only_expressionclass_per_BindingCluster %>% group_by(ELT2_cluster) %>% mutate(background_percent = sum(present) /
                                                                                       (sum(present) + sum(absent)))
 
 # Use binom.test to calculate pvalue and confidence intervales for the percentage of ELT2 binding clusters per expression clusters
 bound_only_expression_binding_stats <-
   bound_only_expression_binding_stats %>%
-  group_by(ELT2_cluster, set) %>%
+  group_by(ELT2_cluster, class) %>%
   mutate(
     pval = binom.test(
       x = c(present, absent),
@@ -1300,9 +1355,9 @@ bound_only_expression_binding_stats <-
     )$conf.int[1]
   )
 
-bound_only_expression_binding_stats$set <-
-  factor(bound_only_expression_binding_stats$set,
-         levels = c("SET4", "SET3", "SET2", "SET1"))
+bound_only_expression_binding_stats$class <-
+  factor(bound_only_expression_binding_stats$class,
+         levels = c("ClassD", "ClassC", "ClassB", "ClassA"))
 
 bound_only_expression_binding_stats %>% head()
 
@@ -1312,13 +1367,13 @@ bound_only_expression_binding_stats %>% head()
 
 ```{r}
 bound_percent_multi <- ggplot(bound_only_expression_binding_stats,
-       aes(x = set,
+       aes(x = class,
            y = percent, fill = ELT2_cluster)) +
   geom_bar(stat = "identity") +
   scale_y_continuous(limits = c(0, 1.5)) +
   theme_classic() +
   geom_hline(
-    data = bound_only_expression_binding_stats %>% ungroup() %>% select(ELT2_cluster, background_percent) %>% unique,
+    data = bound_only_expression_binding_stats %>% ungroup() %>% dplyr::select(ELT2_cluster, background_percent) %>% unique,
     color = "red",
     linetype = "dashed",
     aes(yintercept = background_percent)
@@ -1350,7 +1405,7 @@ myggsave(plot = bound_percent_multi,
 wTF3.0 <-
   read.csv("./01_input/TF3-0_namesonly.txt",
            sep = "\t",
-           header = TRUE) %>% select(WBGeneID)
+           header = TRUE) %>% dplyr::select(WBGeneID)
 
 dynamic_counts_matrix_scaled_TFs <-
   matrix_select(dynamic_counts_matrix_scaled_ascend, wTF3.0$WBGeneID)
@@ -1531,6 +1586,7 @@ dynamic_counts_matrix_scaled_TFs_bound_names <-
   id2name(dynamic_counts_matrix_scaled_TFs_bound)
 
 HAboundTF <- Heatmap(
+  name = "elt2D-elt7D\nRNAseq",
   dynamic_counts_matrix_scaled_TFs_bound_names,
   col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
   cluster_columns = FALSE,
@@ -1538,8 +1594,19 @@ HAboundTF <- Heatmap(
   clustering_method_rows = "complete",
   show_row_names = TRUE,
   row_names_side = "left",
+  row_names_gp = gpar(fontsize = 10),
   show_column_names = TRUE,
-  column_title = "Differential Expression of\nELT-2 Bound Transcription Factors"
+  column_title = "Differential Expression of\nELT-2 Bound Transcription Factors",
+  column_split = RNA_column_order,
+  column_labels = column_labels[colnames(dynamic_counts_matrix_scaled_TFs_bound_names)],
+  bottom_annotation = HeatmapAnnotation(
+      foo = anno_block(
+        labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
+        labels_gp = gpar(cex = .8),
+        gp = gpar(border = NA, lty = "blank")
+      ),
+      foo2 = anno_block(gp = gpar(fill = "black"), height = unit(0.5, "mm"))
+    )
 )
 
 HAboundTF
@@ -1554,6 +1621,58 @@ if (plot == TRUE){
   )
   }
 ```
+
+```{r}
+bound_tf_class <- bound_only_class %>% filter(WBGeneID %in% rownames(dynamic_counts_matrix_scaled_TFs_bound)) %>% arrange(WBGeneID)
+identical(bound_tf_class$WBGeneID, rownames(dynamic_counts_matrix_scaled_TFs_bound))
+table(bound_tf_class$class)
+```
+
+```{r}
+HAboundTF_class <- Heatmap(
+  name = "elt2D-elt7D\nRNAseq",
+  dynamic_counts_matrix_scaled_TFs_bound_names,
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = TRUE,
+  row_split = bound_tf_class$class,
+  row_names_side = "left",
+  row_names_gp = gpar(fontsize = 10),
+  show_column_names = TRUE,
+  column_title = "Differential Expression of\nELT-2 Bound Transcription Factors",
+  column_split = RNA_column_order,
+  column_labels = column_labels[colnames(dynamic_counts_matrix_scaled_TFs_bound_names)],
+  bottom_annotation = HeatmapAnnotation(
+      foo = anno_block(
+        labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
+        labels_gp = gpar(cex = .8),
+        gp = gpar(border = NA, lty = "blank")
+      ),
+      foo2 = anno_block(gp = gpar(fill = "black"), height = unit(0.5, "mm"))
+    )
+) + rowAnnotation(
+    Class = bound_tf_class$class,
+    col = list(Class = c(
+      "ClassA" = "red", "ClassB" = "orange", "ClassC" = "yellow", "ClassD" = "green"
+    )),
+    border = TRUE
+  )
+
+HAboundTF_class
+
+if (plot == TRUE){
+  myPDFplot(
+    plot = HAboundTF_class,
+    name = "15c_Differential_Expression_Bound_TFs_Class_Split",
+    height = 5,
+    width = 5.5,
+    plotdir = plotdir
+  )
+  }
+```
+
 
 ```{r}
 tf_bound_spencer_rna_anno <- data.frame(
@@ -1661,12 +1780,12 @@ mosaic(t(tableformosaic),shade=T,
        just_labels="right",
        rot_labels=c(0,0,0,0),
        offset_label=c(0,0,0,-.5),
-       main  ="pee pee poo poo")
+       main  ="Mosaic")
 ```
 
 ```{r}
 library(corrplot)
-corrplot(
+DEset_vs_ELT2cluster_corr<- corrplot(
   chisq.test(tableformosaic, simulate.p.value = TRUE)$residuals,
   is.cor = FALSE,
   cl.ratio = 0.35,
@@ -1676,30 +1795,27 @@ corrplot(
   tl.srt = 45
 )
 
-pdf(file = "./03_plots/17_Dineensets_vs_elt2sets_pearsonresiduals.pdf")
-corrplot(
-    chisq.test(tableformosaic, simulate.p.value = TRUE)$residuals,
-    is.cor = FALSE,
-    cl.ratio = 0.35,
-    cl.align = "r",
-    tl.col = "black",
-    tl.cex = 1,
-    tl.srt = 45
+if (plot == TRUE){
+myPDFplot(
+    plot = corrplot(
+  chisq.test(tableformosaic, simulate.p.value = TRUE)$residuals,
+  is.cor = FALSE,
+  cl.ratio = 0.35,
+  cl.align = "r",
+  tl.col = "black",
+  tl.cex = 1,
+  tl.srt = 45
+),
+    name = "17_Dineensets_vs_elt2sets_pearsonresiduals",
+    height = 5,
+    width = 5.5,
+    plotdir = plotdir
   )
-dev.off()
+}
+
+
 ```
 
-```{r}
-  corrplot(
-    chisq.test(tableformosaic, simulate.p.value = TRUE)$stdres,
-    is.cor = FALSE,
-    cl.ratio = 0.35,
-    cl.align = "r",
-    tl.col = "black",
-    tl.cex = 1,
-    tl.srt = 45
-  )
-```
 
 ```{r}
 dineen_ELT2_pearson_residuals <-
@@ -1730,7 +1846,10 @@ dineen_ELT2_pearson_residuals$ELT2_cluster <-
   )
 # add q-value
 dineen_ELT2_pearson_residuals <- cbind(dineen_ELT2_pearson_residuals, p.adjust = as.data.frame(tableformosiac.q)$Freq)
+```
 
+
+```{r fig.widt = 3, fig.height=3}
 # draw the plot
 # Add pass vs fail for pvalue
 ggplot(dineen_ELT2_pearson_residuals,
@@ -1743,19 +1862,114 @@ ggplot(dineen_ELT2_pearson_residuals,
     midpoint = 0
   ) +
   theme_bw() +
-  scale_color_manual(values = c("grey", "black"))
+  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in")) +
+  scale_color_manual(values = c("light grey", "black")) +
+  xlab("ELT-2 Binding Cluster") +
+  ylab("Expression Set")
 
-ggsave("03_plots/18_Dineen_Sets_ELT2clusters_custom_mosaic.pdf", width = 5, height = 3, useDingbats=FALSE)
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "18_Dineen_Sets_ELT2clusters_custom_mosaic",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), width = 5, height = 3.25, useDingbats=FALSE)
+}
+
+
 ```
 
 
-contingency table of L1 stage binding bound not bound then pearson residuals plot
+
+```{r fig.width=3, fig.height=4}
+# HA_bound_split
+# HA_bound_split <- RNA_heatmap2(
+#   dynamic_counts_matrix_scaled_ascend,
+#   column_split = RNA_column_order,
+#   row_split = elt2_L1_anno$elt2_detected_in_L1
+# ) + elt2_l1_row_annotation(elt2_L1_anno)
+# 
+# 
+# pdf(file = "../Dineen_heatmap_bound_split.pdf", width = 4.5, height = 4)
+# HA_bound_split
+# dev.off()
+
+
+```
+
+```{r fig.width=3, fig.height=4}
+# Ha_bound_only 
+# Ha_bound_only <-
+#   RNA_heatmap2(mat = dynamic_counts_matrix_scaled_bound_only,
+#               column_split = RNA_column_order,
+#               row_split = bound_only_class$class)
+# 
+# pdf(file = "..//Dineen_heatmap_bound_only.pdf", width = 4, height = 4)
+# Ha_bound_only 
+# dev.off()
+```
+
+Determine which class the genes Jess is performing smFISH fall under
+```{r}
+c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+
+
+bound_only_class %>% inner_join(
+  (bitr(bound_only_class$WBGeneID,
+     fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db)),
+  by = c("WBGeneID" = "WORMBASE")
+) %>% filter(SYMBOL %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
+```
 
 ```{r}
-
+dineen_nishimura_sets_ascend %>% inner_join(
+  (bitr(bound_only_class$WBGeneID,
+     fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db)),
+  by = c("WBGeneID" = "WORMBASE")
+) %>% filter(SYMBOL %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
 ```
 
+# Make output dataframe
 
+```{r}
+fig4df <- expression_L1_binding %>% left_join(elt2_peaks %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID") %>% left_join(bound_only_class, by = "WBGeneID") %>% dplyr::rename(bound_class = "class", dineen_set = "set")
+fig4df$cluster.description <- factor(fig4df$cluster.description, levels = c(levels(fig4df$cluster.description), "Not_Bound"))
+fig4df$cluster.description[is.na(fig4df$cluster.description)] <- "Not_Bound"
+fig4df
+# write_csv(fig4df, path = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+write_csv()
+
+(fig4df %>% filter(bound_class == "ClassA") %>% dplyr::select(WBGeneID))
+
+bound_classes <- c("ClassA", "ClassB", "ClassC", "ClassD")
+
+# Make file for each bound class
+for(i in bound_classes){
+  write.table(x = fig4df %>% filter(bound_class == i) %>% dplyr::select(WBGeneID), file = paste("./02_output/Figure4_Bound_",i,"_WBGeneID.csv", sep = ""),
+          quote = FALSE, row.names = FALSE, col.names = FALSE)
+}
+
+# make background file of genes from all 4 classes
+write.table(x = fig4df %>% filter(bound_class %in% bound_classes) %>% dplyr::select(WBGeneID), file = "./02_output/Figure4_Bound_Background_WBGeneID.csv",
+          quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+dineen_sets <- paste(rep("SET", 6), 1:6, sep = "")
+dineen_sets
+
+fig4df %>% left_join(bitr(fig4df$WBGeneID, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("WBGeneID" = "WORMBASE")) %>% View()
+```
+
+```{r}
+library(clusterProfiler)
+library(org.Ce.eg.db)
+ClassD_Anatomy <- read.csv(file = "~/Downloads/hyperGeo1614267897.81772.csv")
+ClassD_Anatomy
+ClassD_Anatomy %>% left_join(bitr(ClassD_Anatomy$wbid, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("wbid" = "WORMBASE")) %>% View()
+```
 
 
 ## Session Info

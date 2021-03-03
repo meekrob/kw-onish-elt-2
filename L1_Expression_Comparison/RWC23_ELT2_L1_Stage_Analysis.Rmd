@@ -28,6 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # install.packages("binom")
 # BiocManager::install("clusterProfiler")
 # BiocManager::install("org.Ce.eg.db")
+# install.packages("extrafont")
 ```
 
 
@@ -49,6 +50,7 @@ library(clusterProfiler)
 library("org.Ce.eg.db")
 library(DESeq2)
 library(readxl)
+library(extrafont)
 ```
 
 ## Source functions
@@ -465,11 +467,14 @@ does not include analysis from here
 # Figure 3: RNA-seq of dissociated C. elegans cells identified L1 stage intestine specific and intestine depleted genes
 ## Defining intestine specific and depleted genes
 
+
+# L1 stage intestine analysis
+
 Read in the counts data
 
 ```{r}
-countsData_L1 <- read.table(file = "../RWC24_L1_Intestine_RNAseq/03_output/all.counts", header = FALSE, row.names = 1, skip = 2)
-head(countsData_L1)
+counts_L1 <- read.table(file = "../RWC24_L1_Intestine_RNAseq/03_output/all.counts", header = FALSE, row.names = 1, skip = 2)
+head(counts_L1)
 ```
 
 Read in and print metadata file
@@ -492,166 +497,685 @@ metadata_L1$names <- factor(
     "gfpPlus_rep1",
     "gfpPlus_rep2",
     "gfpMinus_rep1",
-    "gfpMinusCells_rep2"
+    "gfpMinus_rep2"
   )
 )
 metadata_L1$type <-
-  factor(metadata_L1$type, levels = c("gutless", "gut", "cells", "whole"))
+  factor(metadata_L1$type, levels = c("gut", "gutless", "cells", "whole"))
+metadata_L1$stage <- "L1"
+metadata_L1
 ```
 Name `countsData` headers
 ```{r}
-colnames(countsData_L1) <- c("chr", "start", "stop", "strand", "length", as.vector(metadata_L1$names))
-head(countsData_L1)
-```
-
-# Add embryo intestine FACS data
-
-Read in the counts data
-
-```{r}
-embryo_counts <- read.delim(file = "../RWC25_Embryo_Intestine_FACS/all.counts", sep = " ")
-head(embryo_counts)
-colnames(embryo_counts[6:15])
-```
-
-```{r}
-metadata_embryo <- read.table(file = "../RWC25_Embryo_Intestine_FACS/RWP27_metadata.tsv", header = FALSE, stringsAsFactors = FALSE)
-colnames(metadata_embryo) <- c("Filename.Fwd", "Filename.Rev", "names")
-
-rep <- c(1,1,1,2,2,2,2,3,3,3)
-type <- c("cells", "gut", "gutless", "whole", "cells", "gut", "gutless", "whole", "gut", "gutless")
-metadata_embryo <- cbind(metadata_embryo, rep, type)
-metadata_embryo$type <-
-  factor(metadata_embryo$type, levels = c("gutless", "gut", "cells", "whole"))
-metadata_embryo$stage <- "embryo"
-metadata_embryo
+colnames(counts_L1) <- c("chr", "start", "stop", "strand", "length", as.vector(metadata_L1$names))
+head(counts_L1)
 ```
 
 
 Generate a table called "cts" out of the countsData table. Subset the countsData.
 ```{r}
-cts <- as.matrix(countsData %>% dplyr::select(metadata1$names))
-head(cts)
+cts_L1 <- as.matrix(counts_L1 %>% dplyr::select(metadata_L1$names))
+head(cts_L1)
 ```
 
 Reorganize the metadata table so the names2 column are now headers
 
 ```{r}
-rownames(metadata1)<- metadata1$names
-coldata <- metadata1[,c("names", "rep", "type")]
-rownames(coldata) <- as.vector(metadata1$names)
-coldata
+rownames(metadata_L1)<- metadata_L1$names
+coldata_L1 <- metadata_L1[,c("names", "rep", "type", "stage")]
+rownames(coldata_L1) <- as.vector(metadata_L1$names)
+coldata_L1
 ```
 
 Check that the names match  --> Should be TRUE
 
 ```{r}
-all(rownames(coldata) == colnames(cts))
+all(rownames(coldata_L1) == colnames(cts_L1))
 ```
 
 ```{r}
-dds_int <- DESeqDataSetFromMatrix(countData = cts,
-                              colData = coldata,
+dds_int_L1 <- DESeqDataSetFromMatrix(countData = cts_L1,
+                              colData = coldata_L1,
                               design = ~ type)
-keep <- rowSums(counts(dds_int)) >=10
-dds_int <- dds[keep,]
-dds_int
+keep <- rowSums(counts(dds_int_L1)) >=10
+dds_int_L1 <- dds_int_L1[keep,]
+dds_int_L1
 ```
 
 ```{r}
-dds_int <- DESeq(dds_int)
-resultsNames(dds_int)
+dds_int_L1 <- DESeq(dds_int_L1)
+resultsNames(dds_int_L1)
 ```
 
 # Figure 3A: Sample distance matrix show that FACS sorted intestine cells are distinct from other samples
 
 ```{r}
 library("RColorBrewer")
-rld <- rlog(dds_int, blind=FALSE)
-sampleDists <- dist(t(assay(rld)))
-sampleDistMatrix <- as.matrix(sampleDists)
-rownames(sampleDistMatrix) <- paste(rld$names, rld$type, sep="-")
-colnames(sampleDistMatrix) <- paste(rld$names, rld$type, sep="-")
+rld_L1 <- rlog(dds_int_L1, blind=FALSE)
+sampleDists_L1 <- dist(t(assay(rld_L1)))
+sampleDistMatrix_L1 <- as.matrix(sampleDists_L1)
+rownames(sampleDistMatrix_L1) <- paste(rld_L1$stage, rld_L1$type, rld_L1$rep, sep="-")
+colnames(sampleDistMatrix_L1) <- NULL
+# colnames(sampleDistMatrix) <- paste(rld$type, rld$rep, sep="-")
 colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
-pheatmap(sampleDistMatrix,
-         clustering_distance_rows=sampleDists,
-         clustering_distance_cols=sampleDists,
+pheatmap(sampleDistMatrix_L1,
+         clustering_distance_rows=sampleDists_L1,
+         clustering_distance_cols=sampleDists_L1,
          color=colors)
+
 ```
 
 
 ```{r}
-res_int <- results(dds_int, contrast = c("type", "gut", "gutless"))
-head(res_int)
+res_int_L1 <- results(dds_int_L1, contrast = c("type", "gut", "gutless"), lfcThreshold = 1, alpha = 0.05)
+head(res_int_L1)
 ```
 
 Write results output file.  
 
 ```{r}
-res_int_df <- as.data.frame(res_int) %>% rownames_to_column(var = "WBGeneID")
+res_int_L1_df <- as.data.frame(res_int_L1) %>% rownames_to_column(var = "WBGeneID")
 ```
 
 ## Define Intestine Expression Sets: Specific, Shared, and Depleted
 
 ```{r}
-plotMA(res_int, ylim = c(-11,11), alpha = 0.05)
+plotMA(res_int_L1, ylim = c(-11,11), alpha = 0.05)
 ```
+Perform log fold shrinkage. Comparison must be in `coef` from `resultsNames()`, adjust factor levels if necessary.  
 ```{r}
-resLFC <- lfcShrink(dds_int, coef = "type_gut_vs_gutless")
-resApeglm <- lfcShrink(dds_int, coef = "type_gut_vs_gutless", type = "apeglm")
-resAsh <- lfcShrink(dds_int, coef = "type_gut_vs_gutless", type = "ashr")
-```
-
-```{r}
-par(mfrow = c(1,3), mar = c(4,4,2,1))
-plotMA(resLFC, ylim=c(-10,10), main = "normal")
-plotMA(resApeglm, ylim=c(-10,10), main = "apeglm")
-plotMA(resAsh, ylim=c(-10,10), main = "ashr")
+# resLFC <- lfcShrink(dds_int_L1, coef = "type_gut_vs_gutless")
+# resApeglm <- lfcShrink(dds_int_L1, coef = "type_gut_vs_gutless", type = "apeglm")
+# resAsh <- lfcShrink(dds_int_L1, coef = "type_gut_vs_gutless", type = "ashr")
+# par(mfrow = c(1,3), mar = c(4,4,2,1))
+# plotMA(resLFC, ylim=c(-10,10), main = "normal")
+# plotMA(resApeglm, ylim=c(-10,10), main = "apeglm")
+# plotMA(resAsh, ylim=c(-10,10), main = "ashr")
 ```
 
-```{r}
-res_int_specific <- results(dds_int, contrast = c("type", "gut", "gutless"), lfcThreshold = 1, altHypothesis = "greater")
-res_int_depleted <- results(dds_int, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "less")
-res_int_shared <- results(dds_int, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "lessAbs")
-
-res_int_specific_df <- res_int_specific %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
-res_int_depleted_df <- res_int_depleted %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
-res_int_shared_df <- res_int_shared %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
-
-```
 
 ```{r}
-par(mfrow = c(1,3), mar = c(4,4,2,1))
-plotMA(res_int_specific, ylim=c(-10,10), main = "intestine specific")
-plotMA(res_int_depleted, ylim=c(-10,10), main = "intestine depleted")
-plotMA(res_int_shared, ylim=c(-10,10), main = "intestine shared")
+# res_int_L1_specific <- results(dds_int_L1, contrast = c("type", "gut", "gutless"), lfcThreshold = 1, altHypothesis = "greater")
+# res_int_L1_depleted <- results(dds_int_L1, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "less")
+# res_int_L1_shared <- results(dds_int_L1, contrast = c("type", "gut", "gutless"),lfcThreshold = 1, altHypothesis = "lessAbs")
+# 
+# res_int_L1_specific_df <- res_int_L1_specific %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+# res_int_L1_depleted_df <- res_int_L1_depleted %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+# res_int_L1_shared_df <- res_int_L1_shared %>% as.data.frame() %>% rownames_to_column(var = "WBGeneID")
+
 ```
 
 ```{r}
-int_exp_categories <-
+# par(mfrow = c(1,3), mar = c(4,4,2,1))
+# plotMA(res_int_L1_specific, ylim=c(-10,10), main = "intestine specific")
+# plotMA(res_int_L1_depleted, ylim=c(-10,10), main = "intestine depleted")
+# plotMA(res_int_L1_shared, ylim=c(-10,10), main = "intestine shared")
+```
+
+```{r}
+L1_int_exp_categories <-
   data.frame(
-    WBGeneID = (res_int_specific_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    WBGeneID = (res_int_L1_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
     ExpType = "Specific",
     stringsAsFactors = FALSE
   ) %>% bind_rows(data.frame(
-    WBGeneID = (res_int_depleted_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    WBGeneID = (res_int_L1_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
     ExpType = "Depleted",
     stringsAsFactors = FALSE
   ))
+
+head(L1_int_exp_categories)
+table(L1_int_exp_categories$ExpType)
 ```
 
 # Figure 3B: Defining intestine specific genes and intestine depleted genes
 ```{r}
 ggplot(
-  res_int_df %>% right_join(int_exp_categories, by = "WBGeneID"),
+  res_int_L1_df %>% right_join(L1_int_exp_categories, by = "WBGeneID"),
   aes(x = log10(baseMean), y = log2FoldChange)
 ) +
-  geom_point(data = res_int_df, colour = "grey", alpha = 0.04)+
+  geom_point(data = res_int_L1_df, colour = "grey", alpha = 0.04)+
   geom_point(alpha = 0.4, aes(colour = ExpType))+
   geom_hline(linetype = "dashed", aes(yintercept = 1)) +
   geom_hline(linetype = "dashed", aes(yintercept = -1))+
    theme_bw()
 ```
+
+# Embryo Intestine Analysis
+
+Read in the embryo counts data
+
+```{r}
+countsData_emb <- read.delim(file = "../RWC25_Embryo_Intestine_FACS/all.counts", sep = " ")
+head(countsData_emb)
+```
+```{r}
+colnames(countsData_emb[6:15])
+```
+
+
+Read in and print metadata file
+```{r}
+metadata_emb <- read.table(file = "../RWC25_Embryo_Intestine_FACS/RWP27_metadata.tsv", header = FALSE, stringsAsFactors = FALSE)
+colnames(metadata_emb) <- c("Filename.Fwd", "Filename.Rev", "names")
+
+rep <- c(1,1,1,2,2,2,2,3,3,3)
+type <- c("cells", "gut", "gutless", "whole", "cells", "gut", "gutless", "whole", "gut", "gutless")
+metadata_emb <- cbind(metadata_emb, rep, type)
+metadata_emb$stage <- "Embryo"
+metadata_emb
+```
+
+Factorize metadata
+```{r}
+
+metadata_emb$names <- factor(
+  metadata_emb$names,
+  levels = metadata_emb$names
+)
+metadata_emb$type <-
+  factor(metadata_emb$type, levels = c("gutless", "gut", "cells", "whole"))
+```
+
+Order columns according to metadata_emb order
+```{r}
+countsData_emb <- countsData_emb  %>% dplyr::select(chr:length, sort(metadata_emb$names))
+head(countsData_emb)
+```
+
+Generate a table called "cts" out of the countsData_emb table. Subset the countsData_emb.
+```{r}
+cts_Emb <- as.matrix(countsData_emb %>% dplyr::select(metadata_emb$names))
+head(cts_Emb)
+```
+
+Reorganize the metadata table so the names2 column are now headers
+
+```{r}
+rownames(metadata_emb)<- metadata_emb$names
+coldata_Emb <- metadata_emb[,c("names", "rep", "type", "stage")]
+rownames(coldata_Emb) <- as.vector(metadata_emb$names)
+coldata_Emb
+```
+
+Check that the names match  --> Should be TRUE
+
+```{r}
+all(rownames(coldata_Emb) == colnames(cts_Emb))
+```
+```{r}
+dds_int_Emb <- DESeqDataSetFromMatrix(countData = cts_Emb,
+                              colData = coldata_Emb,
+                              design = ~ type)
+# filter lowly expressed genes
+keep_emb <- rowSums(counts(dds_int_Emb)) >=10
+dds_int_Emb <- dds_int_Emb[keep_emb,]
+dds_int_Emb
+```
+
+```{r}
+dds_int_Emb <- DESeq(dds_int_Emb)
+resultsNames(dds_int_Emb)
+```
+
+# Embryo Intestine: Sample distance matrix show that FACS sorted intestine cells are distinct from other samples
+
+```{r}
+library("RColorBrewer")
+rld_Emb <- rlog(dds_int_Emb, blind=FALSE)
+sampleDists <- dist(t(assay(rld_Emb)))
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- paste(rld_Emb$stage, rld_Emb$type, rld_Emb$rep, sep="-")
+colnames(sampleDistMatrix) <- NULL
+# rownames(sampleDistMatrix) <- paste(rld_Emb$type, rld_Emb$rep, sep="-")
+# colnames(sampleDistMatrix) <- paste(rld_Emb$type, rld_Emb$rep, sep="-")
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+rownames(sampleDistMatrix) <- c("Unsorted Cells 1", "GFP+ Cells 1", "GFP- Cells 1", "Whole Embryo 1", "Unsorted Cells 2", "GFP+ Cells 2", "GFP- Cells 2", "Whole Embryo 2", "GFP+ Cells 3", "GFP- Cells 3")
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists,
+         color=colors)
+
+```
+
+
+```{r}
+res_int_Emb <- results(dds_int_Emb, contrast = c("type", "gut", "gutless"), lfcThreshold = 1, alpha = 0.05)
+head(res_int_Emb)
+```
+
+Write results output file.  
+
+```{r}
+res_int_Emb_df <- as.data.frame(res_int_Emb) %>% rownames_to_column(var = "WBGeneID")
+```
+
+## Define Intestine Expression Sets: Specific, Shared, and Depleted
+
+```{r fig.width=4, fig.height=3}
+plotMA(res_int_Emb, ylim = c(-11,11), alpha = 0.05)
+```
+Perform log fold shrinkage. Comparison must be in `coef` from `resultsNames()`, adjust factor levels if necessary.  
+```{r}
+# resLFC <- lfcShrink(dds_int_Emb, coef = "type_gut_vs_gutless")
+# resApeglm <- lfcShrink(dds_int_Emb, coef = "type_gut_vs_gutless", type = "apeglm")
+# resAsh <- lfcShrink(dds_int_Emb, coef = "type_gut_vs_gutless", type = "ashr")
+# par(mfrow = c(1,3), mar = c(4,4,2,1))
+# plotMA(resLFC, ylim=c(-10,10), main = "normal")
+# plotMA(resApeglm, ylim=c(-10,10), main = "apeglm")
+# plotMA(resAsh, ylim=c(-10,10), main = "ashr")
+```
+
+
+```{r}
+int_Emb_exp_categories <-
+  data.frame(
+    WBGeneID = (res_int_Emb_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    ExpType = "Specific",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (res_int_Emb_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    ExpType = "Depleted",
+    stringsAsFactors = FALSE
+  ))
+head(int_Emb_exp_categories)
+table(int_Emb_exp_categories$ExpType)
+```
+
+# Figure 3B: Defining intestine specific genes and intestine depleted genes
+```{r}
+ggplot(
+  res_int_Emb_df %>% right_join(int_Emb_exp_categories, by = "WBGeneID"),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_int_Emb_df, colour = "grey", alpha = 0.04)+
+  geom_point(alpha = 0.4, aes(colour = ExpType))+
+  geom_hline(linetype = "dashed", aes(yintercept = 1)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -1))+
+   theme_bw()
+```
+
+# Compare dissociated cells to whole worm in Embryo and L1 samples
+
+```{r fig.width=3, fig.height=3}
+rld_Emb_df <- as.data.frame(assay(rld_Emb)) %>% rownames_to_column(var = "WBGeneID")
+# rld_Emb_df
+# rld_Emb_df %>% dplyr::select(WBGeneID, contains(c("Cells", "Whole"))) %>%
+#   ggplot(aes(x = embryoCells_rep2, y = embryoWhole_rep2)) +
+#   geom_point() + 
+#   geom_smooth(method = "lm")+ theme_classic()
+
+# hist((rld_Emb_df %>% dplyr::select(WBGeneID, contains(c("Cells", "Whole"))))$embryoWhole_rep2)
+#%>% pivot_longer(contains(c("Cells", "Whole")), names_to = "sample", values_to = "rlog_counts")
+
+library(ggpubr)
+Emb_wholeVcells_scatter <- ggscatter(rld_Emb_df %>% dplyr::select(WBGeneID, contains(c("Cells", "Whole"))),
+          x = "embryoCells_rep2", y = "embryoWhole_rep2", add = "reg.line", add.params = list(color = "grey"), alpha = 0.025) +
+  stat_cor(label.x = 0.5, label.y = 17) +
+  stat_regline_equation(label.x = 0.5, label.y = 19) +
+  xlab("Dissociated Cells\nRlog Stabilized Read Counts") +
+  ylab("Whole Worm\nRlog Stabilized Read Counts")+
+  ggtitle("Embryo Stage")
+Emb_wholeVcells_scatter
+# ggsave(plot = Emb_wholeVcells_scatter, filename = "./06_793_plots/Emb_wholeVcells_scatter.png", height = 3, width = 3)
+```
+
+```{r  fig.width=3, fig.height=3}
+rld_L1_df <- as.data.frame((assay(rld_L1))) %>% rownames_to_column(var = "WBGeneID")
+colnames(rld_L1_df)
+L1_cellsVwhole_scatter <- ggscatter(rld_L1_df %>% dplyr::select(WBGeneID, contains(c("Cells", "Whole"))),
+          x = "wholeL1_rep1", y = "allCells_rep1", add = "reg.line", add.params = list(color = "grey"), alpha = 0.025) +
+  stat_cor(label.x = 0.5, label.y = 17) +
+  stat_regline_equation(label.x = 0.5, label.y = 19) +
+  xlab("Dissociated Cells\nRlog Stabilized Read Counts") +
+  ylab("Whole Worm\nRlog Stabilized Read Counts") +
+  ggtitle("L1 Stage")
+L1_cellsVwhole_scatter
+# ggsave(plot = L1_cellsVwhole_scatter, filename = "./06_793_plots/L1_cellsVwhole_scatter.png", height = 3, width = 3)
+```
+
+
+```{r fig.width=3, fig.height=3}
+library("extrafont")
+loadfonts(device = "postscript", quiet = TRUE)
+myMA <- function(res_df, cat_df, xlab, ylab, mytitle){
+  ggplot(
+  res_df %>% right_join(cat_df, by = "WBGeneID"),
+  aes(x = log10(baseMean), y = log2FoldChange)
+) +
+  geom_point(data = res_df, colour = "grey", alpha = 0.04, na.rm = TRUE)+
+  geom_point(alpha = 0.1, colour = "red", na.rm = TRUE)+
+  geom_hline(linetype = "dashed", aes(yintercept = 1)) +
+  geom_hline(linetype = "dashed", aes(yintercept = -1))+
+  theme_classic() +
+  xlab(xlab) +
+  ylab(ylab) +
+  ggtitle(mytitle)  #+
+  # theme_grey(base_family = "sans") +
+  # theme(text = element_text(family = "Arial", size =11),
+  #       plot.title = element_text(family = "Arial", size =12),
+  #       axis.title = element_text(family = "Arial", size =12)
+  # )
+}
+```
+
+
+```{r fig.width=3.25, fig.height=3}
+Embryo_Intestine_MA <- myMA(res_int_Emb_df, int_Emb_exp_categories, "log10(Mean Normalized Read Counts)", "log2(GFP+ Cells/GFP- Cells)", "Embryo Intestine\nDifferential Expression") + xlim(0, 5) + ylim(-10,12.5) + 
+  annotate(geom="text", x = 1.75, y =-9, label = 
+             paste0("Intestine Depleted =", 
+                    (as.data.frame(table(int_Emb_exp_categories$ExpType)) %>% filter(Var1 == "Depleted"))$Freq), 
+           color = "black") + 
+  annotate(geom="text", x = 1.75, y =12.5, label = 
+             paste0("Intestine Specifc =", 
+                    (as.data.frame(table(int_Emb_exp_categories$ExpType)) %>% filter(Var1 == "Specific"))$Freq), 
+           color = "black")
+Embryo_Intestine_MA
+# ggsave(plot = Embryo_Intestine_MA, filename = "./06_793_plots/Embryo_Intestine_MA.png", height = 3, width = 3.25)
+
+```
+
+```{r fig.width=3, fig.height=3}
+L1_intestine_MA <- myMA(res_int_L1_df, L1_int_exp_categories, "log10(Mean Normalized Read Counts)", "log2(GFP+ Cells/GFP- Cells)", "L1 Intestine\nDifferential Expression") + xlim(0, 5) + ylim(-10,12) + 
+  annotate(geom="text", x = 1.75, y =-9, label = 
+             paste0("Intestine Depleted =", 
+                    (as.data.frame(table(L1_int_exp_categories$ExpType)) %>% filter(Var1 == "Depleted"))$Freq), 
+           color = "black") + 
+  annotate(geom="text", x = 1.75, y =12, label = 
+             paste0("Intestine Specifc =", 
+                    (as.data.frame(table(L1_int_exp_categories$ExpType)) %>% filter(Var1 == "Specific"))$Freq), 
+           color = "black")
+L1_intestine_MA
+# ggsave(plot = L1_intestine_MA, filename = "./06_793_plots/L1_intestine_MA.png", height = 3, width = 3.25)
+```
+
+Count up the number of genes in different categories between L1 and embryo stage
+
+
+```{r}
+L1_int_exp_categories %>% full_join(int_Emb_exp_categories, by = "WBGeneID", suffix = c(".L1", ".Emb")) %>% replace_na(list(ExpType.L1 = "NotSig", ExpType.Emb = "NotSig")) %>% group_by(ExpType.L1, ExpType.Emb) %>% summarise(genes = n())
+
+```
+
+
+# Embryo intestine cells vs L1 intestine cells
+
+```{r}
+cts_Emb_L1 <- as.data.frame(cts_L1) %>% rownames_to_column(var = "WBGeneID") %>% left_join(as.data.frame(cts_Emb) %>% rownames_to_column(var = "WBGeneID"), by = "WBGeneID") %>% column_to_rownames(var = "WBGeneID") %>% as.matrix()
+
+coldata_L1
+coldata_Emb_L1 <- coldata_L1 %>% bind_rows(coldata_Emb)
+coldata_Emb_L1$stage <- factor(coldata_Emb_L1$stage, levels = c("Embryo", "L1"))
+coldata_Emb_L1$type <- factor(coldata_Emb_L1$type, levels = c("gut", "gutless", "cells", "whole"), labels = c("Intestine", "NonIntestine", "Cells", "Whole"))
+coldata_Emb_L1$group <- factor(paste0(coldata_Emb_L1$stage, "_",coldata_Emb_L1$type))
+rownames(coldata_Emb_L1) <- colnames(cts_Emb_L1)
+coldata_Emb_L1
+```
+
+
+```{r}
+dds_int_Emb_L1 <- DESeqDataSetFromMatrix(countData = cts_Emb_L1,
+                              colData = coldata_Emb_L1,
+                              design = ~ group)
+keep_Emb_L1 <- rowSums(counts(dds_int_Emb_L1)) >=10
+dds_int_Emb_L1 <- dds_int_Emb_L1[keep_Emb_L1,]
+dds_int_Emb_L1 <- DESeq(dds_int_Emb_L1)
+res_int_Emb_L1 <- results(dds_int_Emb_L1, contrast = c("group", "L1_Intestine", "Embryo_NonIntestine"), lfcThreshold = 1, alpha = 0.05)
+```
+
+
+```{r}
+res_int_Emb_L1_df <- as.data.frame(res_int_Emb_L1) %>% rownames_to_column(var = "WBGeneID")
+
+int_Emb_vs_L1_exp_categories <-
+  data.frame(
+    WBGeneID = (res_int_Emb_L1_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    ExpType = "L1_Specific",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (res_int_Emb_L1_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    ExpType = "Embryo_Specific",
+    stringsAsFactors = FALSE
+  ))
+
+head(int_Emb_vs_L1_exp_categories)
+```
+
+```{r fig.width=3.2, fig.height=3}
+L1vsEmb_intestine_MA <- myMA(res_int_Emb_L1_df, cat_df = int_Emb_vs_L1_exp_categories, xlab = "log10(Mean Normalized Read Count)", ylab = "log2(L1 Intestine/\nEmbryo Intestine)", mytitle = "L1 vs Embryo Intestine") + 
+  annotate(geom="text", x = 2.25, y =15, label = 
+             paste0("L1 Intestine Specific =", 
+                    (as.data.frame(table(int_Emb_vs_L1_exp_categories$ExpType)) %>% filter(Var1 == "L1_Specific"))$Freq), 
+           color = "black") + 
+  annotate(geom="text", x = 2.75, y =-10., label = 
+             paste0("Embryo Intestine Specific =", 
+                    (as.data.frame(table(int_Emb_vs_L1_exp_categories$ExpType)) %>% filter(Var1 == "Embryo_Specific"))$Freq), 
+           color = "black")
+L1vsEmb_intestine_MA
+# ggsave(plot = L1vsEmb_intestine_MA, filename = "./06_793_plots/L1vsEmb_intestine_MA.png", height = 3, width = 3.25)
+```
+
+
+```{r}
+sampleDistMatrix_emb_L1
+rld_Emb_L1 <- rlog(dds_int_Emb_L1, blind=FALSE)
+sampleDists_emb_L1 <- dist(t(assay(rld_Emb_L1)))
+sampleDistMatrix_emb_L1 <- as.matrix(sampleDists_emb_L1)
+# rownames(sampleDistMatrix_emb_L1) <- paste(rld_Emb_L1$stage, rld_Emb_L1$type, rld_Emb_L1$rep, sep=" ")
+colnames(sampleDistMatrix_emb_L1) <- NULL
+# rownames(sampleDistMatrix) <- paste(rld_Emb$type, rld_Emb$rep, sep="-")
+# colnames(sampleDistMatrix) <- paste(rld_Emb$type, rld_Emb$rep, sep="-")
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+
+# colnames(rld_Emb_L1)
+ rownames(sampleDistMatrix_emb_L1) <- c("L1 Whole 1", 
+                                 "L1 Cells 1", 
+                                 "L1 GFP+ 1", 
+                                 "L1 GFP- 1", 
+                                 "L1 Whole 2", 
+                                 "L1 Cells 2", 
+                                 "L1 GFP+ 2", 
+                                 "L1 GFP- 2", 
+                                 "Embryo Cells 1", 
+                                 "Embryo GFP+ 1", 
+                                 "Embryo GFP- 1", 
+                                 "Embryo Whole 2", 
+                                 "Embryo Cells 2", 
+                                 "Embryo GFP+ 2", 
+                                 "Embryo GFP- 2", 
+                                 "Embryo Whole 3", 
+                                 "Embryo GFP+ 3", 
+                                 "Embryo GFP- 3")
+ 
+pheatmap(sampleDistMatrix_emb_L1,
+         clustering_distance_rows=sampleDists_emb_L1,
+         clustering_distance_cols=sampleDists_emb_L1,
+         color=colors)
+
+
+if (plot == TRUE){
+  myPDFplot(plot = pheatmap(sampleDistMatrix_emb_L1,
+         clustering_distance_rows=sampleDists_emb_L1,
+         clustering_distance_cols=sampleDists_emb_L1,
+         color=colors),
+        name = "FACS_Sample_Distance_Matrix_L1_Embryo",
+        width = 4.5,
+        height = 3,
+        plotdir = "./"
+              )
+}
+
+```
+
+# Differential expression between Whole embryo and embryo cells
+```{r}
+
+res_L1_wholeVcells <- results(dds_int_Emb_L1, contrast = c("group", "L1_Whole", "L1_Cells"), lfcThreshold = 1, alpha = 0.05)
+
+plotMA(res_L1_wholeVcells, ylim = c(-10,10), alpha= 0.05, main = "Differential expression between L1 whole worms and unsorted cells")#, ylim(c(-10,10)), alpha = 0.05)
+```
+
+```{r fig.width=3.2, fig.height=3}
+res_L1_wholeVcells_df <- as.data.frame(res_L1_wholeVcells) %>% rownames_to_column(var = "WBGeneID")
+L1_wholeVcells_categories <-
+  data.frame(
+    WBGeneID = (res_L1_wholeVcells_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    ExpType = "L1_Specific",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (res_L1_wholeVcells_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    ExpType = "Embryo_Specific",
+    stringsAsFactors = FALSE
+  ))
+
+L1_wholeVcells_MA <- myMA(res_L1_wholeVcells_df, cat_df = L1_wholeVcells_categories, xlab = "log10(Mean Normalized Read Count)", ylab = "log2(Whole L1/\nL1 Cells)", mytitle = "Whole L1 vs L1 Cells") + 
+  annotate(geom="text", x = 2.25, y =15, label = 
+             paste0("Whole L1 Specific =", 
+                    (as.data.frame(table(L1_wholeVcells_categories$ExpType)) %>% filter(Var1 == "L1_Specific"))$Freq), 
+           color = "black") + 
+  annotate(geom="text", x = 2.75, y =-10., label = 
+             paste0("L1 Cells Specific =", 
+                    (as.data.frame(table(L1_wholeVcells_categories$ExpType)) %>% filter(Var1 == "Embryo_Specific"))$Freq), 
+           color = "black")
+L1_wholeVcells_MA
+# ggsave(plot = L1_wholeVcells_MA, filename = "./06_793_plots/L1_wholeVcells_MA.png", height = 3, width = 3.2)
+```
+
+```{r}
+res_Emb_wholeVcells <- results(dds_int_Emb_L1, contrast = c("group", "Embryo_Whole", "Embryo_Cells"), lfcThreshold = 1, alpha = 0.05)
+
+plotMA(res_Emb_wholeVcells, ylim = c(-10,10), alpha= 0.05, main = "Differential expression between whole embryo and unsorted cells")#, ylim(c(-10,10)), alpha = 0.05)
+```
+
+
+```{r fig.width=3.25, fig.height=3}
+res_Emb_wholeVcells_df <- as.data.frame(res_Emb_wholeVcells) %>% rownames_to_column(var = "WBGeneID")
+Emb_wholeVcells_categories <-
+  data.frame(
+    WBGeneID = (res_Emb_wholeVcells_df %>% filter(log2FoldChange > 1, padj < 0.05))$WBGeneID,
+    ExpType = "L1_Specific",
+    stringsAsFactors = FALSE
+  ) %>% bind_rows(data.frame(
+    WBGeneID = (res_Emb_wholeVcells_df %>% filter(log2FoldChange < -1, padj < 0.05))$WBGeneID,
+    ExpType = "Embryo_Specific",
+    stringsAsFactors = FALSE
+  ))
+
+Emb_wholeVcells_MA <- myMA(res_Emb_wholeVcells_df, cat_df = Emb_wholeVcells_categories, xlab = "log10(Mean Normalized Read Count)", ylab = "log2(Whole Embryo/\nEmbyro Cells)", mytitle = "Whole Embryo vs Embryo Cells") + 
+  annotate(geom="text", x = 2.25, y =15, label = 
+             paste0("Whole Embryo Specific =", 
+                    (as.data.frame(table(Emb_wholeVcells_categories$ExpType)) %>% filter(Var1 == "L1_Specific"))$Freq), 
+           color = "black") + 
+  annotate(geom="text", x = 2, y =-10., label = 
+             paste0("Embryo Cells Specific =", 
+                    (as.data.frame(table(Emb_wholeVcells_categories$ExpType)) %>% filter(Var1 == "Embryo_Specific"))$Freq), 
+           color = "black")
+Emb_wholeVcells_MA
+# ggsave(plot = Emb_wholeVcells_MA, file = "./06_793_plots/WholeEmbyo_vs_Embryocells_MAplot.png", height = 3, width =3.25)
+```
+
+
+# Cluster profiler of embryo intestine vs L1 intestine
+
+```{r}
+int_Emb_vs_L1_exp_categories
+int_Emb_vs_L1_BP <- compareCluster(WBGeneID~ExpType, data = int_Emb_vs_L1_exp_categories, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(int_Emb_vs_L1_BP)
+```
+# Cluster profiler of embryo intestine vs non-intestine
+
+```{r}
+
+int_Emb_BP <- compareCluster(WBGeneID~ExpType, data = int_Emb_exp_categories, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(int_Emb_BP)
+```
+
+```{r}
+
+int_L1_BP <- compareCluster(WBGeneID~ExpType, data = L1_int_exp_categories, fun="enrichGO", universe = as.data.frame(org.Ce.egWORMBASE)$wormbase_id,
+                OrgDb = org.Ce.eg.db,
+                ont = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff = 0.01,
+                qvalueCutoff = 0.05,
+                readable = TRUE,
+                keyType = 'WORMBASE')
+dotplot(int_L1_BP)
+```
+
+
+# transcription factor heatmap
+
+```{r}
+int_Emb_vs_L1_exp_categories %>% left_join(bitr(int_Emb_vs_L1_exp_categories$WBGeneID,
+                                                fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db), by = c("WBGeneID" = "WORMBASE")) %>% inner_join(wTF3.0, by = "WBGeneID")
+```
+
+# Measure association between dineen sets and L1 stage intestine gene expression
+
+```{r}
+dineen_nishimura_clusters <-
+  read_xlsx(path = "./01_ChIPseq_RNAseq_Integration/01_input/Table_S6_All_Dynamically_Expressed_Genes_Clusters.xlsx",
+            sheet = "dataset")
+dineen_nishimura_clusters
+
+dineen_nishimura_sets <-
+  dineen_nishimura_clusters %>% dplyr::select(WBGeneID, set)
+dineen_nishimura_sets_ascend <-
+  arrange(dineen_nishimura_sets, WBGeneID)
+dineen_nishimura_sets_ascend$set <-
+  toupper(dineen_nishimura_sets_ascend$set)
+dineen_nishimura_sets_ascend %>% head
+```
+
+```{r fig.width=2, fig.height=3.5}
+L1_int_exp_categories %>% inner_join(dineen_nishimura_sets_ascend, by = "WBGeneID") %>% group_by(ExpType, set) %>% summarise(gene_sum = n()) %>%
+  ggplot(aes(x = ExpType, y = gene_sum)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  xlab("L1 Intestine RNA-seq") +
+  ylab("Gene Total") +
+  scale_y_continuous(breaks = seq(0, 500, by = 250), limits = c(0,500)) +
+  facet_grid(set~.)
+
+# ggsave(filename = "./03_plots/210116_L1_Intestine_Dineen_Sets.pdf", width = 2, height = 3.5)
+```
+
+Do the same thing for the bound_only classes of genes (from RWC23_ELT2_Regulated_Genes.Rmd)
+
+```{r fig.width=2, fig.height=3.5}
+head(bound_only_sets)
+
+L1_int_exp_categories %>% inner_join(bound_only_sets, by = "WBGeneID") %>% group_by(ExpType, set) %>% summarise(gene_sum = n()) %>%
+  ggplot(aes(x = ExpType, y = gene_sum)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  xlab("L1 Intestine RNA-seq") +
+  ylab("Gene Total") +
+  scale_y_continuous(breaks = seq(0, 300, by = 100), limits = c(0,300)) +
+  facet_grid(set~.)
+
+ggsave(filename = "./06_793_plots/210116_L1_Intestine_Bound_Dineen_Classes.pdf", width = 2, height = 3.5)
+```
+
+
+## OLD STUFF BELOW!
 
 # Figure 3C: Rlog stabilized read count values of example genes
 
@@ -694,11 +1218,11 @@ res_int_rlog_df %>% filter(WBGeneID %in%
 
 ```{r}
 
-int_exp_categories
+L1_int_exp_categories
 elt2_reg_categories
 # int_elt2 <- int_exp_categories %>% left_join(elt2_reg_categories %>% filter(RegType != "Independent"), by = "WBGeneID") %>% replace_na(list(RegType = "Unregulated"))
 
-int_elt2 <- int_exp_categories %>% left_join(elt2_reg_categories, by = "WBGeneID") %>% drop_na()
+int_elt2 <- L1_int_exp_categories %>% left_join(elt2_reg_categories, by = "WBGeneID") %>% drop_na()
 int_elt2
 int_elt2$elt2_detected_in_L1 <- ifelse(test = int_elt2$WBGeneID %in% elt2_detected_in_L1$WBGeneID,
                                        yes = "bound",
@@ -710,18 +1234,18 @@ int_elt2$ExpType <- factor(int_elt2$ExpType, c("Specific", "Depleted"))
 # Figure 4A: Mapping ELT-2 regulated genes to intestine expression
 ```{r fig.width=8, fig.height=3}
 
-res_int_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent")))) %>%
+res_int_L1_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent")))) %>%
 ggplot(
   aes(x = log10(baseMean), y = log2FoldChange)
 ) +
-  geom_point(data = res_int_df %>% filter(abs(log2FoldChange) >1, padj < 0.05), colour = "grey", alpha = 0.05)+
+  geom_point(data = res_int_L1_df %>% filter(abs(log2FoldChange) >1, padj < 0.05), colour = "grey", alpha = 0.05)+
   geom_point(alpha = 0.2, aes(colour = RegType))+
   geom_hline(linetype = "dashed", aes(yintercept = 1)) +
   geom_hline(linetype = "dashed", aes(yintercept = -1))+
    theme_bw() + facet_grid(.~RegType) +
   ggtitle("Intestine Expressed Genes")
 
-res_int_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent"))))
+res_int_L1_df %>% right_join(int_elt2, by ="WBGeneID") %>% mutate_at(vars(RegType), funs(factor(., levels = c("Activated", "Repressed", "Independent"))))
 ```
 
 ```{r}
@@ -751,7 +1275,8 @@ ggplot(int_elt2_percent,
 A different way of showing the same thing
 
 ```{r}
-int_totals <- table(int_exp_categories$ExpType)
+
+int_totals <- table(L1_int_exp_categories$ExpType)
 int_totals[2]
 
 int_elt2_percent_t <- int_elt2 %>% filter(ExpType == "Specific") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/int_totals[2]) %>% mutate(ExpType = "Specific") 
@@ -759,7 +1284,12 @@ int_elt2_percent_t <- int_elt2 %>% filter(ExpType == "Specific") %>% group_by(Re
 int_elt2_percent_t <- int_elt2_percent_t %>% bind_rows(int_elt2 %>% filter(ExpType == "Depleted") %>% group_by(RegType) %>% summarise(ngene = n()) %>% ungroup() %>%  mutate(percent = 100*ngene/int_totals[1]) %>% mutate(ExpType = "Depleted")) 
 
 int_elt2_percent_t %>% ggplot(aes(x = RegType, y = percent, fill = ExpType)) +
-  geom_bar(stat = "identity", position = "dodge")
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("black", "grey")) +
+  theme_classic() +
+  xlab("ELT-2 Regulation Category") +
+  ylab("Percent of genes") +
+  labs(fill = "L1 Intestine\nExpression")
 ```
 ```{r}
 int_elt2_percent_t %>% ggplot(aes(x = ExpType, y = ngene)) +
@@ -1011,14 +1541,14 @@ image_ctcf
 Plot the results
 # Figure 6A: Overexpression of ELT-2 promoter is ELT-7 dependent
 
-```{r}
+```{r fig.width=5, fig.height=4}
 library(ggpubr)
 ggplot(image_ctcf, aes(treatment, CTCF/area)) + 
   geom_boxplot() +
-  geom_jitter(aes(fill = strain, color = treatment)) +
+  geom_jitter() +
   facet_grid(.~strain) +
   labs(
-    title = "Overexpression of ELT-2 promoter is ELT-7 dependent",
+    title = "Overexpression of ELT-2\npromoter is ELT-7 dependent",
     x = "RNAi Treatment",
     y = "Corrected Total Cell \nFluorescence (A.U.)"
   ) +
@@ -1033,7 +1563,8 @@ ggplot(image_ctcf, aes(treatment, CTCF/area)) +
     axis.title.y = element_text(size=18),
     plot.title = element_text(hjust = 0.5, size = 18)
     ) 
-  
+
+ggsave("./ELT-2_promoter_analysis_plot_210117.pdf", width = 5, height = 4, useDingbats=FALSE)  
 ```
 
 # Figure 6B: Foldchange of ELT-2 promoter expression
@@ -1066,11 +1597,11 @@ mean_ctcf$upper = c(L1_ttest_ratio_JM149$conf.int[2], L1_ttest_ratio_JM259$conf.
 ```
 
 # Figure 6B: Relative change in ELT-2 promoter fluorescence
-```{r}
+```{r fig.width=3, fig.height=3}
 ggplot(mean_ctcf, aes(x = strain, y = `avgCTCF_ELT-2`/avgCTCF_L4440)) +
   geom_bar(stat = "identity") +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
-  labs(title = "elt-2 Promoter Relative Fluorescence") +
+  labs(title = "elt-2 Promoter\nRelative Fluorescence") +
   theme_classic()+
   theme(
     panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
@@ -1081,8 +1612,9 @@ ggplot(mean_ctcf, aes(x = strain, y = `avgCTCF_ELT-2`/avgCTCF_L4440)) +
     plot.title = element_text(hjust = 0.5, size = 20)
     ) +
   geom_hline(yintercept = 1, linetype = "dashed") +
-  ylab("Relative Fluorescence")
- 
+  ylab("Relative Fluorescence") + coord_flip()
+
+ggsave("./ELT-2_promoter_analysis_fold_change_210117.pdf", width = 3, height = 3, useDingbats=FALSE)  
 ```
 
 
@@ -1216,4 +1748,102 @@ ggplot(wtV2_compareCluster %>% left_join(res_gutVnogut, by = c("WORMBASE" = "WBG
        aes(x = set, y = log2FoldChange)) +
   geom_violin() +
   facet_grid(.~elt2_detected_in_L1) + theme_bw()
+```
+
+# graveyard
+# Row Z-score normalized heatmap for Embryo and L1 intestine specific genes
+Make a list of genes that are intestine specific in the embryo or L1 stage
+Note: this didn't work too well. Need more reps, works better with more samples. For just two samples do a pairwise comparison.
+```{r}
+rld_L1_df %>% filter(WBGeneID %in% (L1_int_exp_categories %>% filter(ExpType == "Specific"))$WBGeneID)
+
+L1_or_Emb_specific <- rld_Emb_df %>% filter(
+  WBGeneID %in%
+    (int_Emb_exp_categories %>% filter(ExpType == "Specific"))$WBGeneID |
+    WBGeneID %in% (L1_int_exp_categories %>% filter(ExpType == "Specific"))$WBGeneID
+) %>% dplyr::select(WBGeneID) 
+```
+
+Make a matrix of rlog stabilized read counts for the embryo and L1 sorted intestine samples
+```{r}
+gfp_rld_matrix <-
+  rld_L1_df %>% 
+  full_join(rld_Emb_df, by = "WBGeneID") %>% 
+  rowwise() %>% 
+  mutate(Embryo = mean(c(embryoGFPplus_rep1, embryoGFPplus_rep3, embryoGFPplus_rep3)),
+         L1 = mean(c(gfpPlus_rep1, gfpPlus_rep2))) %>%
+  dplyr::select(WBGeneID, Embryo, L1) %>% 
+  column_to_rownames(var = "WBGeneID") %>% 
+  as.matrix()
+head(gfp_rld_matrix)
+nrow(gfp_rld_matrix)
+```
+
+```{r}
+int_specific_rld <- matrix_select(gfp_rld_matrix, L1_or_Emb_specific$WBGeneID)
+nrow(int_specific_rld)
+```
+
+```{r}
+int_specific_scaled <- t(apply(unlist(int_specific_rld), 1, scale, center = TRUE, scale = TRUE))
+rownames(int_specific_scaled) <- rownames(int_specific_rld)
+colnames(int_specific_scaled) <- colnames(int_specific_rld)
+head(int_specific_scaled)
+nrow(int_specific_scaled)
+Heatmap(int_specific_scaled)
+```
+## Intestine Embryo Specific Genes vs L1 Specific Genes Clustered Heatmap
+This didn't work too well. 
+```{r}
+# set.seed(66669)
+# kclus <- kmeans(scaled_counts, 2)
+
+
+scaled_counts_set <- (elt2_reg_categories %>% filter(RegType != "Independent") %>% arrange(WBGeneID))
+# scaled_counts_set <-
+#   data.frame(
+#     WBGeneID = rownames(scaled_counts),
+#     set = paste("Class", kclus$cluster, sep = ""),
+#     stringsAsFactors = FALSE
+#   )
+# scaled_counts_set[scaled_counts_set$set == "Class1", "set"] <- "ELT2_Repressed"
+# scaled_counts_set[scaled_counts_set$set == "Class2", "set"] <- "ELT2_Activated"
+
+
+# Heatmap(int_specific_scaled,
+#         col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+#   cluster_columns = FALSE,
+#   clustering_distance_rows = "spearman",
+#   clustering_method_rows = "complete",
+#   show_row_names = FALSE)
+
+
+```
+
+```{r}
+set.seed(66669)
+# kclus <- kmeans(scaled_counts, 2)
+
+
+# scaled_counts_set <- (elt2_reg_categories %>% filter(RegType != "Independent") %>% arrange(WBGeneID))
+# scaled_counts_set <-
+#   data.frame(
+#     WBGeneID = rownames(scaled_counts),
+#     set = paste("Class", kclus$cluster, sep = ""),
+#     stringsAsFactors = FALSE
+#   )
+# scaled_counts_set[scaled_counts_set$set == "Class1", "set"] <- "ELT2_Repressed"
+# scaled_counts_set[scaled_counts_set$set == "Class2", "set"] <- "ELT2_Activated"
+
+
+Heatmap(int_specific_scaled,
+        col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = FALSE)
+
+hclust(int_specific_scaled)
+head(int_specific_scaled)
+?hclust
 ```
