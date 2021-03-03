@@ -3,9 +3,9 @@ title: "Clustering of modENCODE/Reinke ChIP-seq peaks"
 author: "DC King - Onish lab"
 date: "Fall 2020"
 output:
+  pdf_document: default
   word_document:
     keep_md: true
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -1167,46 +1167,25 @@ runTest(my.group)
 ```
 
 ```{r embryo-golists, cache=TRUE}
-dataset=mkGO(unique.clust_1_wbid,unique.ap.wbid)
+#dataset=mkGO(unique.clust_1_wbid,unique.ap.wbid)
+dv_axon_guidance = 'GO:0033563'
+neuron_fate_specification = 'GO:0048665'
+neuropeptide_signalling_pathway = 'GO:0007218'
+netrin_activated_signalling_pathway = 'GO:0038007'
+GO_figure_neuro_terms = c(dv_axon_guidance,
+                          neuron_fate_specification,
+                          neuropeptide_signalling_pathway,
+                          netrin_activated_signalling_pathway)
 
-neurogo=c('GO:0007218','GO:0033563','GO:0048665','GO:0097376','GO:0050769','GO:0007416','GO:0050769','GO:0003388')
-neuroterms=genesInTerm(dataset$BP, neurogo)
-neurogenes=c()
-# neuropeptide signaling pathway
-neuroterms$`GO:0007218`[neuroterms$`GO:0007218` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# dorsal/ventral axon guidance
-neuroterms$`GO:0033563`[neuroterms$`GO:0033563` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# neuron fate specification
-neuroterms$`GO:0048665`[neuroterms$`GO:0048665` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# interneuron axon guidance
-neuroterms$`GO:0097376`[neuroterms$`GO:0097376` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# synapse assembly
-neuroterms$`GO:0007416`[neuroterms$`GO:0007416` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# GO:0050769	positive regulation of neurogenesis
-neuroterms$`GO:0050769`[neuroterms$`GO:0050769` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-# GO:0003388	neuron development involved in amphid se…	2	2	
-neuroterms$`GO:0003388`[neuroterms$`GO:0003388` %in% unique.clust_1_wbid] %>% c(neurogenes) -> neurogenes
-neurogenes=unique(neurogenes)
+GO_figure_neuro_genes=c()
+neuroterms=genesInTerm(dataset$BP, GO_figure_neuro_terms)
+for (neuro_term in GO_figure_neuro_terms){
+  neuroterms[[neuro_term]][neuroterms[[neuro_term]] %in% unique.clust_1_wbid] %>% c(GO_figure_neuro_genes) -> GO_figure_neuro_genes
+}
 
-# in K3:
-# GO:0007212	dopamine receptor signaling pathway 
+cat("Genes in the neuron-related terms in the embryo VS ELT-2-dataset:\n")
+WORMGO %>% filter(go_accession %in% GO_figure_neuro_terms) %>% filter(wbps_gene_id %in% GO_figure_neuro_genes)
 
-# in K4: reproduction-
-# GO:1905516	positive regulation of fertilization
-# and GO:0000003	reproduction	461	262
-# in K4: neuro-
-# GO:0007614	short-term memory 9	8	
-# GO:0042048	olfactory behavior	20	17	
-
-# These values are used in the text below.
-# neuroterms "found in "significantly enriched" in Embryo cluster that are significantly enriched in the whole dataset versus the C. elegans genome
-n_neuroterms_all = omigod[['all']] %>% filter(GO.ID %in% neurogo) %>% nrow # 0
-n_0050769 = length(genesInTerm(dataset$BP,"GO:0050769")[[1]]) # 43
-n_0050769_genome = length(genesInTerm(all.GO$BP,"GO:0050769")[[1]]) # 61
-stats_0050769_k1 = omigod[['K1']] %>% select(-classicFisher,-'Rank in elim') %>% rename(pval=elim) %>% filter(GO.ID == 'GO:0050769') # 4 Significant, 1.62 Expected, 0.0373 p-val
-
-# The genes with this term are:
-annotatedPeaks$all_CDS_genes[neuroterms$`GO:0050769`[neuroterms$`GO:0050769` %in% unique.clust_1_wbid]]
 ```
 We find some GO terms are enriched in some of the clusters versus the ELT-2 peaks at-large (all clusters). However, those terms *ARE NOT enriched* in ELT-2 peaks (all clusters) versus the genome (there are `r n_neuroterms_all` enriched).
 
@@ -1251,7 +1230,7 @@ rownames(immune_genes_labelled) <- immune_genes_chip
 
 ```
 
-```{r GOterm-exracto-function}
+```{r GOterm-extracto-function}
 zeroIfError = function(expr)
 {
   suppressWarnings(tryCatch(expr, error=function(e){0}))
