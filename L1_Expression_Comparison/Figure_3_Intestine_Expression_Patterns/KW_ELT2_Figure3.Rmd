@@ -225,10 +225,15 @@ m1 <- make_comb_mat(intestine_upset_matrix)
 m1
 ```
 
-```{r}
-UpSet(m1, 
+```{r fig.width=5, fig.height=3}
+intestine_upset_plot <- UpSet(m1, 
       set_order = c("tint_2Ep", "hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
       comb_order = order(comb_size(m1)))
+intestine_upset_plot
+
+if(plot == TRUE){
+  myPDFplot(intestine_upset_plot, name = "Intestine_Gene_Upset_Plot", height = 3, width = 5,plotdir)
+}
 ```
 
 
