@@ -438,7 +438,7 @@ table(chip_rna_df$cluster.description)
 ```
 
 
-# Subset heatmap based on ELT-2 binding pattern
+# Variance filter, log transform and z-score row normalize time-resolved RNA expression values
 
 ```{r chip_rna_matrix}
 #### Handle duplicate rows created by 1:many gene:peak mapping
@@ -485,6 +485,8 @@ chip_rna_matrix_scaled <- row_scale(chip_rna_matrix_log) # calls base::scale() v
 
 
 ```
+
+# Time-resolved RNA heatmap based on ELT-2 occupancy cluster
 
 ```{r heatmap_function}
 BoeckRNA_ELT2_chip_Heatmap <- 
@@ -539,7 +541,7 @@ gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-
 BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Log(RNA Timecourse), Variance excludes lower %.0f%%", thresh*100))
 ```
 
-# Cluster Time-resolved RNA-seq of intestine genes
+# Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
 
 ```{r BoeckRNA_ELT2_chip}
 data.whole = chip_rna_matrix_scaled[real&changing,]
@@ -574,14 +576,14 @@ rna_cluster_names <- c("Postembryonic", "Embryonic", "Late Postembryonic")
 time_resolved_heatmap <- Heatmap(
   data.whole,
   column_title = sprintf(
-    "Log(RNA Timecourse)\nVariance excludes lower %.0f%%",
-    thresh * 100
+    "Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
+    thresh * 100, nrow(data.whole)
   ),
-  name = "Boeck Time Resolved RNA",
+  name = "Row z-score log(dcpm)",
   cluster_columns = F,
   row_order = hc$order,
   row_split = cutree(hc, nclust),
-  row_title = rna_cluster_names,
+  row_title = paste(rna_cluster_names, "\n(n = ",as.vector(table(cutree(hc, nclust))), ")", sep = ""),
   row_title_rot = 0,
   show_row_names = F
 ) +
@@ -600,11 +602,14 @@ time_resolved_heatmap
 if (plot == TRUE){
 myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", width = 10, height = 6, plotdir)
 }
+
 ```
 
 ```{r BoeckRNA_ELT2_chip}
 mosaic_df <- data.frame(Cluster = cutree(hc, nclust)) %>% rownames_to_column(var = "wikigene_name") %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
-
+mosaic_df$rna_cluster_name <- rna_cluster_names[mosaic_df$Cluster]
+table(mosaic_df$rna_cluster_name, mosaic_df$cluster.description)
+table(mosaic_df$Cluster)
 tab <- table(mosaic_df$Cluster, mosaic_df$cluster.description)
 
 hclusters = cutree(hc, nclust)
