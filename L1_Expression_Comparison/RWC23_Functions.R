@@ -172,7 +172,7 @@ RNA_heatmap2 <- function(mat, column_split = NULL, row_title = NULL, row_split =
     column_split = column_split,
     bottom_annotation = HeatmapAnnotation(
       foo = anno_block(
-        labels = c("WT", "elt7D", "elt2D", "elt7D;elt2D"),
+        labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
         labels_gp = gpar(cex = .8),
         gp = gpar(border = NA, lty = "blank")
       ),
@@ -194,7 +194,7 @@ RNA_heatmap2 <- function(mat, column_split = NULL, row_title = NULL, row_split =
 elt2_l1_row_annotation <- function(df){
   rowAnnotation(L1bound = df$elt2_detected_in_L1,
                 col = list(L1bound = c(
-                  "bound" = "green", "not.bound" = "black"
+                  "Direct" = "green", "Indirect" = "black"
                 )))
 }
 
@@ -244,7 +244,7 @@ make_cluster_annotation <- function(input_matrix, binding_matrix){
     as.data.frame.matrix() %>%
     rownames_to_column() %>%
     left_join(rownames_to_column(binding_matrix), by = "rowname") %>%
-    select(rowname, all_of(elt2_cluster_names)) %>%
+    dplyr::select(rowname, all_of(elt2_cluster_names), "Not_Bound") %>%
     replace_na(list(
       Embryo_Specific = 0,
       Larval = 0,
@@ -257,7 +257,7 @@ make_cluster_annotation <- function(input_matrix, binding_matrix){
 }
 
 # make_cluster_binary_annotation() will convert number of binding sites per ELT2 binding pattern
-# to bindary present/absent list. Used in conjunction with make_cluster_annotation()
+# to binary present/absent list. Used in conjunction with make_cluster_annotation()
 # `input_matrix` is the output of make_cluster_annotation()
 
 make_cluster_binary_annotation <- function(input_matrix){
@@ -294,7 +294,15 @@ make_cluster_binary_annotation <- function(input_matrix){
         true = "absent",
         false = "present"
       )
-    )}
+    ) %>%
+    mutate(
+      Not_Bound = if_else(
+        condition = input_matrix$Not_Bound == 0,
+        true = "absent",
+        false = "present"
+      )
+    )
+  }
 
 row_scale <- function(mat){
   scale_mat <-t(apply(unlist(mat), 1, scale))

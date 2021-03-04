@@ -74,7 +74,8 @@ time_resolved_rna <- time_resolved_rna %>% drop_na(wbps_gene_id)
 
 ```{r}
 intestine_gene_list <-
-  read_csv("../02_Public_Intesine_RNA/02_output/RWC23_Public_Intestine_RNA_Data.csv")
+  read_csv("../02_Public_Intesine_RNA/02_output/RWC23_Public_Intestine_RNA_Gene_List.csv")
+nrow(intestine_gene_list)
 ```
 
 
@@ -86,7 +87,7 @@ wTF3.0 <-
     "../01_ChIPseq_RNAseq_Integration/01_input/TF3-0_namesonly.txt",
     sep = "\t",
     header = TRUE
-  ) %>% select(WBGeneID)
+  ) %>% dplyr::select(WBGeneID)
 ```
 
 
@@ -97,7 +98,7 @@ time_resolved_rna_intestine_df <- time_resolved_rna %>%
   remove_rownames() %>%
   arrange(wbps_gene_id) %>%
   filter(wbps_gene_id %in% intestine_gene_list$WBGeneID) %>%
-  select(-(emb_4cell:emb_471min),-DE,-D,-DX,-Soma,-Male,-AdultSPE9,-gonad,-LENGTH)
+  dplyr::select(-(emb_4cell:emb_471min),-DE,-D,-DX,-Soma,-Male,-AdultSPE9,-gonad,-LENGTH)
 head(time_resolved_rna_intestine_df)
 ```
 
@@ -105,7 +106,7 @@ head(time_resolved_rna_intestine_df)
 ```{r}
 time_resolved_rna_intestine_matrix <-
   time_resolved_rna_intestine_df %>%
-  select(-wormbase_gseq, -wikigene_name) %>%
+  dplyr::select(-wormbase_gseq, -wikigene_name) %>%
   remove_rownames() %>%
   arrange(wbps_gene_id) %>%
   column_to_rownames(var = "wbps_gene_id") %>%
@@ -127,15 +128,47 @@ Store index of relavent genes for row annotations. Use custom function
 ```{r}
 gene_names <-
   c("elt-2", "elt-7", "elt-4", "pqm-1", "mtl-2", "ets-4", "aat-6")
-GOI_df <-
-  GOI_annotate_heatmap(gene_names, time_resolved_rna_intestine_df$wikigene_name)
-GOI_df
+# GOI_df <-
+#   GOI_annotate_heatmap(gene_names, time_resolved_rna_intestine_df$wikigene_name)
+# GOI_df
+```
+
+```{r}
+# time_resolved_rna_intestine_df %>% filter(wikigene_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1"))
+smFISH_genes_1 <- c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+smFISH_genes_2 <- c("bcl-11", "sre-23", "T25D10.4", "ftn-1", "elt-2", "elt-7")
+# smFISH_GOI_df <- GOI_annotate_heatmap(smFISH_genes_2, time_resolved_rna_intestine_df$wikigene_name)
+# smFISH_GOI_df
+```
+```{r fig.width=4, fig.height=7}
+smFISH_normalized_expression <- time_resolved_rna_intestine_df %>% filter(wikigene_name %in% smFISH_genes_1) %>% pivot_longer(cols = emb_510min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
+  ggplot(aes(x = Stage, y = Normalized_Expression)) +
+  geom_point() +
+  facet_grid(wikigene_name~.) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  ggtitle("Time-Resolved RNA Expression of\nIntestine Genes for smFISH")
+smFISH_normalized_expression
+# ggsave(smFISH_normalized_expression, file = "03_plots/210209_smFISH_targets_normalized_expression.pdf", width = 4, height = 7)
+# ggsave(smFISH_normalized_expression, file = "03_plots/210209_smFISH_targets_normalized_expression.png", width = 4, height = 7)
 ```
 
 
 ```{r}
 time_resolved_rna_intestine_df %>% filter(wikigene_name %in% GOI_df$name)
 ```
+
+```{r}
+Heatmap(
+    time_resolved_rna_intestine_matrix_scaled,
+    cluster_columns = FALSE,
+    show_row_names = FALSE,
+    row_km = 3
+  ) +
+  rowAnnotation(foo = anno_mark(smFISH_GOI_df$index, labels = smFISH_GOI_df$name))
+```
+
+
 
 
 ```{r}
@@ -162,7 +195,7 @@ time_resolved_rna_intestine_matrix_scaled_TFONLY <-
 tf_GOI_df <-
   GOI_df %>% 
   left_join(time_resolved_rna_intestine_df, by = c("name" = "wikigene_name")) %>% 
-  select(name:wbps_gene_id, -index) %>% filter(wbps_gene_id %in% wTF3.0$WBGeneID)
+  dplyr::select(name:wbps_gene_id, -index) %>% filter(wbps_gene_id %in% wTF3.0$WBGeneID)
 tf_GOI_df
 tf_GOI_df <-
   GOI_annotate_heatmap(
@@ -191,7 +224,9 @@ Heatmap(
 ```{r}
 chip_df <-
   read_csv(file = "../01_ChIPseq_RNAseq_Integration/01_input/200719_annotatedPeaks.csv")
+# chip_df <- as.data.frame(mcols(chip_RDS))
 head(chip_df)
+table(chip_df$cluster.description)
 ```
 
 # Subset ELT-2 ChIP with literature Intestine Expression
@@ -200,10 +235,11 @@ Do this earlier in the code to have k4labels stored in the time_resolved_rna dat
 
 ```{r}
 chip_rna_df <- chip_df %>%
-  select(name, cluster.description, WBGeneID)  %>%
+  dplyr::select(name, cluster.description, WBGeneID)  %>%
   right_join(time_resolved_rna_intestine_df,
              by = c("WBGeneID" = "wbps_gene_id")) %>%
-  replace_na(list("cluster.description" = "Not_Bound", "name" = "Not_Bound"))
+  replace_na(list("cluster.description" = "Not_Bound", "name" = "Not_Bound")) %>%
+  filter(WBGeneID %in% intestine_gene_list$WBGeneID)
 
 chip_rna_df$cluster.description <-
   factor(
@@ -233,9 +269,8 @@ chip_rna_df = chip_rna_df[nr_gene_name_ixs,]
 
 
 chip_rna_matrix <-
-  chip_rna_df %>% select(emb_510min:YA) %>% as.matrix()
+  chip_rna_df %>% dplyr::select(emb_510min:YA) %>% as.matrix()
   #chip_rna_df %>% select(emb_548min,emb_626min,L1,L2,L3,L4) %>% as.matrix()
-
 
 #### Handle 0's and take the log
 # 1. Just replace 0's as NAs so we can apply log(). Alternatively, we could do log(x + .01), but there are only ~300
@@ -256,6 +291,8 @@ plot(ecdf(rowvariances)) # no "steps" anywhere, just a smooth curve
 chip_rna_matrix = chip_rna_matrix_log
 rownames(chip_rna_matrix) <- chip_rna_df$wikigene_name
 chip_rna_matrix_scaled <- row_scale(chip_rna_matrix) # calls base::scale() via RWC23_Functions.R
+
+# filter for genes on the intestine list (public intestine meta analysis)
 
 ```
 
@@ -341,7 +378,7 @@ library(vcd) # for mosaic
 #     "K01F9.2"
 #   )
 
-gene_names <- c("sre-23", "T25D10.4", "M88.4", "bcl-11", "aat-6", "pgp-1", "ftn-1")
+gene_names <- c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 
 real = apply(chip_rna_matrix_scaled, 1, function(x) { ! any(is.na(x)) }) # NA's introduced by log transform don't jive here
 embryo_specific = chip_rna_df$cluster.description == "Embryo_Specific"
@@ -352,9 +389,11 @@ increasing = chip_rna_df$cluster.description == "Increasing"
 #changing = rowvariances > 0.1355294 # .05 thresh from chipseq
 
 ### ALL ###
-qthreshold = quantile(rowvariances,.2)
+thresh = 0.05
+qthreshold = quantile(rowvariances,thresh)
+# qthreshold = 0.05
 changing = rowvariances > qthreshold
-BoeckRNA_ELT2_chip_Heatmap(real & changing, sprintf("Log(RNA Timecourse), Variance > %.2f", qthreshold))
+BoeckRNA_ELT2_chip_Heatmap(real & changing, sprintf("Log(RNA Timecourse), Variance excludes lower %.0f%%", thresh*100))
 
 data.whole = chip_rna_matrix_scaled[real&changing,]
 agglom='ward.D2'
@@ -372,27 +411,52 @@ nclust=3
 subsetrows=real&changing
 ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
   chip_GOI_df = data.frame(name=rownames(chip_rna_matrix_scaled)[subsetrows][ix], index=ix)
+```
 
-Heatmap(data.whole,
-        column_title=sprintf("Log(RNA Timecourse), Variance > %.2f", qthreshold),
+
+```{r BoeckRNA_ELT2_chip}
+boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[real&changing], chip_rna_df$cluster.description[real&changing]))
+boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
+boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
+
+time_resolved_heatmap <- Heatmap(data.whole,
+        column_title=sprintf("Log(RNA Timecourse)\nVariance excludes lower %.0f%%", thresh*100),
         name = "Boeck Time Resolved RNA",
         cluster_columns = F,
         row_order=hc$order,row_split=cutree(hc, nclust),show_row_names = F) +
-  rowAnnotation(
-    ELT2_cluster = chip_rna_df$cluster.description[real&changing],
-    col = list(
-      ELT2_cluster = c(
-        "Embryo_Specific" = "#7570B3",
-        "Larval" = "#1B9E77",
-        "Increasing" = "#E7298A",
-        "L3_High" = "#D95F02",
-        "Not_Changing" = "#505050",
-        "Not_Bound" = "yellow"
-      )
-    ),
-    border = TRUE
-  )+  rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
-                               labels = chip_GOI_df$name))
+  # rowAnnotation(
+  #   ELT2_cluster = chip_rna_df$cluster.description[real&changing],
+  #   col = list(
+  #     ELT2_cluster = c(
+  #       "Embryo_Specific" = "#7570B3",
+  #       "Larval" = "#1B9E77",
+  #       "Increasing" = "#E7298A",
+  #       "L3_High" = "#D95F02",
+  #       "Not_Changing" = "#505050",
+  #       "Not_Bound" = "yellow"
+  #     )
+  #   ),
+  #   border = TRUE
+  # )+  
+  rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
+                               labels = chip_GOI_df$name)) +
+  binding_cluster_row_annotation(boeck_chip_annotation) +
+    rowAnnotation(
+      Not_Bound = boeck_chip_annotation$Not_Bound,
+      col = list(Not_Bound = c(
+        "absent" = "white", "present" = "black"
+      )),
+      border = TRUE
+    )
+time_resolved_heatmap
+
+# pdf("03_plots/210224_Boeck_TimeresolvedRNA_elt-2_chip.pdf")
+# time_resolved_heatmap
+# dev.off()
+```
+
+
+```{r BoeckRNA_ELT2_chip}
 hclusters = cutree(hc, nclust)
 tab=table(hclusters, chip_rna_df$cluster.description[real&changing])
 dimnames(tab) <- list("hclusters"=1:nclust, 
@@ -407,22 +471,27 @@ mosaic(t(tab),shade=T,
 ```
 
 ```{r}
-boeck_heatmap <- Heatmap(data.whole,
-        column_title=sprintf("Log(RNA Timecourse), Variance > %.2f", qthreshold),
-        name = "Boeck Time Resolved RNA",
-        cluster_columns = F,
-        row_order=hc$order,row_split=cutree(hc, nclust),show_row_names = F) + rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
-                               labels = chip_GOI_df$name))
-
-
-pdf(file = "03_plots/Boeck_Time_Resolved_RNA_Heatmap_geneAnnotated_201216.pdf", width = 7, height = 5)
+boeck_heatmap <- Heatmap(
+  data.whole,
+  column_title = sprintf("Log(RNA Timecourse), Variance > %.2f", qthreshold),
+  name = "Boeck Time Resolved RNA",
+  cluster_columns = F,
+  row_order = hc$order,
+  row_split = cutree(hc, nclust),
+  show_row_names = F
+) + rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
+                                  labels = chip_GOI_df$name))
 boeck_heatmap
-dev.off()
-dev.set(dev.next())
+
+# pdf(file = "03_plots/Boeck_Time_Resolved_RNA_Heatmap_geneAnnotated_201216.pdf", width = 7, height = 5)
+# boeck_heatmap
+# dev.off()
+# dev.set(dev.next())
 ```
 
 
 ```{r pearson-residuals}
+library(corrplot)
 corrplot(
   chisq.test(tab, simulate.p.value = TRUE)$stdres,
   is.corr = FALSE,
@@ -447,6 +516,23 @@ boeck_pearson_residuals$hclusters <-
     boeck_pearson_residuals$hclusters,
     levels = c("3", "2", "1")
   )
+
+# add q-value
+q <- p.adjust(
+  2*pnorm(
+    abs(chisq.test(tab, simulate.p.value = TRUE)$stdres), 
+    lower.tail = FALSE), 
+  method = "BH")
+
+tableformosiac.q <- matrix(q, ncol = 6)
+
+dimnames(tableformosiac.q) <- dimnames(tab)
+tableformosiac.q<- as.table(tableformosiac.q)
+boeck_pearson_residuals <- cbind(boeck_pearson_residuals, p.adjust = as.data.frame(tableformosiac.q)$Freq)
+```
+
+
+```{r custom-mosaic, fig.width=5, fig.height=4.25}
 ggplot(boeck_pearson_residuals,
        aes(x = ELT2_cluster, y = hclusters)) +
   geom_point(aes(size = Observed, color = Pearson_Residual)) + scale_color_gradient2(
@@ -455,36 +541,69 @@ ggplot(boeck_pearson_residuals,
     mid = "white",
     midpoint = 0
   ) +
-  theme_bw()
-ggsave("03_plots/Boeck_ELT2clusters_moasiac_201216.pdf", width = 5, height = 3, useDingbats=FALSE)
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45))
+# ggsave("03_plots/Boeck_ELT2clusters_moasiac_201216.pdf", width = 5, height = 3, useDingbats=FALSE)
+```
+
+
+```{r fig.widt = 3, fig.height=3.75}
+# draw the plot
+# Add pass vs fail for pvalue
+ggplot(boeck_pearson_residuals,
+       aes(x = ELT2_cluster, y = hclusters)) +
+  geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
+  scale_fill_gradient2(
+    high = "red",
+    low = "blue",
+    mid = "white",
+    midpoint = 0
+  ) +
+  theme_bw() +
+  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in")) +
+  scale_color_manual(values = c("light grey", "black")) +
+  xlab("ELT-2 Binding Cluster") +
+  ylab("Expression Set")
+
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "18_Dineen_Sets_ELT2clusters_custom_mosaic",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), width = 5, height = 3.25, useDingbats=FALSE)
+}
+
+
 ```
 
 
 ```{r zoom-ins}
 gene_names=rownames(chip_rna_matrix_scaled)[real & changing & embryo_specific]
 (BoeckRNA_ELT2_chip_Heatmap(real & changing & embryo_specific, "Log(RNA Timecourse), No threshold on variance",row_split=2)->emb)
-pdf(file="embryo.pdf",height=10.5,width=10.5)
-print(emb)
-dev.off()
+# pdf(file="embryo.pdf",height=10.5,width=10.5)
+# print(emb)
+# dev.off()
 
 gene_names=rownames(chip_rna_matrix_scaled)[real & changing & larval]
 (BoeckRNA_ELT2_chip_Heatmap(real & changing & larval, "Log(RNA Timecourse), variance > 1 (top 20% data)",row_split=5)->larv)
 
-pdf(file="larval.pdf",height=14,width=14)
-print(larv)
-dev.off()
+# pdf(file="larval.pdf",height=14,width=14)
+# print(larv)
+# dev.off()
 
 gene_names=rownames(chip_rna_matrix_scaled)[real & changing & l3_high]
 (BoeckRNA_ELT2_chip_Heatmap(real & changing & l3_high, "Log(RNA Timecourse), variance > 1 (top 20% data)",row_split=4)->L3plot)
-pdf(file="L3.pdf",height=14,width=14)
-print(L3plot)
-dev.off()
+# pdf(file="L3.pdf",height=14,width=14)
+# print(L3plot)
+# dev.off()
 
 gene_names=rownames(chip_rna_matrix_scaled)[real & changing & increasing]
 (BoeckRNA_ELT2_chip_Heatmap(real & changing & increasing, "Log(RNA Timecourse), variance > 1 (top 20% data)",row_split=4)->inc)
-pdf(file="increasing.pdf",height=21,width=21)
-print(inc)
-dev.off()
+# pdf(file="increasing.pdf",height=21,width=21)
+# print(inc)
+# dev.off()
 
 ```
+
 
