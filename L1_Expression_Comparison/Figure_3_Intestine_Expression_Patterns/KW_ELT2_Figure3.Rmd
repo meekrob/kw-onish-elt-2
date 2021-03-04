@@ -1,0 +1,674 @@
+---
+title: "KW_ELT2_Figure3"
+author: "Robert Williams"
+date: "3/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(biomaRt)
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(ComplexHeatmap)
+library(lubridate)
+```
+
+Load custom functions
+
+```{r}
+source("../RWC23_Functions.R")
+```
+
+Set plot variable
+
+```{r}
+plot <- FALSE
+plotdir <- "./03_plots/"
+```
+
+
+# Import Time-resolved RNA
+
+```{r}
+time_resolved_rna <- read.delim("./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/Unified_dcpm_per_wormbase_gene.txt", quote="", stringsAsFactors=FALSE)
+
+paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+
+time_resolved_rna <- getBM(
+  mart = paramart,
+  filter = c("wormbase_gseqname"),
+  value = time_resolved_rna$WormbaseName,
+  attributes = c("wormbase_gseq","wbps_gene_id", "wikigene_name")
+) %>% right_join(time_resolved_rna, by = c("wormbase_gseq" = "WormbaseName"))
+
+
+time_resolved_rna <- time_resolved_rna %>% drop_na(wbps_gene_id)
+```
+
+
+# Load in public intestine expression datasets
+
+Initalize an empty dataframe.
+
+```{r}
+intestine_rna <- data.frame(WBGeneID = time_resolved_rna$wbps_gene_id, Sequence.name = time_resolved_rna$wormbase_gseq, Public_name = time_resolved_rna$wikigene_name)
+```
+
+
+# A Transcriptional Lineage of the Early C . elegans Embryo.
+## Tintori SC, Nishimura EO, Golden P, Lieb JD, Goldstein B. Dev Cell. 2016;38(4):430-444. doi:10.1101/047746
+
+```{r}
+tintori_2Ep <- read.csv("./01_input/7_Tintori_et_al_2016_Embryo_scRNA-seq/16cell_vs_Ep_p1_00.csv", header = FALSE, stringsAsFactors = FALSE)
+tintori_columns <- c("gene", "p.value", "log.CPM", "log.FC")
+colnames(tintori_2Ep) <- str_c("tintori_2Ep_", tintori_columns)
+tintori_2Ep <- tintori_2Ep %>% mutate(tintori_2Ep_log.FC = tintori_2Ep_log.FC*-1)
+intestine_rna <- intestine_rna %>% left_join(tintori_2Ep, by = c("Sequence.name" = "tintori_2Ep_gene"))
+
+```
+
+# Spatiotemporal transcriptomics reveals the evolutionary history of the endoderm germ layer.
+## Hashimshony T, Feder M, Levin M, Hall BK, Yanai I.  Nature. 2015;519(7542):219-222. doi:10.1038/nature13996
+
+```{r}
+hashimshony_embryo <- read.csv("./01_input/1_Hashimshony_et_al_2015_CEL-seq/Hashimshony_Endoderm_Genes.csv", header = TRUE)
+colnames(hashimshony_embryo) <- c("hashimshony_embryo_genes")
+
+```
+
+# Chromosomal clustering and GATA transcriptional regulation of intestine-expressed genes in C. elegans.
+## Pauli F, Liu Y, Kim Y a, Chen P-J, Kim SK. Development. 2006;133(2):287-295. doi:10.1242/dev.02185
+
+```{r}
+# TFs from Pauli et al 
+pauliGenes <- read_excel("./01_input/4_Pauli_et_al_2006_PAB-1_Pulldown_microarray/SupTable1_intestine_enriched_genes.xlsx")
+colnames(pauliGenes) <- str_c("pauli_L4_", c("gene", "percentile", "pvalue", "description"))
+# add to master datatable
+intestine_rna <- intestine_rna %>% left_join(pauliGenes, by = c("Sequence.name" = "pauli_L4_gene"))
+```
+
+# A spatial and temporal map of C. elegans gene expression. Genome Research, 21(2), 325–41. https://doi.org/10.1101/gr.114595.110 
+## Spencer, W. C., Zeller, G., Watson, J. D., Henz, S. R., Watkins, K. L., McWhirter, R. D., … Miller, D. M. (2011).
+
+```{r}
+
+# Late embryo intestine from Spencer et al
+spencerLEgenes <- read.table("./01_input/6_Spencer_et_al_2010_FACS_and_pulldown_tilling_array/LE-intestine_enr_vs_ref.WS200.txt", quote="\"", comment.char="", header = TRUE)
+colnames(spencerLEgenes) <- str_c("spencer_LE_", colnames(spencerLEgenes))
+spencer_LE_subset <- spencerLEgenes %>% select(spencer_LE_ID, spencer_LE_AveExpr, spencer_LE_adj_P_Val, spencer_LE_FC)
+
+# add to dataframe
+intestine_rna <- merge(x = intestine_rna, y = spencer_LE_subset, by.x = 'WBGeneID', by.y = 'spencer_LE_ID', all.x = TRUE)
+
+
+
+# L2 intestine genes from Spencer et al
+spencerL2genes <- read.table("./01_input/6_Spencer_et_al_2010_FACS_and_pulldown_tilling_array/L2-intestine_enr_vs_ref.WS200.txt", quote="\"", comment.char="", header = TRUE)
+colnames(spencerL2genes) <- str_c("spencer_L2_", colnames(spencerL2genes))
+spencer_L2_subset <- spencerL2genes %>% select(spencer_L2_ID, spencer_L2_AveExpr, spencer_L2_adj_P_Val, spencer_L2_FC)
+
+intestine_rna <- merge(x = intestine_rna, y = spencer_L2_subset, by.x = 'WBGeneID', by.y = 'spencer_L2_ID', all.x = TRUE)
+
+```
+
+# Final Filtering
+
+```{r}
+# Tintori
+intestine_rna <-
+  intestine_rna %>% mutate(
+    tintori_2Ep_bool = if_else(
+      intestine_rna$Sequence.name %in%
+        (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value <= 0.05))$tintori_2Ep_gene,
+      TRUE,
+      FALSE
+    )
+  )
+nrow(intestine_rna %>% filter(tintori_2Ep_bool == TRUE))
+# Hashimshony
+intestine_rna <- intestine_rna %>% mutate(hashimshony_embryo_bool = if_else(intestine_rna$Public_name %in% hashimshony_embryo$hashimshony_embryo_genes, TRUE, FALSE))
+nrow(intestine_rna %>% filter(hashimshony_embryo_bool == TRUE))
+
+# Pauli
+# intestine_rna <- intestine_rna %>% mutate(pauli_L4_bool = if_else(intestine_rna$Sequence.name %in% (pauliGenes %>% filter(pauli_L4_percentile > 0.8))$pauli_L4_gene, TRUE, FALSE))
+intestine_rna <-
+  intestine_rna %>% mutate(pauli_L4_bool = if_else(
+    intestine_rna$Sequence.name %in% pauliGenes$pauli_L4_gene,
+    TRUE,
+    FALSE
+  ))
+nrow(intestine_rna %>% filter(pauli_L4_bool == TRUE))
+
+# Spencer Late Embryo
+intestine_rna <- intestine_rna %>% mutate(spencer_LE_bool = if_else(intestine_rna$WBGeneID %in% spencer_LE_subset$spencer_LE_ID, TRUE, FALSE))
+nrow(intestine_rna %>% filter(spencer_LE_bool == TRUE))
+
+# Spencer L2
+intestine_rna <- intestine_rna %>% mutate(spencer_L2_bool = if_else(intestine_rna$WBGeneID %in% spencer_L2_subset$spencer_L2_ID, TRUE, FALSE))
+nrow(intestine_rna %>% filter(spencer_L2_bool == TRUE))
+```
+```{r}
+intestine_rna %>% filter(Public_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")) %>% dplyr::select(Public_name, contains("bool"))
+```
+
+
+Make a vector that contains intestine expressed genes from any stage
+
+```{r}
+intestine_gene_list <- intestine_rna %>% filter(
+  tintori_2Ep_bool == TRUE |
+    hashimshony_embryo_bool == TRUE |
+    pauli_L4_bool == TRUE |
+    spencer_LE_bool == TRUE |
+    spencer_L2_bool == TRUE
+) %>% dplyr::select(WBGeneID, Public_name, contains("bool")) %>% dplyr::rename(
+  tintori_2Ep = "tintori_2Ep_bool",
+  hashimshony_emb = "hashimshony_embryo_bool",
+  pauli_L4 = "pauli_L4_bool",
+  spencer_LE = "spencer_LE_bool",
+  spencer_L2 = "spencer_L2_bool"
+)
+
+head(intestine_gene_list)
+dim(intestine_gene_list)
+```
+
+Write output files
+
+```{r}
+# write_csv(intestine_gene_list, "./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv")
+# write_csv(intestine_rna, "./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv")
+```
+
+Read in files for downstream work
+
+```{r}
+# intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
+# intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
+```
+
+
+# UpSet plot of overlaps
+
+```{r}
+# there are 5 sets of interest
+# set up the combination matrix
+intestine_upset <-
+  intestine_gene_list %>% left_join(intestine_rna, by = "WBGeneID") %>% dplyr::select(WBGeneID, contains("bool")) %>% column_to_rownames(var = "WBGeneID") %>% dplyr::rename(
+    tint_2Ep = "tintori_2Ep_bool",
+    hash_emb = "hashimshony_embryo_bool",
+    pauli_L4 = "pauli_L4_bool",
+    spen_LE = "spencer_LE_bool",
+    spen_L2 = "spencer_L2_bool"
+  )
+head(intestine_upset)
+nrow(intestine_upset)
+# replace TRUE/FALSE with 1/0
+intestine_upset[, sapply(intestine_upset, is.logical)] <-
+  lapply(intestine_upset[, sapply(intestine_upset, is.logical)], as.numeric)
+# convert to matrix
+intestine_upset_matrix <- as.matrix.data.frame(intestine_upset)
+# peek
+head(intestine_upset_matrix)
+# number of rows
+nrow(intestine_upset_matrix)
+```
+
+```{r}
+m1 <- make_comb_mat(intestine_upset_matrix)
+m1
+```
+
+```{r}
+UpSet(m1, 
+      set_order = c("tint_2Ep", "hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
+      comb_order = order(comb_size(m1)))
+```
+
+
+# Metadata
+
+Initalize a seprate empty "metadata" dataframe to store descriptive information
+
+```{r}
+RWC23_Metadata <- data.frame(column_ID = "", column_detail = "", source_DOI = "", source_detail = "", seq_method = "")
+
+# Tintori metadata
+
+RWC23_Metadata <- RWC23_Metadata %>% add_row(
+  column_ID = colnames(tintori_2Ep[1]),
+  column_detail = "Gene sequence name",
+  source_DOI = "10.1016/j.devcel.2016.07.025",
+  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+  seq_method = "Illumina"
+  ) %>% add_row(
+  column_ID = colnames(tintori_2Ep[2]),
+  column_detail = "Gene p-value",
+  source_DOI = "10.1016/j.devcel.2016.07.025",
+  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+  seq_method = "Illumina"
+  ) %>% add_row(
+  column_ID = colnames(tintori_2Ep[3]),
+  column_detail = "Counts per transcript per million mapped reads.",
+  source_DOI = "10.1016/j.devcel.2016.07.025",
+  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+  seq_method = "Illumina"
+  ) %>% add_row(
+  column_ID = colnames(tintori_2Ep[4]),
+  column_detail = "Log2(Fold Change) of gene in the 2Ep cell when compared to the whole embryo. Less than zero is enriched in the 1E cell. Greater than zero is enriched in the whole 16 cell embryo",
+  source_DOI = "10.1016/j.devcel.2016.07.025",
+  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+  seq_method = "Illumina"
+  )
+
+
+# Hashimshony metadata
+
+RWC23_Metadata <- RWC23_Metadata %>% add_row(
+  column_ID = colnames(hashimshony_embryo[1]),
+  column_detail = "Gene public name",
+  source_DOI = "10.1038/nature13996",
+  source_detail = "Supplementary Table 4. Endoderm gene set from Single cell RNA-seq of cultured dissociated embryos.",
+  seq_method = "Illumina"
+  )
+
+# update metadata
+RWC23_Metadata <- RWC23_Metadata  %>% add_row(
+  column_ID = colnames(pauliGenes[1]),
+  column_detail = "Sequence name",
+  source_DOI = "10.1242/dev.02185",
+  source_detail = "Supplementary Table 1. Microarray of ges-1P::PAB-1 pulldown in L4 worms"
+  ) %>% add_row(
+  column_ID = colnames(pauliGenes[2]),
+  column_detail = "Percentile ranking of transcript abundance",
+  source_DOI = "10.1242/dev.02185",
+  source_detail = "Supplementary Table 1. Microarray of ges-1P::PAB-1 pulldown in L4 worms"
+  ) %>% add_row(
+  column_ID = colnames(pauliGenes[3]),
+  column_detail = "Student's T-test to calculate significant enrichment of intestine transcripts",
+  source_DOI = "10.1242/dev.02185",
+  source_detail = "Supplementary Table 1. Microarray of ges-1P::PAB-1 pulldown in L4 worms"
+  ) %>% add_row(
+  column_ID = colnames(pauliGenes[4]),
+  column_detail = "Short descriptions generated by WormBase",
+  source_DOI = "10.1242/dev.02185",
+  source_detail = "Supplementary Table 1. Microarray of ges-1P::PAB-1 pulldown in L4 worms"
+  ) %>% add_row(
+  column_ID = "pauli_L4_bool",
+  column_detail = "True if included on the list, false if absent on the list",
+  source_DOI = "10.1242/dev.02185",
+  source_detail = "Supplementary Table 1. Microarray of ges-1P::PAB-1 pulldown in L4 worms"
+  ) 
+
+# add sequencing method column
+
+RWC23_Metadata <- mutate(RWC23_Metadata, seq_method = ifelse(RWC23_Metadata$column_ID %in% c(colnames(pauliGenes), "pauli_L4_bool"), "Microarray",RWC23_Metadata$seq_method))
+
+
+# Add Spencer metadata
+
+RWC23_Metadata <- RWC23_Metadata  %>% add_row(
+  column_ID = colnames(spencer_LE_subset[1]),
+  column_detail = "Wormbase Gene ID",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_LE_subset[2]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_LE_subset[3]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_LE_subset[4]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = "spencer_LE_bool",
+  column_detail = "True if present in this list",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  )
+
+RWC23_Metadata <- mutate(RWC23_Metadata, seq_method = ifelse(RWC23_Metadata$column_ID %in% c(colnames(spencer_LE_subset), "spencer_LE_bool"), "Microarray",RWC23_Metadata$seq_method))
+
+RWC23_Metadata <- RWC23_Metadata  %>% add_row(
+  column_ID = colnames(spencer_L2_subset[1]),
+  column_detail = "Wormbase Gene ID",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_L2_subset[2]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_L2_subset[3]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = colnames(spencer_L2_subset[4]),
+  column_detail = "??",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  ) %>% add_row(
+  column_ID = "spencer_L2_bool",
+  column_detail = "True if present in this list",
+  source_DOI = "10.1101/gr.114595.110",
+  source_detail = "FACS Sorted ELT-2::GFP worms. https://www.vanderbilt.edu/wormdoc/wormmap"
+  )
+
+RWC23_Metadata <- mutate(RWC23_Metadata, seq_method = ifelse(RWC23_Metadata$column_ID %in% c(colnames(spencer_L2_subset), "spencer_L2_bool"), "Microarray",RWC23_Metadata$seq_method))
+```
+
+## write output metadata file
+
+```{r}
+# write.xlsx(RWC23_Metadata, "./02_output/Fig3_Public_Intestine_RNA_Metadata.xlsx")
+```
+
+
+
+
+
+# Import ELT-2 ChIP-seq binding data
+
+Make sure annotatedPeaks file is linked to `01_input` directory.  
+The path is: `../../../ELT2_binding/annotatedPeaks.rds`
+
+```{r}
+elt2_GRange <- readRDS("01_input/annotatedPeaks.rds")
+head(elt2_GRange)
+elt2_peaks <- as.data.frame(mcols(elt2_GRange))
+elt2_peaks <- elt2_peaks %>% dplyr::rename(cluster.description = k4labels, WBGeneID = feature)
+elt2_cluster_names <- c("Embryo_Specific",
+                        "Larval",
+                        "Increasing",
+                        "L3_High",
+                        "Not_Changing")
+
+elt2_peaks$cluster.description <-
+  factor(
+    elt2_peaks$cluster.description,
+    levels = c(
+      "LE-specific",
+      "Post-embryonic",
+      "Increasing",
+      "L3-high",
+      "Not-changing or not IDR-passing"
+    ),
+    labels = elt2_cluster_names
+  )
+
+elt2_peaks %>% head
+```
+```{r}
+table(elt2_peaks$cluster.description)
+```
+
+Merge the ELT-2 ChIP-seq data with the intestine filtered time-resolved RNA-seq data
+
+```{r}
+chip_rna_df <- elt2_peaks %>%
+  dplyr::select(name, cluster.description, WBGeneID)  %>%
+  right_join(time_resolved_rna,
+             by = c("WBGeneID" = "wbps_gene_id")) %>%
+  tidyr::replace_na(list("name" = "Not_Bound")) %>%
+  filter(WBGeneID %in% intestine_gene_list$WBGeneID)
+chip_rna_df$cluster.description <- factor(chip_rna_df$cluster.description, levels = c(levels(chip_rna_df$cluster.description), "Not_Bound"))
+chip_rna_df$cluster.description[is.na(chip_rna_df$cluster.description)] <- "Not_Bound"
+head(chip_rna_df)
+table(chip_rna_df$cluster.description)
+```
+
+
+# Subset heatmap based on ELT-2 binding pattern
+
+```{r chip_rna_matrix}
+#### Handle duplicate rows created by 1:many gene:peak mapping
+
+# match will return the first index of each non-redundant gene
+nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_name)
+# length(nr_gene_name_ixs)
+#[1] 3012
+
+# chip_rna_df = chip_rna_df[nr_gene_name_ixs,]
+
+chip_rna_matrix <-
+  chip_rna_df[nr_gene_name_ixs,] %>% dplyr::select(emb_510min:YA) %>% as.matrix()
+rownames(chip_rna_matrix) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
+#### Handle 0's and take the log
+# 1. Just replace 0's as NAs so we can apply log(). Alternatively, we could do log(x + .01), but there are only ~300
+chip_rna_matrix_na = chip_rna_matrix; 
+chip_rna_matrix_na[0 == chip_rna_matrix_na] <- NA
+# 2. Apply log()
+chip_rna_matrix_log = log( chip_rna_matrix_na )
+# 3. Do variances row-wise, make sure to set na.rm=T
+rowvariances = apply(chip_rna_matrix_log, 1, var, na.rm=T)
+
+range(rowvariances) # no NaNs
+# 4. Plot distribution of row variances of the log data...
+# You can do hist with 10,100,1000 breaks, and there will always be
+# a dominant spike all the way on the lowest value. This is because the data elicit no natural lowest break, and can be demonstrated by ecdf, which is binless.
+plot(ecdf(rowvariances)) # no "steps" anywhere, just a smooth curve
+
+# 5. Exclude the lowest 5% of the rows by their variance
+# Remove NA's introduced by log transform
+real = apply(chip_rna_matrix_log, 1, function(x) { ! any(is.na(x)) }) 
+# Set threshold
+thresh = 0.05
+# Calculate row variance value at threshold
+qthreshold = quantile(rowvariances,thresh)
+# Identify matrix indexes where variance is above threshold
+changing = rowvariances > qthreshold
+
+# 6. Z score scale the log transformed values
+# chip_rna_matrix = chip_rna_matrix_log
+rownames(chip_rna_matrix_log) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
+chip_rna_matrix_scaled <- row_scale(chip_rna_matrix_log) # calls base::scale() via RWC23_Functions.R
+
+
+```
+
+```{r heatmap_function}
+BoeckRNA_ELT2_chip_Heatmap <- 
+  function(subsetrows, 
+           column_title,
+           name = "Boeck Time Resolved RNA",                                
+           row_split=chip_rna_df[nr_gene_name_ixs,]$cluster.description[subsetrows],
+           clustering_distance_rows = "euclidean",
+           clustering_method_rows = "complete",
+           ...)
+           
+{
+  
+  ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
+  chip_GOI_df = data.frame(name=rownames(chip_rna_matrix_scaled)[subsetrows][ix], index=ix)
+  
+  BoeckRNA_ELT2_chip <- Heatmap(
+  chip_rna_matrix_scaled[subsetrows,],
+  name=name,
+  row_split = row_split,
+  column_title = column_title,
+  row_title = NULL,
+  cluster_columns = FALSE,
+  clustering_distance_rows = clustering_distance_rows,
+  clustering_method_rows = clustering_method_rows,
+  ...
+) +
+  rowAnnotation(
+    ELT2_cluster = chip_rna_df[nr_gene_name_ixs,]$cluster.description[subsetrows],
+    col = list(
+      ELT2_cluster = c(
+        "Embryo_Specific" = "#7570B3",
+        "Larval" = "#1B9E77",
+        "Increasing" = "#E7298A",
+        "L3_High" = "#D95F02",
+        "Not_Changing" = "#505050",
+        "Not_Bound" = "yellow"
+      )
+    ),
+    border = TRUE
+  ) +  rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
+                               labels = chip_GOI_df$name))
+BoeckRNA_ELT2_chip
+}
+```
+
+```{r BoeckRNA_ELT2_chip}
+
+gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+
+
+BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Log(RNA Timecourse), Variance excludes lower %.0f%%", thresh*100))
+```
+
+# Cluster Time-resolved RNA-seq of intestine genes
+
+```{r BoeckRNA_ELT2_chip}
+data.whole = chip_rna_matrix_scaled[real&changing,]
+agglom='ward.D2'
+hc = hclust(dist(data.whole), method =agglom )
+# plot the hc height to get the screeplot
+ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
+    geom_point() + geom_line() +
+    theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
+
+nclust=3
+# main 2 clusters are stable, 3rd unstable 
+# set.seed(5)
+# clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
+
+```
+
+
+```{r BoeckRNA_ELT2_chip, fig.width = 10, fig.height=6}
+# 1. Record matrix indecies for genes of interest to label on heatmap
+gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+subsetrows=real&changing
+ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
+chip_GOI_df = data.frame(name=rownames(chip_rna_matrix_scaled)[subsetrows][ix], index=ix)
+# 2. Record ELT-2 occupancy pattern annotation per gene
+boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[real&changing], chip_rna_df$cluster.description[real&changing]))
+boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
+boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
+# 3. Assign cluster names
+rna_cluster_names <- c("Postembryonic", "Embryonic", "Late Postembryonic")
+# 4. Draw the heatmap
+time_resolved_heatmap <- Heatmap(
+  data.whole,
+  column_title = sprintf(
+    "Log(RNA Timecourse)\nVariance excludes lower %.0f%%",
+    thresh * 100
+  ),
+  name = "Boeck Time Resolved RNA",
+  cluster_columns = F,
+  row_order = hc$order,
+  row_split = cutree(hc, nclust),
+  row_title = rna_cluster_names,
+  row_title_rot = 0,
+  show_row_names = F
+) +
+  rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
+                                labels = chip_GOI_df$name)) +
+  binding_cluster_row_annotation(boeck_chip_annotation) +
+  rowAnnotation(
+    Not_Bound = boeck_chip_annotation$Not_Bound,
+    col = list(Not_Bound = c(
+      "absent" = "white", "present" = "black"
+    )),
+    border = TRUE
+  )
+time_resolved_heatmap
+
+if (plot == TRUE){
+myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", width = 10, height = 6, plotdir)
+}
+```
+
+```{r BoeckRNA_ELT2_chip}
+mosaic_df <- data.frame(Cluster = cutree(hc, nclust)) %>% rownames_to_column(var = "wikigene_name") %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
+
+tab <- table(mosaic_df$Cluster, mosaic_df$cluster.description)
+
+hclusters = cutree(hc, nclust)
+# tab=table(hclusters, chip_rna_df$cluster.description[real&changing])
+dimnames(tab) <- list(
+  "hclusters" = 1:nclust,
+  "ELT-2" = levels(chip_rna_df$cluster.description)
+)
+tab
+```
+
+
+```{r custom-mosaic}
+boeck_pearson_residuals <-
+  as.data.frame(chisq.test(tab, simulate.p.value = TRUE)$stdres)
+boeck_pearson_residuals <-
+  cbind(boeck_pearson_residuals,
+        as.data.frame(chisq.test(tab, simulate.p.value = TRUE)$observed)$Freq)
+colnames(boeck_pearson_residuals) <-
+  c("hclusters", "ELT2_cluster", "Pearson_Residual", "Observed")
+boeck_pearson_residuals$hclusters <-
+  factor(
+    boeck_pearson_residuals$hclusters,
+    levels = c("3", "2", "1"),
+    labels = rna_cluster_names[3:1]
+  )
+
+# add q-value
+q <- p.adjust(
+  2*pnorm(
+    abs(chisq.test(tab, simulate.p.value = TRUE)$stdres), 
+    lower.tail = FALSE), 
+  method = "BH")
+
+tableformosiac.q <- matrix(q, ncol = 6)
+
+dimnames(tableformosiac.q) <- dimnames(tab)
+tableformosiac.q <- as.table(tableformosiac.q)
+boeck_pearson_residuals <-
+  cbind(boeck_pearson_residuals, 
+        p.adjust = as.data.frame(tableformosiac.q)$Freq)
+```
+
+```{r fig.width= 5, fig.height=4}
+# draw the plot
+# Add pass vs fail for pvalue
+ggplot(boeck_pearson_residuals,
+       aes(x = ELT2_cluster, y = hclusters)) +
+  geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
+  scale_fill_gradient2(
+    high = "red",
+    low = "blue",
+    mid = "white",
+    midpoint = 0
+  ) +
+  theme_bw() +
+  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0)) +
+  scale_color_manual(values = c("light grey", "black")) +
+  xlab("ELT-2 Binding Cluster\n(from ChIP-seq)") +
+  ylab("Time-resolved Gene Cluster\n(from RNA-seq)")
+
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "TimeresolvedRNA_ELT2clusters_custom_mosaic",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), width = 5, height = 3.75, useDingbats=FALSE)
+}
+
+
+```
