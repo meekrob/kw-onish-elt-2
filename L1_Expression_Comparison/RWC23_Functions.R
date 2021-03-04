@@ -244,7 +244,7 @@ make_cluster_annotation <- function(input_matrix, binding_matrix){
     as.data.frame.matrix() %>%
     rownames_to_column() %>%
     left_join(rownames_to_column(binding_matrix), by = "rowname") %>%
-    dplyr::select(rowname, all_of(elt2_cluster_names), "Not_Bound") %>%
+    dplyr::select(rowname, all_of(elt2_cluster_names), any_of("Not_Bound")) %>%
     replace_na(list(
       Embryo_Specific = 0,
       Larval = 0,

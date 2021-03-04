@@ -188,14 +188,12 @@ table(dineen_nishimura_sets_ascend$set)
 
 *Make sure the column names are correct here and that the factor levels match the cluster description names*
 
-```{r}
-# temp_peaks <- mcols(readRDS("/Users/rtpw/Dropbox/01_GITHUBREPO/RWC23_elt2_regulated_genes/01_ChIPseq_RNAseq_Integration/01_input/201019_annotatedPeaks.rds"))
-# write.csv(temp_peaks, file = "./01_input/201019_annotatedPeaks.csv")
-library(GenomicRanges)
-# elt2_GRange <- readRDS("./01_input/201109_annotatedPeaks.rds")
-# elt2_peaks <- as.data.frame(mcols(readRDS("./01_input/201109_annotatedPeaks.rds")))
+Use linked `annotatedPeaks.rds` file for ELT-2 ChIP-seq annotations
 
-elt2_GRange <- readRDS("./01_input/201228_annotatedPeaks.rds")
+```{r}
+library(GenomicRanges)
+
+elt2_GRange <- readRDS("./01_input/annotatedPeaks.rds")
 elt2_peaks <- as.data.frame(mcols(elt2_GRange))
 
 elt2_peaks <- elt2_peaks %>% dplyr::rename(cluster.description = k4labels, WBGeneID = feature)
@@ -720,8 +718,12 @@ Start by using custom function `make_cluster_annotation()`. This function takes 
 ```{r}
 chip_annotation <-
   make_cluster_annotation(dynamic_counts_matrix_scaled_ascend,
-                          binding_cluster_gene_counts)
-
+                          binding_cluster_gene_counts) %>% rowwise() %>% mutate(
+                            Not_Bound = case_when(
+                              Embryo_Specific + Larval + Increasing + L3_High + Not_Changing == 0 ~ 1
+                            ),
+                            Not_Bound = replace_na(Not_Bound, 0)
+                          )
 chip_annotation %>% head()
 ```
 
@@ -763,7 +765,7 @@ Convert ChIP binding clusters to a present/absence list.
 
 ```{r}
 chip_annotation_present_absent <-
-  make_cluster_binary_annotation(chip_annotation)
+  make_cluster_binary_annotation(data.frame(chip_annotation))
 ```
 
 Plot the heatmap with presence/absence.
@@ -1044,7 +1046,7 @@ bound_only_elt2_clust_anno <-
     make_cluster_annotation(
       dynamic_counts_matrix_scaled_bound_only,
       binding_cluster_gene_counts
-    )
+    )%>% cbind(Not_Bound = 0)
   )
 
 bound_only_elt2_clust_anno %>% head()
@@ -1841,7 +1843,7 @@ dineen_ELT2_pearson_residuals$ELT2_cluster <-
       "Increasing",
       "L3_High",
       "Not_Changing",
-      "not bound"
+      "Not_Bound"
     )
   )
 # add q-value
@@ -1936,26 +1938,69 @@ dineen_nishimura_sets_ascend %>% inner_join(
 # Make output dataframe
 
 ```{r}
-fig4df <- expression_L1_binding %>% left_join(elt2_peaks %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID") %>% left_join(bound_only_class, by = "WBGeneID") %>% dplyr::rename(bound_class = "class", dineen_set = "set")
+fig4df <- expression_L1_binding %>% left_join(elt2_peaks %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID") %>% left_join(bound_only_class, by = "WBGeneID") %>% dplyr::rename(bound_class = "class", dineen_set = "set") %>% left_join(bitr(fig4df$WBGeneID, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("WBGeneID" = "WORMBASE")) %>% dplyr::select(WBGeneID, SYMBOL, elt2_detected_in_L1:bound_class)
 fig4df$cluster.description <- factor(fig4df$cluster.description, levels = c(levels(fig4df$cluster.description), "Not_Bound"))
 fig4df$cluster.description[is.na(fig4df$cluster.description)] <- "Not_Bound"
 fig4df
-# write_csv(fig4df, path = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
-write_csv()
+write_csv(fig4df, path = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+getwd()
+```
 
+SET2 genes directly bound by ELT-2 in the L1 stage
+
+```{r}
+SET2_direct <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET2_indirect <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+SET2_genes <- fig4df %>% filter(dineen_set == "SET2") %>% dplyr::select(WBGeneID)
+
+write_csv(SET2_direct, path = "./02_output/Figure4_SET2_ELT2_Direct_WBGeneID.csv", col_names = FALSE)
+write_csv(SET2_indirect, path = "./02_output/Figure4_SET2_ELT2_Indirect_WBGeneID.csv", col_names = FALSE)
+write_csv(SET2_genes, path = "./02_output/Figure4_SET2_WBGeneID_Background.csv", col_names = FALSE)
+```
+
+SET3 genes directly bound by ELT-2 in the L1 stage
+
+```{r}
+SET3_direct <- fig4df %>% filter(dineen_set == "SET3", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET3_indirect <- fig4df %>% filter(dineen_set == "SET3", elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+
+write_csv(SET3_direct, path = "./02_output/Figure4_SET3_ELT2_Direct_WBGeneID.csv", col_names = FALSE)
+write_csv(SET3_indirect, path = "./02_output/Figure4_SET3_ELT2_Indirect_WBGeneID.csv", col_names = FALSE)
+```
+
+Background sets of genes separated by binding status in the L1 stage
+
+```{r}
+L1_ELT2_direct_background <- fig4df %>% filter(elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+L1_ELT2_indirect_background <- fig4df %>% filter(elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+
+write_csv(L1_ELT2_direct_background, path = "./02_output/Figure4_ELT2_Direct_WBGeneID_Background.csv", col_names = FALSE)
+write_csv(L1_ELT2_indirect_background, path = "./02_output/Figure4_ELT2_Indirect_WBGeneID_Background.csv", col_names = FALSE)
+
+```
+
+Save WBGeneIDs from all SETS
+
+```{r}
+write_csv(fig4df %>% dplyr::select(WBGeneID), path = "./02_output/Figure4_All_WBGeneID_Background.csv")
+```
+
+
+
+```{r}
 (fig4df %>% filter(bound_class == "ClassA") %>% dplyr::select(WBGeneID))
 
 bound_classes <- c("ClassA", "ClassB", "ClassC", "ClassD")
 
 # Make file for each bound class
-for(i in bound_classes){
-  write.table(x = fig4df %>% filter(bound_class == i) %>% dplyr::select(WBGeneID), file = paste("./02_output/Figure4_Bound_",i,"_WBGeneID.csv", sep = ""),
-          quote = FALSE, row.names = FALSE, col.names = FALSE)
-}
+# for(i in bound_classes){
+#   write.table(x = fig4df %>% filter(bound_class == i) %>% dplyr::select(WBGeneID), file = paste("./02_output/Figure4_Bound_",i,"_WBGeneID.csv", sep = ""),
+#           quote = FALSE, row.names = FALSE, col.names = FALSE)
+# }
 
 # make background file of genes from all 4 classes
-write.table(x = fig4df %>% filter(bound_class %in% bound_classes) %>% dplyr::select(WBGeneID), file = "./02_output/Figure4_Bound_Background_WBGeneID.csv",
-          quote = FALSE, row.names = FALSE, col.names = FALSE)
+# write.table(x = fig4df %>% filter(bound_class %in% bound_classes) %>% dplyr::select(WBGeneID), file = "./02_output/Figure4_Bound_Background_WBGeneID.csv",
+#           quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 dineen_sets <- paste(rep("SET", 6), 1:6, sep = "")
 dineen_sets
@@ -1969,6 +2014,10 @@ library(org.Ce.eg.db)
 ClassD_Anatomy <- read.csv(file = "~/Downloads/hyperGeo1614267897.81772.csv")
 ClassD_Anatomy
 ClassD_Anatomy %>% left_join(bitr(ClassD_Anatomy$wbid, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("wbid" = "WORMBASE")) %>% View()
+```
+
+```{python}
+pip install tissue_enrichment_analysis
 ```
 
 

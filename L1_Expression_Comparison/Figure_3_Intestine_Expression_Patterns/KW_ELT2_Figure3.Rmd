@@ -101,7 +101,7 @@ intestine_rna <- intestine_rna %>% left_join(pauliGenes, by = c("Sequence.name" 
 # Late embryo intestine from Spencer et al
 spencerLEgenes <- read.table("./01_input/6_Spencer_et_al_2010_FACS_and_pulldown_tilling_array/LE-intestine_enr_vs_ref.WS200.txt", quote="\"", comment.char="", header = TRUE)
 colnames(spencerLEgenes) <- str_c("spencer_LE_", colnames(spencerLEgenes))
-spencer_LE_subset <- spencerLEgenes %>% select(spencer_LE_ID, spencer_LE_AveExpr, spencer_LE_adj_P_Val, spencer_LE_FC)
+spencer_LE_subset <- spencerLEgenes %>% dplyr::select(spencer_LE_ID, spencer_LE_AveExpr, spencer_LE_adj_P_Val, spencer_LE_FC)
 
 # add to dataframe
 intestine_rna <- merge(x = intestine_rna, y = spencer_LE_subset, by.x = 'WBGeneID', by.y = 'spencer_LE_ID', all.x = TRUE)
@@ -111,7 +111,7 @@ intestine_rna <- merge(x = intestine_rna, y = spencer_LE_subset, by.x = 'WBGeneI
 # L2 intestine genes from Spencer et al
 spencerL2genes <- read.table("./01_input/6_Spencer_et_al_2010_FACS_and_pulldown_tilling_array/L2-intestine_enr_vs_ref.WS200.txt", quote="\"", comment.char="", header = TRUE)
 colnames(spencerL2genes) <- str_c("spencer_L2_", colnames(spencerL2genes))
-spencer_L2_subset <- spencerL2genes %>% select(spencer_L2_ID, spencer_L2_AveExpr, spencer_L2_adj_P_Val, spencer_L2_FC)
+spencer_L2_subset <- spencerL2genes %>% dplyr::select(spencer_L2_ID, spencer_L2_AveExpr, spencer_L2_adj_P_Val, spencer_L2_FC)
 
 intestine_rna <- merge(x = intestine_rna, y = spencer_L2_subset, by.x = 'WBGeneID', by.y = 'spencer_L2_ID', all.x = TRUE)
 
@@ -538,7 +538,13 @@ BoeckRNA_ELT2_chip
 gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 
 
-BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Log(RNA Timecourse), Variance excludes lower %.0f%%", thresh*100))
+time_resolved_heatmap_ELT2_binding_split <- BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
+    thresh * 100, nrow(data.whole)))
+time_resolved_heatmap_ELT2_binding_split
+
+if (plot == TRUE){
+  myPDFplot(time_resolved_heatmap_ELT2_binding_split, "TimeresolvedRNA_Heatmap_ELT2_Cluster_Split", width = 7, height = 6, plotdir)
+}
 ```
 
 # Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
