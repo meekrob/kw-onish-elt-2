@@ -548,6 +548,34 @@ dfG_max$k6weights[reps_avd$threshold3d_ix] = clusters$k6weights
 
 ```
 
+### Partition the IDR peaks by the cluster assigned to their counterpart in the union set
+```{r idr-by-cluster}
+IDR_sets = within(IDR_sets,{
+  dfG_max$k4cluster[ to(LE_verify) ] ->LE_IDR$cluster
+  dfG_max$k4cluster[ to(L1_verify) ] ->L1_IDR$cluster
+  dfG_max$k4cluster[ to(L3_verify) ] ->L3_IDR$cluster
+  LE_IDR$called.stage = "LE"
+  L1_IDR$called.stage = "L1"
+  L3_IDR$called.stage = "L3"
+})
+
+
+IDR_concat = c(IDR_sets$LE_IDR,IDR_sets$L1_IDR,IDR_sets$L3_IDR)
+# remove chrM
+IDR_concat = IDR_concat[ seqnames(IDR_concat) != 'chrM']
+IDR_by_cluster = split(IDR_concat, IDR_concat$cluster) # returns GRangesList
+
+
+for (clust in names(IDR_by_cluster)) {
+  last_col = ncol(mcols(IDR_by_cluster[[clust]])) # yikes
+  fname = paste("IDR_", clust, ".bed", sep='')
+  gr = sort(IDR_by_cluster[[clust]])
+  write.table(gr[,3:last_col], fname, row.names=F,col.names=F,quote=F,sep="\t")
+}
+
+```
+
+
 ### Prepare data structures to output bigBed files.
 
 Custom tracks are served locally (but world-readable). The chunk currently also maps peaks to genes through the "scripts/getCodingGenes.R".
