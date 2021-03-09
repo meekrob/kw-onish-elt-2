@@ -564,43 +564,67 @@ IDR_concat = c(IDR_sets$LE_IDR,IDR_sets$L1_IDR,IDR_sets$L3_IDR)
 # remove chrM
 IDR_concat = IDR_concat[ seqnames(IDR_concat) != 'chrM']
 IDR_by_cluster = split(IDR_concat, IDR_concat$cluster) # returns GRangesList
+total_coverage = sum(unlist(lapply(coverage(IDR_by_cluster), sum)))  
+nr_coverage = sum(unlist(lapply(coverage(reduce(IDR_by_cluster)), sum)))
 
+total_coverage/nr_coverage
+
+# separate and save IDR peaks mapped by cluster
 for (clust in names(IDR_by_cluster)) {
   last_col = ncol(mcols(IDR_by_cluster[[clust]])) # yikes
   fname = paste("IDR_", clust, ".bed", sep='')
   gr = sort(IDR_by_cluster[[clust]])
+  nr_gr = reduce(gr)
   write.table(gr[,3:last_col], fname, row.names=F,col.names=F,quote=F,sep="\t")
-}
-```
-
-```{r plotClump}
-plotClump = function(clump) {
-  clumpers = unlist(ranges(sort(clump)))
-  plot(c(min(start(clumpers)), 
-         max(end(clumpers))), 
-       c(0, length(clumpers)+1), type='n')
-  rect(start(clumpers), seq_along(clumpers), end(clumpers), seq_along(clumpers) + .5)
-  text( mid(clumpers), seq_along(clumpers)+.25, 
-        cex=.5, 
-        labels = unlist(clump)$called.stage )
-  clump_data = unlist(clump)
-  summits = start(clump_data) + clump_data$overall_summit_off
-  lines(rep(summits, each=2), seq(0, length(clumpers), by=.5))
+  
+  cov_gr = sum(sum(coverage(gr)))
+  cov_nr_gr = sum(sum(coverage(nr_gr)))
+  cat(sprintf("%s overcount: %.2f\n", clust, cov_gr/cov_nr_gr))
   
 }
 
+```
+
+```{r inspect a clump}
 clust = '4'
 compGR = findOverlaps(IDR_by_cluster[[clust]], reduce(IDR_by_cluster[[clust]]))
 clumps = split(IDR_by_cluster[[clust]], subjectHits(compGR))
-biggestClump = which.max(unlist(lapply(clumps,length))) # 12!!!!!!
+#system.time({clump_lens = unlist(lapply(clumps,length))}) # user: 14.294s
+clump_lens = unlist(elementNROWS(clumps)) # user: .001s
+
+biggestClump = which.max(clump_lens) # 12!!!!!!
 #plotClump( clumps[biggestClump])
-clump = clumps[biggestClump]
-clumpers = unlist(ranges(sort(clump)))
+#clump = clumps[biggestClump]
+clump = clumps[9]
 source('scripts/GRplot.R')
-plotdata = GRPlotNew(clump)
-plotIDR(plotdata$gr_ranges, plotdata$gr_data, plotdata$barheight)
+{ # must run two plot cmds at once in Rmd
+  plotdata = GRPlotNew(clump)
+  plotIDR(plotdata$gr_ranges, plotdata$gr_data, plotdata$barheight)
+}
+
 ```
 
+```{r}
+for (clust in names(IDR_by_cluster)) {
+  IDR_clust = IDR_by_cluster[[clust]]
+  # make a new set of ranges based on peak summit
+  summits = start(IDR_clust) + IDR_clust$overall_summit_off
+  # window size = flank * 2
+  flank=12 # plus or minus
+  s = summits - flank
+  e = summits + flank
+  centered_gr = GRanges(seqnames(IDR_clust), IRanges(start=s,end=e))
+  nr_centered_gr = reduce(centered_gr)
+  cov_centered_gr = sum(sum(coverage(centered_gr)))
+  cov_nr_centered_gr = sum(sum(coverage(nr_centered_gr)))
+  cat(sprintf("%s overcount: %.2f\n", clust, cov_centered_gr/cov_nr_centered_gr))
+  # clump overlapping
+  # clumped = findOverlaps(centered_gr, reduce(centered_gr))
+  # break
+}
+# clumps = split(centered_gr, subjectHits(clumped))
+# clump_lengths = unlist(elementNROWS(clumps))
+```
 
 ### Prepare data structures to output bigBed files.
 

@@ -1,10 +1,23 @@
 # set up GenomicRanges rect plot
+GRPlotBasic = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
+  plotdata=GRPlotNew(gr, main,xlab, ylab, barheight)
+  # basic ranges/tracks  
+  rect(start(plotdata$gr_ranges), 
+       seq_along(plotdata$gr_ranges), 
+       end(plotdata$gr_ranges), 
+       seq_along(plotdata$gr_ranges) + barheight,col='white')
+  # basic ranges/tracks
+  invisible(plotdata)
+}
 GRPlotNew = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
   # make the new empty plot, including axes
-  
-  gr_ranges = unlist(ranges(sort(gr)))
-  gr_data = sort(unlist(gr))
-  chrom = seqlevelsInUse(gr_data)
+  if (class(gr) %in% c('CompressedGRangesList','GRangesList')) {
+    gr = unlist(gr)
+  }
+  gr = sort(gr)
+  gr_ranges = ranges(gr)
+  gr_data = mcols(gr)
+  chrom = seqlevelsInUse(gr)
   stopifnot(length(chrom) == 1) # handle multiple chromosomes later
   
   low_end = min(start(gr_ranges))
@@ -19,8 +32,8 @@ GRPlotNew = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
     axes=F,
     xlab="",
     ylab=sprintf("%d genomic range%s", 
-                 length(unlist(gr)), 
-                 ifelse(length(unlist(gr))>1,"s","")),
+                 length(gr), 
+                 ifelse(length(gr)>1,"s","")),
     main=sprintf("%s:%s-%s", 
                  chrom, 
                  commathou(low_end),
@@ -39,8 +52,12 @@ GRPlotNew = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
   majorTicks = seq(majTx_start, high_end, by=majTx)
   minorTicks = seq(majTx_start+minTx, high_end, by=majTx)
   
-  micTx = minTx/2
-  microTicks = seq(majTx_start+micTx, high_end, by=minTx)
+  micTx = ifelse(minTx <= 5, 1, (minTx/2))
+  microTicks = seq(majTx_start+micTx, 
+                   high_end, 
+                   by=ifelse(minTx<=5,
+                             1,
+                             minTx))
   
   # make sure the ticks don't stop before the data
   if (high_end > tail(majorTicks,1) ) {
@@ -51,7 +68,7 @@ GRPlotNew = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
   }
   
   # the top of the graph is reserved for the major, minor, microticks
-  topBar = length(unlist(gr)) + 1
+  topBar = length(gr) + 1
   ybars = seq(topBar, topBar+.5, length.out=3)
   
   segments(majorTicks[1],ybars[3], majorTicks[1] + majTx)
@@ -112,11 +129,11 @@ plotIDR = function(gr_ranges, gr_data, barheight){
         cex=.5, 
         labels = gr_data$called.stage )
   
-  summits = start(gr_data) + gr_data$overall_summit_off
+  summits = start(gr_ranges) + gr_data$overall_summit_off
   segments(summits, y0=seq_along(gr_ranges), y1=seq_along(gr_ranges) + barheight)
-  summits = gr_data$peak_1_start + gr_data$peak_1_summit
-  segments(summits, y0=seq_along(gr_ranges), y1=seq_along(gr_ranges) + barheight, col='blue')
-  summits = gr_data$peak_2_start + gr_data$peak_2_summit
-  segments(summits, y0=seq_along(gr_ranges), y1=seq_along(gr_ranges) + barheight, col='red')
-  
+  # summits = gr_data$peak_1_start + gr_data$peak_1_summit
+  # segments(summits, y0=seq_along(gr_ranges), y1=seq_along(gr_ranges) + barheight, col='blue')
+  # summits = gr_data$peak_2_start + gr_data$peak_2_summit
+  # segments(summits, y0=seq_along(gr_ranges), y1=seq_along(gr_ranges) + barheight, col='red')
+  # 
 }
