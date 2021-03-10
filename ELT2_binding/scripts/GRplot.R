@@ -1,3 +1,7 @@
+# a filter function
+GRfilter = function(gr, chrom, start, end) {
+  filterGR = GRanges(seqnames = chrom, ranges=IRanges())
+}
 # set up GenomicRanges rect plot
 GRPlotBasic = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
   plotdata=GRPlotNew(gr, main,xlab, ylab, barheight)
@@ -100,7 +104,9 @@ GRPlotNew = function(gr, main=NULL, xlab=NULL, ylab=NULL, barheight=.8){
   return( 
     list('gr_data'=gr_data,
          'gr_ranges'=gr_ranges,
-         'barheight'=barheight)
+         'barheight'=barheight,
+         'chrom'=chrom,
+         'position'=c(low_end,high_end))
     )
 }
 
