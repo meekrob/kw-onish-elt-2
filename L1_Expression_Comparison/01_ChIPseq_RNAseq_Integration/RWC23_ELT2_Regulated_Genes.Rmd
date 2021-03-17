@@ -1921,8 +1921,7 @@ bound_only_class %>% inner_join(
      fromType = "WORMBASE",
      toType = "SYMBOL",
      OrgDb = org.Ce.eg.db)),
-  by = c("WBGeneID" = "WORMBASE")
-) %>% filter(SYMBOL %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
+  by = c("WBGeneID" = "WORMBASE")) %>% filter(SYMBOL %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
 ```
 
 ```{r}
@@ -2016,8 +2015,89 @@ ClassD_Anatomy
 ClassD_Anatomy %>% left_join(bitr(ClassD_Anatomy$wbid, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("wbid" = "WORMBASE")) %>% View()
 ```
 
+# try python interfacing for Tissue Enrichment Analysis
+
+```{r}
+# install.packages("reticulate")
+library(reticulate)
+use_condaenv("kw_fig5", required = TRUE)
+# conda_list()
+py_config()
+# file.edit(file.path("~", ".Rprofile"))
+```
+
 ```{python}
-pip install tissue_enrichment_analysis
+x = 7
+print(x)
+import numpy as np
+import pandas as pd
+import tissue_enrichment_analysis as tea
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# fetch the dictionaries
+tissue = tea.fetch_dictionary('tissue')
+phenotype = tea.fetch_dictionary('phenotype')
+go = tea.fetch_dictionary('go')
+
+# Load the gene lists
+set3_direct = r.SET3_direct
+set3_indirect = r.SET3_indirect
+set2_direct = r.SET2_direct
+set2_indirect = r.SET2_indirect
+# analyze gene list
+## place dictionaries into a has
+frames = {'tissue': tissue, 'phenotype': phenotype, 'go': go}
+
+## test the list of genes against each dictionary
+result = {}
+for analysis, dictionary in frames.items():
+  result[analysis] = tea.enrichment_analysis(set3_direct["WBGeneID"], dictionary, show = False, alpha=10**-1)
+
+# plot the results
+## make the figure
+fig, ax = plt.subplots(nrows = 3, figsize = (20,40))
+i = 0
+
+# go through results hash
+for t, r in result.items():
+  r['logQ'] = -r['Q value'].apply(np.log10)
+  r.logQ.replace([np.inf], np.nan, inplace=True)
+  r.logQ.replace(np.nan, 70, inplace=True)
+  
+  tea.plot_enrichment_results(r, title=t, analysis=t, ax=ax[i], y='logQ', n_bars=10)
+  
+  ax[i].set_ylabel(t)
+  if i != 2:
+    ax[i].set_xlabel('')
+  else:
+    ax[i].set_xlabel(r'$-\log{10}{Q}$')
+  i += 1
+
+plt.show()
+```
+
+
+```{python}
+df_results= tea.enrichment_analysis(set2_direct["WBGeneID"], tissue_df, aname= 'FileName')
+
+tea.plot_enrichment_results(df_results, title= 'FileName')
+plt.figure(figsize = (100,100))
+plt.show()
+
+df_results= tea.enrichment_analysis(set2_indirect["WBGeneID"], tissue_df, aname= 'FileName')
+
+tea.plot_enrichment_results(df_results, title= 'FileName')
+plt.show()
+plt.savefig('Set3_Direct_Enrichment_Results.svg', bbox_inches='tight')
+
+result_tissue_SET3_direct = result['tissue']
+```
+
+```{r}
+library(tidyverse)
+ggplot(py$result_tissue_SET3_direct, aes(Term, logQ)) + geom_bar(stat = 'identity') + coord_flip()
+py$result_tissue_SET3_direct
 ```
 
 

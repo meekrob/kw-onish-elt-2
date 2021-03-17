@@ -1,0 +1,4 @@
+Term	Expected	Observed	Enrichment Fold Change	P value	Q value
+intestine WBbt:0005772	52	127	2.5	1e-22	3.1e-20
+PVD WBbt:0006831	18	42	2.4	6.2e-08	9.3e-06
+outer labial sensillum WBbt:0005501	18	41	2.3	1.7e-07	1.7e-05

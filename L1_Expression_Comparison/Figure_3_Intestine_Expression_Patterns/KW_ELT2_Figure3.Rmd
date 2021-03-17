@@ -179,7 +179,36 @@ head(intestine_gene_list)
 dim(intestine_gene_list)
 ```
 
-Write output files
+
+## Boeck expression values for genes of interest
+
+```{r fig.width=4, fig.height=7}
+smFISH_genes <- c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+
+time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% pivot_longer(cols = emb_510min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
+  ggplot(aes(x = Stage, y = Normalized_Expression)) +
+  geom_point() +
+  facet_grid(wikigene_name~.) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  ggtitle("Time-Resolved RNA Expression of\nIntestine Genes for smFISH") +
+  ylab("depth of coverage per base per million reads (dcpm)")
+```
+```{r fig.width=3.25, fig.height=5}
+
+elt2elt7_dcpm <- time_resolved_rna %>% filter(wikigene_name %in% c("elt-2", "elt-7")) %>% pivot_longer(cols = emb_510min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
+  ggplot(aes(x = Stage, y = Normalized_Expression)) +
+  geom_point() +
+  facet_grid(wikigene_name~.) +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  ggtitle("Time-Resolved RNA Expression") +
+  ylab("depth of coverage per base per million reads (dcpm)")
+elt2elt7_dcpm
+# ggsave(elt2elt7_dcpm, file = "03_plots/210316_elt2elt7_timeresolvedRNA.pdf", width = 3.25, height = 5)
+```
+
+## Write output files
 
 ```{r}
 # write_csv(intestine_gene_list, "./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv")
@@ -189,8 +218,8 @@ Write output files
 Read in files for downstream work
 
 ```{r}
-# intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
-# intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
+intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
+intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
 ```
 
 
@@ -382,9 +411,6 @@ RWC23_Metadata <- mutate(RWC23_Metadata, seq_method = ifelse(RWC23_Metadata$colu
 ```{r}
 # write.xlsx(RWC23_Metadata, "./02_output/Fig3_Public_Intestine_RNA_Metadata.xlsx")
 ```
-
-
-
 
 
 # Import ELT-2 ChIP-seq binding data
