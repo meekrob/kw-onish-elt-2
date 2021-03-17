@@ -548,6 +548,119 @@ dfG_max$k6weights[reps_avd$threshold3d_ix] = clusters$k6weights
 
 ```
 
+### Partition the IDR peaks by the cluster assigned to their counterpart in the union set
+```{r idr-by-cluster}
+IDR_sets = within(IDR_sets,{
+  dfG_max$k4cluster[ to(LE_verify) ] ->LE_IDR$cluster
+  dfG_max$k4cluster[ to(L1_verify) ] ->L1_IDR$cluster
+  dfG_max$k4cluster[ to(L3_verify) ] ->L3_IDR$cluster
+  LE_IDR$called.stage = "LE"
+  L1_IDR$called.stage = "L1"
+  L3_IDR$called.stage = "L3"
+})
+
+
+IDR_concat = c(IDR_sets$LE_IDR,IDR_sets$L1_IDR,IDR_sets$L3_IDR)
+# remove chrM
+IDR_concat = IDR_concat[ seqnames(IDR_concat) != 'chrM']
+IDR_by_cluster = split(IDR_concat, IDR_concat$cluster) # returns GRangesList
+total_coverage = sum(unlist(lapply(coverage(IDR_by_cluster), sum)))  
+nr_coverage = sum(unlist(lapply(coverage(reduce(IDR_by_cluster)), sum)))
+
+total_coverage/nr_coverage
+
+# separate and save IDR peaks mapped by cluster
+for (clust in names(IDR_by_cluster)) {
+  last_col = ncol(mcols(IDR_by_cluster[[clust]])) # yikes
+  fname = paste("peaklists/IDR_", clust, ".bed", sep='')
+  gr = sort(IDR_by_cluster[[clust]])
+  nr_gr = reduce(gr)
+  write.table(gr[,3:last_col], fname, row.names=F,col.names=F,quote=F,sep="\t")
+  
+  cov_gr = sum(sum(coverage(gr)))
+  cov_nr_gr = sum(sum(coverage(nr_gr)))
+  cat(sprintf("%s overcount: %.2f\n", clust, cov_gr/cov_nr_gr))
+  
+}
+
+```
+
+```{r inspect a clump}
+clust = '4'
+compGR = findOverlaps(IDR_by_cluster[[clust]], reduce(IDR_by_cluster[[clust]]))
+clumps = split(IDR_by_cluster[[clust]], subjectHits(compGR))
+#system.time({clump_lens = unlist(lapply(clumps,length))}) # user: 14.294s
+clump_lens = unlist(elementNROWS(clumps)) # user: .001s
+
+biggestClump = which.max(clump_lens) # 12!!!!!!
+#plotClump( clumps[biggestClump])
+#clump = clumps[biggestClump]
+clump = clumps[9]
+source('scripts/GRplot.R')
+{ # must run two plot cmds at once in Rmd
+  plotdata = GRPlotNew(clump)
+  plotIDR(plotdata$gr_ranges, plotdata$gr_data, plotdata$barheight)
+}
+
+```
+
+```{r}
+merged_around_summits = GRangesList()
+for (clust in names(IDR_by_cluster)) {
+  IDR_clust = IDR_by_cluster[[clust]]
+  # make a new set of ranges based on peak summit
+  summits = start(IDR_clust) + IDR_clust$overall_summit_off
+  # window size = flank * 2
+  flank=6 # plus or minus
+  s = summits - flank
+  e = summits + flank
+  centered_gr = GRanges(seqnames(IDR_clust), IRanges(start=s,end=e))
+  nr_centered_gr = reduce(centered_gr)
+  # cov_centered_gr = sum(sum(coverage(centered_gr)))
+  # cov_nr_centered_gr = sum(sum(coverage(nr_centered_gr)))
+  # cat(sprintf("%s overcount: %.2f\n", clust, cov_centered_gr/cov_nr_centered_gr))
+  merged_around_summits[[clust]] = nr_centered_gr
+  # clump overlapping
+  # clumped = findOverlaps(centered_gr, reduce(centered_gr))
+  # break
+}
+# Can the findOverlaps() call be done on a GRlist instead of individually?
+# call them clumps, instead of clusters, to inspect contributing
+# ranges to a UNION'd interval
+# clumps = split(centered_gr, subjectHits(clumped))
+# clump_lengths = unlist(elementNROWS(clumps))
+
+# create intervals for meme-chip, centering on the midpoint of 
+# merged_around_summits
+ChIP_width = 100
+merged_around_summits_resized = resize(merged_around_summits, 100, fix="center")
+d1 = as.data.frame( 
+  lapply(merged_around_summits_resized, 
+         function(x) 
+           sum(sum(coverage(x)))
+         )
+  )
+reduce_check = reduce(merged_around_summits_resized)
+d0 = as.data.frame(lapply(reduce_check, function(x) sum(sum(coverage(x)))))
+d1 = as.data.frame( 
+  lapply(merged_around_summits_resized, 
+         function(x) 
+           sum(sum(coverage(x)))
+         )
+  )
+cat("These proportions of sequence will be counted twice for each cluster:\n")
+d1/d0
+
+# write each to a file
+for (clust in names(merged_around_summits_resized)) {
+  fname = paste("peaklists/IDR_summit_centered_f", ChIP_width, "_", clust, ".bed", sep='')
+  gr = sort(merged_around_summits_resized[[clust]])
+  cat("writing", fname)
+  write.table(gr, fname, row.names=F,col.names=F,quote=F,sep="\t")
+  cat("\n")
+}
+```
+
 ### Prepare data structures to output bigBed files.
 
 Custom tracks are served locally (but world-readable). The chunk currently also maps peaks to genes through the "scripts/getCodingGenes.R".
