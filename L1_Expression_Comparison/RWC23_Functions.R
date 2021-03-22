@@ -234,6 +234,13 @@ binding_cluster_row_annotation <- function(df){
         "absent" = "white", "present" = "#505050"
       )),
       border = TRUE
+    ) +
+    rowAnnotation(
+      Not_Bound = df$Not_Bound,
+      col = list(Not_Bound = c(
+        "absent" = "white", "present" = "black"
+      )),
+      border = TRUE
     )
 }
 

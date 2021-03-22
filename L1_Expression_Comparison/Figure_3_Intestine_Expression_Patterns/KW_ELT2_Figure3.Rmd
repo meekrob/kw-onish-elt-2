@@ -125,7 +125,7 @@ intestine_rna <-
   intestine_rna %>% mutate(
     tintori_2Ep_bool = if_else(
       intestine_rna$Sequence.name %in%
-        (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value <= 0.05))$tintori_2Ep_gene,
+        (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value < 0.05))$tintori_2Ep_gene,
       TRUE,
       FALSE
     )
@@ -474,7 +474,7 @@ nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_
 # length(nr_gene_name_ixs)
 #[1] 3012
 
-# chip_rna_df = chip_rna_df[nr_gene_name_ixs,]
+chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
 
 chip_rna_matrix <-
   chip_rna_df[nr_gene_name_ixs,] %>% dplyr::select(emb_510min:YA) %>% as.matrix()
@@ -509,7 +509,8 @@ changing = rowvariances > qthreshold
 rownames(chip_rna_matrix_log) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
 chip_rna_matrix_scaled <- row_scale(chip_rna_matrix_log) # calls base::scale() via RWC23_Functions.R
 
-
+chip_rna_df_nr_top95 <- chip_rna_df_nr[real&changing,]
+head(chip_rna_df_nr_top95)
 ```
 
 # Time-resolved RNA heatmap based on ELT-2 occupancy cluster
@@ -559,19 +560,7 @@ BoeckRNA_ELT2_chip
 }
 ```
 
-```{r BoeckRNA_ELT2_chip}
 
-gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
-
-
-time_resolved_heatmap_ELT2_binding_split <- BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
-    thresh * 100, nrow(data.whole)))
-time_resolved_heatmap_ELT2_binding_split
-
-if (plot == TRUE){
-  myPDFplot(time_resolved_heatmap_ELT2_binding_split, "TimeresolvedRNA_Heatmap_ELT2_Cluster_Split", width = 7, height = 6, plotdir)
-}
-```
 
 # Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
 
@@ -590,10 +579,22 @@ nclust=3
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
 
 ```
+```{r BoeckRNA_ELT2_chip}
 
+gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+
+
+time_resolved_heatmap_ELT2_binding_split <- BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
+    thresh * 100, nrow(data.whole)))
+time_resolved_heatmap_ELT2_binding_split
+
+if (plot == TRUE){
+  myPDFplot(time_resolved_heatmap_ELT2_binding_split, "TimeresolvedRNA_Heatmap_ELT2_Cluster_Split", width = 7, height = 6, plotdir)
+}
+```
 
 ```{r BoeckRNA_ELT2_chip, fig.width = 10, fig.height=6}
-# 1. Record matrix indecies for genes of interest to label on heatmap
+# 1. Record matrix indexes for genes of interest to label on heatmap
 gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 subsetrows=real&changing
 ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
@@ -603,7 +604,7 @@ boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[re
 boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
 boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
 # 3. Assign cluster names
-rna_cluster_names <- c("Postembryonic", "Embryonic", "Late Postembryonic")
+rna_cluster_names <- c("Larval", "Embryonic", "Adult")
 # 4. Draw the heatmap
 time_resolved_heatmap <- Heatmap(
   data.whole,
@@ -621,14 +622,14 @@ time_resolved_heatmap <- Heatmap(
 ) +
   rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
                                 labels = chip_GOI_df$name)) +
-  binding_cluster_row_annotation(boeck_chip_annotation) +
-  rowAnnotation(
-    Not_Bound = boeck_chip_annotation$Not_Bound,
-    col = list(Not_Bound = c(
-      "absent" = "white", "present" = "black"
-    )),
-    border = TRUE
-  )
+  binding_cluster_row_annotation(boeck_chip_annotation)
+  # + rowAnnotation(
+  #   Not_Bound = boeck_chip_annotation$Not_Bound,
+  #   col = list(Not_Bound = c(
+  #     "absent" = "white", "present" = "black"
+  #   )),
+  #   border = TRUE
+  # )
 time_resolved_heatmap
 
 if (plot == TRUE){
@@ -636,21 +637,26 @@ myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", widt
 }
 
 ```
+Output time-resolved cluster and ELT-2  
+```{r}
+write_csv(mosaic_df %>% dplyr::select(-Cluster) %>% rename(ELT2_cluster_name = "cluster.description"), path = "02_output/Fig3_Intestine_RNA_Cluster_Assignments.csv")
+head(mosaic_df)
+mosaic_df %>% filter(wikigene_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
+```
+
 
 ```{r BoeckRNA_ELT2_chip}
 mosaic_df <- data.frame(Cluster = cutree(hc, nclust)) %>% rownames_to_column(var = "wikigene_name") %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
 mosaic_df$rna_cluster_name <- rna_cluster_names[mosaic_df$Cluster]
-table(mosaic_df$rna_cluster_name, mosaic_df$cluster.description)
-table(mosaic_df$Cluster)
-tab <- table(mosaic_df$Cluster, mosaic_df$cluster.description)
+mosaic_df$rna_cluster_name <- factor(mosaic_df$rna_cluster_name, levels = rna_cluster_names)
 
-hclusters = cutree(hc, nclust)
-# tab=table(hclusters, chip_rna_df$cluster.description[real&changing])
+tab <- table(mosaic_df$Cluster, mosaic_df$cluster.description)
 dimnames(tab) <- list(
-  "hclusters" = 1:nclust,
+  "hclusters" = levels(mosaic_df$rna_cluster_name),
   "ELT-2" = levels(chip_rna_df$cluster.description)
 )
 tab
+
 ```
 
 
@@ -665,8 +671,7 @@ colnames(boeck_pearson_residuals) <-
 boeck_pearson_residuals$hclusters <-
   factor(
     boeck_pearson_residuals$hclusters,
-    levels = c("3", "2", "1"),
-    labels = rna_cluster_names[3:1]
+    levels = rna_cluster_names[3:1]
   )
 
 # add q-value
