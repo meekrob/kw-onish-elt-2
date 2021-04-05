@@ -152,7 +152,7 @@ RNA_heatmap <- function(mat, split = NULL){
 
 # RNA_heatmap2() is a variation with better plotting aestetics
 
-RNA_heatmap2 <- function(mat, column_split = NULL, row_title = NULL, row_split = NULL, split = NULL){
+RNA_heatmap2 <- function(mat, column_split = NULL, row_title = NULL, row_split = NULL, split = NULL, right_annotation = NULL){
   Heatmap(
     mat,
     name = "elt2D-elt7D\nRNAseq",
@@ -165,11 +165,14 @@ RNA_heatmap2 <- function(mat, column_split = NULL, row_title = NULL, row_split =
     column_labels = column_labels[colnames(mat)],
     column_names_gp = gpar(cex = 0.7),
     heatmap_legend_param = list(color_bar = "continuous"),
+    show_row_dend = FALSE,
+    row_title_rot = 0,
     row_split = row_split,
     cluster_row_slices = FALSE,
     # row_title = row_title,
     column_title = NULL,
     column_split = column_split,
+    right_annotation = right_annotation,
     bottom_annotation = HeatmapAnnotation(
       foo = anno_block(
         labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
