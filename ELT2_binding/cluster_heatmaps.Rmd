@@ -633,7 +633,7 @@ for (clust in names(IDR_by_cluster)) {
 # create intervals for meme-chip, centering on the midpoint of 
 # merged_around_summits
 ChIP_width = 100
-merged_around_summits_resized = resize(merged_around_summits, 100, fix="center")
+merged_around_summits_resized = resize(merged_around_summits, ChIP_width, fix="center")
 d1 = as.data.frame( 
   lapply(merged_around_summits_resized, 
          function(x) 
