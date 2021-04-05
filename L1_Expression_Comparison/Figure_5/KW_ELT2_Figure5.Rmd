@@ -1,0 +1,231 @@
+---
+title: "KW_ELT2_Figure5"
+author: "Robert Williams"
+date: "3/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(biomaRt)
+library(tidyverse)
+library(reticulate)
+use_condaenv("kw_fig5", required = TRUE)
+library(clusterProfiler)
+library("org.Ce.eg.db")
+```
+
+
+
+```{r}
+fig4df <- read_csv(file = "../Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+SET1_direct <- fig4df %>% filter(dineen_set == "SET1", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET2_direct <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET2_indirect <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+SET3_direct <- fig4df %>% filter(dineen_set == "SET3", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET3_indirect <- fig4df %>% filter(dineen_set == "SET3", elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+SET4_direct <- fig4df %>% filter(dineen_set == "SET4", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET5_direct <- fig4df %>% filter(dineen_set == "SET5", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+SET6_direct <- fig4df %>% filter(dineen_set == "SET6", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+L1_ELT2_direct_background <- fig4df %>% filter(elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
+L1_ELT2_indirect_background <- fig4df %>% filter(elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+```
+
+
+
+```{r}
+# write_csv(SET2_direct, path = "./01_input/Figure5_SET2_ELT2_Direct_WBGeneID.csv", col_names = FALSE)
+# write_csv(SET2_indirect, path = "./01_input/Figure5_SET2_ELT2_Indirect_WBGeneID.csv", col_names = FALSE)
+# write_csv(SET3_direct, path = "./01_input/Figure5_SET3_ELT2_Direct_WBGeneID.csv", col_names = FALSE)
+# write_csv(SET3_indirect, path = "./01_input/Figure5_SET3_ELT2_Indirect_WBGeneID.csv", col_names = FALSE)
+# write_csv(L1_ELT2_direct_background, path = "./01_input/Figure5_ELT2_Direct_WBGeneID_Background.csv", col_names = FALSE)
+# write_csv(L1_ELT2_indirect_background, path = "./01_input/Figure5_ELT2_Indirect_WBGeneID_Background.csv", col_names = FALSE)
+```
+
+# Use Tissue Enrichment Analysis to identify tissue of origin
+
+Citation: Angeles-Albores, David, Raymond Y. N. Lee, Juancarlos Chan, and Paul W. Sternberg. “Tissue Enrichment Analysis for C. Elegans Genomics.” BMC Bioinformatics 17, no. 1 (September 13, 2016): 366. https://doi.org/10.1186/s12859-016-1229-9.
+
+
+```{python}
+import numpy as np
+import pandas as pd
+import tissue_enrichment_analysis as tea
+import matplotlib.pyplot as plt
+import seaborn as sns
+import inspect
+
+# fetch the dictionaries
+tissue = tea.fetch_dictionary('tissue')
+phenotype = tea.fetch_dictionary('phenotype')
+# go = tea.fetch_dictionary('go')
+
+# Load the gene lists
+set1_direct = r.SET1_direct
+set2_direct = r.SET2_direct
+set2_indirect = r.SET2_indirect
+set3_direct = r.SET3_direct
+set3_indirect = r.SET3_indirect
+set4_direct = r.SET4_direct
+set5_direct = r.SET5_direct
+set6_direct = r.SET6_direct
+direct_background = r.L1_ELT2_direct_background
+indirect_background = r.L1_ELT2_indirect_background
+```
+
+
+```{python}
+tea_set2_direct = tea.enrichment_analysis(set2_direct["WBGeneID"], tissue)
+tea_set3_direct = tea.enrichment_analysis(set3_direct["WBGeneID"], tissue)
+
+tea_set2_direct_bg = tea.enrichment_analysis(set2_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+tea_set3_direct_bg = tea.enrichment_analysis(set3_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+
+tea_set2_indirect = tea.enrichment_analysis(set2_indirect["WBGeneID"], tissue)
+tea_set3_indirect = tea.enrichment_analysis(set3_indirect["WBGeneID"], tissue)
+
+tea_set2_indirect_bg = tea.enrichment_analysis(set2_indirect["WBGeneID"], tissue[tissue.wbid.isin(indirect_background.WBGeneID)])
+tea_set3_indirect_bg = tea.enrichment_analysis(set3_indirect["WBGeneID"], tissue[tissue.wbid.isin(indirect_background.WBGeneID)])
+
+tea_all_direct = tea.enrichment_analysis(direct_background["WBGeneID"], tissue)
+
+tea_set1_direct_bg = tea.enrichment_analysis(set1_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+tea_set4_direct_bg = tea.enrichment_analysis(set4_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+tea_set5_direct_bg = tea.enrichment_analysis(set5_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+tea_set6_direct_bg = tea.enrichment_analysis(set6_direct["WBGeneID"], tissue[tissue.wbid.isin(direct_background.WBGeneID)])
+
+tea_set1_direct = tea.enrichment_analysis(set1_direct["WBGeneID"], tissue)
+tea_set4_direct = tea.enrichment_analysis(set4_direct["WBGeneID"], tissue)
+tea_set5_direct = tea.enrichment_analysis(set5_direct["WBGeneID"], tissue)
+tea_set6_direct = tea.enrichment_analysis(set6_direct["WBGeneID"], tissue)
+
+# # analyze gene list
+# ## place dictionaries into a has
+# frames = {'tissue': tissue, 'phenotype': phenotype, 'go': go}
+# 
+# ## test the list of genes against each dictionary
+# result = {}
+# for analysis, dictionary in frames.items():
+#   result[analysis] = tea.enrichment_analysis(set3_direct["WBGeneID"], dictionary, show = False, alpha=5*10**-2)
+# 
+# # plot the results
+# ## make the figure
+# fig, ax = plt.subplots(nrows = 3, figsize = (20,40))
+# i = 0
+# 
+# # go through results hash
+# for t, r in result.items():
+#   r['logQ'] = -r['Q value'].apply(np.log10)
+#   r.logQ.replace([np.inf], np.nan, inplace=True)
+#   r.logQ.replace(np.nan, 70, inplace=True)
+#   
+#   tea.plot_enrichment_results(r, title=t, analysis=t, ax=ax[i], y='logQ', n_bars=10)
+#   
+#   ax[i].set_ylabel(t)
+#   if i != 2:
+#     ax[i].set_xlabel('')
+#   else:
+#     ax[i].set_xlabel(r'$-\log{10}{Q}$')
+#   i += 1
+# 
+# plt.show()
+```
+
+```{r}
+tea_df_bg <- bind_rows(data.frame(py$tea_set2_direct_bg, set = "SET2_direct_bg", stringsAsFactors = FALSE),
+          data.frame(py$tea_set3_direct_bg, set = "SET3_direct_bg", stringsAsFactors = FALSE),
+          data.frame(py$tea_set4_direct_bg, set = "SET4_direct_bg", stringsAsFactors = FALSE),
+          data.frame(py$tea_set6_direct_bg, set = "SET6_direct_bg", stringsAsFactors = FALSE),
+          data.frame(py$tea_all_direct, set = "Direct_vs_Genome", stringsAsFactors = FALSE)
+          )
+
+tea_df <- bind_rows(data.frame(py$tea_set2_direct, set = "SET2_direct", stringsAsFactors = FALSE),
+          data.frame(py$tea_set3_direct, set = "SET3_direct", stringsAsFactors = FALSE),
+          data.frame(py$tea_set4_direct, set = "SET4_direct", stringsAsFactors = FALSE),
+          data.frame(py$tea_set5_direct, set = "SET5_direct", stringsAsFactors = FALSE),
+          data.frame(py$tea_set6_direct, set = "SET6_direct", stringsAsFactors = FALSE),
+          data.frame(py$tea_all_direct, set = "Direct_vs_Genome", stringsAsFactors = FALSE)
+          )
+
+```
+
+
+```{r fig.height=15, fig.width=10}
+reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
+    new_x <- paste(x, within, sep = sep)
+    stats::reorder(new_x, by, FUN = fun)
+}
+
+scale_x_reordered <- function(..., sep = "___") {
+    reg <- paste0(sep, ".+$")
+    ggplot2::scale_x_discrete(labels = function(x) gsub(reg, "", x), ...)
+}
+
+
+tea_df_bg %>% 
+  filter(Q.value < 0.05,  Observed > 5, set != "Direct_vs_Genome") %>% 
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), set), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(set~., scales = "free_y") +
+  theme_bw()
+
+```
+# Fig 5B
+Anatomy Gene Ontology terms ELT-2 bound and deferentially expressed genes
+```{r fig.width = 5, fig.height=3}
+anatomy_terms <- c(
+    "reproductive system WBbt:0005747",
+    "head mesodermal cell WBbt:0004697",
+    "muscular system WBbt:0005737",
+    "intestine WBbt:0005772",
+    "excretory system WBbt:0005736",
+    "anterior ganglion WBbt:0005375")
+
+tea_df_bg %>% filter(set != "Direct_vs_Genome", Observed >= 10, P.value < .05) %>% group_by(set) %>% filter(Term %in% anatomy_terms) %>%
+  mutate(Term = factor(Term, levels = anatomy_terms)) %>% 
+  ggplot(aes(x = set, y = Term)) +
+  geom_point(aes(size = Observed, color = -log(Q.value))) +
+  theme_bw() +
+  ylab("Anatomy Term") + 
+  xlab("GATA Response Gene Sets") + 
+  # theme(axis.text.x = element_text(angle = 315, hjust = 0))+
+  scale_x_discrete(labels = c("SET2", "SET3", "SET4", "SET6"))
+
+```
+
+
+
+```{r fig.width = 10}
+tea_df %>% filter(Observed >= 10, Q.value < .05) %>% group_by(set) %>% slice_max(Observed, n = 6) %>%
+  ggplot(aes(x = set, y = Term)) +
+  geom_point(aes(size = Observed, color = -log(Q.value))) +
+  theme_bw() +
+  ylab("Anatomy Term") + 
+  xlab("GATA Response Gene Sets")
+```
+```{r}
+tissue_df <- py$tissue
+
+tissue_df %>% filter(wbid %in% fig4df$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% tea_df$Term)  %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value)
+
+```
+
+```{r}
+tissue_df_sets <- tissue_df %>% filter(wbid %in% L1_ELT2_direct_background$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1) %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set", "elt2_detected_in_L1")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value)
+
+tissue_df_sets
+```
+
+# Fig 5A Enrichment of binding in each set
+
+Use hypergeometric to determine if there is more ELT-2 binding in each set than expected by chance
+
+```{r}
+
+```
+
