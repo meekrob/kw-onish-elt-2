@@ -1,0 +1,43 @@
+---
+title: "Chromosome set distribution"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r read-data}
+library(readr)
+Bound_Genes_Class_Assignments <- read_csv("01_ChIPseq_RNAseq_Integration/02_output/Bound_Genes_Class_Assignments.csv")
+```
+
+## Including Plots
+
+
+
+```{r BM}
+paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+
+locations <- getBM(
+  mart = paramart,
+  filter = c("wbps_gene_id"),
+  value = Bound_Genes_Class_Assignments$WBGeneID,
+  attributes = c("chromosome_name", "start_position", "wbps_gene_id"))
+
+Bound_Genes_Classes = data.frame(chrom=sprintf("chr%s", locations$chromosome_name), 
+                                              start = locations$start_position,
+                                              wbps_gene_id = locations$wbps_gene_id,
+                                              class = Bound_Genes_Class_Assignments$class)
+Bound_Genes_Classes = Bound_Genes_Classes[ order(Bound_Genes_Classes$chrom,Bound_Genes_Classes$start),]
+head(Bound_Genes_Classes)
+```
+
+```{r, chrom-by-class}
+chisq.test(table(Bound_Genes_Classes[,c('chrom','class')]))
+mosaicplot(table(Bound_Genes_Classes[,c('chrom','class')]), shade=T)
+```
+
