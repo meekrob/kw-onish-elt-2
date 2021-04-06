@@ -583,40 +583,204 @@ if(plot == TRUE){
   )
 }
 ```
+# Subset ELT-2/ELT-7 differentially expressed genes based on ELT-2 binding in L1 stage
 
-# Bound Class A-D
-# TODO
+```{r}
+l1_bound_list <-
+  elt2_L1_anno %>% filter(elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID) %>% arrange(WBGeneID)
 
+dynamic_counts_matrix_scaled_bound_only <-
+  matrix_select(dynamic_counts_matrix_scaled_ascend, l1_bound_list$WBGeneID)
+
+bound_only_elt2_clust_anno <-
+  make_cluster_binary_annotation(
+    make_cluster_annotation(
+      dynamic_counts_matrix_scaled_bound_only,
+      binding_cluster_gene_counts
+    )%>% cbind(Not_Bound = 0)
+  )
+```
+Kmeans cluster ELT-2 directly bound genes
+```{r}
+# Do the following once
+# set.seed(421)
+# kclus <- kmeans(dynamic_counts_matrix_scaled_bound_only, 4)
+# bound_only_class <-
+#   data.frame(
+#     WBGeneID = rownames(dynamic_counts_matrix_scaled_bound_only),
+#     class = paste("Class", kclus$cluster, sep = ""),
+#     stringsAsFactors = FALSE
+#   )
+# bound_only_class[bound_only_class$class == "Class1", "class"] <- "ClassC"
+# bound_only_class[bound_only_class$class == "Class2", "class"] <- "ClassD"
+# bound_only_class[bound_only_class$class == "Class3", "class"] <- "ClassB"
+# bound_only_class[bound_only_class$class == "Class4", "class"] <- "ClassA"
+# bound_only_class
+# bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+# write.csv(x = bound_only_class, file = "./02_output/Bound_Genes_Class_Assignments.csv", quote = FALSE, row.names = FALSE)
+
+# Read in Class assignments
+
+bound_only_class <- read.csv(file = "./02_output/Bound_Genes_Class_Assignments.csv",header = TRUE, stringsAsFactors = FALSE)
+bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+head(bound_only_class)
+table(bound_only_class$class)
+nrow(bound_only_class)
+```
+Plot heatmap
+
+```{r}
+Ha_bound_only <-
+  RNA_heatmap2(mat = dynamic_counts_matrix_scaled_bound_only,
+              column_split = RNA_column_order,
+              row_split = bound_only_class$class)
+
+Ha_bound_only
+if (plot == TRUE){
+  myPDFplot(
+    plot = Ha_bound_only,
+    name = "6a_ELT2_DE_Genes_ELT2bound",
+    height = 6.5, width = 6,
+    plotdir = plotdir
+  )
+}
+```
+
+Mark genes of interest on the heatmap
+```{r}
+genes_to_test <- bitr(c("ets-4", "cebp-1", "mtl-2", "pqm-1", "zip-10"),
+     fromType = "SYMBOL",
+     toType = "WORMBASE",
+     OrgDb = org.Ce.eg.db)
+
+ Ha_bound_only_gene_anno <- Ha_bound_only +
+  rowAnnotation(foo = anno_mark(
+    at = unlist(lapply(c(1:nrow(genes_to_test)),
+                function(x) {
+                  which(
+                    rownames(dynamic_counts_matrix_scaled_bound_only) == genes_to_test$WORMBASE[x]
+                  )
+                })),
+    labels = genes_to_test$SYMBOL
+  ))
+ 
+ Ha_bound_only_gene_anno
+ 
+if (plot == TRUE){
+  myPDFplot(
+    plot = Ha_bound_only_gene_anno,
+    name = "6b_ELT2_DE_Genes_ELT2bound_Test_Genes_Annotated",
+    height = 6.5, width = 6,
+    plotdir = plotdir
+  )
+}
+```
+Add ELT-2 binding cluster annotation
+
+```{r}
+
+bound_only_annotation <-
+  merge(bound_only_elt2_clust_anno,
+        bound_only_class,
+        by.x = "WBGeneID",
+        by.y = "WBGeneID")
+bound_only_annotation_ascend <-
+  bound_only_annotation %>% arrange(WBGeneID)
+
+Ha_bound_only_chipClust <-
+  Ha_bound_only + binding_cluster_row_annotation(bound_only_elt2_clust_anno)
+Ha_bound_only_chipClust
+if (plot == TRUE){
+  myPDFplot(
+    plot = Ha_bound_only_chipClust,
+    name = "09b_DE_Heatmap_L1elt2boundOnly_elt2bindclusters_anno",
+    height = 6.5,
+    width = 6,
+    plotdir = plotdir
+  )
+  }
+```
+Further subset this heatmap for transcription factors
+
+```{r}
+wTF3.0 <-
+  read.csv("./01_input/TF3-0_namesonly.txt",
+           sep = "\t",
+           header = TRUE) %>% dplyr::select(WBGeneID)
+
+dynamic_counts_matrix_scaled_TFs <-
+  matrix_select(dynamic_counts_matrix_scaled_ascend, wTF3.0$WBGeneID)
+
+dynamic_counts_matrix_scaled_TFs_names <-
+  id2name(dynamic_counts_matrix_scaled_TFs)
+dynamic_counts_matrix_scaled_TFs_bound <-
+  matrix_select(dynamic_counts_matrix_scaled_TFs,
+                elt2_detected_in_L1$WBGeneID)
+
+dynamic_counts_matrix_scaled_TFs_bound_names <-
+  id2name(dynamic_counts_matrix_scaled_TFs_bound)
+bound_tf_class <- bound_only_class %>% filter(WBGeneID %in% rownames(dynamic_counts_matrix_scaled_TFs_bound)) %>% arrange(WBGeneID)
+identical(bound_tf_class$WBGeneID, rownames(dynamic_counts_matrix_scaled_TFs_bound))
+table(bound_tf_class$class)
+HAboundTF_class <- Heatmap(
+  name = "elt2D-elt7D\nRNAseq",
+  dynamic_counts_matrix_scaled_TFs_bound_names,
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  show_row_names = TRUE,
+  row_split = bound_tf_class$class,
+  row_names_side = "left",
+  row_names_gp = gpar(fontsize = 10),
+  show_column_names = TRUE,
+  column_title = "Differential Expression of\nELT-2 Bound Transcription Factors",
+  column_split = RNA_column_order,
+  column_labels = column_labels[colnames(dynamic_counts_matrix_scaled_TFs_bound_names)],
+  bottom_annotation = HeatmapAnnotation(
+      foo = anno_block(
+        labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
+        labels_gp = gpar(cex = .8),
+        gp = gpar(border = NA, lty = "blank")
+      ),
+      foo2 = anno_block(gp = gpar(fill = "black"), height = unit(0.5, "mm"))
+    )
+) + rowAnnotation(
+    Class = bound_tf_class$class,
+    col = list(Class = c(
+      "ClassA" = "red", "ClassB" = "orange", "ClassC" = "yellow", "ClassD" = "green"
+    )),
+    border = TRUE
+  )
+
+HAboundTF_class
+
+if (plot == TRUE){
+  myPDFplot(
+    plot = HAboundTF_class,
+    name = "15c_Differential_Expression_Bound_TFs_Class_Split",
+    height = 5,
+    width = 5.5,
+    plotdir = plotdir
+  )
+  }
+```
 
 # Make output dataframe
 
 ```{r}
-fig4df <- expression_L1_binding %>% left_join(elt2_peaks %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID") %>% left_join(bound_only_class, by = "WBGeneID") %>% dplyr::rename(bound_class = "class", dineen_set = "set")
-fig4df$cluster.description <- factor(fig4df$cluster.description, levels = c(levels(fig4df$cluster.description), "Not_Bound"))
-fig4df$cluster.description[is.na(fig4df$cluster.description)] <- "Not_Bound"
-fig4df
+fig4df <- expression_L1_binding  %>% left_join(bound_only_class, by = "WBGeneID") %>% left_join(chip_annotation, by = "WBGeneID") %>%  dplyr::rename(bound_class = "class", dineen_set = "set")
+
+fig4df <- fig4df %>% inner_join(
+  (bitr(fig4df$WBGeneID,
+     fromType = "WORMBASE",
+     toType = "SYMBOL",
+     OrgDb = org.Ce.eg.db)),
+  by = c("WBGeneID" = "WORMBASE")) %>%
+  dplyr::select(WBGeneID, SYMBOL, elt2_detected_in_L1:Not_Bound)
 # write_csv(fig4df, path = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
-write_csv()
-
-(fig4df %>% filter(bound_class == "ClassA") %>% dplyr::select(WBGeneID))
-
-bound_classes <- c("ClassA", "ClassB", "ClassC", "ClassD")
-
-# Make file for each bound class
-for(i in bound_classes){
-  write.table(x = fig4df %>% filter(bound_class == i) %>% dplyr::select(WBGeneID), file = paste("./02_output/Figure4_Bound_",i,"_WBGeneID.csv", sep = ""),
-          quote = FALSE, row.names = FALSE, col.names = FALSE)
-}
-
-# make background file of genes from all 4 classes
-write.table(x = fig4df %>% filter(bound_class %in% bound_classes) %>% dplyr::select(WBGeneID), file = "./02_output/Figure4_Bound_Background_WBGeneID.csv",
-          quote = FALSE, row.names = FALSE, col.names = FALSE)
-
-dineen_sets <- paste(rep("SET", 6), 1:6, sep = "")
-dineen_sets
-
-fig4df %>% left_join(bitr(fig4df$WBGeneID, fromType = "WORMBASE", toType = "SYMBOL", OrgDb = org.Ce.eg.db), by = c("WBGeneID" = "WORMBASE")) %>% View()
 ```
+
 
 # Measure enrichment between expression SETs and ELT-2 occupancy clusters
 Mosaic plot/dot plot representation of chi-square test
@@ -666,7 +830,7 @@ dineen_ELT2_pearson_residuals <- cbind(dineen_ELT2_pearson_residuals, p.adjust =
 ```
 
 
-```{r fig.widt = 3, fig.height=3}
+```{r fig.widt = 3, fig.height=4}
 # draw the plot
 # Add pass vs fail for pvalue
 ggplot(dineen_ELT2_pearson_residuals,
@@ -679,19 +843,90 @@ ggplot(dineen_ELT2_pearson_residuals,
     midpoint = 0
   ) +
   theme_bw() +
-  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in")) +
+  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = 315, hjust = -0.01)) +
   scale_color_manual(values = c("light grey", "black")) +
   xlab("ELT-2 Binding Cluster") +
   ylab("Expression Set")
+```
 
+
+```{r fig.widt = 3, fig.height=3}
 if (plot == TRUE){
 ggsave(paste(plotdir,
-          "18_Dineen_Sets_ELT2clusters_custom_mosaic",
+          "Dineen_Sets_ELT2clusters_custom_mosaic",
           "_",
           today(),
           ".pdf",
-          sep = ""), width = 5, height = 3.25, useDingbats=FALSE)
+          sep = ""), width = 5, height = 4, useDingbats=FALSE)
 }
+plot <- TRUE
+```
 
+# plot for Gaby
+
+```{r}
+gaby_genes <-
+  data.frame(
+    WORMBASE = c(
+      "WBGene00003474",
+      "WBGene00001598",
+      "WBGene00016997",
+      "WBGene00012101",
+      "WBGene00017687",
+      "WBGene00004096"
+    ),
+    SYMBOL =  c("mtl-2", "glh-1", "cebp-1", "zip-10", "ets-4", "pqm-1"),
+    # assign index value from matrix to gene one at a time
+    index = unlist(lapply(c(1:nrow(
+      gaby_genes
+    )),
+    function(x) {
+      which(rownames(dynamic_counts_matrix_scaled_ascend) == gaby_genes$WORMBASE[x])
+    }))
+  )
+
+gaby_genes %>% inner_join(dineen_nishimura_sets_ascend, by = c("WORMBASE" = "WBGeneID"))
+```
+
+
+```{r}
+gaby_genes <-
+  data.frame(
+    WORMBASE = c(
+      "WBGene00016997",
+      "WBGene00017687",
+      "WBGene00004096",
+      "WBGene00004729",
+      "WBGene00000458",
+      "WBGene00000458"
+    ),
+    SYMBOL =  c("cebp-1", "ets-4", "pqm-1", "sax-3", "ceh-37", "unc-44"))
+gaby_genes <- data.frame(gaby_genes, 
+    # assign index value from matrix to gene one at a time
+    index = unlist(lapply(c(1:nrow(
+      gaby_genes
+    )),
+    function(x) {
+      which(rownames(dynamic_counts_matrix_scaled_ascend) == gaby_genes$WORMBASE[x])
+    }))
+  )
+
+gaby_genes %>% inner_join(dineen_nishimura_sets_ascend, by = c("WORMBASE" = "WBGeneID"))
+
+row_mark <- rowAnnotation(foo = anno_mark(at = gaby_genes$index,
+                                labels = gaby_genes$SYMBOL))
+
+
+dineen_sets_gene_marked <- RNA_heatmap2(dynamic_counts_matrix_scaled_ascend, RNA_column_order, row_split = dineen_nishimura_sets_ascend$set, right_annotation = row_mark)
+dineen_sets_gene_marked
+if (plot == TRUE){
+myPDFplot(plot = dineen_sets_gene_marked, name = "dineen_sets_gene_marked", height = 4.5, width = 6, plotdir = plotdir)
+}
+```
+
+```{r}
+as.data.frame.matrix(dynamic_counts_matrix) %>% rownames_to_column(var = "WBGeneID") %>% filter(WBGeneID == "WBGene00016997") %>% pivot_longer(cols = contains("_")) %>%
+  ggplot(aes(x = name, y = value)) +
+  geom_jitter()
 ```
 
