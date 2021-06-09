@@ -9,7 +9,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Install packages
+```{r}
+# BiocManager::install("biomaRt")
+# install.packages("tidyverse")
+# install.packages("readxl")
+# install.packages("openxlsx")
+# BiocManager::install("ComplexHeatmap")
+# BiocManager::install("GenomicRanges")
+```
 
+Load packages
 ```{r}
 library(biomaRt)
 library(tidyverse)
@@ -32,6 +42,11 @@ plot <- FALSE
 plotdir <- "./03_plots/"
 ```
 
+# TODO
+- remove tintori
+- add sets
+  - blaize 2015 mixed stage PAT-seq
+  - Cao et al L2 scRNA-seq
 
 # Import Time-resolved RNA
 
@@ -64,12 +79,14 @@ intestine_rna <- data.frame(WBGeneID = time_resolved_rna$wbps_gene_id, Sequence.
 # A Transcriptional Lineage of the Early C . elegans Embryo.
 ## Tintori SC, Nishimura EO, Golden P, Lieb JD, Goldstein B. Dev Cell. 2016;38(4):430-444. doi:10.1101/047746
 
+_No longer using this dataset_
+
 ```{r}
-tintori_2Ep <- read.csv("./01_input/7_Tintori_et_al_2016_Embryo_scRNA-seq/16cell_vs_Ep_p1_00.csv", header = FALSE, stringsAsFactors = FALSE)
-tintori_columns <- c("gene", "p.value", "log.CPM", "log.FC")
-colnames(tintori_2Ep) <- str_c("tintori_2Ep_", tintori_columns)
-tintori_2Ep <- tintori_2Ep %>% mutate(tintori_2Ep_log.FC = tintori_2Ep_log.FC*-1)
-intestine_rna <- intestine_rna %>% left_join(tintori_2Ep, by = c("Sequence.name" = "tintori_2Ep_gene"))
+# tintori_2Ep <- read.csv("./01_input/7_Tintori_et_al_2016_Embryo_scRNA-seq/16cell_vs_Ep_p1_00.csv", header = FALSE, stringsAsFactors = FALSE)
+# tintori_columns <- c("gene", "p.value", "log.CPM", "log.FC")
+# colnames(tintori_2Ep) <- str_c("tintori_2Ep_", tintori_columns)
+# tintori_2Ep <- tintori_2Ep %>% mutate(tintori_2Ep_log.FC = tintori_2Ep_log.FC*-1)
+# intestine_rna <- intestine_rna %>% left_join(tintori_2Ep, by = c("Sequence.name" = "tintori_2Ep_gene"))
 
 ```
 
@@ -121,16 +138,17 @@ intestine_rna <- merge(x = intestine_rna, y = spencer_L2_subset, by.x = 'WBGeneI
 
 ```{r}
 # Tintori
-intestine_rna <-
-  intestine_rna %>% mutate(
-    tintori_2Ep_bool = if_else(
-      intestine_rna$Sequence.name %in%
-        (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value < 0.05))$tintori_2Ep_gene,
-      TRUE,
-      FALSE
-    )
-  )
-nrow(intestine_rna %>% filter(tintori_2Ep_bool == TRUE))
+# intestine_rna <-
+#   intestine_rna %>% mutate(
+#     tintori_2Ep_bool = if_else(
+#       intestine_rna$Sequence.name %in%
+#         (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value < 0.05))$tintori_2Ep_gene,
+#       TRUE,
+#       FALSE
+#     )
+#   )
+# nrow(intestine_rna %>% filter(tintori_2Ep_bool == TRUE))
+
 # Hashimshony
 intestine_rna <- intestine_rna %>% mutate(hashimshony_embryo_bool = if_else(intestine_rna$Public_name %in% hashimshony_embryo$hashimshony_embryo_genes, TRUE, FALSE))
 nrow(intestine_rna %>% filter(hashimshony_embryo_bool == TRUE))
@@ -162,13 +180,13 @@ Make a vector that contains intestine expressed genes from any stage
 
 ```{r}
 intestine_gene_list <- intestine_rna %>% filter(
-  tintori_2Ep_bool == TRUE |
+  # tintori_2Ep_bool == TRUE |
     hashimshony_embryo_bool == TRUE |
     pauli_L4_bool == TRUE |
     spencer_LE_bool == TRUE |
     spencer_L2_bool == TRUE
 ) %>% dplyr::select(WBGeneID, Public_name, contains("bool")) %>% dplyr::rename(
-  tintori_2Ep = "tintori_2Ep_bool",
+  # tintori_2Ep = "tintori_2Ep_bool",
   hashimshony_emb = "hashimshony_embryo_bool",
   pauli_L4 = "pauli_L4_bool",
   spencer_LE = "spencer_LE_bool",
@@ -218,8 +236,8 @@ elt2elt7_dcpm
 Read in files for downstream work
 
 ```{r}
-intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
-intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
+# intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
+# intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
 ```
 
 
@@ -230,7 +248,7 @@ intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List
 # set up the combination matrix
 intestine_upset <-
   intestine_gene_list %>% left_join(intestine_rna, by = "WBGeneID") %>% dplyr::select(WBGeneID, contains("bool")) %>% column_to_rownames(var = "WBGeneID") %>% dplyr::rename(
-    tint_2Ep = "tintori_2Ep_bool",
+    # tint_2Ep = "tintori_2Ep_bool",
     hash_emb = "hashimshony_embryo_bool",
     pauli_L4 = "pauli_L4_bool",
     spen_LE = "spencer_LE_bool",
@@ -256,7 +274,7 @@ m1
 
 ```{r fig.width=5, fig.height=3}
 intestine_upset_plot <- UpSet(m1, 
-      set_order = c("tint_2Ep", "hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
+      set_order = c("hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
       comb_order = order(comb_size(m1)))
 intestine_upset_plot
 
@@ -275,31 +293,31 @@ RWC23_Metadata <- data.frame(column_ID = "", column_detail = "", source_DOI = ""
 
 # Tintori metadata
 
-RWC23_Metadata <- RWC23_Metadata %>% add_row(
-  column_ID = colnames(tintori_2Ep[1]),
-  column_detail = "Gene sequence name",
-  source_DOI = "10.1016/j.devcel.2016.07.025",
-  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
-  seq_method = "Illumina"
-  ) %>% add_row(
-  column_ID = colnames(tintori_2Ep[2]),
-  column_detail = "Gene p-value",
-  source_DOI = "10.1016/j.devcel.2016.07.025",
-  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
-  seq_method = "Illumina"
-  ) %>% add_row(
-  column_ID = colnames(tintori_2Ep[3]),
-  column_detail = "Counts per transcript per million mapped reads.",
-  source_DOI = "10.1016/j.devcel.2016.07.025",
-  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
-  seq_method = "Illumina"
-  ) %>% add_row(
-  column_ID = colnames(tintori_2Ep[4]),
-  column_detail = "Log2(Fold Change) of gene in the 2Ep cell when compared to the whole embryo. Less than zero is enriched in the 1E cell. Greater than zero is enriched in the whole 16 cell embryo",
-  source_DOI = "10.1016/j.devcel.2016.07.025",
-  source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
-  seq_method = "Illumina"
-  )
+# RWC23_Metadata <- RWC23_Metadata %>% add_row(
+#   column_ID = colnames(tintori_2Ep[1]),
+#   column_detail = "Gene sequence name",
+#   source_DOI = "10.1016/j.devcel.2016.07.025",
+#   source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+#   seq_method = "Illumina"
+#   ) %>% add_row(
+#   column_ID = colnames(tintori_2Ep[2]),
+#   column_detail = "Gene p-value",
+#   source_DOI = "10.1016/j.devcel.2016.07.025",
+#   source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+#   seq_method = "Illumina"
+#   ) %>% add_row(
+#   column_ID = colnames(tintori_2Ep[3]),
+#   column_detail = "Counts per transcript per million mapped reads.",
+#   source_DOI = "10.1016/j.devcel.2016.07.025",
+#   source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+#   seq_method = "Illumina"
+#   ) %>% add_row(
+#   column_ID = colnames(tintori_2Ep[4]),
+#   column_detail = "Log2(Fold Change) of gene in the 2Ep cell when compared to the whole embryo. Less than zero is enriched in the 1E cell. Greater than zero is enriched in the whole 16 cell embryo",
+#   source_DOI = "10.1016/j.devcel.2016.07.025",
+#   source_detail = "Single cell RNA-seq of hand dissected embryo. Accessed from tintori.bio.unc.edu.",
+#   seq_method = "Illumina"
+#   )
 
 
 # Hashimshony metadata
@@ -443,6 +461,8 @@ elt2_peaks$cluster.description <-
   )
 
 elt2_peaks %>% head
+
+View(elt2_peaks)
 ```
 ```{r}
 table(elt2_peaks$cluster.description)
@@ -452,16 +472,18 @@ Merge the ELT-2 ChIP-seq data with the intestine filtered time-resolved RNA-seq 
 
 ```{r}
 chip_rna_df <- elt2_peaks %>%
-  dplyr::select(name, cluster.description, WBGeneID)  %>%
+  dplyr::select(WBGeneID, cluster.description)  %>%
   right_join(time_resolved_rna,
              by = c("WBGeneID" = "wbps_gene_id")) %>%
   tidyr::replace_na(list("name" = "Not_Bound")) %>%
   filter(WBGeneID %in% intestine_gene_list$WBGeneID)
+
 chip_rna_df$cluster.description <- factor(chip_rna_df$cluster.description, levels = c(levels(chip_rna_df$cluster.description), "Not_Bound"))
 chip_rna_df$cluster.description[is.na(chip_rna_df$cluster.description)] <- "Not_Bound"
 head(chip_rna_df)
 table(chip_rna_df$cluster.description)
 ```
+
 
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
@@ -477,7 +499,7 @@ nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_
 chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
 
 chip_rna_matrix <-
-  chip_rna_df[nr_gene_name_ixs,] %>% dplyr::select(emb_510min:YA) %>% as.matrix()
+  chip_rna_df %>% filter(WBGeneID %in% single_cluster_genes$WBGeneID) %>% dplyr::select(emb_510min:YA) %>% as.matrix()
 rownames(chip_rna_matrix) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
 #### Handle 0's and take the log
 # 1. Just replace 0's as NAs so we can apply log(). Alternatively, we could do log(x + .01), but there are only ~300
@@ -719,3 +741,84 @@ ggsave(paste(plotdir,
 
 
 ```
+
+# Analysis redo 210609
+
+Select genes with one ELT-2 occupancy pattern category
+
+```{r}
+chip_rna_df_wider <- chip_rna_df %>% group_by(WBGeneID, cluster.description) %>% summarise(cluster.count = n()) %>% pivot_wider(id_cols = WBGeneID, names_from = cluster.description, values_from = cluster.count, values_fill = 0) %>% ungroup()
+chip_rna_df_wider["Not_Bound" > 1 & "Increasing" == 0]
+chip_rna_df_wider$Not_Bound > 1 & chip_rna_df_wider$Increasing == 0
+
+chip_rna_df_wider %>% filter(Not_Bound >= 1 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
+
+chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing >= 1 , L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
+
+chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High >= 1, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
+
+chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval >= 1, Not_Changing == 0, Embryo_Specific == 0)
+
+chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing >= 1, Embryo_Specific == 0)
+
+chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific >= 1)
+
+```
+
+```{r}
+single_cluster_genes <- chip_rna_df_wider %>%
+  mutate(
+    single_cluster =
+      case_when(
+        Not_Bound >= 1 &
+          Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "Not_Bound",
+        Not_Bound == 0 &
+          Increasing >= 1 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "Increasing",
+        Not_Bound == 0 &
+          Increasing == 0 &
+          L3_High >= 1 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "L3_High",
+        Not_Bound == 0 &
+          Increasing == 0 &
+          L3_High == 0 &
+          Larval >= 1 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "Larval",
+        Not_Bound == 0 &
+          Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing >= 1 & 
+          Embryo_Specific == 0 ~ "Not_Changing",
+        Not_Bound == 0 &
+          Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific >= 1 ~ "Embryo_Specific",
+        TRUE ~ "Multi_Cluster"
+      )
+  ) %>%
+  dplyr::select(WBGeneID, single_cluster) %>%
+  filter(single_cluster != "Multi_Cluster")
+
+head(single_cluster_genes)
+nrow(single_cluster_genes)
+
+single_cluster_genes %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
+  geom_bar(stat = "identity")
+```
+```{r}
+
+```
+
