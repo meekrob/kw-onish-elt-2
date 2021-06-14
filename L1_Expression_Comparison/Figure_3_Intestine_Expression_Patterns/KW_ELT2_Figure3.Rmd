@@ -468,22 +468,76 @@ View(elt2_peaks)
 table(elt2_peaks$cluster.description)
 ```
 
-Merge the ELT-2 ChIP-seq data with the intestine filtered time-resolved RNA-seq data
+# Analysis redo 210609
+
+Select genes with one ELT-2 occupancy pattern category
 
 ```{r}
-chip_rna_df <- elt2_peaks %>%
-  dplyr::select(WBGeneID, cluster.description)  %>%
-  right_join(time_resolved_rna,
-             by = c("WBGeneID" = "wbps_gene_id")) %>%
-  tidyr::replace_na(list("name" = "Not_Bound")) %>%
-  filter(WBGeneID %in% intestine_gene_list$WBGeneID)
+elt2_peaks_wider <- elt2_peaks %>% group_by(WBGeneID, cluster.description) %>% summarise(cluster.count = n()) %>% pivot_wider(id_cols = WBGeneID, names_from = cluster.description, values_from = cluster.count, values_fill = 0) %>% ungroup()
 
-chip_rna_df$cluster.description <- factor(chip_rna_df$cluster.description, levels = c(levels(chip_rna_df$cluster.description), "Not_Bound"))
-chip_rna_df$cluster.description[is.na(chip_rna_df$cluster.description)] <- "Not_Bound"
-head(chip_rna_df)
-table(chip_rna_df$cluster.description)
 ```
 
+```{r}
+single_cluster_genes <- elt2_peaks_wider %>%
+  mutate(
+    single_cluster =
+      case_when(
+        Increasing >= 1 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "Increasing",
+        Increasing == 0 &
+          L3_High >= 1 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "L3_High",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval >= 1 &
+          Not_Changing == 0 & 
+          Embryo_Specific == 0 ~ "Larval",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing >= 1 & 
+          Embryo_Specific == 0 ~ "Not_Changing",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 & 
+          Embryo_Specific >= 1 ~ "Embryo_Specific",
+        TRUE ~ "Multi_Cluster"
+      )
+  ) %>%
+  dplyr::select(WBGeneID, single_cluster) %>%
+  filter(single_cluster != "Multi_Cluster")
+
+head(single_cluster_genes)
+nrow(single_cluster_genes)
+
+single_cluster_genes %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
+  geom_bar(stat = "identity")
+```
+
+Merge the ELT-2 ChIP-seq data with the intestine filtered time-resolved RNA-seq data
+
+
+```{r}
+chip_rna_df <-  time_resolved_rna %>%
+  inner_join(intestine_gene_list,
+             by = c("wbps_gene_id" = "WBGeneID")) %>%
+  left_join(single_cluster_genes, by = c("wbps_gene_id" = "WBGeneID")) %>%
+  dplyr::rename(WBGeneID = wbps_gene_id, cluster.description = single_cluster) %>%
+  filter(!is.na(cluster.description))
+
+chip_rna_df$cluster.description[is.na(chip_rna_df$cluster.description)] <- "Not_Bound"
+chip_rna_df$cluster.description <- factor(chip_rna_df$cluster.description, levels = c("Embryo_Specific", "Increasing", "L3_High", "Larval", "Not_Changing"))
+                                          # , "Not_Bound"))
+nrow(chip_rna_df)
+table(chip_rna_df$cluster.description)
+```
+# 
 
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
@@ -492,25 +546,43 @@ table(chip_rna_df$cluster.description)
 #### Handle duplicate rows created by 1:many gene:peak mapping
 
 # match will return the first index of each non-redundant gene
-nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_name)
+# nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_name)
 # length(nr_gene_name_ixs)
 #[1] 3012
 
-chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
+# chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
 
 chip_rna_matrix <-
-  chip_rna_df %>% filter(WBGeneID %in% single_cluster_genes$WBGeneID) %>% dplyr::select(emb_510min:YA) %>% as.matrix()
-rownames(chip_rna_matrix) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
+  chip_rna_df %>% dplyr::select(emb_510min:YA) %>% as.matrix()
+rownames(chip_rna_matrix) <- chip_rna_df$wikigene_name
+nrow(chip_rna_matrix)
+hist(chip_rna_matrix[chip_rna_matrix >=100])
+hist(chip_rna_matrix)
+```
+Above is the distribution of expression values (dcpm, depth of coverage per base per million reads). A majority are near zero
+
+```{r chip_rna_matrix}
 #### Handle 0's and take the log
 # 1. Just replace 0's as NAs so we can apply log(). Alternatively, we could do log(x + .01), but there are only ~300
-chip_rna_matrix_na = chip_rna_matrix; 
+chip_rna_matrix_na = chip_rna_matrix;
 chip_rna_matrix_na[0 == chip_rna_matrix_na] <- NA
 # 2. Apply log()
 chip_rna_matrix_log = log( chip_rna_matrix_na )
+hist(chip_rna_matrix_log)
+```
+Log10 transformation makes the expression values appear normally distributed.
+
+```{r chip_rna_matrix}
 # 3. Do variances row-wise, make sure to set na.rm=T
 rowvariances = apply(chip_rna_matrix_log, 1, var, na.rm=T)
 
 range(rowvariances) # no NaNs
+hist(rowvariances, xaxt ='n')
+axis(side=1, at=c(0,2,5,10,15), labels=c(0,2,5,10,15))
+```
+A majority of genes have a variance less than 2.
+
+```{r chip_rna_matrix}
 # 4. Plot distribution of row variances of the log data...
 # You can do hist with 10,100,1000 breaks, and there will always be
 # a dominant spike all the way on the lowest value. This is because the data elicit no natural lowest break, and can be demonstrated by ecdf, which is binless.
@@ -523,15 +595,22 @@ real = apply(chip_rna_matrix_log, 1, function(x) { ! any(is.na(x)) })
 thresh = 0.05
 # Calculate row variance value at threshold
 qthreshold = quantile(rowvariances,thresh)
+qthreshold
 # Identify matrix indexes where variance is above threshold
 changing = rowvariances > qthreshold
+hist(chip_rna_matrix_log[real&changing,])
+nrow(chip_rna_matrix_log[real&changing,])
+```
 
+
+```{r chip_rna_matrix}
 # 6. Z score scale the log transformed values
 # chip_rna_matrix = chip_rna_matrix_log
-rownames(chip_rna_matrix_log) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
+# rownames(chip_rna_matrix_log)
+# rownames(chip_rna_matrix_log) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
 chip_rna_matrix_scaled <- row_scale(chip_rna_matrix_log) # calls base::scale() via RWC23_Functions.R
 
-chip_rna_df_nr_top95 <- chip_rna_df_nr[real&changing,]
+chip_rna_df_nr_top95 <- chip_rna_df[real&changing,]
 head(chip_rna_df_nr_top95)
 ```
 
@@ -542,7 +621,7 @@ BoeckRNA_ELT2_chip_Heatmap <-
   function(subsetrows, 
            column_title,
            name = "Boeck Time Resolved RNA",                                
-           row_split=chip_rna_df[nr_gene_name_ixs,]$cluster.description[subsetrows],
+           row_split=chip_rna_df$cluster.description[subsetrows],
            clustering_distance_rows = "euclidean",
            clustering_method_rows = "complete",
            ...)
@@ -564,7 +643,7 @@ BoeckRNA_ELT2_chip_Heatmap <-
   ...
 ) +
   rowAnnotation(
-    ELT2_cluster = chip_rna_df[nr_gene_name_ixs,]$cluster.description[subsetrows],
+    ELT2_cluster = chip_rna_df$cluster.description[subsetrows],
     col = list(
       ELT2_cluster = c(
         "Embryo_Specific" = "#7570B3",
@@ -615,7 +694,7 @@ if (plot == TRUE){
 }
 ```
 
-```{r BoeckRNA_ELT2_chip, fig.width = 10, fig.height=6}
+```{r BoeckRNA_ELT2_chip, fig.width = 5, fig.height=4}
 # 1. Record matrix indexes for genes of interest to label on heatmap
 gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 subsetrows=real&changing
@@ -661,17 +740,17 @@ myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", widt
 ```
 Output time-resolved cluster and ELT-2  
 ```{r}
-write_csv(mosaic_df %>% dplyr::select(-Cluster) %>% rename(ELT2_cluster_name = "cluster.description"), path = "02_output/Fig3_Intestine_RNA_Cluster_Assignments.csv")
-head(mosaic_df)
-mosaic_df %>% filter(wikigene_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
+mosaic_df <- data.frame(Cluster = cutree(hc, nclust), wikigene_name = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
+
+# write_csv(mosaic_df %>% dplyr::select(-Cluster) %>% rename(ELT2_cluster_name = "cluster.description"), path = "02_output/Fig3_Intestine_RNA_Cluster_Assignments.csv")
 ```
 
 
 ```{r BoeckRNA_ELT2_chip}
-mosaic_df <- data.frame(Cluster = cutree(hc, nclust)) %>% rownames_to_column(var = "wikigene_name") %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
+mosaic_df %>% filter(wikigene_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
 mosaic_df$rna_cluster_name <- rna_cluster_names[mosaic_df$Cluster]
 mosaic_df$rna_cluster_name <- factor(mosaic_df$rna_cluster_name, levels = rna_cluster_names)
-
+mosaic_df
 tab <- table(mosaic_df$Cluster, mosaic_df$cluster.description)
 dimnames(tab) <- list(
   "hclusters" = levels(mosaic_df$rna_cluster_name),
@@ -703,7 +782,7 @@ q <- p.adjust(
     lower.tail = FALSE), 
   method = "BH")
 
-tableformosiac.q <- matrix(q, ncol = 6)
+tableformosiac.q <- matrix(q, ncol = 5)
 
 dimnames(tableformosiac.q) <- dimnames(tab)
 tableformosiac.q <- as.table(tableformosiac.q)
@@ -712,7 +791,7 @@ boeck_pearson_residuals <-
         p.adjust = as.data.frame(tableformosiac.q)$Freq)
 ```
 
-```{r fig.width= 5, fig.height=4}
+```{r fig.width= 3, fig.height=2.75}
 # draw the plot
 # Add pass vs fail for pvalue
 ggplot(boeck_pearson_residuals,
@@ -742,83 +821,4 @@ ggsave(paste(plotdir,
 
 ```
 
-# Analysis redo 210609
-
-Select genes with one ELT-2 occupancy pattern category
-
-```{r}
-chip_rna_df_wider <- chip_rna_df %>% group_by(WBGeneID, cluster.description) %>% summarise(cluster.count = n()) %>% pivot_wider(id_cols = WBGeneID, names_from = cluster.description, values_from = cluster.count, values_fill = 0) %>% ungroup()
-chip_rna_df_wider["Not_Bound" > 1 & "Increasing" == 0]
-chip_rna_df_wider$Not_Bound > 1 & chip_rna_df_wider$Increasing == 0
-
-chip_rna_df_wider %>% filter(Not_Bound >= 1 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
-
-chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing >= 1 , L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
-
-chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High >= 1, Larval == 0, Not_Changing == 0, Embryo_Specific == 0)
-
-chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval >= 1, Not_Changing == 0, Embryo_Specific == 0)
-
-chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing >= 1, Embryo_Specific == 0)
-
-chip_rna_df_wider %>% filter(Not_Bound == 0 & Increasing == 0, L3_High == 0, Larval == 0, Not_Changing == 0, Embryo_Specific >= 1)
-
-```
-
-```{r}
-single_cluster_genes <- chip_rna_df_wider %>%
-  mutate(
-    single_cluster =
-      case_when(
-        Not_Bound >= 1 &
-          Increasing == 0 &
-          L3_High == 0 &
-          Larval == 0 &
-          Not_Changing == 0 & 
-          Embryo_Specific == 0 ~ "Not_Bound",
-        Not_Bound == 0 &
-          Increasing >= 1 &
-          L3_High == 0 &
-          Larval == 0 &
-          Not_Changing == 0 & 
-          Embryo_Specific == 0 ~ "Increasing",
-        Not_Bound == 0 &
-          Increasing == 0 &
-          L3_High >= 1 &
-          Larval == 0 &
-          Not_Changing == 0 & 
-          Embryo_Specific == 0 ~ "L3_High",
-        Not_Bound == 0 &
-          Increasing == 0 &
-          L3_High == 0 &
-          Larval >= 1 &
-          Not_Changing == 0 & 
-          Embryo_Specific == 0 ~ "Larval",
-        Not_Bound == 0 &
-          Increasing == 0 &
-          L3_High == 0 &
-          Larval == 0 &
-          Not_Changing >= 1 & 
-          Embryo_Specific == 0 ~ "Not_Changing",
-        Not_Bound == 0 &
-          Increasing == 0 &
-          L3_High == 0 &
-          Larval == 0 &
-          Not_Changing == 0 & 
-          Embryo_Specific >= 1 ~ "Embryo_Specific",
-        TRUE ~ "Multi_Cluster"
-      )
-  ) %>%
-  dplyr::select(WBGeneID, single_cluster) %>%
-  filter(single_cluster != "Multi_Cluster")
-
-head(single_cluster_genes)
-nrow(single_cluster_genes)
-
-single_cluster_genes %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
-  geom_bar(stat = "identity")
-```
-```{r}
-
-```
 
