@@ -24,7 +24,6 @@ Load packages
 library(biomaRt)
 library(tidyverse)
 library(readxl)
-library(openxlsx)
 library(ComplexHeatmap)
 library(lubridate)
 ```
@@ -76,18 +75,18 @@ intestine_rna <- data.frame(WBGeneID = time_resolved_rna$wbps_gene_id, Sequence.
 ```
 
 
-# A Transcriptional Lineage of the Early C . elegans Embryo.
-## Tintori SC, Nishimura EO, Golden P, Lieb JD, Goldstein B. Dev Cell. 2016;38(4):430-444. doi:10.1101/047746
+# Comparative RNA-Seq Analysis Reveals Pervasive Tissue-Specific Alternative Polyadenylation in Caenorhabditis Elegans Intestine and Muscles.
+## Blazie, Stephen M, Cody Babb, Henry Wilky, Alan Rawls, Jin G Park, and Marco Mangone. https://doi.org/10.1186/s12915-015-0116-6
 
-_No longer using this dataset_
 
 ```{r}
-# tintori_2Ep <- read.csv("./01_input/7_Tintori_et_al_2016_Embryo_scRNA-seq/16cell_vs_Ep_p1_00.csv", header = FALSE, stringsAsFactors = FALSE)
-# tintori_columns <- c("gene", "p.value", "log.CPM", "log.FC")
-# colnames(tintori_2Ep) <- str_c("tintori_2Ep_", tintori_columns)
-# tintori_2Ep <- tintori_2Ep %>% mutate(tintori_2Ep_log.FC = tintori_2Ep_log.FC*-1)
-# intestine_rna <- intestine_rna %>% left_join(tintori_2Ep, by = c("Sequence.name" = "tintori_2Ep_gene"))
+blazie_mixed <- read_xlsx(path = "./01_input/2_Blazie_et_al_2015_PAB-1_Pulldown_RNA-seq/Blazie_et_al_2015_Table_S3.xlsx", sheet = "ges-1 - Unique Genes", col_names = TRUE) %>% dplyr::rename(WBGeneID = `WB Gene ID`) %>% dplyr::select(-Description)
 
+colnames(blazie_mixed) <- str_c("blazie_", colnames(blazie_mixed))
+
+head(blazie_mixed)
+intestine_rna<- intestine_rna %>% left_join(blazie_mixed, by = c("Sequence.name" = "blazie_Cosmid"))
+head(intestine_rna)
 ```
 
 # Spatiotemporal transcriptomics reveals the evolutionary history of the endoderm germ layer.
@@ -149,6 +148,11 @@ intestine_rna <- merge(x = intestine_rna, y = spencer_L2_subset, by.x = 'WBGeneI
 #   )
 # nrow(intestine_rna %>% filter(tintori_2Ep_bool == TRUE))
 
+# Blazie
+
+intestine_rna <- intestine_rna %>% mutate(blazie_bool = if_else(intestine_rna$Sequence.name %in% blazie_mixed$blazie_Cosmid, TRUE, FALSE))
+nrow(intestine_rna %>% filter(blazie_bool == TRUE))
+
 # Hashimshony
 intestine_rna <- intestine_rna %>% mutate(hashimshony_embryo_bool = if_else(intestine_rna$Public_name %in% hashimshony_embryo$hashimshony_embryo_genes, TRUE, FALSE))
 nrow(intestine_rna %>% filter(hashimshony_embryo_bool == TRUE))
@@ -180,13 +184,13 @@ Make a vector that contains intestine expressed genes from any stage
 
 ```{r}
 intestine_gene_list <- intestine_rna %>% filter(
-  # tintori_2Ep_bool == TRUE |
+    blazie_bool == TRUE |
     hashimshony_embryo_bool == TRUE |
     pauli_L4_bool == TRUE |
     spencer_LE_bool == TRUE |
     spencer_L2_bool == TRUE
 ) %>% dplyr::select(WBGeneID, Public_name, contains("bool")) %>% dplyr::rename(
-  # tintori_2Ep = "tintori_2Ep_bool",
+  blazie_mixed = "blazie_bool",
   hashimshony_emb = "hashimshony_embryo_bool",
   pauli_L4 = "pauli_L4_bool",
   spencer_LE = "spencer_LE_bool",
@@ -248,7 +252,7 @@ Read in files for downstream work
 # set up the combination matrix
 intestine_upset <-
   intestine_gene_list %>% left_join(intestine_rna, by = "WBGeneID") %>% dplyr::select(WBGeneID, contains("bool")) %>% column_to_rownames(var = "WBGeneID") %>% dplyr::rename(
-    # tint_2Ep = "tintori_2Ep_bool",
+    blazie_mixed = "blazie_bool",
     hash_emb = "hashimshony_embryo_bool",
     pauli_L4 = "pauli_L4_bool",
     spen_LE = "spencer_LE_bool",
@@ -274,7 +278,7 @@ m1
 
 ```{r fig.width=5, fig.height=3}
 intestine_upset_plot <- UpSet(m1, 
-      set_order = c("hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
+      set_order = c("blazie_mixed","hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
       comb_order = order(comb_size(m1)))
 intestine_upset_plot
 
@@ -287,6 +291,8 @@ if(plot == TRUE){
 # Metadata
 
 Initalize a seprate empty "metadata" dataframe to store descriptive information
+
+# TODO: add blaize to metadata
 
 ```{r}
 RWC23_Metadata <- data.frame(column_ID = "", column_detail = "", source_DOI = "", source_detail = "", seq_method = "")
@@ -461,8 +467,6 @@ elt2_peaks$cluster.description <-
   )
 
 elt2_peaks %>% head
-
-View(elt2_peaks)
 ```
 ```{r}
 table(elt2_peaks$cluster.description)
@@ -674,7 +678,7 @@ ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
     geom_point() + geom_line() +
     theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
 
-nclust=3
+nclust=4
 # main 2 clusters are stable, 3rd unstable 
 # set.seed(5)
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
@@ -705,7 +709,7 @@ boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[re
 boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
 boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
 # 3. Assign cluster names
-rna_cluster_names <- c("Larval", "Embryonic", "Adult")
+rna_cluster_names <- c("Larval", "Embryonic", "Adult", "Other")
 # 4. Draw the heatmap
 time_resolved_heatmap <- Heatmap(
   data.whole,
