@@ -42,15 +42,15 @@ plotdir <- "./03_plots/"
 ```
 
 # TODO
-- remove tintori
-- add sets
-  - blaize 2015 mixed stage PAT-seq
-  - Cao et al L2 scRNA-seq
+
+- add blaize to metadata
+- soft/med/hard variance cutoff
 
 # Import Time-resolved RNA
 
 ```{r}
 time_resolved_rna <- read.delim("./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/Unified_dcpm_per_wormbase_gene.txt", quote="", stringsAsFactors=FALSE)
+View(read.delim("./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/Unified_dcpm_per_wormbase_gene.txt", quote="", stringsAsFactors=FALSE))
 
 paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
 
@@ -85,6 +85,7 @@ blazie_mixed <- read_xlsx(path = "./01_input/2_Blazie_et_al_2015_PAB-1_Pulldown_
 colnames(blazie_mixed) <- str_c("blazie_", colnames(blazie_mixed))
 
 head(blazie_mixed)
+hist(blazie_mixed$blazie_FPKM)
 intestine_rna<- intestine_rna %>% left_join(blazie_mixed, by = c("Sequence.name" = "blazie_Cosmid"))
 head(intestine_rna)
 ```
@@ -189,7 +190,7 @@ intestine_gene_list <- intestine_rna %>% filter(
     pauli_L4_bool == TRUE |
     spencer_LE_bool == TRUE |
     spencer_L2_bool == TRUE
-) %>% dplyr::select(WBGeneID, Public_name, contains("bool")) %>% dplyr::rename(
+) %>% dplyr::select(WBGeneID, Sequence.name, Public_name, contains("bool")) %>% dplyr::rename(
   blazie_mixed = "blazie_bool",
   hashimshony_emb = "hashimshony_embryo_bool",
   pauli_L4 = "pauli_L4_bool",
@@ -207,7 +208,7 @@ dim(intestine_gene_list)
 ```{r fig.width=4, fig.height=7}
 smFISH_genes <- c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 
-time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% pivot_longer(cols = emb_510min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
+time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% pivot_longer(cols = emb_316min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
   ggplot(aes(x = Stage, y = Normalized_Expression)) +
   geom_point() +
   facet_grid(wikigene_name~.) +
@@ -218,7 +219,7 @@ time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% pivot_longer(c
 ```
 ```{r fig.width=3.25, fig.height=5}
 
-elt2elt7_dcpm <- time_resolved_rna %>% filter(wikigene_name %in% c("elt-2", "elt-7")) %>% pivot_longer(cols = emb_510min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
+elt2elt7_dcpm <- time_resolved_rna %>% filter(wikigene_name %in% c("elt-2", "elt-7")) %>% pivot_longer(cols = emb_316min:YA, names_to = "Stage",values_to = "Normalized_Expression") %>%
   ggplot(aes(x = Stage, y = Normalized_Expression)) +
   geom_point() +
   facet_grid(wikigene_name~.) +
@@ -557,10 +558,10 @@ table(chip_rna_df$cluster.description)
 # chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
 
 chip_rna_matrix <-
-  chip_rna_df %>% dplyr::select(emb_510min:YA) %>% as.matrix()
+  chip_rna_df %>% dplyr::select(emb_44min:YA) %>% as.matrix()
 rownames(chip_rna_matrix) <- chip_rna_df$wikigene_name
 nrow(chip_rna_matrix)
-hist(chip_rna_matrix[chip_rna_matrix >=100])
+# hist(chip_rna_matrix[chip_rna_matrix >=100])
 hist(chip_rna_matrix)
 ```
 Above is the distribution of expression values (dcpm, depth of coverage per base per million reads). A majority are near zero
@@ -578,8 +579,9 @@ Log10 transformation makes the expression values appear normally distributed.
 
 ```{r chip_rna_matrix}
 # 3. Do variances row-wise, make sure to set na.rm=T
-rowvariances = apply(chip_rna_matrix_log, 1, var, na.rm=T)
-
+# rowvariances = apply(chip_rna_matrix_log, 1, var, na.rm=T)
+rowvariances = apply(chip_rna_matrix, 1, var, na.rm=T)
+sum(rowvariances >= 1)
 range(rowvariances) # no NaNs
 hist(rowvariances, xaxt ='n')
 axis(side=1, at=c(0,2,5,10,15), labels=c(0,2,5,10,15))
@@ -596,14 +598,17 @@ plot(ecdf(rowvariances)) # no "steps" anywhere, just a smooth curve
 # Remove NA's introduced by log transform
 real = apply(chip_rna_matrix_log, 1, function(x) { ! any(is.na(x)) }) 
 # Set threshold
-thresh = 0.05
+# thresh = 0.05
+thresh = 0.0
 # Calculate row variance value at threshold
 qthreshold = quantile(rowvariances,thresh)
 qthreshold
 # Identify matrix indexes where variance is above threshold
 changing = rowvariances > qthreshold
+# changing = rowvariances >= 0.05
 hist(chip_rna_matrix_log[real&changing,])
 nrow(chip_rna_matrix_log[real&changing,])
+
 ```
 
 
@@ -678,7 +683,7 @@ ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
     geom_point() + geom_line() +
     theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
 
-nclust=4
+nclust=3
 # main 2 clusters are stable, 3rd unstable 
 # set.seed(5)
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
@@ -709,7 +714,8 @@ boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[re
 boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
 boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
 # 3. Assign cluster names
-rna_cluster_names <- c("Larval", "Embryonic", "Adult", "Other")
+# rna_cluster_names <- c("Larval", "Embryonic", "Adult", "Other")
+rna_cluster_names <- c("One", "Two", "Three")
 # 4. Draw the heatmap
 time_resolved_heatmap <- Heatmap(
   data.whole,
@@ -825,4 +831,222 @@ ggsave(paste(plotdir,
 
 ```
 
+# Scratch space
+
+```{r}
+# z <- chip_rna_matrix[apply(chip_rna_matrix > 0.07, 1, sum) > 1,]
+# z <- chip_rna_matrix_log[real,]
+z <- chip_rna_matrix
+z_var <- apply(z, 1, var)
+z_mean <- apply(z, 1, mean)
+plot(log(z_mean), log(z_var), pch='.')
+abline(h=log2(1), col='red')
+abline(v=log2(1), col='red')
+
+nrow(chip_rna_matrix[which(z_var >= 0.05 & z_mean >= log(0.07)),1:10])
+hist(log2(z_var))
+hist(log2(z_mean[z_mean >= 0]))
+z_filt <- z[which(z_var >= 0.05 & z_mean >= log(0.07)),1:10]
+nrow(z_filt)
+# scaledata <- t(scale(t(z)))
+scale_percent <- t(apply(z_filt, 1, function(x)(x-min(x))/(max(x)-min(x))))
+Heatmap(scale_percent)
+```
+TPM = A*1/sum(A)*10^6
+A = total reads mapped to gene * 10^3/gene length in bp
+```{r}
+boeck_counts <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, ends_with("counts"))
+
+boeck_count_mat <- boeck_counts %>% column_to_rownames(var = "WormbaseName") %>% dplyr::select(ends_with("counts"), -aggregate_polya_counts, -aggregate_totalRNA_counts, -aggregate_counts) %>% as.matrix.data.frame()
+
+```
+
+
+```{r}
+# Length of each gene
+gene.length <- boeck_counts$NonRepetitiveLength
+# Divide each row by gene length
+length_norm <- t(t(boeck_count_mat)/gene.length)
+
+colSums(length_norm, na.rm = TRUE)
+t(t(length_norm)*1e6/colSums(t(length_norm)))
+colSums(length_norm)
+
+counts_to_tpm <- function(counts, featureLength, meanFragmentLength) {
+  
+  # Ensure valid arguments.
+  stopifnot(length(featureLength) == nrow(counts))
+  stopifnot(length(meanFragmentLength) == ncol(counts))
+  
+  # Compute effective lengths of features in each library.
+  effLen <- do.call(cbind, lapply(1:ncol(counts), function(i) {
+    featureLength - meanFragmentLength[i] + 1
+  }))
+  
+  # Exclude genes with length less than the mean fragment length.
+  idx <- apply(effLen, 1, function(x) min(x) > 1)
+  counts <- counts[idx,]
+  effLen <- effLen[idx,]
+  featureLength <- featureLength[idx]
+  
+  # Process one column at a time.
+  tpm <- do.call(cbind, lapply(1:ncol(counts), function(i) {
+    rate = log(counts[,i]) - log(effLen[,i])
+    denom = log(sum(exp(rate)))
+    exp(rate - denom + log(1e6))
+  }))
+
+  # Copy the row and column names from the original matrix.
+  colnames(tpm) <- colnames(counts)
+  rownames(tpm) <- rownames(counts)
+  return(tpm)
+}
+
+boeck_tpm <- counts_to_tpm(counts = boeck_count_mat, featureLength = gene.length, meanFragmentLength = rep(1, ncol(boeck_count_mat)))
+
+boeck_dcpm <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, ends_with("dcpm"))
+
+boeck_dcpm_mat <- boeck_dcpm %>% column_to_rownames(var = "WormbaseName") %>% dplyr::select(ends_with("dcpm"), -aggregate_polya_dcpm, -aggregate_totalRNA_dcpm, -aggregate_dcpm) %>% as.matrix.data.frame()
+
+
+z <- boeck_dcpm_mat
+z_var <- apply(z, 1, var)
+z_mean <- apply(z, 1, mean)
+z_sq_stdev <- apply(z, 1, function(x) sqrt(sd(x)))
+
+plot(log2(z_mean), log2(z_var), pch='.')
+abline(h=log(1), col='red')
+abline(v=log(1), col='red')
+
+
+```
+
+```{r}
+var_mean_plot <- function(mat, meancut, varcut, title = NULL){
+ mat_var <- apply(mat, 1, var)
+ mat_mean <- apply(mat, 1, mean)
+ plot(log2(mat_mean), log2(mat_var), pch='.', main = title)
+abline(h=log2(varcut), col='red')
+abline(v=log2(meancut), col='red')
+}
+par(mfrow=c(1,3))
+var_mean_plot(mat = boeck_count_mat, varcut = 1, meancut = 1, title = "unified counts")
+var_mean_plot(mat = boeck_dcpm_mat*10, varcut = 1, meancut = 1, title = "dcpm")
+var_mean_plot(mat = boeck_tpm, varcut = 1, meancut = 1, title = "tpm")
+
+```
+
+See if unified dcpm is similar to TPM
+
+Sample pairs: 
+Early embryo, bean: N2_EE_50.210, N2_EE_50.240
+Mid embryo, comma/tadpole: N2_EE_50.390, N2_EE_50.420
+Late embryo, pretzel: N2_EE_50.690, N2_EE_50.720
+L1: "L1_counts", "N2_L1.1_counts"
+L2: "L2_counts", "N2_L2.4_counts"
+L3: "L3_counts", "N2_L3.1_counts"
+L4: "L4_counts", "L4b_counts"
+YA: "YA_counts", "N2_Yad.1_counts"
+
+```{r}
+# make list of relevant samples
+sample_names <- c("N2_EE_50.210", "N2_EE_50.240", 
+                         "N2_EE_50.390", "N2_EE_50.420", 
+                         "N2_EE_50.690", "N2_EE_50.720", 
+                         "L1", "N2_L1.1",
+                         "L2", "N2_L2.4",
+                         "L3", "N2_L3.1",
+                         "L4", "L4b",
+                         "YA", "N2_Yad.1")
+# give the samples better names
+my_names = c("early_emb_1", "early_emb_2", "mid_emb_1", "mid_emb_2", "late_emb_1", "late_emb_2", "L1_1", "L1_2", "L2_1", "L2_2", "L3_1", "L3_2", "L4_1", "L4_2", "YA_1", "YA_2")
+
+# make df that stores to and from column names
+boeck_count_samples <- data.frame(count_names = paste(sample_names, "_counts", sep = ""), my_names = my_names)
+# extract read counts from file
+boeck_raw_counts <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, boeck_count_samples$count_names) %>% rename_at(vars(boeck_count_samples$count_names), ~boeck_count_samples$my_names)
+# boeck_raw_counts <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, contains("count"), -aggregate_polya_counts, -aggregate_totalRNA_counts, -aggregate_counts)
+# turn into matrix
+boeck_raw_counts_mat <- boeck_raw_counts %>% column_to_rownames(var = "WormbaseName") %>% dplyr::select(-NonRepetitiveLength) %>% as.matrix.data.frame()
+
+# make df that stores to and from column names
+boeck_dcpm_samples <- data.frame(count_names = paste(sample_names, "_dcpm", sep = ""), my_names = my_names)
+# extract dcpm values and rename
+boeck_raw_dcpm <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, boeck_dcpm_samples$count_names) %>% rename_at(vars(boeck_dcpm_samples$count_names), ~boeck_dcpm_samples$my_names)
+# turn into matrix
+boeck_raw_dcpm_mat <- boeck_raw_dcpm %>% column_to_rownames(var = "WormbaseName") %>% dplyr::select(-NonRepetitiveLength) %>% as.matrix.data.frame()
+# Calculate TPM
+boeck_raw_tpm <- counts_to_tpm(counts = boeck_raw_counts_mat, featureLength = boeck_raw_counts$NonRepetitiveLength, meanFragmentLength = rep(1, ncol(boeck_raw_counts_mat)))
+```
+
+```{r}
+par(mfrow=c(1,3))
+var_mean_plot(mat = boeck_raw_counts_mat, varcut = 1, meancut = 1, title = "raw counts")
+var_mean_plot(mat = boeck_raw_dcpm_mat, varcut = 1, meancut = 1, title = "raw dcpm")
+var_mean_plot(mat = boeck_raw_tpm, varcut = 1, meancut = 1, title = "raw tpm")
+```
+
+
+```{r}
+smFISH_genes <- c("aat-6", "pgp-1", "elt-2", "elt-7", "vit-2")
+genes_df <- time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% dplyr::select(wormbase_gseq, wbps_gene_id, wikigene_name)
+genes_list <- setNames(genes_df$wikigene_name, genes_df$wormbase_gseq)
+genes_list[["C18G1.2"]]
+unlist(genes_list[c(rownames(mat[ix,]))])
+
+```
+
+
+```{r}
+var_mean_plot(mat = boeck_raw_tpm, varcut = 1, meancut = 1, title = "raw tpm")
+
+mat <- boeck_raw_tpm[rownames(boeck_raw_tpm) %in% genes_df$wormbase_gseq,]
+ix <- rownames(boeck_raw_tpm) %in% genes_df$wormbase_gseq
+mat <- boeck_raw_tpm
+mat_var <- apply(mat, 1, var)
+mat_mean <- apply(mat, 1, mean)
+```
+
+
+```{r fig.width=2, fig.height=2}
+mat_mean[ix]
+mat_var[ix]
+plot(log2(mat_mean), log2(mat_var), pch='.', main = "tpm")
+abline(h=log2(2), col='red')
+abline(v=log2(2), col='red')
+text(x = log2(mat_mean[ix]),log2(mat_var[ix]), labels = genes_list[c(rownames(mat[ix,]))], col = "red", pos = 2, offset = 1.5, cex = 0.8)
+points(log2(mat_mean[ix]), log2(mat_var[ix]), col = "red")
+```
+```{r}
+par(mfrow=c(1,2))
+hist(boeck_raw_tpm[mat_var >= 1 & mat_mean >= 1,])
+hist(log(boeck_raw_tpm[mat_var >= 1 & mat_mean >= 1,]))
+```
+
+
+```{r}
+var_mean_plot(boeck_raw_tpm[rownames(boeck_raw_tpm) %in% genes_df$wormbase_gseq,], varcut = 1, meancut = 1, title = "smFISH genes")
+
+
+```
+
+```{r}
+# select intestine expressed genes
+boeck_raw_tpm_gut <- matrix_select(boeck_raw_tpm, intestine_gene_list$Sequence.name)
+# log transform
+min_mean <- 1
+min_var <- 1
+tpm_gut_mean <- apply(boeck_raw_tpm_gut, 1, mean)
+tpm_gut_var <- apply(boeck_raw_tpm_gut, 1, var, na.rm=T)
+# tpm_gut_scale <- t(apply(boeck_raw_tpm_gut[tpm_gut_mean >= min_mean & tpm_gut_var >= min_var,], 1, function(x)(x-min(x))/(max(x)-min(x))))
+tpm_gut_scale <- row_scale(boeck_raw_tpm_gut[tpm_gut_mean >= min_mean & tpm_gut_var >= min_var,])
+hc = hclust(dist(tpm_gut_scale), method =agglom )
+# plot the hc height to get the screeplot
+ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
+    geom_point() + geom_line() +
+    theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
+
+Heatmap(tpm_gut_scale, cluster_columns = TRUE, show_row_names = FALSE, km = 6)
+
+```
 
