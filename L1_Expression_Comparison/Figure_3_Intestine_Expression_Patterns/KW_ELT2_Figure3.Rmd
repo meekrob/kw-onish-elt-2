@@ -43,14 +43,18 @@ plotdir <- "./03_plots/"
 
 # TODO
 
-- add blaize to metadata
-- soft/med/hard variance cutoff
+- 210616
+  - add blaize to metadata
+  - soft/med/hard variance cutoff
+- 210622
+  - Add Early, middle, late embryo intestine
+  - Calculate unified tpm from counts
+  - Time resolved heatmap with different threshold cutoffs (make plotting function)
 
 # Import Time-resolved RNA
 
 ```{r}
 time_resolved_rna <- read.delim("./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/Unified_dcpm_per_wormbase_gene.txt", quote="", stringsAsFactors=FALSE)
-View(read.delim("./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/Unified_dcpm_per_wormbase_gene.txt", quote="", stringsAsFactors=FALSE))
 
 paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
 
@@ -134,21 +138,9 @@ intestine_rna <- merge(x = intestine_rna, y = spencer_L2_subset, by.x = 'WBGeneI
 
 ```
 
-# Final Filtering
+# Intestine Gene Filtering
 
 ```{r}
-# Tintori
-# intestine_rna <-
-#   intestine_rna %>% mutate(
-#     tintori_2Ep_bool = if_else(
-#       intestine_rna$Sequence.name %in%
-#         (tintori_2Ep %>% filter(tintori_2Ep_log.FC > 1.75 & tintori_2Ep_p.value < 0.05))$tintori_2Ep_gene,
-#       TRUE,
-#       FALSE
-#     )
-#   )
-# nrow(intestine_rna %>% filter(tintori_2Ep_bool == TRUE))
-
 # Blazie
 
 intestine_rna <- intestine_rna %>% mutate(blazie_bool = if_else(intestine_rna$Sequence.name %in% blazie_mixed$blazie_Cosmid, TRUE, FALSE))
@@ -159,7 +151,6 @@ intestine_rna <- intestine_rna %>% mutate(hashimshony_embryo_bool = if_else(inte
 nrow(intestine_rna %>% filter(hashimshony_embryo_bool == TRUE))
 
 # Pauli
-# intestine_rna <- intestine_rna %>% mutate(pauli_L4_bool = if_else(intestine_rna$Sequence.name %in% (pauliGenes %>% filter(pauli_L4_percentile > 0.8))$pauli_L4_gene, TRUE, FALSE))
 intestine_rna <-
   intestine_rna %>% mutate(pauli_L4_bool = if_else(
     intestine_rna$Sequence.name %in% pauliGenes$pauli_L4_gene,
@@ -473,9 +464,7 @@ elt2_peaks %>% head
 table(elt2_peaks$cluster.description)
 ```
 
-# Analysis redo 210609
-
-Select genes with one ELT-2 occupancy pattern category
+# Select genes with one ELT-2 occupancy pattern category
 
 ```{r}
 elt2_peaks_wider <- elt2_peaks %>% group_by(WBGeneID, cluster.description) %>% summarise(cluster.count = n()) %>% pivot_wider(id_cols = WBGeneID, names_from = cluster.description, values_from = cluster.count, values_fill = 0) %>% ungroup()
@@ -525,46 +514,91 @@ single_cluster_genes %>% group_by(single_cluster) %>% summarise(gene_total = n()
   geom_bar(stat = "identity")
 ```
 
-Merge the ELT-2 ChIP-seq data with the intestine filtered time-resolved RNA-seq data
+# Convert `time_resolved_rna` dcpm to tpm
+
+```{r}
+counts_to_tpm <- function(counts, featureLength, meanFragmentLength) {
+  
+  # Ensure valid arguments.
+  stopifnot(length(featureLength) == nrow(counts))
+  stopifnot(length(meanFragmentLength) == ncol(counts))
+  
+  # Compute effective lengths of features in each library.
+  effLen <- do.call(cbind, lapply(1:ncol(counts), function(i) {
+    featureLength - meanFragmentLength[i] + 1
+  }))
+  
+  # Exclude genes with length less than the mean fragment length.
+  idx <- apply(effLen, 1, function(x) min(x) > 1)
+  counts <- counts[idx,]
+  effLen <- effLen[idx,]
+  featureLength <- featureLength[idx]
+  
+  # Process one column at a time.
+  tpm <- do.call(cbind, lapply(1:ncol(counts), function(i) {
+    rate = log(counts[,i]) - log(effLen[,i])
+    denom = log(sum(exp(rate)))
+    exp(rate - denom + log(1e6))
+  }))
+
+  # Copy the row and column names from the original matrix.
+  colnames(tpm) <- colnames(counts)
+  rownames(tpm) <- rownames(counts)
+  return(tpm)
+}
+
+boeck_count_mat <- time_resolved_rna %>% 
+  column_to_rownames(var = "wbps_gene_id") %>%
+  dplyr::select(emb_4cell:emb_665min,L1:YA) %>% as.matrix.data.frame()
+
+boeck_tpm <- counts_to_tpm(counts = boeck_count_mat, featureLength = time_resolved_rna$LENGTH, meanFragmentLength = rep(1, ncol(boeck_count_mat)))
+par(mfrow = c(1,2))
+hist(log(boeck_tpm), main = "derived TPM")
+hist(log(boeck_count_mat), main = "published dcpm")
+```
+Plot the variance vs the mean
+
+```{r}
+var_mean_plot <- function(mat, meancut, varcut, title = NULL){
+ mat_var <- apply(mat, 1, var)
+ mat_mean <- apply(mat, 1, mean)
+ plot(log2(mat_mean), log2(mat_var), pch='.', main = title)
+abline(h=log2(varcut), col='red')
+abline(v=log2(meancut), col='red')
+}
+par(mfrow=c(1,2))
+var_mean_plot(boeck_tpm, meancut = 1, varcut = 1, title = "derived tpm")
+var_mean_plot(boeck_count_mat, meancut = 1, varcut = 1, title = "published dcpm")
+```
+
+# Integrate Time-resolved RNA TPM for intestine specific genes and ELT-2 single occupancy clusters
 
 
 ```{r}
-chip_rna_df <-  time_resolved_rna %>%
+chip_rna_df <-  as.data.frame(boeck_count_mat) %>% rownames_to_column(var = "wbps_gene_id") %>%
   inner_join(intestine_gene_list,
              by = c("wbps_gene_id" = "WBGeneID")) %>%
   left_join(single_cluster_genes, by = c("wbps_gene_id" = "WBGeneID")) %>%
   dplyr::rename(WBGeneID = wbps_gene_id, cluster.description = single_cluster) %>%
   filter(!is.na(cluster.description))
 
-chip_rna_df$cluster.description[is.na(chip_rna_df$cluster.description)] <- "Not_Bound"
 chip_rna_df$cluster.description <- factor(chip_rna_df$cluster.description, levels = c("Embryo_Specific", "Increasing", "L3_High", "Larval", "Not_Changing"))
-                                          # , "Not_Bound"))
+
 nrow(chip_rna_df)
 table(chip_rna_df$cluster.description)
+
+# Choose the time-resolve RNA-seq samples
+chip_rna_matrix <- chip_rna_df %>% dplyr::select(emb_4cell:emb_665min:YA) %>% as.matrix()
+rownames(chip_rna_matrix) <- chip_rna_df$WBGeneID
+head(chip_rna_matrix)
+par(mfrow=c(1,2))
+var_mean_plot(boeck_tpm, meancut = 1, varcut = 1, title = "time-resolved all genes tpm")
+var_mean_plot(chip_rna_matrix, meancut = 1, varcut = 1, title = "time-resolved intestine gene tpm")
 ```
-# 
 
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
 
-```{r chip_rna_matrix}
-#### Handle duplicate rows created by 1:many gene:peak mapping
-
-# match will return the first index of each non-redundant gene
-# nr_gene_name_ixs = match(unique(chip_rna_df$wikigene_name),chip_rna_df$wikigene_name)
-# length(nr_gene_name_ixs)
-#[1] 3012
-
-# chip_rna_df_nr = chip_rna_df[nr_gene_name_ixs,]
-
-chip_rna_matrix <-
-  chip_rna_df %>% dplyr::select(emb_44min:YA) %>% as.matrix()
-rownames(chip_rna_matrix) <- chip_rna_df$wikigene_name
-nrow(chip_rna_matrix)
-# hist(chip_rna_matrix[chip_rna_matrix >=100])
-hist(chip_rna_matrix)
-```
-Above is the distribution of expression values (dcpm, depth of coverage per base per million reads). A majority are near zero
 
 ```{r chip_rna_matrix}
 #### Handle 0's and take the log
@@ -573,104 +607,23 @@ chip_rna_matrix_na = chip_rna_matrix;
 chip_rna_matrix_na[0 == chip_rna_matrix_na] <- NA
 # 2. Apply log()
 chip_rna_matrix_log = log( chip_rna_matrix_na )
-hist(chip_rna_matrix_log)
-```
-Log10 transformation makes the expression values appear normally distributed.
-
-```{r chip_rna_matrix}
 # 3. Do variances row-wise, make sure to set na.rm=T
-# rowvariances = apply(chip_rna_matrix_log, 1, var, na.rm=T)
 rowvariances = apply(chip_rna_matrix, 1, var, na.rm=T)
-sum(rowvariances >= 1)
-range(rowvariances) # no NaNs
-hist(rowvariances, xaxt ='n')
-axis(side=1, at=c(0,2,5,10,15), labels=c(0,2,5,10,15))
-```
-A majority of genes have a variance less than 2.
-
-```{r chip_rna_matrix}
-# 4. Plot distribution of row variances of the log data...
-# You can do hist with 10,100,1000 breaks, and there will always be
-# a dominant spike all the way on the lowest value. This is because the data elicit no natural lowest break, and can be demonstrated by ecdf, which is binless.
-plot(ecdf(rowvariances)) # no "steps" anywhere, just a smooth curve
-
-# 5. Exclude the lowest 5% of the rows by their variance
+range(rowvariances) # make sure there are no NaNs
+# 4. Exclude the lowest 5% of the rows by their variance
 # Remove NA's introduced by log transform
 real = apply(chip_rna_matrix_log, 1, function(x) { ! any(is.na(x)) }) 
 # Set threshold
-# thresh = 0.05
-thresh = 0.0
+thresh = 0.05
 # Calculate row variance value at threshold
 qthreshold = quantile(rowvariances,thresh)
 qthreshold
 # Identify matrix indexes where variance is above threshold
 changing = rowvariances > qthreshold
-# changing = rowvariances >= 0.05
-hist(chip_rna_matrix_log[real&changing,])
-nrow(chip_rna_matrix_log[real&changing,])
-
-```
-
-
-```{r chip_rna_matrix}
-# 6. Z score scale the log transformed values
-# chip_rna_matrix = chip_rna_matrix_log
-# rownames(chip_rna_matrix_log)
-# rownames(chip_rna_matrix_log) <- chip_rna_df[nr_gene_name_ixs,]$wikigene_name
+# 5. Z score scale the log transformed values
 chip_rna_matrix_scaled <- row_scale(chip_rna_matrix_log) # calls base::scale() via RWC23_Functions.R
-
-chip_rna_df_nr_top95 <- chip_rna_df[real&changing,]
-head(chip_rna_df_nr_top95)
+# chip_rna_matrix_scaled <- t(apply(chip_rna_matrix, 1, function(x)(x-min(x))/(max(x)-min(x)))) # zero to one scaling
 ```
-
-# Time-resolved RNA heatmap based on ELT-2 occupancy cluster
-
-```{r heatmap_function}
-BoeckRNA_ELT2_chip_Heatmap <- 
-  function(subsetrows, 
-           column_title,
-           name = "Boeck Time Resolved RNA",                                
-           row_split=chip_rna_df$cluster.description[subsetrows],
-           clustering_distance_rows = "euclidean",
-           clustering_method_rows = "complete",
-           ...)
-           
-{
-  
-  ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
-  chip_GOI_df = data.frame(name=rownames(chip_rna_matrix_scaled)[subsetrows][ix], index=ix)
-  
-  BoeckRNA_ELT2_chip <- Heatmap(
-  chip_rna_matrix_scaled[subsetrows,],
-  name=name,
-  row_split = row_split,
-  column_title = column_title,
-  row_title = NULL,
-  cluster_columns = FALSE,
-  clustering_distance_rows = clustering_distance_rows,
-  clustering_method_rows = clustering_method_rows,
-  ...
-) +
-  rowAnnotation(
-    ELT2_cluster = chip_rna_df$cluster.description[subsetrows],
-    col = list(
-      ELT2_cluster = c(
-        "Embryo_Specific" = "#7570B3",
-        "Larval" = "#1B9E77",
-        "Increasing" = "#E7298A",
-        "L3_High" = "#D95F02",
-        "Not_Changing" = "#505050",
-        "Not_Bound" = "yellow"
-      )
-    ),
-    border = TRUE
-  ) +  rowAnnotation(foo = anno_mark(at = chip_GOI_df$index,
-                               labels = chip_GOI_df$name))
-BoeckRNA_ELT2_chip
-}
-```
-
-
 
 # Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
 
@@ -683,34 +636,33 @@ ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
     geom_point() + geom_line() +
     theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
 
-nclust=3
+nclust=5
 # main 2 clusters are stable, 3rd unstable 
 # set.seed(5)
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
 
 ```
-```{r BoeckRNA_ELT2_chip}
+# Collect WBGeneIDs and 
 
-gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
-
-
-time_resolved_heatmap_ELT2_binding_split <- BoeckRNA_ELT2_chip_Heatmap(real&changing, sprintf("Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
-    thresh * 100, nrow(data.whole)))
-time_resolved_heatmap_ELT2_binding_split
-
-if (plot == TRUE){
-  myPDFplot(time_resolved_heatmap_ELT2_binding_split, "TimeresolvedRNA_Heatmap_ELT2_Cluster_Split", width = 7, height = 6, plotdir)
-}
+```{r}
+smFISH_genes <- c("aat-6", "pgp-1", "elt-2", "elt-7", "vit-2")
+genes_df <- time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% dplyr::select(wormbase_gseq, wbps_gene_id, wikigene_name)
+genes_list <- setNames(genes_df$wikigene_name, genes_df$wbps_gene_id)
+# genes_list[["C18G1.2"]]
+genes_df$wbps_gene_id
+genes_list[["WBGene00000007"]]
 ```
 
-```{r BoeckRNA_ELT2_chip, fig.width = 5, fig.height=4}
+
+```{r BoeckRNA_ELT2_chip}
+#, fig.width = 6, fig.height=4}
 # 1. Record matrix indexes for genes of interest to label on heatmap
-gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
+# gene_names <- c("bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7")
 subsetrows=real&changing
-ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% gene_names)
-chip_GOI_df = data.frame(name=rownames(chip_rna_matrix_scaled)[subsetrows][ix], index=ix)
+ix=which(rownames(chip_rna_matrix_scaled)[subsetrows] %in% genes_df$wbps_gene_id)
+chip_GOI_df = data.frame(name=genes_list[c(rownames(chip_rna_matrix_scaled)[subsetrows][ix])], index=ix)
 # 2. Record ELT-2 occupancy pattern annotation per gene
-boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$wikigene_name[real&changing], chip_rna_df$cluster.description[real&changing]))
+boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$WBGeneID[real&changing], chip_rna_df$cluster.description[real&changing]))
 boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
 boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
 # 3. Assign cluster names
@@ -750,14 +702,14 @@ myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", widt
 ```
 Output time-resolved cluster and ELT-2  
 ```{r}
-mosaic_df <- data.frame(Cluster = cutree(hc, nclust), wikigene_name = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(wikigene_name, cluster.description), by = "wikigene_name")
+mosaic_df <- data.frame(Cluster = cutree(hc, nclust), WBGeneID = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID")
 
 # write_csv(mosaic_df %>% dplyr::select(-Cluster) %>% rename(ELT2_cluster_name = "cluster.description"), path = "02_output/Fig3_Intestine_RNA_Cluster_Assignments.csv")
 ```
 
 
 ```{r BoeckRNA_ELT2_chip}
-mosaic_df %>% filter(wikigene_name %in% c("M88.4", "bcl-11", "sre-23", "T25D10.4", "aat-6", "pgp-1", "ftn-1", "elt-2", "elt-7"))
+
 mosaic_df$rna_cluster_name <- rna_cluster_names[mosaic_df$Cluster]
 mosaic_df$rna_cluster_name <- factor(mosaic_df$rna_cluster_name, levels = rna_cluster_names)
 mosaic_df
@@ -801,10 +753,10 @@ boeck_pearson_residuals <-
         p.adjust = as.data.frame(tableformosiac.q)$Freq)
 ```
 
-```{r fig.width= 3, fig.height=2.75}
+```{r } #fig.width= 3, fig.height=2.75}
 # draw the plot
 # Add pass vs fail for pvalue
-ggplot(boeck_pearson_residuals,
+boeck_mosaic_plot<- ggplot(boeck_pearson_residuals,
        aes(x = ELT2_cluster, y = hclusters)) +
   geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
   scale_fill_gradient2(
@@ -818,7 +770,7 @@ ggplot(boeck_pearson_residuals,
   scale_color_manual(values = c("light grey", "black")) +
   xlab("ELT-2 Binding Cluster\n(from ChIP-seq)") +
   ylab("Time-resolved Gene Cluster\n(from RNA-seq)")
-
+boeck_mosaic_plot
 if (plot == TRUE){
 ggsave(paste(plotdir,
           "TimeresolvedRNA_ELT2clusters_custom_mosaic",
@@ -852,8 +804,8 @@ nrow(z_filt)
 scale_percent <- t(apply(z_filt, 1, function(x)(x-min(x))/(max(x)-min(x))))
 Heatmap(scale_percent)
 ```
-TPM = A*1/sum(A)*10^6
-A = total reads mapped to gene * 10^3/gene length in bp
+`TPM = A*1/sum(A)*10^6`
+`A = total reads mapped to gene * 10^3/gene length in bp`
 ```{r}
 boeck_counts <- read.csv(file = "./01_input/9_Boeck_et_al_2016_time-resolved_transcriptome/wormbase_genes.readcounts_dcpm_per_sample.txt", sep = " ") %>% dplyr::select(WormbaseName, NonRepetitiveLength, ends_with("counts"))
 
@@ -992,8 +944,6 @@ smFISH_genes <- c("aat-6", "pgp-1", "elt-2", "elt-7", "vit-2")
 genes_df <- time_resolved_rna %>% filter(wikigene_name %in% smFISH_genes) %>% dplyr::select(wormbase_gseq, wbps_gene_id, wikigene_name)
 genes_list <- setNames(genes_df$wikigene_name, genes_df$wormbase_gseq)
 genes_list[["C18G1.2"]]
-unlist(genes_list[c(rownames(mat[ix,]))])
-
 ```
 
 
@@ -1049,4 +999,6 @@ ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
 Heatmap(tpm_gut_scale, cluster_columns = TRUE, show_row_names = FALSE, km = 6)
 
 ```
+
+
 
