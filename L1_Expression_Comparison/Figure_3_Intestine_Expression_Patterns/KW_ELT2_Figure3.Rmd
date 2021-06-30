@@ -659,7 +659,7 @@ time_resolved_heatmap <- Heatmap(
   cluster_columns = F,
   row_order = hc$order,
   row_split = rna_cluster_names[cutree(hc, nclust)],
-  # row_title = paste(rna_cluster_names, "\n(n = ",as.vector(table(cutree(hc, nclust))), ")", sep = ""),
+  row_title = paste(levels(rna_cluster_names), "\n(n = ",as.vector(table(rna_cluster_names[cutree(hc, nclust)])), ")", sep = ""),
   row_title_rot = 0,
   show_row_names = F
 ) +
@@ -677,10 +677,17 @@ time_resolved_heatmap <- Heatmap(
 time_resolved_heatmap
 
 if (plot == TRUE){
-myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", width = 10, height = 6, plotdir)
+myPDFplot(time_resolved_heatmap, "TimeresolvedRNA_Heatmap_ELT2_annotation", width = 7, height = 6, plotdir)
 }
 
 ```
+Number of genes in each cluster
+
+```{r}
+table(rna_cluster_names[cutree(hc, nclust)])
+```
+
+
 Output time-resolved cluster and ELT-2  
 ```{r}
 mosaic_df <- data.frame(Cluster = rna_cluster_names[cutree(hc, nclust)], WBGeneID = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID")
@@ -734,10 +741,24 @@ boeck_pearson_residuals <-
         p.adjust = as.data.frame(tableformosiac.q)$Freq)
 ```
 
+Set factor order and change labels
+```{r}
+boeck_pearson_residuals$ELT2_cluster <- factor(boeck_pearson_residuals$ELT2_cluster, 
+                                               levels = c("Embryo_Specific", 
+                                                          "Increasing", 
+                                                          "L3_High", 
+                                                          "Larval", 
+                                                          "Not_Changing"),
+                                               labels = c("embryo cluster",
+                                                          "larval cluster",
+                                                          "increasing cluster",
+                                                          "L3 cluster",
+                                                          "un-dynamic"))
+boeck_pearson_residuals$hclusters <- factor(boeck_pearson_residuals$hclusters, levels = rev(levels(rna_cluster_names)))
+```
+
+
 ```{r } 
-#fig.width= 3, fig.height=2.75}
-# draw the plot
-# Add pass vs fail for pvalue
 boeck_mosaic_plot<- ggplot(boeck_pearson_residuals,
        aes(x = ELT2_cluster, y = hclusters)) +
   geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
@@ -745,21 +766,32 @@ boeck_mosaic_plot<- ggplot(boeck_pearson_residuals,
     high = "red",
     low = "blue",
     mid = "white",
-    midpoint = 0
+    midpoint = 0,
   ) +
-  theme_bw() +
-  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0)) +
-  scale_color_manual(values = c("light grey", "black")) +
+  scale_size_continuous(range = c(1,5), 
+                        breaks = c(2,20,200)) +
+  scale_color_manual(values = c("light grey", "black")) +  
+theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  # theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.125, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0), legend.background = element_rect(fill="lightblue", size=0.5, linetype="solid")) +
+  theme(legend.key.height = unit(0.125, "in"), legend.margin = margin(0.1,0.1,0.1,0.1)) +
+  # guides(fill = )
+  guides(fill = guide_colorbar(title = "pearson residual",title.position = "top",label.position = "bottom", direction = "horizontal"),
+         size = guide_legend(title = "# genes"),
+         color = guide_legend(title = "q < 0.05")) +
   xlab("ELT-2 Binding Cluster\n(from ChIP-seq)") +
   ylab("Time-resolved Gene Cluster\n(from RNA-seq)")
 boeck_mosaic_plot
 if (plot == TRUE){
 ggsave(paste(plotdir,
-          "TimeresolvedRNA_ELT2clusters_custom_mosaic",
+          "TimeresolvedRNA_ELT2clusters_dotplot",
           "_",
           today(),
           ".pdf",
-          sep = ""), width = 5, height = 3.75, useDingbats=FALSE)
+          sep = ""), 
+       plot = boeck_mosaic_plot,
+       width = 5, height = 3.75, 
+       useDingbats=FALSE)
 }
 
 
