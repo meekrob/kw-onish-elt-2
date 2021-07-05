@@ -267,6 +267,7 @@ nrow(intestine_upset_matrix)
 m1 <- make_comb_mat(intestine_upset_matrix)
 m1
 ```
+## The total number of intestine genes is `r sum(comb_size(m1))`
 
 ```{r fig.width=5, fig.height=3}
 intestine_upset_plot <- UpSet(m1, 
