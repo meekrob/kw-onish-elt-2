@@ -237,13 +237,13 @@ binding_cluster_row_annotation <- function(df){
         "absent" = "white", "present" = "#505050"
       )),
       border = TRUE
-    ) +
-    rowAnnotation(
-      Not_Bound = df$Not_Bound,
-      col = list(Not_Bound = c(
-        "absent" = "white", "present" = "black"
-      )),
-      border = TRUE
+    # ) +
+    # rowAnnotation(
+    #   Not_Bound = df$Not_Bound,
+    #   col = list(Not_Bound = c(
+    #     "absent" = "white", "present" = "black"
+    #   )),
+    #   border = TRUE
     )
 }
 
@@ -304,13 +304,13 @@ make_cluster_binary_annotation <- function(input_matrix){
         true = "absent",
         false = "present"
       )
-    ) %>%
-    mutate(
-      Not_Bound = if_else(
-        condition = input_matrix$Not_Bound == 0,
-        true = "absent",
-        false = "present"
-      )
+    # ) %>%
+    # mutate(
+    #   Not_Bound = if_else(
+    #     condition = input_matrix$Not_Bound == 0,
+    #     true = "absent",
+    #     false = "present"
+    #   )
     )
   }
 
