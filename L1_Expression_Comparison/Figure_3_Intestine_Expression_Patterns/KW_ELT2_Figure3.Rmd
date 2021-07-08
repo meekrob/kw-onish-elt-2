@@ -269,6 +269,11 @@ m1
 ```
 ## The total number of intestine genes is `r sum(comb_size(m1))`
 
+```{r}
+sum(comb_size(m1))
+```
+
+
 ```{r fig.width=5, fig.height=3}
 intestine_upset_plot <- UpSet(m1, 
       set_order = c("blazie_mixed","hash_emb", "spen_LE", "spen_L2", "pauli_L4"),
@@ -512,7 +517,7 @@ single_cluster_genes <- elt2_gene_occupancy %>%
 
 head(single_cluster_genes)
 nrow(single_cluster_genes)
-
+table(elt2_gene_occupancy$single_cluster)
 elt2_gene_occupancy %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
   geom_bar(stat = "identity")
 ```
@@ -559,6 +564,18 @@ chip_rna_matrix <- chip_rna_df %>% dplyr::select(emb_510min:YA) %>% as.matrix()
 rownames(chip_rna_matrix) <- chip_rna_df$WBGeneID
 head(chip_rna_matrix)
 var_mean_plot(chip_rna_matrix, meancut = 0, varcut = 0, title = "time-resolved intestine gene dcpm")
+```
+
+# Are there intestine specific genes that are not ELT-2 bound?
+
+```{r}
+intestine_elt2 <- intestine_gene_list %>% full_join(elt2_gene_occupancy, by = "WBGeneID")
+intestine_elt2$single_cluster[is.na(intestine_elt2$single_cluster)] <- "Not_Bound"
+
+intestine_elt2 %>% group_by(single_cluster) %>% summarise(gene_total = 100*n()/nrow(intestine_elt2)) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
+  geom_bar(stat = "identity")
+table(intestine_elt2$single_cluster)
+nrow(chip_rna_df)
 ```
 
 
