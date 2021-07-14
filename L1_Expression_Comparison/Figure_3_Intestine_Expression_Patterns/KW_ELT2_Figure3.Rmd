@@ -578,7 +578,7 @@ table(intestine_elt2$single_cluster)
 nrow(chip_rna_df)
 ```
 
-# How many intestine genes are bound by ELT-2 at any stage regardless of occupancy cluster?
+# Figure S4: How many intestine genes are bound by ELT-2 at any stage regardless of occupancy cluster?
 
 ```{r}
 intestine_gene_list
@@ -619,21 +619,36 @@ my_hyper(x =bound_intestine_genes, k = all_intestine_genes, m = all_elt2_bound_g
 phyper(q = bound_intestine_genes-1, m = all_elt2_bound_genes, n = all_elt2_notbound_genes, k = all_intestine_genes, lower.tail = FALSE)
 ```
 
+```{r fig.width=3, fig.height=3}
 
-```{r}
+num_genes <- 20470
+whole_genome_bound <- length(unique(elt2_peaks$WBGeneID))
+whole_genome_notbound <- num_genes-whole_genome_bound
 
-exp.x <- hyper_expected(x = bound_intestine_genes, k = all_intestine_genes, m = all_elt2_bound_genes, n = all_elt2_notbound_genes)
-exp.x
-percent_of_intestine_bound <- intestine_hyper %>% 
-  mutate(type = "Intestine_Genes", gene_percent = 100*genes/all_intestine_genes) %>% 
+whole_and_intestine_binding <- data.frame(
+  type = c("whole_genome", "whole_genome", "intestine_genes", "intestine_genes"),
+  status = c("elt2_bound", "elt2_notbound", "elt2_bound", "elt2_notbound"),
+  genes = c(whole_genome_bound, whole_genome_notbound, bound_intestine_genes, intestine_hyper %>% filter(status == "not_bound") %>% select(genes) %>% as.numeric()),
+  set_size = c(num_genes, num_genes, all_intestine_genes, all_intestine_genes)
+)  %>% mutate(gene_percent = 100*genes/set_size)
+
+whole_and_intestine_percent <- whole_and_intestine_binding %>%
   ggplot(aes(x = type, y = gene_percent, fill = status)) + 
-  geom_col()+
+  geom_col(width = 0.75, colour = "black")+
   theme_classic() +
   geom_text(aes(label = paste0(round(gene_percent,1), "%")),
-            position = position_stack(vjust = 0.5))
+            position = position_stack(vjust = 0.5)) +
+  xlab(NULL) +
+  ylab("gene %") +
+  scale_x_discrete(labels = c("intestine", "whole\ngenome")) +
+  labs(fill = "ELT-2 binding") +
+  scale_fill_manual(labels = c("bound", "not bound"), values = c("grey", "white"))
 
-percent_of_intestine_bound
+whole_and_intestine_percent
+```
 
+
+```{r fig.width=3, fig.height=3}
 obs_expect_intestine_bound <- intestine_hyper %>% bind_rows(list(
   status = "bound_expect",
   genes = hyper_expected(
@@ -642,17 +657,27 @@ obs_expect_intestine_bound <- intestine_hyper %>% bind_rows(list(
     m = all_elt2_bound_genes,
     n = all_elt2_notbound_genes
   )
-)) %>% filter(status != "not_bound") %>% ggplot(aes(x = status, y = genes)) + geom_bar(stat = "identity") + theme_classic()
+)) %>% filter(status != "not_bound") %>% 
+  ggplot(aes(x = status, y = genes)) + 
+  geom_bar(stat = "identity", width = 0.75, color = "black", fill = "grey") + 
+  theme_classic() +
+  xlab("ELT-2 bound\nintestine genes") +
+  ylab("# of genes") +
+  scale_x_discrete(labels = c("observed", "expected"))
 obs_expect_intestine_bound
+```
+
+save the plots
+```{r}
 if (plot == TRUE){
 ggsave(paste(plotdir,
-          "FigureS4_Percent_Intestine_Genes_ELT2_Bound",
+          "FigureS4_Percent_Genes_ELT2_Bound",
           "_",
           today(),
           ".pdf",
           sep = ""), 
-       plot = percent_of_intestine_bound,
-       width = 3, height = 3, 
+       plot = whole_and_intestine_percent,
+       width = 3.25, height = 3, 
        useDingbats=FALSE)
 ggsave(paste(plotdir,
           "FigureS4_Expected_Intestine_Genes_ELT2_Bound",
@@ -661,11 +686,16 @@ ggsave(paste(plotdir,
           ".pdf",
           sep = ""), 
        plot = obs_expect_intestine_bound,
-       width = 3, height = 3, 
+       width = 2, height = 3, 
        useDingbats=FALSE)
 }
 ```
 
+
+```{r}
+whole_and_intestine_binding %>% filter(status == "elt2_bound") %>% mutate(expected = set_size*whole_genome_bound/num_genes)
+my_hyper
+```
 
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
