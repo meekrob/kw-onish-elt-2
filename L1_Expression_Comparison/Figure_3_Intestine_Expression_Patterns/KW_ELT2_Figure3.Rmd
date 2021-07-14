@@ -744,12 +744,16 @@ points(log2(chip_rna_matrix_rowmean[ix]), log2(chip_rna_matrix_rowvar[ix]), col 
 
 # Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
 
-# Figure S4: Scree plot analysis of developmental intestine gene expression
-
+Perform clustering
 ```{r BoeckRNA_ELT2_chip}
 data.whole = chip_rna_matrix_scaled[real&changing,]
 
 hc = hclust(dist(data.whole), method ='ward.D2')
+```
+
+# Figure S4: Scree plot analysis of developmental intestine gene expression
+
+```{r BoeckRNA_ELT2_chip}
 # plot the hc height to get the screeplot
 intestine_scree <- ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
     geom_point() + geom_line() +
