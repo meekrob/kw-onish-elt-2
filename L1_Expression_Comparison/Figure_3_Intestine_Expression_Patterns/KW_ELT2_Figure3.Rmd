@@ -578,6 +578,95 @@ table(intestine_elt2$single_cluster)
 nrow(chip_rna_df)
 ```
 
+# How many intestine genes are bound by ELT-2 at any stage regardless of occupancy cluster?
+
+```{r}
+intestine_gene_list
+intestine_peaks <- elt2_peaks %>% group_by(WBGeneID) %>% summarise(peaks = n()) %>% right_join(intestine_gene_list, by = "WBGeneID") %>% select(WBGeneID, peaks) %>% replace_na(list(peaks = 0)) %>% mutate(status = case_when(peaks == 0 ~ "not_bound", peaks >= 1 ~ "bound"))
+intestine_hyper <- intestine_peaks %>% group_by(status) %>% summarise(genes = n()) 
+intestine_hyper
+nrow(intestine_gene_list) == sum(intestine_hyper$genes)
+
+
+my_hyper<- function(x,k,m,n){
+  # x = total number of successes in the sample size
+  # k = sample size
+  # m = population successes
+  # n = population non-successes
+  dhyper(x = x, k = k, m = m, n = n)
+}
+
+hyper_expected <- function(x,k,m,n){
+  # x = total number of successes in the sample size
+  # k = sample size
+  # m = population successes
+  # n = population non-successes
+  k*m/(m+n)
+}
+
+bound_intestine_genes <-  intestine_hyper %>% filter(status == "bound") %>% select(genes) %>% as.numeric() # the number of successes in the sample size, the number of bound genes within one set
+all_intestine_genes <- sum(intestine_hyper$genes) # sample size, the total number of genes in a single set
+all_elt2_bound_genes <- length(unique(elt2_peaks$WBGeneID)) # population successes, number of bound genes in the genome
+all_elt2_notbound_genes <- 20470 - m # number of genes not bound in the genome
+# n <- intestine_hyper %>% filter(status == "not_bound") %>% select(genes) %>% as.numeric() # population non-successes, number of not bound genes
+
+my_hyper(x =bound_intestine_genes, k = all_intestine_genes, m = all_elt2_bound_genes, n = all_elt2_notbound_genes)
+
+```
+
+
+```{r}
+phyper(q = bound_intestine_genes-1, m = all_elt2_bound_genes, n = all_elt2_notbound_genes, k = all_intestine_genes, lower.tail = FALSE)
+```
+
+
+```{r}
+
+exp.x <- hyper_expected(x = bound_intestine_genes, k = all_intestine_genes, m = all_elt2_bound_genes, n = all_elt2_notbound_genes)
+exp.x
+percent_of_intestine_bound <- intestine_hyper %>% 
+  mutate(type = "Intestine_Genes", gene_percent = 100*genes/all_intestine_genes) %>% 
+  ggplot(aes(x = type, y = gene_percent, fill = status)) + 
+  geom_col()+
+  theme_classic() +
+  geom_text(aes(label = paste0(round(gene_percent,1), "%")),
+            position = position_stack(vjust = 0.5))
+
+percent_of_intestine_bound
+
+obs_expect_intestine_bound <- intestine_hyper %>% bind_rows(list(
+  status = "bound_expect",
+  genes = hyper_expected(
+    x = bound_intestine_genes,
+    k = all_intestine_genes,
+    m = all_elt2_bound_genes,
+    n = all_elt2_notbound_genes
+  )
+)) %>% filter(status != "not_bound") %>% ggplot(aes(x = status, y = genes)) + geom_bar(stat = "identity") + theme_classic()
+obs_expect_intestine_bound
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "FigureS4_Percent_Intestine_Genes_ELT2_Bound",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), 
+       plot = percent_of_intestine_bound,
+       width = 3, height = 3, 
+       useDingbats=FALSE)
+ggsave(paste(plotdir,
+          "FigureS4_Expected_Intestine_Genes_ELT2_Bound",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), 
+       plot = obs_expect_intestine_bound,
+       width = 3, height = 3, 
+       useDingbats=FALSE)
+}
+```
+
+
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
 
@@ -625,17 +714,38 @@ points(log2(chip_rna_matrix_rowmean[ix]), log2(chip_rna_matrix_rowvar[ix]), col 
 
 # Cluster Time-resolved RNA-seq of intestine genes based on expression patterns
 
+# Figure S4: Scree plot analysis of developmental intestine gene expression
+
 ```{r BoeckRNA_ELT2_chip}
 data.whole = chip_rna_matrix_scaled[real&changing,]
-agglom='ward.D2'
-hc = hclust(dist(data.whole), method =agglom )
-# plot the hc height to get the screeplot
-ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
-    geom_point() + geom_line() +
-    theme_bw() + labs(title="Scree Plot of hclust", x = "# of clusters", y="Height") + scale_x_continuous(limits=c(1,15)) 
 
+hc = hclust(dist(data.whole), method ='ward.D2')
+# plot the hc height to get the screeplot
+intestine_scree <- ggplot(NULL, aes(x=length(hc$height):1, y=hc$height)) +
+    geom_point() + geom_line() +
+    theme_bw() + 
+  # labs(title="Scree Plot of Intestine Development Expression", x = "# of clusters", y="Height") + 
+  labs(x = "# of clusters", y="dendrogram height") + 
+  scale_x_continuous(limits=c(1,15)) +
+  theme_classic()
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "FigureS4_Intestine_Expression_Scree_Plot",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), 
+       plot = intestine_scree,
+       width = 3, height = 2, 
+       useDingbats=FALSE)
+}
+intestine_scree
+```
+
+# Set the number of clusters
+
+```{r BoeckRNA_ELT2_chip}
 nclust=4
-# main 2 clusters are stable, 3rd unstable 
 # set.seed(5)
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
 
