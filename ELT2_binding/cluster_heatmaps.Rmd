@@ -200,7 +200,7 @@ npeaks_vs_chromlen = data.frame(
   )
 ggplot(npeaks_vs_chromlen, aes(y=npeaks,x=chromlens, label=rownames(npeaks_vs_chromlen))) + geom_point() +geom_smooth(formula='y~x',method="lm") + geom_text_repel() + ggtitle("Number of peaks versus chromosome length") + xlab("chromosome length") + ylab("# peaks called")
 
-ggplot(positionals, aes(x=relpos)) + geom_density(adjust=.5)  + facet_wrap(vars(chrom)) + ggtitle("Peaks favor chromosome centers") + xlab("Relative position of peak along chromosome") + ylab("peak density")
+ggplot(positionals, aes(x=relpos)) + geom_density(adjust=.25, size=.1)  + geom_density(adjust=.5, color='red')  + facet_wrap(vars(chrom)) + ggtitle("Peaks favor chromosome centers") + xlab("Relative position of peak along chromosome") + ylab("peak density")
 ```
 Peaks are equally distributed across the nuclear chromosomes, accounting for the chromosome size in bases.
 
