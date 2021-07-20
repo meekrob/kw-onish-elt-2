@@ -28,6 +28,22 @@ TFs.in.exprMatrix = which(rownames(exprMatrix) %in% TFs)
 
 ```
 
+```{r umap}
+library(umap)
+set.seed(0)
+#mp = umap(exprMatrix)
+df = data.frame(umap1=mp$layout[,1], 
+                umap2=mp$layout[,2],
+                SET=dineen_nishimura_sets_ascend$set,
+                bound=elt2_L1_anno$elt2_detected_in_L1)
+ggplot(df, aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "bound and unbound")
+
+ggplot(df[df$bound=='Direct',], aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "bound only")
+
+ggplot(df[df$bound !='Direct',], aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "unbound only")
+
+```
+
 ```{r id2name.df}
 paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
 row.id2name.df <- (biomaRt::getBM(mart = paramart,
@@ -111,8 +127,19 @@ rownames(rlogs) <- geneNames
 
 TFs_in_set = TFs.WBID.Name[TFs.WBID.Name$external_gene_id %in% rlog.WBID.Name$external_gene_id, 'external_gene_id']
 
-rlogs.genie3 = GENIE3(rlogs, regulators = TFs_in_set)
-linkList = getLinkList(rlogs.genie3,500)
+
+elt7_row = which(rownames(rlogs) == 'elt-7')
+elt2_row = which(rownames(rlogs) == 'elt-2')
+rlogs_elts_zeroed = rlogs
+elt7_cols = !is.na(str_match(colnames(rlogs_elts_zeroed),"elt7"))
+elt2_cols = !is.na(str_match(colnames(rlogs_elts_zeroed),"elt2"))
+rlogs_elts_zeroed[c(elt7_row), elt7_cols] <- 0
+rlogs_elts_zeroed[c(elt2_row), elt2_cols] <- 0
+
+
+set.seed(0)
+system.time({rlogs.genie3 = GENIE3(rlogs_elts_zeroed, regulators = TFs_in_set)})
+linkList.10k = getLinkList(rlogs.genie3,10000)
 Gsi <- graph.data.frame(edge_listsi,directed = T)
 Asi <- get.adjacency(Gsi,sparse = F,attr = "weight",type = "both")
 g_arasi <- graph.adjacency(Asi,mode = "directed",weighted = T)
