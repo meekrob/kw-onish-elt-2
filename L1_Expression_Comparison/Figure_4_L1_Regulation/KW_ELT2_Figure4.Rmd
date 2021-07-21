@@ -15,7 +15,7 @@ Change `plot` to `TRUE` if you want to write plots to a file
 change `plot` to `FALSE` if you do not want to write plots to a file
 
 ```{r}
-plot <- TRUE
+plot <- FALSE
 plotdir <- "./03_plots/"
 ```
 
@@ -35,6 +35,9 @@ plotdir <- "./03_plots/"
 # install.packages("RVAideMemoire")
 # install.packages("dendextend")
 # install.packages("binom")
+# BiocManager::install("GenomicRanges")
+# BiocManager::install("org.Ce.eg.db")
+# BiocManager::install("clusterProfiler")
 ```
 
 
@@ -46,7 +49,7 @@ library(tidyverse)
 library(readxl)
 library(ComplexHeatmap)
 library(matrixStats)
-library(pheatmap)
+# library(pheatmap)
 library(RVAideMemoire)
 library(dendextend)
 library(binom)
@@ -145,6 +148,8 @@ dineen_nishimura_sets_ascend <-
   arrange(dineen_nishimura_sets, WBGeneID)
 dineen_nishimura_sets_ascend$set <-
   toupper(dineen_nishimura_sets_ascend$set)
+dineen_nishimura_sets_ascend$set <- factor(dineen_nishimura_sets_ascend$set, levels = paste("SET", 1:6,sep = ""))
+
 ```
 
 The number of genes in each set:
@@ -281,11 +286,12 @@ column_labels
 
 
 
-```{r}
+```{r fig.width=6, fig.height=8}
 Ha <- Heatmap(
   dynamic_counts_matrix_scaled_ascend,
   name = "elt2D-elt7D\nRNAseq",
   col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  use_raster = TRUE,
   cluster_columns = FALSE,
   clustering_distance_rows = "spearman",
   clustering_method_rows = "complete",
@@ -295,6 +301,57 @@ Ha <- Heatmap(
   column_names_gp = gpar(cex = 0.7),
   heatmap_legend_param = list(color_bar = "continuous"),
   row_split = dineen_nishimura_sets_ascend$set,
+  row_title = NULL,
+  column_title = NULL,
+  column_split = RNA_column_order,
+  bottom_annotation = HeatmapAnnotation(
+    foo = anno_block(
+      labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
+      labels_gp = gpar(cex = .8),
+      gp = gpar(border = NA, lty = "blank")
+      ),
+    foo2 = anno_block(gp = gpar(fill = "black"), height = unit(0.5, "mm"))
+  ),
+  left_annotation = rowAnnotation(foo = anno_block(
+    labels = c("SET1", "SET2", "SET3", "SET4", "SET5", "SET6"),
+    labels_rot = 0,
+    gp = gpar(border = NA, lty = "blank", cex = 0.4)
+  ))
+) + rowAnnotation(SET = dineen_nishimura_sets_ascend$set) +
+  rowAnnotation(foo = anno_mark(
+    at = which(rownames(dynamic_counts_matrix_scaled_ascend) == "WBGene00017687"),
+    labels = "ets-4"
+    )
+    ) +
+  rowAnnotation(foo = anno_mark(
+    at = which(rownames(dynamic_counts_matrix_scaled_ascend) == "WBGene00016997"),
+    labels = "cebp-1"
+    )
+    )
+# ,
+#                      col = list(L1bound = c(
+#                        "Direct" = "green", "Indirect" = "black"
+#                      )))
+Ha
+```
+
+```{r}
+Ha <- Heatmap(
+  dynamic_counts_matrix_scaled_ascend,
+  name = "elt2D-elt7D\nRNAseq",
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  cluster_columns = FALSE,
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  # cluster_row_slices = TRUE,
+  cluster_rows = TRUE,
+  show_row_names = FALSE,
+  show_column_names = TRUE,
+  column_labels = column_labels[colnames(dynamic_counts_matrix_scaled_ascend)],
+  column_names_gp = gpar(cex = 0.7),
+  heatmap_legend_param = list(color_bar = "continuous"),
+  # row_split = dineen_nishimura_sets_ascend$set,
+  row_km = 6,
   row_title = NULL,
   column_title = NULL,
   column_split = RNA_column_order,
@@ -778,16 +835,62 @@ fig4df <- fig4df %>% inner_join(
      OrgDb = org.Ce.eg.db)),
   by = c("WBGeneID" = "WORMBASE")) %>%
   dplyr::select(WBGeneID, SYMBOL, elt2_detected_in_L1:Not_Bound)
-# write_csv(fig4df, path = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+# write_csv(fig4df, file = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+```
+
+# IAMHERE, Identify single binding type genes for bound class genes
+
+```{r}
+e2e7response_bound_occupancy <- fig4df %>% filter(!is.na(bound_class)) %>% dplyr::select(WBGeneID, SYMBOL, bound_class, Embryo_Specific:Not_Bound) %>%
+  mutate(
+    single_cluster =
+      case_when(
+        Increasing >= 1 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 &
+          Embryo_Specific == 0 ~ "Increasing",
+        Increasing == 0 &
+          L3_High >= 1 &
+          Larval == 0 &
+          Not_Changing == 0 &
+          Embryo_Specific == 0 ~ "L3_High",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval >= 1 &
+          Not_Changing == 0 &
+          Embryo_Specific == 0 ~ "Larval",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing >= 1 &
+          Embryo_Specific == 0 ~ "Not_Changing",
+        Increasing == 0 &
+          L3_High == 0 &
+          Larval == 0 &
+          Not_Changing == 0 &
+          Embryo_Specific >= 1 ~ "Embryo_Specific",
+        TRUE ~ "Multi_Cluster"
+      )
+  )
+    
+e2e7response_bound_single_cluster <- e2e7response_bound_occupancy %>%
+  dplyr::select(WBGeneID, single_cluster, bound_class) %>%
+  filter(single_cluster != "Multi_Cluster")
+
+head(e2e7response_bound_single_cluster)
+nrow(e2e7response_bound_single_cluster)
+table(e2e7response_bound_occupancy$single_cluster)
+e2e7response_bound_occupancy %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
+  geom_bar(stat = "identity")
 ```
 
 
-# Measure enrichment between expression SETs and ELT-2 occupancy clusters
+# Measure enrichment between expression bound classes and ELT-2 occupancy clusters
 Mosaic plot/dot plot representation of chi-square test
 
 ```{r}
-tableformosaic <- table(gene_peaks_sets$set, gene_peaks_sets$cluster.description)
-dimnames(tableformosaic) <- list("DineenSets" = paste("SET", 1:6, sep = ""), " " =c("Embryo_Specific","Increasing","L3_High","Larval","Not_Changing", "Not_Bound"))
+tableformosaic <- table(e2e7response_bound_single_cluster$bound_class, e2e7response_bound_single_cluster$single_cluster)
 
 dineen_ELT2_pearson_residuals <-
   as.data.frame(chisq.test(tableformosaic, simulate.p.value = TRUE)$stdres)
@@ -795,12 +898,12 @@ dineen_ELT2_pearson_residuals <-
   cbind(dineen_ELT2_pearson_residuals,
         as.data.frame(chisq.test(tableformosaic, simulate.p.value = TRUE)$observed)$Freq)
 colnames(dineen_ELT2_pearson_residuals) <-
-  c("Dineen_Set", "ELT2_cluster", "Pearson_Residual", "Observed")
+  c("Dineen_Class", "ELT2_cluster", "Pearson_Residual", "Observed")
 # set factor levels
-dineen_ELT2_pearson_residuals$Dineen_Set <-
+dineen_ELT2_pearson_residuals$Dineen_Class <-
   factor(
-    dineen_ELT2_pearson_residuals$Dineen_Set,
-    levels = c("SET6", "SET5", "SET4", "SET3", "SET2", "SET1")
+    dineen_ELT2_pearson_residuals$Dineen_Class,
+    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
   )
 # set factor levels
 dineen_ELT2_pearson_residuals$ELT2_cluster <-
@@ -822,47 +925,167 @@ q <- p.adjust(
     abs(tableformosaic.chisq$stdres), 
     lower.tail = FALSE), 
   method = "BH")
-tableformosaic.q <- matrix(q, ncol = 6)
+tableformosaic.q <- matrix(q, ncol = 5)
 dimnames(tableformosaic.q) <- dimnames(tableformosaic)
 tableformosaic.q<- as.table(tableformosaic.q)
-dineen_ELT2_pearson_residuals <- cbind(dineen_ELT2_pearson_residuals, p.adjust = as.data.frame(tableformosaic.q)$Freq)
+dineen_ELT2_pearson_residuals <- cbind(
+  dineen_ELT2_pearson_residuals, 
+  p.value = as.data.frame(2*pnorm(abs(tableformosaic.chisq$stdres), lower.tail = FALSE))$Freq,
+  p.adjust = as.data.frame(tableformosaic.q)$Freq)
 
+# write_csv(dineen_ELT2_pearson_residuals, file = "TableS5_elt2elt7_response_ELT2_occupancy.csv")
 ```
 
 
 ```{r fig.widt = 3, fig.height=4}
 # draw the plot
 # Add pass vs fail for pvalue
-ggplot(dineen_ELT2_pearson_residuals,
-       aes(x = ELT2_cluster, y = Dineen_Set)) +
+
+dineen_bound_ELT2_mosiac <- ggplot(dineen_ELT2_pearson_residuals,
+       aes(x = ELT2_cluster, y = Dineen_Class)) +
   geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
   scale_fill_gradient2(
     high = "red",
     low = "blue",
     mid = "white",
-    midpoint = 0
+    midpoint = 0,
   ) +
-  theme_bw() +
-  theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.11, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = 315, hjust = -0.01)) +
-  scale_color_manual(values = c("light grey", "black")) +
-  xlab("ELT-2 Binding Cluster") +
-  ylab("Expression Set")
+  scale_size_continuous(range = c(1,5), 
+                        breaks = c(1,10,max(dineen_ELT2_pearson_residuals$Observed))) +
+  scale_color_manual(values = c("light grey", "black")) +  
+theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  # theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.125, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0), legend.background = element_rect(fill="lightblue", size=0.5, linetype="solid")) +
+  theme(legend.key.height = unit(0.125, "in"), legend.margin = margin(0.1,0.1,0.1,0.1)) +
+  # guides(fill = )
+  guides(fill = guide_colorbar(title = "pearson residual",title.position = "top",label.position = "bottom", direction = "horizontal"),
+         size = guide_legend(title = "# genes"),
+         color = guide_legend(title = "q < 0.05")) +
+  xlab("ELT-2 Binding Cluster\n(from ChIP-seq)") +
+  ylab("ELT-2/ELT-7 Response Cluster\n(from RNA-seq)")
+
+dineen_bound_ELT2_mosiac 
 ```
 
 
 ```{r fig.widt = 3, fig.height=3}
 if (plot == TRUE){
 ggsave(paste(plotdir,
-          "Dineen_Sets_ELT2clusters_custom_mosaic",
+          "Dineen_Class_ELT2clusters_mosaic_dotplot",
           "_",
           today(),
           ".pdf",
-          sep = ""), width = 5, height = 4, useDingbats=FALSE)
+          sep = ""), width = 3.5, height = 4, useDingbats=FALSE)
 }
-plot <- TRUE
+
 ```
 
-# plot for Gaby
+
+# Measure assication between ELT-2/ELT-7 response clusters to intestine development clusters
+
+```{r}
+fig3df <- read_csv(file = "../Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
+
+e2e7clust_intdevclust <- fig3df %>% right_join(fig4df %>% filter(!is.na(bound_class)), by = "WBGeneID") %>% dplyr::select(WBGeneID, intestine_dev_cluster, bound_class) 
+# make "Not_Intestine" category
+e2e7clust_intdevclust$intestine_dev_cluster <- factor(e2e7clust_intdevclust$intestine_dev_cluster, levels = c("Embryonic", "L1", "Post-embryonic", "Adult", "Not_Intestine"))
+e2e7clust_intdevclust$intestine_dev_cluster[is.na(e2e7clust_intdevclust$intestine_dev_cluster)] <- "Not_Intestine"
+
+table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
+```
+
+```{r}
+intdevmosaic <- table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
+
+dineen_dev_pearson_residuals <-
+  as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$stdres)
+dineen_dev_pearson_residuals <-
+  cbind(dineen_dev_pearson_residuals,
+        as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$observed)$Freq)
+colnames(dineen_dev_pearson_residuals) <-
+  c("Dineen_Class", "ELT2_cluster", "Pearson_Residual", "Observed")
+# set factor levels
+dineen_dev_pearson_residuals$Dineen_Class <-
+  factor(
+    dineen_dev_pearson_residuals$Dineen_Class,
+    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
+  )
+# set factor levels
+dineen_dev_pearson_residuals$ELT2_cluster <-
+  factor(
+    dineen_dev_pearson_residuals$ELT2_cluster,
+    levels = c(
+      "Embryonic",
+      "L1",
+      "Post-embryonic",
+      "Adult",
+      "Not_Intestine"
+    )
+  )
+# add q-value
+intdevmosaic.chisq <- chisq.test(intdevmosaic, simulate.p.value = TRUE)
+q <- p.adjust(
+  2*pnorm(
+    abs(intdevmosaic.chisq$stdres), 
+    lower.tail = FALSE), 
+  method = "BH")
+intdevmosaic.q <- matrix(q, ncol = 5)
+dimnames(intdevmosaic.q) <- dimnames(intdevmosaic)
+intdevmosaic.q<- as.table(intdevmosaic.q)
+dineen_dev_pearson_residuals <- cbind(
+  dineen_dev_pearson_residuals, 
+  p.value = as.data.frame(2*pnorm(abs(intdevmosaic.chisq$stdres), lower.tail = FALSE))$Freq,
+  p.adjust = as.data.frame(intdevmosaic.q)$Freq
+  )
+# write_csv(dineen_dev_pearson_residuals, file = "./02_output/TableS6_elt2elt7_response_intestine_development.csv")
+```
+
+
+```{r fig.widt = 3, fig.height=4}
+# draw the plot
+# Add pass vs fail for pvalue
+
+dineen_bound_ELT2_mosiac <- ggplot(dineen_dev_pearson_residuals,
+       aes(x = ELT2_cluster, y = Dineen_Class)) +
+  geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
+  scale_fill_gradient2(
+    high = "red",
+    low = "blue",
+    mid = "white",
+    midpoint = 0,
+  ) +
+  scale_size_continuous(range = c(1,5), 
+                        breaks = c(1,10,max(dineen_dev_pearson_residuals$Observed))) +
+  scale_color_manual(values = c("light grey", "black")) +  
+theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  # theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.125, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0), legend.background = element_rect(fill="lightblue", size=0.5, linetype="solid")) +
+  theme(legend.key.height = unit(0.125, "in"), legend.margin = margin(0.1,0.1,0.1,0.1)) +
+  # guides(fill = )
+  guides(fill = guide_colorbar(title = "pearson residual",title.position = "top",label.position = "bottom", direction = "horizontal"),
+         size = guide_legend(title = "# genes"),
+         color = guide_legend(title = "q < 0.05")) +
+  xlab("Intestine Development Cluster\n(from RNA-seq)") +
+  ylab("ELT-2/ELT-7 Response Cluster\n(from RNA-seq)")
+
+dineen_bound_ELT2_mosiac 
+```
+
+```{r}
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "Dineen_Class_Intestine_Development_Clusters_mosaic_dotplot",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), width = 3.5, height = 4, useDingbats=FALSE)
+}
+```
+
+
+# Scratch space
+
+## plot for Gaby
 
 ```{r}
 gaby_genes <-
@@ -887,7 +1110,6 @@ gaby_genes <-
 
 gaby_genes %>% inner_join(dineen_nishimura_sets_ascend, by = c("WORMBASE" = "WBGeneID"))
 ```
-
 
 ```{r}
 gaby_genes <-
@@ -928,5 +1150,197 @@ myPDFplot(plot = dineen_sets_gene_marked, name = "dineen_sets_gene_marked", heig
 as.data.frame.matrix(dynamic_counts_matrix) %>% rownames_to_column(var = "WBGeneID") %>% filter(WBGeneID == "WBGene00016997") %>% pivot_longer(cols = contains("_")) %>%
   ggplot(aes(x = name, y = value)) +
   geom_jitter()
+```
+
+## Load Dineen and Osborne Nishimura et. al. Data
+```{r}
+# load rlog transformed read counts from all RNA-seq libraries (DESEq2 output)
+dineen_nishimura_counts <-
+  read_xlsx(path = "./01_input/Table_S2_rlog_Stabilized_Read_Counts.xlsx",
+            sheet = "Sheet1")
+# Turn into matrix for heatmap plots
+dineen_nishimura_counts_matrix <- dineen_nishimura_counts %>%
+  column_to_rownames(var = "WBGeneID")  %>%
+  data.matrix()
+# load the subset of differential expressed genes in all pairwise experiments
+dynamic_regulated_genes <-
+  read.table(file = "./01_input/2017-11-20_all_changing_genes_0.1alpha_0.8lfc.txt",
+             quote = "",
+             header = FALSE)
+colnames(dynamic_regulated_genes) <- "WBGeneID"
+
+# load differential expression clusters from Dineen and Nishimura et al (2018).  
+dineen_nishimura_clusters <-
+  read_xlsx(path = "./01_input/Table_S6_All_Dynamically_Expressed_Genes_Clusters.xlsx",
+            sheet = "dataset")
+#slice out useful information and sort by WBGeneID
+dineen_nishimura_sets <-
+  dineen_nishimura_clusters %>% dplyr::select(WBGeneID, set)
+dineen_nishimura_sets_ascend <-
+  arrange(dineen_nishimura_sets, WBGeneID)
+dineen_nishimura_sets_ascend$set <-
+  toupper(dineen_nishimura_sets_ascend$set)
+```
+
+```{r}
+dineen_nishimura_counts_sets <- dineen_nishimura_counts %>% right_join(dineen_nishimura_clusters %>% dplyr::select("WBGeneID", "set"), by = "WBGeneID") %>% filter(WBGeneID %in% dynamic_regulated_genes$WBGeneID)
+
+count_matrix <- dineen_nishimura_counts_sets %>% dplyr::select(WBGeneID:elt2Delt7D_sorted_3) %>% column_to_rownames(var = "WBGeneID") %>% data.matrix()
+
+count_matrix_scaled <- t(apply(count_matrix, 1, scale))
+colnames(count_matrix_scaled) <- colnames(count_matrix)
+identical(rownames(count_matrix_scaled),dineen_nishimura_counts_sets$WBGeneID) 
+Heatmap(count_matrix_scaled, show_row_names = FALSE, cluster_columns = FALSE, 
+        row_split = dineen_nishimura_counts_sets$set,
+        # row_km = 6,
+        clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete"
+  )
+
+colnames(dineen_nishimura_counts_sets)
+```
+
+
+The number of genes in each set:
+`r table(dineen_nishimura_sets_ascend$set)`
+
+
+```{r}
+Ha <- Heatmap(
+  count_matrix_scaled,
+  name = "elt2D-elt7D\nRNAseq",
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+# set columns
+  cluster_columns = FALSE,
+  column_labels = column_labels[colnames(count_matrix_scaled)],
+  column_names_gp = gpar(cex = 0.7),
+  column_title = NULL,
+  column_split = RNA_column_order,
+  show_column_names = TRUE,
+# set rows
+  row_split = dineen_nishimura_counts_sets$set,
+  # row_km = 6,
+  # row_title = NULL,
+  # clustering_distance_rows = "spearman",
+  # clustering_method_rows = "complete",
+  # cluster_rows = FALSE,
+  show_row_names = FALSE,
+  # row_dend_reorder = TRUE,
+  heatmap_legend_param = list(color_bar = "continuous"),
+  # bottom_annotation = HeatmapAnnotation(
+  #   foo = anno_block(
+  #     labels = c("WT", "elt-7(tm840)", "elt-2(ca15)", "elt-7(tm840);\nelt-2(ca15)"),
+  #     labels_gp = gpar(cex = .8),
+  #     gp = gpar(border = NA, lty = "blank")
+  #     ),
+  #   foo2 = anno_block(gp = gpar(fill = "black"), height = unit(0.5, "mm"))
+  # ),
+  # left_annotation = rowAnnotation(foo = anno_block(
+  #   labels = c("SET1", "SET2", "SET3", "SET4", "SET5", "SET6"),
+  #   labels_rot = 0,
+  #   gp = gpar(border = NA, lty = "blank", cex = 0.4)
+  # ))
+)
+Ha
+```
+```{r}
+Heatmap(count_matrix_scaled, cluster_columns = FALSE, 
+  clustering_distance_rows = "spearman",
+  clustering_method_rows = "complete",
+  # row_km = 6,
+  row_split = dineen_nishimura_counts_sets$set
+  ) + rowAnnotation(foo = dineen_nishimura_counts_sets$set)
+```
+```{r}
+test_mat <- matrix(rnorm(100), nrow = 10)
+test_df <- test_mat %>% as.data.frame()
+rownames(test_df) <- paste("gene", 1:10, sep = "")
+colnames(test_df) <- c(paste("wt", 1:3, sep = "_rep"), paste("mut", 1:3, sep = "_rep"))
+test_df$anno <- c(rep("A", 5), rep("B", 5))
+test_df$anno <- factor(test_df$anno, levels = c("A", "B"))
+Heatmap(test_df %>% select(wt_rep1:mut_rep3) %>% data.matrix(), 
+        name = "mat", 
+        row_split = test_df$anno,
+        cluster_columns = FALSE)
+```
+
+```{r}
+Heatmap(row_scale(test_df %>% select(wt_rep1:mut_rep3) %>% data.matrix()), 
+        name = "mat", 
+        row_split = test_df$anno,
+        cluster_columns = FALSE)
+```
+```{r}
+dineen_nishimura_counts <-
+  read_xlsx(path = "./01_input/Table_S2_rlog_Stabilized_Read_Counts.xlsx",
+            sheet = "Sheet1")
+
+# load differential expression clusters from Dineen and Nishimura et al (2018).  
+dineen_nishimura_clusters <-
+  read_xlsx(path = "./01_input/Table_S6_All_Dynamically_Expressed_Genes_Clusters.xlsx",
+            sheet = "dataset")
+
+counts_and_sets <- dineen_nishimura_counts %>% right_join(dineen_nishimura_clusters %>% dplyr::select(WBGeneID, set), by = "WBGeneID")
+
+my_matrix <- counts_and_sets %>% dplyr::select(WBGeneID,wt_sorted_1:elt2Delt7D_sorted_3) %>% column_to_rownames(var = "WBGeneID") %>% data.matrix()
+
+which(rownames(my_matrix) == "WBGene00016997")
+
+dn_hc <- hclust(dist(my_matrix), method = "ward.D2")
+
+
+
+```
+
+
+```{r fig.width=6, fig.height=8}
+# my_scaled <- t(apply(unlist(my_matrix), 1, function(x){(x-mean(x))/sd(x)}))
+# which(rownames(my_scaled) == "WBGene00016997")
+my_scaled <- row_scale(my_matrix)
+colnames(my_scaled) <- c(rep("wt", 4), rep("elt7D", 3), rep("elt2D", 4), rep("elt2Delt7D", 3))
+Heatmap(
+  matrix = my_scaled,
+  name = "mat",
+  use_raster = FALSE,
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+  column_split = factor(colnames(my_scaled), levels = c("wt", "elt7D", "elt2D", "elt2Delt7D")),
+  cluster_column_slices = FALSE,
+  # show_column_names = FALSE,
+  show_column_dend = FALSE,
+  # cluster_columns = FALSE,
+  # row_km = 6
+  # show_row_names = FALSE,
+  # row_split = 6,
+  row_split = counts_and_sets$set,
+  # row_split = factor(counts_and_sets$set, levels = paste("set", 1:6, sep = "")),
+  # cluster_row_slices = FALSE,
+  # row_km = 6
+  right_annotation = rowAnnotation(foo = anno_mark(
+    at = which(rownames(my_scaled) == "WBGene00016997"),
+    labels = "cebp-1"
+    )
+    )
+) +
+  rowAnnotation(foo = anno_mark(
+    at = which(rownames(my_scaled) == "WBGene00017687"),
+    labels = "ets-4"
+    )
+    ) +
+  rowAnnotation(foo = anno_mark(
+    at = which(rownames(my_scaled) == "WBGene00016997"),
+    labels = "cebp-1"
+    )
+    )
+
+
+```
+```{r}
+dineen_nishimura_counts %>% filter(WBGeneID == "WBGene00016997") %>% pivot_longer(colnames(dynamic_counts_matrix_scaled_ascend)) %>% separate(name, sep = "_", into = c("sample", "sorted", "rep")) %>% mutate(value = as.numeric(value), sample = fct_relevel(sample, c("wt", "elt7D", "elt2D", "elt2Delt7D"))) %>%
+  ggplot(aes(x = sample, y = value)) + geom_point(stat = "identity")
+```
+```{r}
+dineen_nishimura_counts %>% filter(WBGeneID == "WBGene00017687")%>% pivot_longer(colnames(dynamic_counts_matrix_scaled_ascend)) %>% separate(name, sep = "_", into = c("sample", "sorted", "rep")) %>% mutate(value = as.numeric(value), sample = fct_relevel(sample, c("wt", "elt7D", "elt2D", "elt2Delt7D"))) %>%
+  ggplot(aes(x = sample, y = value)) + geom_point(stat = "identity")
+
 ```
 
