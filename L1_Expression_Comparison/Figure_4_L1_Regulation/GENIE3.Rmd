@@ -1,0 +1,151 @@
+---
+title: "Untitled"
+author: "David C. King"
+date: "7/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+```{r }
+exprMatrix = dynamic_counts_matrix_scaled_ascend
+genie.out = GENIE3(exprMatrix, regulators = TFs.in.exprMatrix)
+wTF3.0 <- read.csv("./01_input/TF3-0_namesonly.txt", sep = "\t",
+header = TRUE) %>% dplyr::select(WBGeneID)
+TFs = wTF3.0[[1]]
+
+exprMatrix = dynamic_counts_matrix_scaled_ascend
+TFs.in.exprMatrix = which(rownames(exprMatrix) %in% TFs)
+
+```
+
+```{r umap}
+library(umap)
+set.seed(0)
+#mp = umap(exprMatrix)
+df = data.frame(umap1=mp$layout[,1], 
+                umap2=mp$layout[,2],
+                SET=dineen_nishimura_sets_ascend$set,
+                bound=elt2_L1_anno$elt2_detected_in_L1)
+ggplot(df, aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "bound and unbound")
+
+ggplot(df[df$bound=='Direct',], aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "bound only")
+
+ggplot(df[df$bound !='Direct',], aes(x=umap1, y=umap2, col=SET)) + geom_point(alpha=.5,size=1) + ggtitle("Dineen data fig. 4", "unbound only")
+
+```
+
+```{r id2name.df}
+paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+row.id2name.df <- (biomaRt::getBM(mart = paramart,
+filter=c("wbps_gene_id"),
+value=rownames(  exprMatrix  ),
+attributes = c('wbps_gene_id','external_gene_id')
+))
+```
+
+## GENIE3
+
+```{r GENIE3, echo=FALSE}
+set.seed(0)
+genie.out = GENIE3(exprMatrix, regulators = TFs.in.exprMatrix)
+# use id2name.df to translate WBGENE ids
+
+
+# paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+TFs.names <- suppressMessages(biomaRt::getBM(mart = paramart,
+filter=c("wbps_gene_id"),
+value=rownames(genie.out),
+attributes = c('wbps_gene_id','external_gene_id')
+))
+
+rownames(genie.out) = TFs.names$external_gene_id
+
+
+otherGenes.names <- suppressMessages(biomaRt::getBM(mart = paramart,
+filter=c("wbps_gene_id"),
+value=colnames(genie.out),
+attributes = c('wbps_gene_id','external_gene_id')
+))
+
+# use WBID for the non-matching ones (there were 16)
+cnames = colnames(genie.out)
+matched = colnames(genie.out) %in% otherGenes.names$wbps_gene_id
+cnames[matched] <-  otherGenes.names[[2]]
+
+
+linkList = getLinkList(genie.out)
+```
+
+```{r create-cytoscape-graph}
+library(igraph)
+library(RCy3)
+library(Rgraphviz)
+edge_listsi <- linkList[1:200,]
+Gsi <- graph.data.frame(edge_listsi,directed = T)
+Asi <- get.adjacency(Gsi,sparse = F,attr = "weight",type = "both")
+g_arasi <- graph.adjacency(Asi,mode = "directed",weighted = T)
+g.cyto <- igraph.to.graphNEL(g_arasi)
+
+# this command apparently plots in cytoscape if it is open
+# but you will get no notification or change of focus
+cw = createNetworkFromGraph("scaled", graph=g.cyto)
+
+```
+
+```{r rlog-counts}
+# same thing but for rlog counts
+rlogs = dineen_nishimura_counts_matrix
+wbids.rlogs = rownames(rlogs)
+
+rlog.WBID.Name = suppressMessages(biomaRt::getBM(mart = paramart,
+filter=c("wbps_gene_id"),
+value=wbids.rlogs,
+attributes = c('wbps_gene_id','external_gene_id')
+))
+
+TFs.WBID.Name = suppressMessages(biomaRt::getBM(mart = paramart,
+filter=c("wbps_gene_id"),
+value=wTF3.0$WBGeneID,
+attributes = c('wbps_gene_id','external_gene_id')
+))
+
+matching = wbids.rlogs %in% rlog.WBID.Name$wbps_gene_id
+geneNames = wbids.rlogs
+geneNames[matching] <- rlog.WBID.Name$external_gene_id
+
+rownames(rlogs) <- geneNames
+
+TFs_in_set = TFs.WBID.Name[TFs.WBID.Name$external_gene_id %in% rlog.WBID.Name$external_gene_id, 'external_gene_id']
+
+
+elt7_row = which(rownames(rlogs) == 'elt-7')
+elt2_row = which(rownames(rlogs) == 'elt-2')
+rlogs_elts_zeroed = rlogs
+elt7_cols = !is.na(str_match(colnames(rlogs_elts_zeroed),"elt7"))
+elt2_cols = !is.na(str_match(colnames(rlogs_elts_zeroed),"elt2"))
+rlogs_elts_zeroed[c(elt7_row), elt7_cols] <- 0
+rlogs_elts_zeroed[c(elt2_row), elt2_cols] <- 0
+
+
+set.seed(0)
+system.time({rlogs.genie3 = GENIE3(rlogs_elts_zeroed, regulators = TFs_in_set)})
+linkList.10k = getLinkList(rlogs.genie3,10000)
+Gsi <- graph.data.frame(edge_listsi,directed = T)
+Asi <- get.adjacency(Gsi,sparse = F,attr = "weight",type = "both")
+g_arasi <- graph.adjacency(Asi,mode = "directed",weighted = T)
+g.cyto <- igraph.to.graphNEL(g_arasi)
+
+# this command apparently plots in cytoscape if it is open
+# but you will get no notification or change of focus
+cw = createNetworkFromGraph("rlog-counts", graph=g.cyto)
+```
