@@ -232,8 +232,8 @@ elt2elt7_dcpm
 Read in files for downstream work
 
 ```{r}
-# intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
-# intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
+intestine_rna <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Full_Data.csv", stringsAsFactors = FALSE)
+intestine_gene_list <- read.csv("./02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
 ```
 
 
@@ -607,7 +607,7 @@ hyper_expected <- function(x,k,m,n){
 bound_intestine_genes <-  intestine_hyper %>% filter(status == "bound") %>% select(genes) %>% as.numeric() # the number of successes in the sample size, the number of bound genes within one set
 all_intestine_genes <- sum(intestine_hyper$genes) # sample size, the total number of genes in a single set
 all_elt2_bound_genes <- length(unique(elt2_peaks$WBGeneID)) # population successes, number of bound genes in the genome
-all_elt2_notbound_genes <- 20470 - m # number of genes not bound in the genome
+all_elt2_notbound_genes <- 20470 - all_elt2_bound_genes # number of genes not bound in the genome
 # n <- intestine_hyper %>% filter(status == "not_bound") %>% select(genes) %>% as.numeric() # population non-successes, number of not bound genes
 
 my_hyper(x =bound_intestine_genes, k = all_intestine_genes, m = all_elt2_bound_genes, n = all_elt2_notbound_genes)
@@ -694,7 +694,6 @@ ggsave(paste(plotdir,
 
 ```{r}
 whole_and_intestine_binding %>% filter(status == "elt2_bound") %>% mutate(expected = set_size*whole_genome_bound/num_genes)
-my_hyper
 ```
 
 
@@ -747,7 +746,7 @@ points(log2(chip_rna_matrix_rowmean[ix]), log2(chip_rna_matrix_rowvar[ix]), col 
 Perform clustering
 ```{r BoeckRNA_ELT2_chip}
 data.whole = chip_rna_matrix_scaled[real&changing,]
-
+set.seed(5)
 hc = hclust(dist(data.whole), method ='ward.D2')
 ```
 
@@ -780,7 +779,7 @@ intestine_scree
 
 ```{r BoeckRNA_ELT2_chip}
 nclust=4
-# set.seed(5)
+
 # clusterboot( dist(data.whole), clustermethod=disthclustCBI,method=agglom,k=nclust)
 
 ```
@@ -808,11 +807,12 @@ boeck_chip_annotation <- as.data.frame.matrix(table(chip_rna_df$WBGeneID[real&ch
 boeck_chip_annotation <- make_cluster_annotation(data.whole, boeck_chip_annotation)
 boeck_chip_annotation <- make_cluster_binary_annotation(boeck_chip_annotation)
 # 3. Assign cluster names
-# rna_cluster_names <- c("Larval", "Embryonic", "Adult", "Other")
-rna_cluster_names <- factor(c("One", "Two", "Three", "Four"), levels = c("One", "Four", "Two", "Three"), labels = c("Embryonic", "L1", "Post-embryonic", "Adult"))
+# rna_cluster_names <- c("One", "Two", "Three", "Four")
+rna_cluster_names <- factor(c("One", "Two", "Three", "Four"), levels = c("Two", "Three", "Four", "One"), labels = c("Embryonic", "L1", "Post-embryonic", "Adult"))
 # 4. Draw the heatmap
 time_resolved_heatmap <- Heatmap(
   data.whole,
+  col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
   column_title = sprintf(
     "Boeck Time Resolved RNA\nRow Z-score of Log(RNA Timecourse)\nVariance excludes lower %.0f%% (n = %i)",
     thresh * 100, nrow(data.whole)
@@ -852,14 +852,14 @@ table(rna_cluster_names[cutree(hc, nclust)])
 
 Output time-resolved cluster and ELT-2  
 ```{r}
-mosaic_df <- data.frame(Cluster = rna_cluster_names[cutree(hc, nclust)], WBGeneID = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID")
+fig3df <- data.frame(intestine_dev_cluster = rna_cluster_names[cutree(hc, nclust)], WBGeneID = names(cutree(hc, nclust))) %>% dplyr::select(WBGeneID, intestine_dev_cluster)
 
-# write_csv(mosaic_df %>% dplyr::select(-Cluster) %>% rename(ELT2_cluster_name = "cluster.description"), path = "02_output/Fig3_Intestine_RNA_Cluster_Assignments.csv")
+# write_csv(fig3df, path = "02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
 ```
-
+# Make mosaic dot plot
 
 ```{r BoeckRNA_ELT2_chip}
-
+mosaic_df <- data.frame(Cluster = rna_cluster_names[cutree(hc, nclust)], WBGeneID = names(cutree(hc, nclust))) %>% left_join(chip_rna_df %>% dplyr::select(WBGeneID, cluster.description), by = "WBGeneID")
 mosaic_df$rna_cluster_name <- rna_cluster_names[mosaic_df$Cluster]
 mosaic_df$rna_cluster_name <- factor(mosaic_df$rna_cluster_name, levels = rna_cluster_names)
 mosaic_df
