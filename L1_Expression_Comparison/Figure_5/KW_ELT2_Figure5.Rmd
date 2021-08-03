@@ -10,18 +10,131 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-library(biomaRt)
-library(tidyverse)
-library(reticulate)
-use_condaenv("kw_fig5", required = TRUE)
-library(clusterProfiler)
-library("org.Ce.eg.db")
+# BiocManager::install("biomaRt")
+# install.packages("reticulate")
+# install.packages("tidyverse")
+# BiocManager::install("Biostrings")
+# BiocManager::install("BSgenome.Celegans.UCSC.ce11")
+# BiocManager::install("GenomicRanges")
+# BiocManager::install("clusterProfiler")
+# BiocManager::install("org.Ce.eg.db")
 ```
 
 
+```{r}
+library(biomaRt)
+library(tidyverse)
+library(reticulate)
+library(lubridate)
+use_condaenv("kw_fig5", required = TRUE)
+# library(clusterProfiler)
+# library("org.Ce.eg.db")
+
+```
+
+```{bash engine.opts='-l'}
+which python
+```
+
+# Ontology of ELT-2 bound and ELT-2/ELT-7 responding genes
 
 ```{r}
 fig4df <- read_csv(file = "../Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
+
+ClassA <- fig4df %>% filter(bound_class == "ClassA") %>% dplyr::select(WBGeneID)
+ClassB <- fig4df %>% filter(bound_class == "ClassB") %>% dplyr::select(WBGeneID)
+ClassC <- fig4df %>% filter(bound_class == "ClassC") %>% dplyr::select(WBGeneID)
+ClassD <- fig4df %>% filter(bound_class == "ClassD") %>% dplyr::select(WBGeneID)
+all_bound <- fig4df %>% filter(!is.na(bound_class)) %>% dplyr::select(WBGeneID)
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+import tissue_enrichment_analysis as tea
+import matplotlib.pyplot as plt
+import seaborn as sns
+import inspect
+
+# fetch the dictionaries
+tissue = tea.fetch_dictionary('tissue')
+phenotype = tea.fetch_dictionary('phenotype')
+go = tea.fetch_dictionary('go')
+
+classA = r.ClassA
+classB = r.ClassB
+classC = r.ClassC
+classD = r.ClassD
+all_bound = r.all_bound
+
+tea_dict = tissue
+
+classes = ["classA", "classB", "classC", "classD"]
+for i in classes:
+  tea.enrichment_analysis(eval(i)["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
+
+ # tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)]
+classA_tissue = tea.enrichment_analysis(classA["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
+classB_tissue = tea.enrichment_analysis(classB["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
+classC_tissue = tea.enrichment_analysis(classC["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
+classD_tissue = tea.enrichment_analysis(classD["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
+
+
+```
+
+```{r fig.width=5, fig.height=4}
+tea_tissue_df <- bind_rows(data.frame(py$classA_tissue, class = "classA"),
+                           data.frame(py$classB_tissue, class = "classB"),
+                           data.frame(py$classC_tissue, class = "classC"),
+                           data.frame(py$classD_tissue, class = "classD")
+)
+
+reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
+    new_x <- paste(x, within, sep = sep)
+    stats::reorder(new_x, by, FUN = fun)
+}
+
+scale_x_reordered <- function(..., sep = "___") {
+    reg <- paste0(sep, ".+$")
+    ggplot2::scale_x_discrete(labels = function(x) gsub(reg, "", x), ...)
+}
+
+
+tea_tissue_plot <- tea_tissue_df %>% 
+  filter(Q.value < 0.05,  Observed > 5) %>% 
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), class), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(class~., scales = "free_y") +
+  theme_bw() +
+  xlab("Tissue Ontology") +
+  guides(size = guide_legend(title = "# genes")) +
+  scale_size_continuous(breaks = c(20,100,200))
+
+tea_tissue_plot
+```
+
+save the tissue ontology plot
+
+```{r}
+ggsave(filename = "./03_plots/Figure5_tissue_ontology.pdf")
+
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "Figure5_tissue_ontology",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), plot = tea_tissue_plot, width = 5, height = 3.5, useDingbats=FALSE)
+}
+```
+
+
+# Ontology of Dineen SETS
+
+```{r}
+
 SET1_direct <- fig4df %>% filter(dineen_set == "SET1", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
 SET2_direct <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
 SET2_indirect <- fig4df %>% filter(dineen_set == "SET2", elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
@@ -32,6 +145,7 @@ SET5_direct <- fig4df %>% filter(dineen_set == "SET5", elt2_detected_in_L1 == "D
 SET6_direct <- fig4df %>% filter(dineen_set == "SET6", elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
 L1_ELT2_direct_background <- fig4df %>% filter(elt2_detected_in_L1 == "Direct") %>% dplyr::select(WBGeneID)
 L1_ELT2_indirect_background <- fig4df %>% filter(elt2_detected_in_L1 == "Indirect") %>% dplyr::select(WBGeneID)
+
 ```
 
 
@@ -51,17 +165,8 @@ Citation: Angeles-Albores, David, Raymond Y. N. Lee, Juancarlos Chan, and Paul W
 
 
 ```{python}
-import numpy as np
-import pandas as pd
-import tissue_enrichment_analysis as tea
-import matplotlib.pyplot as plt
-import seaborn as sns
-import inspect
+print("Hello world!)
 
-# fetch the dictionaries
-tissue = tea.fetch_dictionary('tissue')
-phenotype = tea.fetch_dictionary('phenotype')
-# go = tea.fetch_dictionary('go')
 
 # Load the gene lists
 set1_direct = r.SET1_direct
@@ -134,6 +239,9 @@ tea_set6_direct = tea.enrichment_analysis(set6_direct["WBGeneID"], tissue)
 # plt.show()
 ```
 
+
+
+
 ```{r}
 tea_df_bg <- bind_rows(data.frame(py$tea_set2_direct_bg, set = "SET2_direct_bg", stringsAsFactors = FALSE),
           data.frame(py$tea_set3_direct_bg, set = "SET3_direct_bg", stringsAsFactors = FALSE),
@@ -177,7 +285,7 @@ tea_df_bg %>%
 ```
 # Fig 5B
 Anatomy Gene Ontology terms ELT-2 bound and deferentially expressed genes
-```{r fig.width = 5, fig.height=3}
+```{r fig.width = 5, fig.height=3.5}
 anatomy_terms <- c(
     "reproductive system WBbt:0005747",
     "head mesodermal cell WBbt:0004697",
@@ -186,19 +294,30 @@ anatomy_terms <- c(
     "excretory system WBbt:0005736",
     "anterior ganglion WBbt:0005375")
 
-tea_df_bg %>% filter(set != "Direct_vs_Genome", Observed >= 10, P.value < .05) %>% group_by(set) %>% filter(Term %in% anatomy_terms) %>%
-  mutate(Term = factor(Term, levels = anatomy_terms)) %>% 
+anatomy_df <- tea_df_bg %>% filter(set != "Direct_vs_Genome", Observed >= 10, Q.value < .05) %>% group_by(set) %>% filter(Term %in% anatomy_terms) %>% mutate(Term = factor(Term, levels = anatomy_terms))
+
+anatomy_df %>%
   ggplot(aes(x = set, y = Term)) +
   geom_point(aes(size = Observed, color = -log(Q.value))) +
+  # scale_size_continuous("Help", breaks = c(10,100,200,300,400), range = c(2,10)) +
+  scale_size_continuous(limits = c(10,400), breaks = c(10,100,200,400), range = c(1,10)) +
+  scale_color_gradient(low = "lightgrey", high = "black") +
   theme_bw() +
   ylab("Anatomy Term") + 
-  xlab("GATA Response Gene Sets") + 
+  xlab("GATA Response Gene Sets")+
   # theme(axis.text.x = element_text(angle = 315, hjust = 0))+
-  scale_x_discrete(labels = c("SET2", "SET3", "SET4", "SET6"))
+  scale_x_discrete(labels = c("SET2", "SET3", "SET4", "SET6")) 
+```
+# Output of genes within the Anatomy terms
+## IAM HERE
 
+```{r}
+anatomy_df 
+
+tissue_df %>% filter(wbid %in% fig4df$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% anatomy_df$Term) %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set", "elt2_detected_in_L1")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value) %>% View()
 ```
 
-
+# Plot anatomy terms
 
 ```{r fig.width = 10}
 tea_df %>% filter(Observed >= 10, Q.value < .05) %>% group_by(set) %>% slice_max(Observed, n = 6) %>%
@@ -221,11 +340,349 @@ tissue_df_sets <- tissue_df %>% filter(wbid %in% L1_ELT2_direct_background$WBGen
 tissue_df_sets
 ```
 
+```{r}
+tea <- import("tissue_enrichment_analysis")
+tissue_df <- tea$fetch_dictionary("tissue")
+phenotype_df <- tea$fetch_dictionary("phenotype")
+go_df <- tea$fetch_dictionary("go")
+# download.file(url = "http://caltech.wormbase.org/TissueEnrichmentAnalysis/DICTs/go_dict_95_33_WS280.csv", destfile = "01_input/go_dict_95_33_WS280.csv", method = "auto")
+# go_df <- read_csv("01_input/go_dict_95_33_WS280.csv")
+# head(go_df)
+```
+
+
+```{r}
+sets <- paste("SET", 1:6, sep = "")
+tea_df <- data.frame()
+for (i in sets){
+  tea_set <- tea$enrichment_analysis(
+    (fig4df %>% filter(dineen_set == i, elt2_detected_in_L1 == "Direct"))$WBGeneID, tissue_df = tissue_df #%>% filter(wbid %in% (fig4df %>% filter(elt2_detected_in_L1 == "Indirect"))$WBGeneID)
+  )
+  if(nrow(tea_set) == 0){
+    next
+  } else {
+  tea_df <- bind_rows(tea_df, data.frame(tea_set, set = i))
+  }
+}
+tea_df
+
+# %>% filter(wbid %in% (fig4df %>% filter(elt2_detected_in_L1 == "Direct"))$WBGeneID)
+```
+```{r fig.width=10, fig.height=12}
+tea_df %>%
+  filter(Q.value < 0.05,  Observed > 10, set != "Direct_vs_Genome") %>% 
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), set), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(set~., scales = "free_y") +
+  theme_bw()
+```
+
+
 # Fig 5A Enrichment of binding in each set
 
 Use hypergeometric to determine if there is more ELT-2 binding in each set than expected by chance
 
 ```{r}
+hyper_df <- fig4df %>% group_by(dineen_set) %>% summarise(set_total = n()) %>% inner_join(
+  fig4df %>% filter(elt2_detected_in_L1 =="Direct") %>% group_by(dineen_set) %>% summarise(direct_total = n())) %>% inner_join(
+  fig4df %>% filter(elt2_detected_in_L1 =="Indirect") %>% group_by(dineen_set) %>% summarise(indirect_total = n())) 
 
+k <- hyper_df$set_total # sample size, the total number of genes in a single set
+
+x <-  hyper_df$direct_total # the number of successes in the sample size, the number of bound genes within one set
+m <- sum(hyper_df$direct_total) # population successes, number of bound genes in the  dataset 
+n <- sum(hyper_df$indirect_total) # population non-successes, number of not bound genes
+m
+n
+dhyper(x = x, k = k, m = m, n = n)
+k*m/(m+n)
+hyper_df_withinset <- hyper_df %>% rowwise() %>% mutate(dhyper = dhyper(x = direct_total, m = m, n = n, k = set_total), expected = set_total*m/(m+n)) 
+# hyper_df_withinset %>% View()
 ```
 
+
+```{r fig.width=4, fig.height=3}
+hyper_df_long<- hyper_df_withinset%>% pivot_longer(cols = c("expected", "direct_total")) 
+hyper_df_long$name <- factor(hyper_df_long$name, levels = c("expected", "direct_total"), labels = c("Expected", "Observed"))
+hyper_df_long %>%
+  ggplot(aes(x = dineen_set, y = value, fill = name)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.75)+
+  scale_color_manual(values = c("Expected" = "grey", "Observed" = "black"),
+                     aesthetics = c("color", "fill")) +
+  theme_classic() +
+  ggtitle("Genes bound by ELT-2") +
+  ylab("# genes in each set") +
+  xlab("GATA Response Gene Sets") +
+  labs(fill = "ELT-2 Binding")
+```
+
+
+```{r}
+elt2_peaks <- readRDS(file = "../Figure_4_L1_Regulation/01_input/annotatedPeaks.rds")
+
+# m, bound genes across the whole genome
+m <- length(unique((as.data.frame(mcols(elt2_peaks)) %>% filter(L1_IDR == 1))$feature))
+m
+# n, genes not bound across the whole genome
+n <- 20470 - m
+n
+
+hyper_df_genome <- hyper_df %>% rowwise() %>% mutate(dhyper = dhyper(x = direct_total, m = m, n = n, k = set_total), expected = set_total*m/(m+n)) 
+hyper_df_genome %>% View()
+```
+
+```{r fig.width=4, fig.height=3}
+hyper_df_genome_long<- hyper_df_genome%>% pivot_longer(cols = c("expected", "direct_total")) 
+hyper_df_genome_long$name <- factor(hyper_df_genome_long$name, levels = c("expected", "direct_total"), labels = c("Expected", "Observed"))
+hyper_df_genome_long %>%
+  ggplot(aes(x = dineen_set, y = value, fill = name)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.75)+
+  scale_color_manual(values = c("Expected" = "grey", "Observed" = "black"),
+                     aesthetics = c("color", "fill")) +
+  theme_classic() +
+  # ggtitle("Genes bound by ELT-2") +
+  ylab("# genes in each set") +
+  xlab("GATA Response Gene Sets") +
+  labs(fill = "ELT-2 Binding")
+```
+# Figure S3 gene ontology analysis of ELT-2 occupancy clusters
+
+```{r}
+elt2_GRange <- readRDS(file = "../../ELT2_binding/annotatedPeaks.rds")
+elt2_peaks <- as.data.frame(elt2_GRange)
+
+elt2_peaks <- elt2_peaks %>% dplyr::rename(cluster.description = k4labels, WBGeneID = feature)
+elt2_cluster_names <- c("Embryo_Specific",
+                        "Larval",
+                        "Increasing",
+                        "L3_High",
+                        "Not_Changing")
+
+elt2_peaks$cluster.description <-
+  factor(
+    elt2_peaks$cluster.description,
+    levels = c(
+      "LE-specific",
+      "Post-embryonic",
+      "Increasing",
+      "L3-high",
+      "Not-changing or not IDR-passing"
+    ),
+    labels = elt2_cluster_names
+  )
+```
+```{r}
+tea <- import("tissue_enrichment_analysis")
+tissue_df <- tea$fetch_dictionary("tissue")
+phenotype_df <- tea$fetch_dictionary("phenotype")
+go_df <- tea$fetch_dictionary("go")
+```
+
+
+```{r}
+tea_dicts <- c("tissue_df", "phenotype_df", "go_df")
+elt2_tea_df <- data.frame()
+for (i in elt2_cluster_names){
+  for (j in tea_dicts){
+  tea_set <- tea$enrichment_analysis(
+    (elt2_peaks %>% filter(cluster.description == i))$WBGeneID, 
+    tissue_df = eval(as.name(j)) %>% filter(wbid %in% elt2_peaks$WBGeneID)
+  )
+  # print(tea_set)
+  if(nrow(tea_set) == 0){
+    next
+  } else {
+  elt2_tea_df <- bind_rows(elt2_tea_df, data.frame(tea_set, cluster = i, analysis = j))
+  }
+  }
+}
+```
+
+```{r fig.width=7, fig.height=6}
+elt2_tea_GO <- elt2_tea_df %>%
+  filter(Q.value < 0.05,  Observed > 5, analysis == "go_df") %>% group_by(cluster) %>% slice_max(Enrichment.Fold.Change, n = 6) %>%
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), cluster), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(cluster~., scales = "free_y") +
+  theme_bw() +
+  ggtitle("ELT-2 Occupancy Clusters\nGO Terms")
+elt2_tea_GO
+if (do_plot == TRUE){
+myggsave(plot = elt2_tea_GO, 
+         name = "FigureS3_ELT2_OccupancyCluster_GO",
+         height = 6,
+         width = 7,
+         plotdir = plotdir)
+}
+
+```
+```{r fig.width=7, fig.height=6}
+elt2_tea_tissue <- elt2_tea_df %>%
+  filter(Q.value < 0.05,  Observed > 5, analysis == "tissue_df") %>% group_by(cluster) %>% slice_max(Observed, n = 6) %>%
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), cluster), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(cluster~., scales = "free_y") +
+  theme_bw() +
+  ggtitle("ELT-2 Occupancy Clusters Tissue Terms")
+elt2_tea_tissue
+if (do_plot == TRUE){
+myggsave(plot = elt2_tea_tissue, 
+         name = "FigureS3_ELT2_OccupancyCluster_Tissue",
+         height = 6,
+         width = 7,
+         plotdir = plotdir)
+}
+```
+```{r fig.width=7, fig.height=6}
+elt2_tea_phenotype <- elt2_tea_df %>%
+  filter(Q.value < 0.05,  Observed > 5, analysis == "phenotype_df") %>% group_by(cluster) %>% slice_max(Observed, n = 6) %>%
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), cluster), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(cluster~., scales = "free_y") +
+  theme_bw() +
+  ggtitle("ELT-2 Occupancy Clusters\nPhenotype Terms")
+elt2_tea_phenotype
+if (do_plot == TRUE){
+myggsave(plot = elt2_tea_phenotype, 
+         name = "FigureS3_ELT2_OccupancyCluster_Phenotype",
+         height = 6,
+         width = 7,
+         plotdir = plotdir)
+}
+```
+
+
+```{r}
+wTF3 <- read.delim(file = "../Figure_4_L1_Regulation/01_input/TF3-0_namesonly.txt", ) %>% dplyr::select(Sequence.name:DBD)
+wTF3
+
+elt2_peaks %>% inner_join(wTF3, by = "WBGeneID") %>% View()
+  group_by(cluster.description) %>% summarise(n = n())
+```
+
+```{r}
+IDR_col <- c("LE_IDR", "L1_IDR", "L3_IDR")
+chip_tea_df <- data.frame()
+for (i in IDR_col){
+  tea_set <- tea$enrichment_analysis(
+    unique((elt2_peaks %>% filter(!!as.name(i) == 1))$WBGeneID), 
+    tissue_df = tissue_df # %>% filter(wbid %in% elt2_peaks$WBGeneID)
+  )
+  if(nrow(tea_set) == 0){
+    next
+  } else {
+  chip_tea_df <- bind_rows(chip_tea_df, data.frame(tea_set, cluster = i))
+  }
+}
+```
+
+```{r}
+chip_tea_df %>%
+  filter(Q.value < 0.05,  Observed > 10) %>% group_by(cluster) %>% slice_max(Observed, n = 6) %>%
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), cluster), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  facet_grid(cluster~., scales = "free_y") +
+  theme_bw() +
+  ggtitle("ELT-2 ChIP-seq Clusters Terms")
+```
+
+
+# Fig 5B Measure association between ELT-2/ELT-7 response clusters to intestine development clusters
+ 
+```{r}
+fig3df <- read_csv(file = "../Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
+
+e2e7clust_intdevclust <- fig3df %>% right_join(fig4df %>% filter(!is.na(bound_class)), by = "WBGeneID") %>% dplyr::select(WBGeneID, intestine_dev_cluster, bound_class) 
+# make "Not_Intestine" category
+e2e7clust_intdevclust$intestine_dev_cluster <- factor(e2e7clust_intdevclust$intestine_dev_cluster, levels = c("Embryonic", "L1", "Post-embryonic", "Adult", "Not_Intestine"))
+e2e7clust_intdevclust$intestine_dev_cluster[is.na(e2e7clust_intdevclust$intestine_dev_cluster)] <- "Not_Intestine"
+
+table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
+```
+
+```{r}
+intdevmosaic <- table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
+
+dineen_dev_pearson_residuals <-
+  as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$stdres)
+dineen_dev_pearson_residuals <-
+  cbind(dineen_dev_pearson_residuals,
+        as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$observed)$Freq)
+colnames(dineen_dev_pearson_residuals) <-
+  c("Dineen_Class", "ELT2_cluster", "Pearson_Residual", "Observed")
+# set factor levels
+dineen_dev_pearson_residuals$Dineen_Class <-
+  factor(
+    dineen_dev_pearson_residuals$Dineen_Class,
+    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
+  )
+# set factor levels
+dineen_dev_pearson_residuals$ELT2_cluster <-
+  factor(
+    dineen_dev_pearson_residuals$ELT2_cluster,
+    levels = c(
+      "Embryonic",
+      "L1",
+      "Post-embryonic",
+      "Adult",
+      "Not_Intestine"
+    )
+  )
+# add q-value
+intdevmosaic.chisq <- chisq.test(intdevmosaic, simulate.p.value = TRUE)
+q <- p.adjust(
+  2*pnorm(
+    abs(intdevmosaic.chisq$stdres), 
+    lower.tail = FALSE), 
+  method = "BH")
+intdevmosaic.q <- matrix(q, ncol = 5)
+dimnames(intdevmosaic.q) <- dimnames(intdevmosaic)
+intdevmosaic.q<- as.table(intdevmosaic.q)
+dineen_dev_pearson_residuals <- cbind(
+  dineen_dev_pearson_residuals, 
+  p.value = as.data.frame(2*pnorm(abs(intdevmosaic.chisq$stdres), lower.tail = FALSE))$Freq,
+  p.adjust = as.data.frame(intdevmosaic.q)$Freq
+  )
+# write_csv(dineen_dev_pearson_residuals, file = "./02_output/TableS6_elt2elt7_response_intestine_development.csv")
+```
+
+
+```{r fig.widt = 3, fig.height=4}
+# draw the plot
+# Add pass vs fail for pvalue
+
+dineen_bound_ELT2_mosiac <- ggplot(dineen_dev_pearson_residuals,
+       aes(x = ELT2_cluster, y = Dineen_Class)) +
+  geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
+  scale_fill_gradient2(
+    high = "red",
+    low = "blue",
+    mid = "white",
+    midpoint = 0,
+  ) +
+  scale_size_continuous(range = c(1,5), 
+                        breaks = c(1,10,max(dineen_dev_pearson_residuals$Observed))) +
+  scale_color_manual(values = c("light grey", "black")) +  
+theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  # theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.125, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0), legend.background = element_rect(fill="lightblue", size=0.5, linetype="solid")) +
+  theme(legend.key.height = unit(0.125, "in"), legend.margin = margin(0.1,0.1,0.1,0.1)) +
+  # guides(fill = )
+  guides(fill = guide_colorbar(title = "pearson residual",title.position = "top",label.position = "bottom", direction = "horizontal"),
+         size = guide_legend(title = "# genes"),
+         color = guide_legend(title = "q < 0.05")) +
+  xlab("Intestine Development Cluster\n(from RNA-seq)") +
+  ylab("ELT-2/ELT-7 Response Cluster\n(from RNA-seq)")
+
+dineen_bound_ELT2_mosiac 
+```

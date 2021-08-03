@@ -1,0 +1,10 @@
+name: kw_fig5
+channels:
+	- conda-forge
+dependencies:
+	- python
+	- numpy
+	- pandas
+	- seaborn
+	- pip:
+		- tissue_enrichment_analysis
