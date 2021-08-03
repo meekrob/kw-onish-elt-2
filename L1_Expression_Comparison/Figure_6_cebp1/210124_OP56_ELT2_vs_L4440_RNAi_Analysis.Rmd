@@ -1,0 +1,93 @@
+---
+title: "191011_OP56_ELT2_vs_L4440_RNAi_Analysis"
+author: "RTPW"
+date: "10/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load libraries
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+
+Load in data
+
+```{r}
+image_df_1 <- read_csv("190626_ELT-2_ImageJ_Analysis.csv", col_names = TRUE)
+image_df_1$RNAi_Treatment <- factor(image_df$RNAi_Treatment, levels = c("L4440", "ELT-2"))
+image_df_1$Rep <- 1
+```
+
+
+```{r}
+image_df_2 <- read_csv("201130_OP56_ELT-2_RNAi_Analysis.csv", col_names = TRUE)
+head(image_df_2)
+image_df <- image_df_1 %>% bind_rows(image_df_2)
+```
+
+Calculate the corrected total cell fluorescence (CTCF)
+
+CTCF = Integrated Density – (Area of selected cell X Mean fluorescence of background readings)
+
+Calculate the mean background value for each image
+```{r}
+background_df<- image_df %>%
+  group_by(RNAi_Treatment, Worm_Num, Measurement_Type) %>%
+  summarize(Mean_Background = mean(Mean_Grey_Value)) %>% 
+  filter(Measurement_Type == "Background")
+background_df
+```
+
+Combine the mean of mean background values with the integrated density and intestine area. Calculate the corrected total cell flourescence.
+
+```{r}
+image_ctcf <- image_df %>%
+  filter(Measurement_Type == "Worm") %>%
+  select(RNAi_Treatment, Worm_Num, Measurement_Area, Integrated_Density) %>%
+  mutate(Mean_Background = background_df$Mean_Background) %>%
+  mutate(CTCF = Integrated_Density - (Measurement_Area*Mean_Background) )
+image_ctcf  
+```
+
+Plot the results
+
+```{r}
+ggplot(image_ctcf, aes(RNAi_Treatment, CTCF)) + 
+  geom_boxplot() +
+  geom_jitter() +
+  labs(
+    title = "ELT-2 RNAi Knockdown \nDecreases ELT-2::GFP Abundance",
+    x = "RNAi Treatment",
+    y = "Corrected Total Cell \nFluorescence (A.U.)"
+  ) +
+  stat_compare_means(comparisons = list(c("L4440", "ELT-2")), method = "t.test") +
+  scale_x_discrete(labels = c("Empty Vector \n(L4440)", "ELT-2\n(pRW17)"))+
+  theme_classic() +
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size=18),
+    plot.title = element_text(hjust = 0.5, size = 20)
+    )
+  
+```
+
+Save the plot
+
+```{r}
+ggsave("191011_OP56_ELT2_vs_L4440_RNAi_GFP_Quant_Plot.png", width = 5, height = 5.15)
+```
+
+
+

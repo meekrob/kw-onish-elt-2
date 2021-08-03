@@ -1,0 +1,196 @@
+---
+title: "CEBP1gfp_Image_Analysis"
+author: "Robert Williams"
+date: "6/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Install Packages
+Install the necessary packages. Do this once the first time analysis is performed.   Uncomment and execute the following code chunk.
+
+```{r}
+# install.packages("tidyverse")
+# install.packages("readxl")
+# install.packages("ggpubr")
+# install.packages("mratios")
+```
+
+
+## Load Package Libraries
+
+```{r echo=FALSE}
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+library(mratios)
+```
+
+# Load in quantification data
+
+Each worm should have the following measurements:
+
+- One intestine fluorescence measurement
+- Four background measurements
+
+The input data should have the following columns (without quotes):
+
+ - "treatment": The type of RNAi treatment
+ - "life_stage": The worm developmental stage
+ - "worm": the worm number imaged
+ - "measurement_type": `background` or `GFP`
+ - "measurement_num": the measurement number from ImageJ
+ - "area": region of interest area
+ - "mean": mean gray pixel intensity
+ - "min": minimum pixel intensity
+ - "max": maximum pixel intensity
+ - "intDen": product of area and sum of the values of the pixels in the selection
+ - "rawIntDen": sum of the values of the pixels in the selection
+ - "experiment": experiment name including rep number
+ - "strain": strain or reporter gene name
+ 
+More info here: https://imagej.nih.gov/ij/docs/guide/146-30.html
+
+Below is code that will work for the data in the `example_data` directory. This section may need to be changed depending on how the input data is structured.
+
+```{r}
+image_df <- read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_L4440rnai_Rep3_Quant.csv") %>% 
+  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT7rnai_Rep3_Quant.csv")) %>% 
+  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT2rnai_Rep3_Quant.csv")) %>% 
+  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT2ELT7rnai_Rep3_Quant.csv"))
+
+image_df_rep3 <- image_df %>% separate(col = Label, sep = ":", into = c("image_name", "measurement_type", "channel")) %>% separate(col = image_name, sep = "_", into = c("max", "strain", "treatment", "Rep", "Obj", "worm", "Extra"), remove = FALSE) %>% separate(measurement_type, sep = "\\d+", into = "measurement_type") %>% 
+  dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
+image_df_rep3$channel <- factor(image_df_rep3$channel, levels = c(2, 1), labels = c("C1", "C2"))
+image_df_rep3$treatment <- factor(image_df_rep3$treatment, levels = c("L4440rnai", "ELT7rnai", "ELT2rnai", "ELT2ELT7rnai"), labels = c("01_L4440rnai", "02_ELT7rnai", "03_ELT2rnai", "04_ELT2ELT7rnai"))
+image_df_rep3$rep <- "Rep3"
+
+image_df_rep4 <- read_csv(file = "210428_CEBP1_Rep4/210428_CEBP1_Rep4_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
+  dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
+image_df_rep4$rep <- "Rep4"
+
+image_df_rep5 <- read_csv(file = "210501_CEBP1_Rep5/210501_CEBP1gfp_Rep5_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
+  dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
+image_df_rep5$rep <- "Rep5"
+
+
+
+image_df <- bind_rows(image_df_rep3, image_df_rep4, image_df_rep5)
+
+# Set the factor levels for ordering in downstream plotting
+image_df$treatment <- factor(image_df$treatment, levels = c("01_L4440rnai", "02_ELT7rnai", "03_ELT2rnai", "04_ELT2ELT7rnai"))
+image_df <- image_df %>% mutate(image_name = paste(image_name, channel, rep, sep = "_"))
+```
+
+
+# Calculate corrected total cell fluorescence (CTCF)
+
+CTCF = Integrated Density – (Area of selected cell X Mean fluorescence of background readings)  
+More information here: https://theolb.readthedocs.io/en/latest/imaging/measuring-cell-fluorescence-using-imagej.html
+
+```{r}
+# Take the mean of the background measurements
+background_df<- image_df %>%
+  group_by(treatment, image_name, measurement_type, channel, rep) %>%
+  filter(measurement_type == "background", channel == "C2") %>%
+  summarize(Mean_Background = mean(Mean)) %>% 
+  ungroup() %>%
+  dplyr::select(image_name, Mean_Background, channel, rep)
+background_df
+```
+```{r}
+# calculate CTCF for each worm
+image_ctcf <- image_df %>%
+  filter(measurement_type %in% c("intestine","worm"), channel == "C2") %>%
+  dplyr::select(treatment, image_name, Area, IntDen) %>%
+  left_join(background_df, by = "image_name") %>%
+  rowwise() %>%
+  mutate(CTCF = IntDen - (Area*Mean_Background) )
+image_ctcf
+```
+
+# Plot the quantification results
+
+```{r fig.width=5, fig.height=4}
+
+image_df %>% filter(channel == "C2", measurement_type == "background") %>% group_by(image_name, measurement_type) %>% summarise(Mean_Background = mean(Mean)) %>% dplyr::select(-measurement_type) %>% right_join(image_df, by = "image_name") %>% filter(measurement_type %in% c("worm", "intestine")) %>% mutate(CTCF = IntDen - (Area*Mean_Background)) %>% filter(CTCF > 1, Area > 300) %>%
+  ggplot(aes(treatment, CTCF/Area)) + 
+  geom_boxplot(width = 0.5) +
+  geom_jitter(width = 0.25, alpha = 0.5, shape = 16, aes(color = rep)) +
+  # facet_grid(.~channel) +
+  labs(
+    title = "CEBP-1::GFP Reporter",
+    x = "RNAi Treatment",
+    y = "Intestine Fluorescence (A.U.)"
+  ) +
+  # stat_compare_means(comparisons = list(c("L4440rnai", "ELT7rnai")), method = "t.test") +
+  # stat_compare_means(comparisons = list(c("L4440rnai", "ELT2rnai")), method = "t.test") +
+  # stat_compare_means(comparisons = list(c("L4440rnai", "ELT2ELT7rnai")), method = "t.test") +
+  scale_x_discrete(labels = c("L4440", "ELT-7", "ELT-2","ELT-2;\nELT-7"))+
+  theme_classic() +
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    axis.text.x = element_text(size = 15),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 18),
+    axis.title.y = element_text(size=18),
+    plot.title = element_text(hjust = 0.5, size = 18)
+    ) 
+
+# ggsave("./RWP32_CEBP1gfp_Quantification_Plot.pdf", width = 5, height = 4, useDingbats=FALSE)
+```
+
+# TO DO
+# Measure fold change 
+To see how much brighter ELT-2 is compared to L4440
+
+```{r}
+mean_ctcf <-
+  image_ctcf %>%
+  group_by(strain, treatment) %>%
+  summarise(avgCTCF = mean(CTCF), sdCTCF = sd(CTCF))
+
+mean_ctcf <-
+  mean_ctcf %>% pivot_wider(names_from = treatment,
+                            values_from = c(avgCTCF, sdCTCF))
+mean_ctcf
+```
+# Calculate fold change and add confidence intervals
+
+```{r}
+
+image_ctcf %>%filter(life_stage=='L1' & treatment == 'ELT-2', strain == "JM149") %>% dplyr::select(CTCF) -> JM149_numerator
+image_ctcf %>% filter(life_stage=='L1' & treatment == 'L4440', strain == "JM149") %>% dplyr::select(CTCF) -> JM149_denominator
+ttestratio(JM149_numerator[[1]], JM149_denominator[[1]]) -> L1_ttest_ratio_JM149
+
+image_ctcf %>%filter(life_stage=='L1' & treatment == 'ELT-2', strain == "JM259") %>% dplyr::select(CTCF) -> JM259_numerator
+image_ctcf %>% filter(life_stage=='L1' & treatment == 'L4440', strain == "JM259") %>% dplyr::select(CTCF) -> JM259_denominator
+ttestratio(JM259_numerator[[1]], JM259_denominator[[1]]) -> L1_ttest_ratio_JM259
+    
+mean_ctcf$lower = c(L1_ttest_ratio_JM149$conf.int[1], L1_ttest_ratio_JM259$conf.int[1])
+mean_ctcf$upper = c(L1_ttest_ratio_JM149$conf.int[2], L1_ttest_ratio_JM259$conf.int[2])
+```
+
+# Plot fold change results
+```{r fig.width=3, fig.height=3}
+ggplot(mean_ctcf, aes(x = strain, y = `avgCTCF_ELT-2`/avgCTCF_L4440)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+  labs(title = "elt-2 Promoter\nRelative Fluorescence") +
+  theme_classic()+
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+    axis.text.x = element_text(size = 16),
+    axis.text.y = element_text(size = 16),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size=20),
+    plot.title = element_text(hjust = 0.5, size = 20)
+    ) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  ylab("Relative Fluorescence") + coord_flip()
+
+# ggsave("./ELT-2_promoter_analysis_fold_change_210117.pdf", width = 3, height = 3, useDingbats=FALSE)  
+```
