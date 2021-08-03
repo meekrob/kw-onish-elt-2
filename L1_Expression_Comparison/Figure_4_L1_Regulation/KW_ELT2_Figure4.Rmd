@@ -15,7 +15,7 @@ Change `plot` to `TRUE` if you want to write plots to a file
 change `plot` to `FALSE` if you do not want to write plots to a file
 
 ```{r}
-plot <- FALSE
+do_plot <- FALSE
 plotdir <- "./03_plots/"
 ```
 
@@ -399,7 +399,7 @@ Ha_L1chip <-
 
 Ha_L1chip
 
-if (plot == TRUE){
+if (do_plot == TRUE){
 myPDFplot(Ha_L1chip, "01a_DE_Heatmap_elt2elt7DERNAseq_L1elt2bound", 4, 4.5, plotdir)
 }
 ```
@@ -473,7 +473,7 @@ l1bound_percents <-
 
 l1bound_percents
 
-if (plot == TRUE){
+if (do_plot == TRUE){
 myggsave(plot = l1bound_percents, 
          name = "02_proportion_of_l1elt2_per_expression_cluster_200428",
          height = 2,
@@ -506,7 +506,7 @@ bound_per_cluster <- ggplot(clust_L1bound_counts_ggplot,
 
 bound_per_cluster
 
-if (plot == TRUE){
+if (do_plot == TRUE){
 myggsave(
   plot = bound_per_cluster,
   name = "03_number_of_l1elt2_per_expression_cluster", 
@@ -552,7 +552,7 @@ l1bound_percents_verticle <- l1bound_percents +
 
 l1bound_percents_verticle
 
-if (plot == TRUE){
+if (do_plot == TRUE){
 myggsave(
   plot = l1bound_percents_verticle,
   name = "04_percentage_l1bound_per_expression_cluster",
@@ -630,7 +630,7 @@ Ha_L1chip_clusterchip <-
 
 Ha_L1chip_clusterchip
 
-if(plot == TRUE){
+if(do_plot == TRUE){
   myPDFplot(
     plot = Ha_L1chip_clusterchip,
     name = "05a_DE_Heatmap_L1elt2bound_elt2bindclusters_anno",
@@ -654,7 +654,7 @@ bound_only_elt2_clust_anno <-
     make_cluster_annotation(
       dynamic_counts_matrix_scaled_bound_only,
       binding_cluster_gene_counts
-    )%>% cbind(Not_Bound = 0)
+    )
   )
 ```
 Kmeans cluster ELT-2 directly bound genes
@@ -693,7 +693,7 @@ Ha_bound_only <-
               row_split = bound_only_class$class)
 
 Ha_bound_only
-if (plot == TRUE){
+if (do_plot == TRUE){
   myPDFplot(
     plot = Ha_bound_only,
     name = "6a_ELT2_DE_Genes_ELT2bound",
@@ -723,7 +723,7 @@ genes_to_test <- bitr(c("ets-4", "cebp-1", "mtl-2", "pqm-1", "zip-10"),
  
  Ha_bound_only_gene_anno
  
-if (plot == TRUE){
+if (do_plot == TRUE){
   myPDFplot(
     plot = Ha_bound_only_gene_anno,
     name = "6b_ELT2_DE_Genes_ELT2bound_Test_Genes_Annotated",
@@ -747,7 +747,7 @@ bound_only_annotation_ascend <-
 Ha_bound_only_chipClust <-
   Ha_bound_only + binding_cluster_row_annotation(bound_only_elt2_clust_anno)
 Ha_bound_only_chipClust
-if (plot == TRUE){
+if (do_plot == TRUE){
   myPDFplot(
     plot = Ha_bound_only_chipClust,
     name = "09b_DE_Heatmap_L1elt2boundOnly_elt2bindclusters_anno",
@@ -812,7 +812,7 @@ HAboundTF_class <- Heatmap(
 
 HAboundTF_class
 
-if (plot == TRUE){
+if (do_plot == TRUE){
   myPDFplot(
     plot = HAboundTF_class,
     name = "15c_Differential_Expression_Bound_TFs_Class_Split",
@@ -824,7 +824,7 @@ if (plot == TRUE){
 ```
 
 # Make output dataframe
-
+#TODO: USE BIOMART TO TRANSLATE WBGENEID
 ```{r}
 fig4df <- expression_L1_binding  %>% left_join(bound_only_class, by = "WBGeneID") %>% left_join(chip_annotation, by = "WBGeneID") %>%  dplyr::rename(bound_class = "class", dineen_set = "set")
 
@@ -838,7 +838,7 @@ fig4df <- fig4df %>% inner_join(
 # write_csv(fig4df, file = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
 ```
 
-# IAMHERE, Identify single binding type genes for bound class genes
+# Identify single binding type genes for bound class genes
 
 ```{r}
 e2e7response_bound_occupancy <- fig4df %>% filter(!is.na(bound_class)) %>% dplyr::select(WBGeneID, SYMBOL, bound_class, Embryo_Specific:Not_Bound) %>%
@@ -969,7 +969,7 @@ dineen_bound_ELT2_mosiac
 
 
 ```{r fig.widt = 3, fig.height=3}
-if (plot == TRUE){
+if (do_plot == TRUE){
 ggsave(paste(plotdir,
           "Dineen_Class_ELT2clusters_mosaic_dotplot",
           "_",
@@ -981,98 +981,9 @@ ggsave(paste(plotdir,
 ```
 
 
-# Measure assication between ELT-2/ELT-7 response clusters to intestine development clusters
 
 ```{r}
-fig3df <- read_csv(file = "../Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
-
-e2e7clust_intdevclust <- fig3df %>% right_join(fig4df %>% filter(!is.na(bound_class)), by = "WBGeneID") %>% dplyr::select(WBGeneID, intestine_dev_cluster, bound_class) 
-# make "Not_Intestine" category
-e2e7clust_intdevclust$intestine_dev_cluster <- factor(e2e7clust_intdevclust$intestine_dev_cluster, levels = c("Embryonic", "L1", "Post-embryonic", "Adult", "Not_Intestine"))
-e2e7clust_intdevclust$intestine_dev_cluster[is.na(e2e7clust_intdevclust$intestine_dev_cluster)] <- "Not_Intestine"
-
-table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
-```
-
-```{r}
-intdevmosaic <- table(e2e7clust_intdevclust$bound_class, e2e7clust_intdevclust$intestine_dev_cluster)
-
-dineen_dev_pearson_residuals <-
-  as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$stdres)
-dineen_dev_pearson_residuals <-
-  cbind(dineen_dev_pearson_residuals,
-        as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$observed)$Freq)
-colnames(dineen_dev_pearson_residuals) <-
-  c("Dineen_Class", "ELT2_cluster", "Pearson_Residual", "Observed")
-# set factor levels
-dineen_dev_pearson_residuals$Dineen_Class <-
-  factor(
-    dineen_dev_pearson_residuals$Dineen_Class,
-    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
-  )
-# set factor levels
-dineen_dev_pearson_residuals$ELT2_cluster <-
-  factor(
-    dineen_dev_pearson_residuals$ELT2_cluster,
-    levels = c(
-      "Embryonic",
-      "L1",
-      "Post-embryonic",
-      "Adult",
-      "Not_Intestine"
-    )
-  )
-# add q-value
-intdevmosaic.chisq <- chisq.test(intdevmosaic, simulate.p.value = TRUE)
-q <- p.adjust(
-  2*pnorm(
-    abs(intdevmosaic.chisq$stdres), 
-    lower.tail = FALSE), 
-  method = "BH")
-intdevmosaic.q <- matrix(q, ncol = 5)
-dimnames(intdevmosaic.q) <- dimnames(intdevmosaic)
-intdevmosaic.q<- as.table(intdevmosaic.q)
-dineen_dev_pearson_residuals <- cbind(
-  dineen_dev_pearson_residuals, 
-  p.value = as.data.frame(2*pnorm(abs(intdevmosaic.chisq$stdres), lower.tail = FALSE))$Freq,
-  p.adjust = as.data.frame(intdevmosaic.q)$Freq
-  )
-# write_csv(dineen_dev_pearson_residuals, file = "./02_output/TableS6_elt2elt7_response_intestine_development.csv")
-```
-
-
-```{r fig.widt = 3, fig.height=4}
-# draw the plot
-# Add pass vs fail for pvalue
-
-dineen_bound_ELT2_mosiac <- ggplot(dineen_dev_pearson_residuals,
-       aes(x = ELT2_cluster, y = Dineen_Class)) +
-  geom_point(aes(size = Observed, fill = Pearson_Residual, colour = p.adjust < 0.05), shape = 21, stroke = 1) + 
-  scale_fill_gradient2(
-    high = "red",
-    low = "blue",
-    mid = "white",
-    midpoint = 0,
-  ) +
-  scale_size_continuous(range = c(1,5), 
-                        breaks = c(1,10,max(dineen_dev_pearson_residuals$Observed))) +
-  scale_color_manual(values = c("light grey", "black")) +  
-theme_bw() +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
-  # theme(legend.key.width = unit(0.125,"in"), legend.key.height = unit(0.125, "in"), legend.key.size = unit(0.01, "in"), axis.text.x = element_text(angle = -45, hjust = 0), legend.background = element_rect(fill="lightblue", size=0.5, linetype="solid")) +
-  theme(legend.key.height = unit(0.125, "in"), legend.margin = margin(0.1,0.1,0.1,0.1)) +
-  # guides(fill = )
-  guides(fill = guide_colorbar(title = "pearson residual",title.position = "top",label.position = "bottom", direction = "horizontal"),
-         size = guide_legend(title = "# genes"),
-         color = guide_legend(title = "q < 0.05")) +
-  xlab("Intestine Development Cluster\n(from RNA-seq)") +
-  ylab("ELT-2/ELT-7 Response Cluster\n(from RNA-seq)")
-
-dineen_bound_ELT2_mosiac 
-```
-
-```{r}
-if (plot == TRUE){
+if (do_plot == TRUE){
 ggsave(paste(plotdir,
           "Dineen_Class_Intestine_Development_Clusters_mosaic_dotplot",
           "_",
@@ -1082,6 +993,90 @@ ggsave(paste(plotdir,
 }
 ```
 
+# Pull DNA sequences for MEME motif analysis
+
+```{r}
+library(Biostrings)
+library(BSgenome.Celegans.UCSC.ce11)
+as.data.frame(elt2_GRange)
+elt2_peaks
+
+all_elt2_summit <-
+  as.data.frame(elt2_GRange) %>% dplyr::rename(WBGeneID = "feature") %>% full_join(bound_only_class, by = "WBGeneID") %>% dplyr::select(seqnames:end, name, WBGeneID, k4labels, class, LE_peak_1_summit:L3_peak_2_summit) %>% rowwise() %>% mutate(peak_summit = round(mean(
+    c(LE_peak_1_summit, LE_peak_2_summit, 
+      L1_peak_1_summit, L1_peak_2_summit, 
+      L3_peak_1_summit, L3_peak_2_summit), na.rm = TRUE
+  ))) %>%
+  rowwise() %>%
+  mutate(
+    summit_start = peak_summit - 250,
+    summit_end = peak_summit + 250,
+    peak_width = summit_end - summit_start
+  ) %>% filter(!is.na(seqnames))
+
+all_elt2_summit$class <- factor(all_elt2_summit$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD", "no_class"))
+all_elt2_summit$class[is.na(all_elt2_summit$class)] <- "no_class"
+head(all_elt2_summit)
+```
+Turn into GenomicRanges object
+```{r}
+chroms <- Seqinfo(c('chrI', 'chrII', 'chrIII', 'chrIV', 'chrV', 'chrX', 'chrM'),
+                    c(15072434, 15279421, 13783801, 17493829, 20924180, 17718942, 13794),
+                    c(rep(FALSE,6), TRUE),
+                    rep("ce11",7))
+
+elt2_summit_GRange <- trim(makeGRangesFromDataFrame(all_elt2_summit,
+                         keep.extra.columns = FALSE,
+                         ignore.strand = TRUE,
+                         start.field = "summit_start",
+                         end.field = "summit_end",
+                         seqinfo = chroms,
+                         starts.in.df.are.0based = T,
+                         ))
+elt2_summit_GRange$bound_class <- all_elt2_summit$class
+elt2_summit_GRange$feature <- all_elt2_summit$WBGeneID
+elt2_summit_GRange$name <- all_elt2_summit$name
+elt2_summit_GRange$k4labels <- all_elt2_summit$k4labels
+names(elt2_summit_GRange) <- all_elt2_summit$name
+head(elt2_summit_GRange)
+length(elt2_summit_GRange)
+```
+
+Get DNA sequences for all ELT-2 binding sites
+
+```{r}
+head(getSeq(Celegans, elt2_summit_GRange))
+# export(getSeq(Celegans, elt2_summit_GRange), "./02_output/MEME-ChIP_fasta/all_elt2_summits.fasta")
+```
+
+subset based on dineen sets and get DNA sequences
+
+```{r}
+# export by class
+classnames <- paste(rep("Class", 4), LETTERS[1:4], sep = "")
+for(i in classnames){
+  filename <- paste("./02_output/MEME-ChIP_fasta/", i, "_peaks.fasta", sep = "")
+  export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] == i]), filename)
+}
+# export all class A through D
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% classnames]), "./02_output/MEME-ChIP_fasta/ClassAthroughD_elt2_summits.fasta")
+# export all peaks with one class removed
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
+                                      c("ClassB","ClassC", "ClassD")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassA_elt2_summits.fasta")
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
+                                      c("ClassA", "ClassC", "ClassD")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassB_elt2_summits.fasta")
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
+                                      c("ClassA", "ClassB", "ClassD")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassC_elt2_summits.fasta")
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
+                                      c("ClassA", "ClassB", "ClassC")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassD_elt2_summits.fasta")
+
+```
+
+Use `meme-suite.org` to perform motif analysis.
 
 # Scratch space
 
@@ -1141,7 +1136,7 @@ row_mark <- rowAnnotation(foo = anno_mark(at = gaby_genes$index,
 
 dineen_sets_gene_marked <- RNA_heatmap2(dynamic_counts_matrix_scaled_ascend, RNA_column_order, row_split = dineen_nishimura_sets_ascend$set, right_annotation = row_mark)
 dineen_sets_gene_marked
-if (plot == TRUE){
+if (do_plot == TRUE){
 myPDFplot(plot = dineen_sets_gene_marked, name = "dineen_sets_gene_marked", height = 4.5, width = 6, plotdir = plotdir)
 }
 ```
@@ -1334,13 +1329,5 @@ Heatmap(
 
 
 ```
-```{r}
-dineen_nishimura_counts %>% filter(WBGeneID == "WBGene00016997") %>% pivot_longer(colnames(dynamic_counts_matrix_scaled_ascend)) %>% separate(name, sep = "_", into = c("sample", "sorted", "rep")) %>% mutate(value = as.numeric(value), sample = fct_relevel(sample, c("wt", "elt7D", "elt2D", "elt2Delt7D"))) %>%
-  ggplot(aes(x = sample, y = value)) + geom_point(stat = "identity")
-```
-```{r}
-dineen_nishimura_counts %>% filter(WBGeneID == "WBGene00017687")%>% pivot_longer(colnames(dynamic_counts_matrix_scaled_ascend)) %>% separate(name, sep = "_", into = c("sample", "sorted", "rep")) %>% mutate(value = as.numeric(value), sample = fct_relevel(sample, c("wt", "elt7D", "elt2D", "elt2Delt7D"))) %>%
-  ggplot(aes(x = sample, y = value)) + geom_point(stat = "identity")
 
-```
 
