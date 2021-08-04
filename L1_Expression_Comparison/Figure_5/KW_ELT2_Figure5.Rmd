@@ -9,6 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+set if plots should be saved
+```{r}
+do_plot <- FALSE
+```
+
+
 ```{r}
 # BiocManager::install("biomaRt")
 # install.packages("reticulate")
@@ -31,62 +37,52 @@ use_condaenv("kw_fig5", required = TRUE)
 # library("org.Ce.eg.db")
 
 ```
-
-```{bash engine.opts='-l'}
-which python
-```
-
-# Ontology of ELT-2 bound and ELT-2/ELT-7 responding genes
+# Import dataframe to be analyzed
 
 ```{r}
 fig4df <- read_csv(file = "../Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
-
-ClassA <- fig4df %>% filter(bound_class == "ClassA") %>% dplyr::select(WBGeneID)
-ClassB <- fig4df %>% filter(bound_class == "ClassB") %>% dplyr::select(WBGeneID)
-ClassC <- fig4df %>% filter(bound_class == "ClassC") %>% dplyr::select(WBGeneID)
-ClassD <- fig4df %>% filter(bound_class == "ClassD") %>% dplyr::select(WBGeneID)
-all_bound <- fig4df %>% filter(!is.na(bound_class)) %>% dplyr::select(WBGeneID)
 ```
 
-```{python}
-import numpy as np
-import pandas as pd
-import tissue_enrichment_analysis as tea
-import matplotlib.pyplot as plt
-import seaborn as sns
-import inspect
 
-# fetch the dictionaries
-tissue = tea.fetch_dictionary('tissue')
-phenotype = tea.fetch_dictionary('phenotype')
-go = tea.fetch_dictionary('go')
+# Use Tissue Enrichment Analysis to identify tissue of origin
 
-classA = r.ClassA
-classB = r.ClassB
-classC = r.ClassC
-classD = r.ClassD
-all_bound = r.all_bound
+Citation: Angeles-Albores, David, Raymond Y. N. Lee, Juancarlos Chan, and Paul W. Sternberg. “Tissue Enrichment Analysis for C. Elegans Genomics.” BMC Bioinformatics 17, no. 1 (September 13, 2016): 366. https://doi.org/10.1186/s12859-016-1229-9.
 
-tea_dict = tissue
-
-classes = ["classA", "classB", "classC", "classD"]
-# for i in classes:
-#   tea.enrichment_analysis(eval(i)["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-
- # tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)]
-classA_tissue = tea.enrichment_analysis(classA["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classB_tissue = tea.enrichment_analysis(classB["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classC_tissue = tea.enrichment_analysis(classC["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classD_tissue = tea.enrichment_analysis(classD["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-
+```{r}
+tea <- import("tissue_enrichment_analysis")
+tissue_df <- tea$fetch_dictionary("tissue")
+phenotype_df <- tea$fetch_dictionary("phenotype")
+go_df <- tea$fetch_dictionary("go")
 ```
 
-```{r fig.width=5, fig.height=4}
-tea_tissue_df <- bind_rows(data.frame(py$classA_tissue, class = "classA"),
-                           data.frame(py$classB_tissue, class = "classB"),
-                           data.frame(py$classC_tissue, class = "classC"),
-                           data.frame(py$classD_tissue, class = "classD")
-)
+# Tissue Enrichment Analysis function
+
+```{r}
+
+bound_classes <- paste("Class", LETTERS[1:4], sep = "")
+my_tea_analysis <- function(input_df, tea_dict){
+  tea_df <- data.frame()
+  for (i in bound_classes){
+  tea_set <- tea$enrichment_analysis(
+    (input_df %>% 
+       filter(bound_class == i))$WBGeneID, 
+    tissue_df = tea_dict %>% 
+      filter(wbid %in% (input_df %>% 
+                          filter(bound_class %in% bound_classes))$WBGeneID)
+  )
+  if(nrow(tea_set) == 0){
+    next
+  } else {
+  tea_df <- bind_rows(tea_df, data.frame(tea_set, class = i))
+  }
+}
+tea_df
+}
+```
+
+# Plotting helper functions
+
+```{r}
 
 reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
     new_x <- paste(x, within, sep = sep)
@@ -98,8 +94,8 @@ scale_x_reordered <- function(..., sep = "___") {
     ggplot2::scale_x_discrete(labels = function(x) gsub(reg, "", x), ...)
 }
 
-
-tea_tissue_plot <- tea_tissue_df %>% 
+my_ontology_plot <- function(input_df, xlabel){
+  input_df %>%
   filter(Q.value < 0.05,  Observed > 5) %>% 
   ggplot(aes(x = reorder_within(Term, -log10(Q.value), class), y = -log10(Q.value))) +
   geom_point(aes(size = Observed)) +
@@ -107,155 +103,103 @@ tea_tissue_plot <- tea_tissue_df %>%
   scale_x_reordered() +
   facet_grid(class~., scales = "free_y") +
   theme_bw() +
-  xlab("Tissue Ontology") +
+  xlab(xlabel) +
   guides(size = guide_legend(title = "# genes")) +
   scale_size_continuous(breaks = c(20,100,200))
-
-tea_tissue_plot
+}
 ```
 
+
+# Figure 5A: Anatomy ontology of ELT-2 bound and differentially expressed genes
+```{r fig.width=5, fig.height=4}
+bound_tissue_df <- my_tea_analysis(input_df = fig4df, tea_dict = tissue_df)
+bound_tissue_plot <- my_ontology_plot(bound_tissue_df, "Tissue Ontology")
+bound_tissue_plot
+```
 save the tissue ontology plot
 
 ```{r}
-ggsave(filename = "./03_plots/Figure5_tissue_ontology.pdf")
-
-if (plot == TRUE){
-ggsave(paste(plotdir,
-          "Figure5_tissue_ontology",
-          "_",
-          today(),
-          ".pdf",
-          sep = ""), plot = tea_tissue_plot, width = 5, height = 3.5, useDingbats=FALSE)
+if (do_plot == TRUE){
+myggsave(plot = bound_tissue_plot, 
+         name = "Figure5_ELT2_bound-DE_tissue_ontology",
+         height = 4,
+         width = 5,
+         plotdir = plotdir)
 }
 ```
-Perform phenotype analysis
-```{python}
-tea_dict = phenotype
-classA_phenotype = tea.enrichment_analysis(classA["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classB_phenotype = tea.enrichment_analysis(classB["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classC_phenotype = tea.enrichment_analysis(classC["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classD_phenotype = tea.enrichment_analysis(classD["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
 
-```
-```{r}
-tea_phenotype_df <- bind_rows(data.frame(py$classA_phenotype, class = "classA"),
-                           # data.frame(py$classB_phenotype, class = "classB"),
-                           data.frame(py$classC_phenotype, class = "classC"),
-                           data.frame(py$classD_phenotype, class = "classD")
-)
-
-tea_phenotype_plot <- tea_phenotype_df %>% 
-  filter(Q.value < 0.05,  Observed > 5) %>% 
-  ggplot(aes(x = reorder_within(Term, -log10(Q.value), class), y = -log10(Q.value))) +
-  geom_point(aes(size = Observed)) +
-  coord_flip() +
-  scale_x_reordered() +
-  facet_grid(class~., scales = "free_y") +
-  theme_bw() +
-  xlab("Phenotype Ontology") +
-  guides(size = guide_legend(title = "# genes")) +
-  scale_size_continuous(breaks = c(20,100,200))
-
-tea_phenotype_plot
-```
-perform GO analysis
-
-Perform phenotype analysis
-```{python}
-tea_dict = go
-classA_go = tea.enrichment_analysis(classA["WBGeneID"],tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classB_go = tea.enrichment_analysis(classB["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classC_go = tea.enrichment_analysis(classC["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-classD_go = tea.enrichment_analysis(classD["WBGeneID"], tea_dict[tea_dict.wbid.isin(all_bound.WBGeneID)])
-
-```
-```{r}
-tea_go_df <- bind_rows(data.frame(py$classA_go, class = "classA"),
-                           data.frame(py$classB_go, class = "classB"),
-                           data.frame(py$classC_go, class = "classC"),
-                           data.frame(py$classD_go, class = "classD")
-)
-
-tea_go_plot <- tea_go_df %>% 
-  filter(Q.value < 0.05,  Observed > 5) %>% 
-  ggplot(aes(x = reorder_within(Term, -log10(Q.value), class), y = -log10(Q.value))) +
-  geom_point(aes(size = Observed)) +
-  coord_flip() +
-  scale_x_reordered() +
-  facet_grid(class~., scales = "free_y") +
-  theme_bw() +
-  xlab("Gene Ontology") +
-  guides(size = guide_legend(title = "# genes")) +
-  scale_size_continuous(breaks = c(20,100,200))
-
-tea_go_plot
-```
-
-
-# Use Tissue Enrichment Analysis to identify tissue of origin
-
-Citation: Angeles-Albores, David, Raymond Y. N. Lee, Juancarlos Chan, and Paul W. Sternberg. “Tissue Enrichment Analysis for C. Elegans Genomics.” BMC Bioinformatics 17, no. 1 (September 13, 2016): 366. https://doi.org/10.1186/s12859-016-1229-9.
-
-
-# Output of genes within the Anatomy terms
-## IAM HERE
+# Determine the genes in each class with the corresponding tissue ontology term
 
 ```{r}
-anatomy_df 
-
-tissue_df %>% filter(wbid %in% fig4df$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% anatomy_df$Term) %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set", "elt2_detected_in_L1")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value) %>% View()
-```
-```{r}
-tissue_df <- py$tissue
-
-tissue_df %>% filter(wbid %in% fig4df$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% tea_df$Term)  %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value)
-
-```
-
-```{r}
-tissue_df_sets <- tissue_df %>% filter(wbid %in% L1_ELT2_direct_background$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1) %>% left_join(fig4df[c("WBGeneID", "SYMBOL", "dineen_set", "elt2_detected_in_L1")], by = c("wbid"= "WBGeneID")) %>% dplyr::select(-value)
-
-tissue_df_sets
-```
-
-```{r}
-tea <- import("tissue_enrichment_analysis")
-tissue_df <- tea$fetch_dictionary("tissue")
-phenotype_df <- tea$fetch_dictionary("phenotype")
-go_df <- tea$fetch_dictionary("go")
-# download.file(url = "http://caltech.wormbase.org/TissueEnrichmentAnalysis/DICTs/go_dict_95_33_WS280.csv", destfile = "01_input/go_dict_95_33_WS280.csv", method = "auto")
-# go_df <- read_csv("01_input/go_dict_95_33_WS280.csv")
-# head(go_df)
-```
-
-
-```{r}
-sets <- paste("SET", 1:6, sep = "")
-tea_df <- data.frame()
-for (i in sets){
-  tea_set <- tea$enrichment_analysis(
-    (fig4df %>% filter(dineen_set == i, elt2_detected_in_L1 == "Direct"))$WBGeneID, tissue_df = tissue_df #%>% filter(wbid %in% (fig4df %>% filter(elt2_detected_in_L1 == "Indirect"))$WBGeneID)
-  )
-  if(nrow(tea_set) == 0){
-    next
-  } else {
-  tea_df <- bind_rows(tea_df, data.frame(tea_set, set = i))
-  }
+genes_in_terms <- function(tea_dict, bound_tea_df){
+  tea_dict %>% 
+  filter(wbid %in% (fig4df %>% filter(bound_class %in% bound_classes))$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% bound_tea_df$Term) %>% 
+  right_join(fig4df[c("WBGeneID", "SYMBOL")], by = c("wbid"= "WBGeneID")) %>% 
+  dplyr::select(-value) %>%
+  inner_join(bound_tea_df , by = c("name" = "Term")) %>%
+  filter(class %in% bound_classes) %>%
+  arrange(name)
+  
 }
-tea_df
+```
 
-# %>% filter(wbid %in% (fig4df %>% filter(elt2_detected_in_L1 == "Direct"))$WBGeneID)
+
+```{r}
+bound_tissue_genes <- genes_in_terms(tea_dict = tissue_df, bound_tea_df = bound_tissue_df)
+head(bound_tissue_genes)
+write.csv(bound_tissue_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Tissue-Ontology_results.csv")
 ```
-```{r fig.width=10, fig.height=12}
-tea_df %>%
-  filter(Q.value < 0.05,  Observed > 10, set != "Direct_vs_Genome") %>% 
-  ggplot(aes(x = reorder_within(Term, -log10(Q.value), set), y = -log10(Q.value))) +
-  geom_point(aes(size = Observed)) +
-  coord_flip() +
-  scale_x_reordered() +
-  facet_grid(set~., scales = "free_y") +
-  theme_bw()
+
+```{r}
+bound_go_genes <- genes_in_terms(tea_dict = go_df, bound_tea_df = bound_go_df)
+head(bound_go_genes)
+write.csv(bound_go_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Gene-Ontology_results.csv")
 ```
+
+```{r}
+bound_phenotype_genes <- genes_in_terms(tea_dict = phenotype_df, bound_tea_df = bound_phenotype_df)
+head(bound_phenotype_genes)
+write.csv(bound_phenotype_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Phenotype-Ontology_results.csv")
+```
+
+# Phenotype ontology of ELT-2 bound and differentially expressed genes
+
+```{r fig.width=5, fig.height=4}
+bound_phenotype_df <- my_tea_analysis(input_df = fig4df, tea_dict = phenotype_df)
+bound_phenotype_plot<- my_ontology_plot(bound_phenotype_df, "Phenotype Ontology")
+bound_phenotype_plot
+```
+save the phenotype ontology plot
+
+```{r}
+if (do_plot == TRUE){
+myggsave(plot = bound_phenotype_plot, 
+         name = "Figure5_ELT2_bound-DE_phenotype_ontology",
+         height = 4,
+         width = 5,
+         plotdir = plotdir)
+}
+```
+
+# Gene ontology of ELT-2 bound and differentially expressed genes
+
+```{r fig.width=8, fig.height=4}
+bound_go_df <- my_tea_analysis(input_df = fig4df, tea_dict = go_df)
+bound_go_plot <- my_ontology_plot(bound_go_df, "Gene Ontology")
+bound_go_plot
+```
+save the phenotype ontology plot
+
+```{r}
+if (do_plot == TRUE){
+myggsave(plot = bound_go_plot, 
+         name = "Figure5_ELT2_bound-DE_gene_ontology",
+         height = 4,
+         width = 8,
+         plotdir = plotdir)
+}
+```
+
 
 
 # Fig 5A Enrichment of binding in each set
@@ -326,7 +270,7 @@ hyper_df_genome_long %>%
   labs(fill = "ELT-2 Binding")
 ```
 # Figure S3 gene ontology analysis of ELT-2 occupancy clusters
-
+Import data
 ```{r}
 elt2_GRange <- readRDS(file = "../../ELT2_binding/annotatedPeaks.rds")
 elt2_peaks <- as.data.frame(elt2_GRange)
@@ -350,12 +294,6 @@ elt2_peaks$cluster.description <-
     ),
     labels = elt2_cluster_names
   )
-```
-```{r}
-tea <- import("tissue_enrichment_analysis")
-tissue_df <- tea$fetch_dictionary("tissue")
-phenotype_df <- tea$fetch_dictionary("phenotype")
-go_df <- tea$fetch_dictionary("go")
 ```
 
 
@@ -445,6 +383,8 @@ wTF3
 elt2_peaks %>% inner_join(wTF3, by = "WBGeneID") %>% View()
   group_by(cluster.description) %>% summarise(n = n())
 ```
+
+# Tissue enrichment analysis of ELT-2 peaks by stage
 
 ```{r}
 IDR_col <- c("LE_IDR", "L1_IDR", "L3_IDR")

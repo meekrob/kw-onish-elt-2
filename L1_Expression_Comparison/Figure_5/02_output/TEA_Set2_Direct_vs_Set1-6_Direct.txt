@@ -1,8 +1,0 @@
-Term	Expected	Observed	Enrichment Fold Change	P value	Q value
-ABprappap WBbt:0006220	0.12	1	8.5	0	0
-ABplappaa WBbt:0006371	0.12	1	8.5	0	0
-ABprappaa WBbt:0006350	0.12	1	8.5	0	0
-excretory cell WBbt:0005812	13	28	2.2	1.2e-05	0.00092
-excretory system WBbt:0005736	15	30	2	6.8e-05	0.0041
-excretory secretory system WBbt:0006850	15	30	2	6.8e-05	0.0041
-cephalic sensillum WBbt:0006920	9.9	21	2.1	0.00023	0.0098
