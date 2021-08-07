@@ -1,0 +1,91 @@
+---
+title: "RWP32_ELT2gfp_RNAi_Analysis"
+author: "RTPW"
+date: "8/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load libraries
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+
+Load in data
+
+```{r}
+image_df_1 <- read_csv("./01_input/ELT2gfp_REP1_quantification.csv", col_names = TRUE)
+
+image_df <- image_df_1 %>% separate(col = Label, sep = ":", into = c("treatment", "measurement_type", "image_name")) %>% separate(col = image_name, sep = "_", into = c("max", "strain", "Treatment", "worm", "wormNum", "channel"), remove = FALSE) %>% 
+  dplyr::select(image_name, treatment, wormNum, measurement_type, channel, Area:RawIntDen)
+image_df$treatment <- factor(image_df$treatment, levels = c("L4440rnai", "ELT2rnai"))
+image_df$Rep <- 1
+head(image_df)
+```
+
+Calculate the corrected total cell fluorescence (CTCF)
+
+CTCF = Integrated Density – (Area of selected cell X Mean fluorescence of background readings)
+
+Calculate the mean background value for each image
+```{r}
+background_df<- image_df %>%
+  group_by(treatment, wormNum, measurement_type, channel) %>%
+  summarize(Mean_Background = mean(Mean)) %>% 
+  filter(measurement_type == "background")
+background_df
+```
+
+Combine the mean of mean background values with the integrated density and intestine area. Calculate the corrected total cell flourescence.
+
+```{r}
+image_ctcf <- image_df %>%
+  filter(measurement_type == "intestine") %>%
+  select(treatment, wormNum, channel, Area, IntDen) %>%
+  mutate(Mean_Background = background_df$Mean_Background) %>%
+  mutate(CTCF = IntDen - (Area*Mean_Background) )
+image_ctcf  
+```
+
+Plot the results
+
+```{r fig.width = 4, fig.height= 4}
+image_ctcf %>% filter(channel == "C1") %>%
+ggplot(aes(treatment, CTCF/Area)) + 
+  geom_boxplot(width = 0.5) +
+  geom_jitter(width = 0.25, alpha = 0.5, shape = 16) +
+  labs(y = "intestine fluorescence (A.U.)", x = NULL) +
+  scale_x_discrete(labels = c("control RNAi", "elt-2 RNAi"))+
+  theme_classic() +
+  theme(
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    axis.text.x = element_text(size = 15),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 18),
+    axis.title.y = element_text(size=18),
+    plot.title = element_text(hjust = 0.5, size = 18)
+    )
+# +
+#   stat_compare_means(comparisons = list(c("L4440", "ELT-2")), method = "t.test") +
+#   scale_x_discrete(labels = c("Empty Vector \n(L4440)", "ELT-2\n(pRW17)"))+
+#   theme_classic() +
+#   theme(
+#     panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#     axis.text.x = element_text(size = 18),
+#     axis.text.y = element_text(size = 16),
+#     axis.title.x = element_text(size = 20),
+#     axis.title.y = element_text(size=18),
+#     plot.title = element_text(hjust = 0.5, size = 20)
+#     )
+
+# ggsave("./03_plots/RWP32_ELT2gfp_Quantification_Plot.pdf", width = 4, height = 4, useDingbats=FALSE)
+```
+

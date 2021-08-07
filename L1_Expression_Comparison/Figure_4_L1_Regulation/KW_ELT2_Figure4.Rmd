@@ -760,6 +760,7 @@ if (do_plot == TRUE){
 Further subset this heatmap for transcription factors
 
 ```{r}
+intestine_gene_list <- read.csv("../Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Public_Intestine_RNA_Gene_List.csv", stringsAsFactors = FALSE)
 wTF3.0 <-
   read.csv("./01_input/TF3-0_namesonly.txt",
            sep = "\t",
@@ -808,20 +809,26 @@ HAboundTF_class <- Heatmap(
       "ClassA" = "red", "ClassB" = "orange", "ClassC" = "yellow", "ClassD" = "green"
     )),
     border = TRUE
-  )
+  ) + rowAnnotation(Intestine = rownames(dynamic_counts_matrix_scaled_TFs_bound_names) %in% intestine_gene_list$Public_name, col = list(Intestine = c( "TRUE"= "black","FALSE"= "white")), border = TRUE)
 
 HAboundTF_class
 
 if (do_plot == TRUE){
   myPDFplot(
     plot = HAboundTF_class,
-    name = "15c_Differential_Expression_Bound_TFs_Class_Split",
+    name = "FigureS7_Bound-DE_TFs_heatmap",
     height = 5,
     width = 5.5,
     plotdir = plotdir
   )
   }
 ```
+```{r}
+paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
+biomaRt::getBM(mart = paramart,attributes = c('wbps_gene_id','external_gene_id'), useCache = FALSE
+  )
+```
+
 
 # Make output dataframe
 #TODO: USE BIOMART TO TRANSLATE WBGENEID

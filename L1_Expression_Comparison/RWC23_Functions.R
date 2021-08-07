@@ -66,9 +66,10 @@ row_zscore_matrix_cutoff <- function(count_matrix, variance_cutoff){
 id2name <- function(count_matrix){
   paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
   id2name.df <- suppressMessages(biomaRt::getBM(mart = paramart, 
-                                                filter=c("wbps_gene_id"), 
+                                                filter=c("wbps_gene_id"),
                                                 value=rownames(count_matrix), 
-                                                attributes = c('wbps_gene_id','external_gene_id')
+                                                attributes = c('wbps_gene_id','external_gene_id'),
+                                                useCache = FALSE
   ))
   rownames(count_matrix) <- id2name.df$external_gene_id[ 
     match(rownames(count_matrix), id2name.df$wbps_gene_id)
