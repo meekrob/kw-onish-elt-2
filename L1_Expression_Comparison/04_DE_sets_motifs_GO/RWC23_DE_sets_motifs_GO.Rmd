@@ -36,7 +36,6 @@ Install libraries
 # BiocManager::install("GenomicRanges")
 # BiocManager::install("clusterProfiler")
 # BiocManager::install("org.Ce.eg.db")
-
 ```
 
 Load libraries.  
@@ -57,7 +56,7 @@ library("org.Ce.eg.db")
 
 ```{r}
 # elt2_GRange <- readRDS("../../onish_ChIP_R_Analysis/peak_summit_GRange.RDS")
-elt2_GRange <- readRDS("../../onish_ChIP_R_Analysis/annotatedPeaks.rds")
+elt2_GRange <- readRDS("../../ELT2_binding/annotatedPeaks.rds")
 elt2_GRange
 elt2_df <- as.data.frame(elt2_GRange)
 

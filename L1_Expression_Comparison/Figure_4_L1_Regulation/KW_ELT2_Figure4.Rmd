@@ -350,8 +350,8 @@ Ha <- Heatmap(
   column_labels = column_labels[colnames(dynamic_counts_matrix_scaled_ascend)],
   column_names_gp = gpar(cex = 0.7),
   heatmap_legend_param = list(color_bar = "continuous"),
-  # row_split = dineen_nishimura_sets_ascend$set,
-  row_km = 6,
+  row_split = dineen_nishimura_sets_ascend$set,
+  # row_km = 6,
   row_title = NULL,
   column_title = NULL,
   column_split = RNA_column_order,
@@ -400,7 +400,7 @@ Ha_L1chip <-
 Ha_L1chip
 
 if (do_plot == TRUE){
-myPDFplot(Ha_L1chip, "01a_DE_Heatmap_elt2elt7DERNAseq_L1elt2bound", 4, 4.5, plotdir)
+myPDFplot(Ha_L1chip, "FigureS5_DE_Heatmap_elt2elt7DERNAseq_L1elt2bound", 4, 4.5, plotdir)
 }
 ```
 
@@ -548,14 +548,14 @@ l1bound_percents_verticle <- l1bound_percents +
     width = 0.25
   ) +
   coord_flip() +
-  ggtitle("L1 stage ELT-2 binding per\nexperession set")
+  ggtitle("L1 stage ELT-2 binding per\nexpression set")
 
 l1bound_percents_verticle
 
 if (do_plot == TRUE){
 myggsave(
   plot = l1bound_percents_verticle,
-  name = "04_percentage_l1bound_per_expression_cluster",
+  name = "FigureS5_percentage_l1bound_per_expression_cluster",
   width = 4,
   height = 5,
   plotdir = plotdir
@@ -1084,6 +1084,91 @@ export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,
 ```
 
 Use `meme-suite.org` to perform motif analysis.
+
+# Figre SX measure intestine specificity of intestine gene list
+```{r}
+library(reticulate)
+use_condaenv("kw_fig5", required = TRUE)
+tea <- import("tissue_enrichment_analysis")
+tissue_df <- tea$fetch_dictionary("tissue")
+phenotype_df <- tea$fetch_dictionary("phenotype")
+go_df <- tea$fetch_dictionary("go")
+```
+
+```{r fig.width=6, fig.height=3}
+reorder_within <- function(x, by, within, fun = mean, sep = "___", ...) {
+    new_x <- paste(x, within, sep = sep)
+    stats::reorder(new_x, by, FUN = fun)
+}
+
+scale_x_reordered <- function(..., sep = "___") {
+    reg <- paste0(sep, ".+$")
+    ggplot2::scale_x_discrete(labels = function(x) gsub(reg, "", x), ...)
+}
+
+intestine_gene_list <- read.csv(file = "../Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Public_Intestine_RNA_Gene_List.csv")
+```
+
+
+```{r fig.width=6, fig.height=3}
+intestine_tissue_df <-tea$enrichment_analysis(intestine_gene_list$WBGeneID, tissue_df = tissue_df)
+intestine_tissue_df %>% rename(Q.value = `Q value`)  %>%
+  filter(Q.value < 0.05,  Observed > 1000) %>% 
+  ggplot(aes(x = reorder_within(Term, -log10(Q.value), Term), y = -log10(Q.value))) +
+  geom_point(aes(size = Observed)) +
+  coord_flip() +
+  scale_x_reordered() +
+  # facet_grid(class~., scales = "free_y") +
+  theme_bw() +
+  xlab("Tissue Ontology")
+  # guides(size = guide_legend(title = "# genes")) +
+  # scale_size_continuous(breaks = c(20,100,200))
+
+```
+
+# Figure SX: Intestine Specific Classes with L1 binding
+
+```{r}
+read_xls("./01_input/Table_S5_Intestine_Specific_Classes.xlsx")
+getwd()
+intestine_class_genes <- read_xlsx(path = "./01_input/Table_S5_Intestine_Specific_Classes.xlsx")
+intestine_class_genes_scaled_matrix <- matrix_select(dynamic_counts_matrix_scaled_ascend, gene_subset_vector = intestine_class_genes$WBGeneID)
+
+intestine_class_genes$ELT2chip_peaksnum_Weisenfahrt <- as.integer(intestine_class_genes$ELT2chip_peaksnum_Weisenfahrt)
+intestine_class_genes$ELT2chip_peaksnum_Mann <- as.integer(intestine_class_genes$ELT2chip_peaksnum_Mann)
+MannWieseELT2 <- intestine_class_genes %>% 
+  mutate(
+  ELT2WieseBool = 
+    case_when(ELT2chip_peaksnum_Weisenfahrt >= 1 ~ "TRUE", 
+              is.na(ELT2chip_peaksnum_Weisenfahrt) ~ "FALSE"),
+  ELT2MannBool = 
+    case_when(ELT2chip_peaksnum_Mann >=1 ~ "TRUE",
+              is.na(ELT2chip_peaksnum_Mann) ~ "FALSE"),
+  ELT2_L1 = as.character(WBGeneID %in% l1_bound_list$WBGeneID)
+  ) %>% 
+  dplyr::select(WBGeneID, gene_id_val, ELT2chip_peaksnum_Weisenfahrt, ELT2WieseBool, ELT2chip_peaksnum_Mann, ELT2MannBool, ELT2_L1)
+MannWieseELT2
+Heatmap(intestine_class_genes_scaled_matrix,
+        col = colorRampPalette(c("cyan", "black", "yellow"))(1000),
+        cluster_columns = FALSE,
+        show_row_names = FALSE,
+        row_split = intestine_class_genes$class) +
+  rowAnnotation(WeisenfahrtELT2 = MannWieseELT2$ELT2WieseBool,
+                MannELT2 = MannWieseELT2$ELT2MannBool,
+                ELT2_L1 = MannWieseELT2$ELT2_L1,
+                col = list(WeisenfahrtELT2 = c("TRUE" = "green", "FALSE" = "black"),
+                           MannELT2 = c("TRUE" = "green", "FALSE" = "black"),
+                           ELT2_L1 = c("TRUE" = "green", "FALSE" = "black")
+                           )
+                )
+
+
+rowAnnotation(L1bound = elt2_L1_anno$elt2_detected_in_L1,
+                     col = list(L1bound = c(
+                       "Direct" = "green", "Indirect" = "black"
+                     )))
+```
+
 
 # Scratch space
 
