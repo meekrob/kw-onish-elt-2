@@ -518,10 +518,7 @@ single_cluster_genes <- elt2_gene_occupancy %>%
 head(single_cluster_genes)
 nrow(single_cluster_genes)
 table(elt2_gene_occupancy$single_cluster)
-elt2_gene_occupancy %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% ggplot(aes(x = single_cluster, y = gene_total)) +
-  geom_bar(stat = "identity")
 ```
-
 
 ```{r}
 
@@ -576,13 +573,14 @@ intestine_elt2 %>% group_by(single_cluster) %>% summarise(gene_total = 100*n()/n
   geom_bar(stat = "identity")
 table(intestine_elt2$single_cluster)
 nrow(chip_rna_df)
+nrow(intestine_gene_list)
 ```
 
-# Figure S4: How many intestine genes are bound by ELT-2 at any stage regardless of occupancy cluster?
+# Figure S5A: How many intestine genes are bound by ELT-2 at any stage regardless of occupancy cluster?
 
 ```{r}
 intestine_gene_list
-intestine_peaks <- elt2_peaks %>% group_by(WBGeneID) %>% summarise(peaks = n()) %>% right_join(intestine_gene_list, by = "WBGeneID") %>% select(WBGeneID, peaks) %>% replace_na(list(peaks = 0)) %>% mutate(status = case_when(peaks == 0 ~ "not_bound", peaks >= 1 ~ "bound"))
+intestine_peaks <- elt2_peaks %>% group_by(WBGeneID) %>% summarise(peaks = n()) %>% right_join(intestine_gene_list, by = "WBGeneID") %>% dplyr::select(WBGeneID, peaks) %>% replace_na(list(peaks = 0)) %>% mutate(status = case_when(peaks == 0 ~ "not_bound", peaks >= 1 ~ "bound"))
 intestine_hyper <- intestine_peaks %>% group_by(status) %>% summarise(genes = n()) 
 intestine_hyper
 nrow(intestine_gene_list) == sum(intestine_hyper$genes)
@@ -604,7 +602,7 @@ hyper_expected <- function(x,k,m,n){
   k*m/(m+n)
 }
 
-bound_intestine_genes <-  intestine_hyper %>% filter(status == "bound") %>% select(genes) %>% as.numeric() # the number of successes in the sample size, the number of bound genes within one set
+bound_intestine_genes <-  intestine_hyper %>% filter(status == "bound") %>% dplyr::select(genes) %>% as.numeric() # the number of successes in the sample size, the number of bound genes within one set
 all_intestine_genes <- sum(intestine_hyper$genes) # sample size, the total number of genes in a single set
 all_elt2_bound_genes <- length(unique(elt2_peaks$WBGeneID)) # population successes, number of bound genes in the genome
 all_elt2_notbound_genes <- 20470 - all_elt2_bound_genes # number of genes not bound in the genome
@@ -628,7 +626,7 @@ whole_genome_notbound <- num_genes-whole_genome_bound
 whole_and_intestine_binding <- data.frame(
   type = c("whole_genome", "whole_genome", "intestine_genes", "intestine_genes"),
   status = c("elt2_bound", "elt2_notbound", "elt2_bound", "elt2_notbound"),
-  genes = c(whole_genome_bound, whole_genome_notbound, bound_intestine_genes, intestine_hyper %>% filter(status == "not_bound") %>% select(genes) %>% as.numeric()),
+  genes = c(whole_genome_bound, whole_genome_notbound, bound_intestine_genes, intestine_hyper %>% filter(status == "not_bound") %>% dplyr::select(genes) %>% as.numeric()),
   set_size = c(num_genes, num_genes, all_intestine_genes, all_intestine_genes)
 )  %>% mutate(gene_percent = 100*genes/set_size)
 
@@ -695,7 +693,66 @@ ggsave(paste(plotdir,
 ```{r}
 whole_and_intestine_binding %>% filter(status == "elt2_bound") %>% mutate(expected = set_size*whole_genome_bound/num_genes)
 ```
+# Figure S5B: Single vs multi cluster
+```{r}
+head(intestine_elt2)
+singlevsmultigenes<- data.frame(genes = c("yes", "yes"),
+           gene_type = c("single_occupancy_genes", "multi_occupancy_genes"),
+           gene_num = c(sum((intestine_elt2 %>% filter(WBGeneID %in% intestine_gene_list$WBGeneID) %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% filter(single_cluster %in% elt2_cluster_names))$gene_total),
+           (intestine_elt2 %>% filter(WBGeneID %in% intestine_gene_list$WBGeneID) %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% filter(single_cluster == "Multi_Cluster"))$gene_total))
+  
+bound_size <- sum(singlevsmultigenes$gene_num)
+singlevsmultigenes <- singlevsmultigenes %>% mutate(gene_percent = gene_num*100/bound_size)
+singlevsmulti_plot <- singlevsmultigenes %>% 
+  ggplot(aes(x = genes, y = gene_percent, fill = gene_type)) +
+  geom_col(width = 0.75, colour = "black")+
+  theme_classic() +
+  geom_text(aes(label = paste0(round(gene_percent,1), "%")),
+            position = position_stack(vjust = 0.5)) +
+  xlab(NULL) +
+  ylab("gene %") +
+  scale_x_discrete(labels = c("ELT-2 bound\nintestine genes")) +
+  labs(fill = "ELT-2 binding") +
+  scale_fill_manual(labels = c("multi_occupancy_genes", "single_occupancy_genes"), values = c("grey", "white"))
+singlevsmulti_plot
+```
 
+```{r}
+single_breakdown_plot <- intestine_elt2 %>% filter(WBGeneID %in% intestine_gene_list$WBGeneID) %>% group_by(single_cluster) %>% summarise(gene_total = n()) %>% filter(single_cluster %in% elt2_cluster_names) %>% mutate(gene_percent = 100*gene_total/sum(gene_total)) %>% 
+  ggplot(aes(x = factor(single_cluster, levels = c("Embryo_Specific", "Larval", "Increasing", "L3_High", "Not_Changing"), labels = c("embryo cluster", "larval cluster", "increasing cluster", "L3 cluster", "un-dynamic")), 
+             y = gene_percent)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  geom_text(aes(label = paste0(round(gene_percent,1), "%")),
+            position = position_dodge(width = 1), vjust = -0.5) +
+  xlab("dynamic intestine-specific genes with unique ELT-2 occupancy") +
+  ylab("gene %")
+single_breakdown_plot
+```
+
+save the plots
+```{r}
+if (plot == TRUE){
+ggsave(paste(plotdir,
+          "FigureS5B_Percent_Intestine_Genes_ELT2_Occupancy_Type",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), 
+       plot = singlevsmulti_plot,
+       width = 3.5, height = 3.25, 
+       useDingbats=FALSE)
+ggsave(paste(plotdir,
+          "FigureS5B_Percent_Intestine_Unique_Occupancy_Breakdown",
+          "_",
+          today(),
+          ".pdf",
+          sep = ""), 
+       plot = single_breakdown_plot,
+       width = 5, height = 3.25, 
+       useDingbats=FALSE)
+}
+```
 
 # Variance filter, log transform and z-score row normalize time-resolved RNA expression values
 
@@ -750,7 +807,7 @@ set.seed(5)
 hc = hclust(dist(data.whole), method ='ward.D2')
 ```
 
-# Figure S4: Scree plot analysis of developmental intestine gene expression
+# Figure S5C: Scree plot analysis of developmental intestine gene expression
 
 ```{r BoeckRNA_ELT2_chip}
 # plot the hc height to get the screeplot
