@@ -57,22 +57,20 @@ More info here: https://imagej.nih.gov/ij/docs/guide/146-30.html
 Below is code that will work for the data in the `example_data` directory. This section may need to be changed depending on how the input data is structured.
 
 ```{r}
-image_df <- read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_L4440rnai_Rep3_Quant.csv") %>% 
-  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT7rnai_Rep3_Quant.csv")) %>% 
-  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT2rnai_Rep3_Quant.csv")) %>% 
-  bind_rows(read_csv(file = "210417_CEBP1_Rep3/04_Quantification/CEBP1gfp_ELT2ELT7rnai_Rep3_Quant.csv"))
+image_df <- read_csv(file = "./01_input/CEBP1gfp_L4440rnai_Rep3_Quant.csv") %>% 
+  bind_rows(read_csv(file = "./01_input/CEBP1gfp_ELT2rnai_Rep3_Quant.csv"))
 
 image_df_rep3 <- image_df %>% separate(col = Label, sep = ":", into = c("image_name", "measurement_type", "channel")) %>% separate(col = image_name, sep = "_", into = c("max", "strain", "treatment", "Rep", "Obj", "worm", "Extra"), remove = FALSE) %>% separate(measurement_type, sep = "\\d+", into = "measurement_type") %>% 
   dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
 image_df_rep3$channel <- factor(image_df_rep3$channel, levels = c(2, 1), labels = c("C1", "C2"))
-image_df_rep3$treatment <- factor(image_df_rep3$treatment, levels = c("L4440rnai", "ELT7rnai", "ELT2rnai", "ELT2ELT7rnai"), labels = c("01_L4440rnai", "02_ELT7rnai", "03_ELT2rnai", "04_ELT2ELT7rnai"))
+image_df_rep3$treatment <- factor(image_df_rep3$treatment, levels = c("L4440rnai", "ELT2rnai"), labels = c("01_L4440rnai", "03_ELT2rnai"))
 image_df_rep3$rep <- "Rep3"
 
-image_df_rep4 <- read_csv(file = "210428_CEBP1_Rep4/210428_CEBP1_Rep4_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
+image_df_rep4 <- read_csv(file = "./01_input/210428_CEBP1_Rep4_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
   dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
 image_df_rep4$rep <- "Rep4"
 
-image_df_rep5 <- read_csv(file = "210501_CEBP1_Rep5/210501_CEBP1gfp_Rep5_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
+image_df_rep5 <- read_csv(file = "./01_input/210501_CEBP1gfp_Rep5_Quantification.csv") %>% separate(Label, c("treatment", "measurement_type", "image_name"), ":") %>% separate(image_name, into = c("image_name_2","channel"), -2, remove = FALSE) %>%
   dplyr::select(image_name, treatment, measurement_type, channel, Area:RawIntDen)
 image_df_rep5$rep <- "Rep5"
 
@@ -83,6 +81,7 @@ image_df <- bind_rows(image_df_rep3, image_df_rep4, image_df_rep5)
 # Set the factor levels for ordering in downstream plotting
 image_df$treatment <- factor(image_df$treatment, levels = c("01_L4440rnai", "02_ELT7rnai", "03_ELT2rnai", "04_ELT2ELT7rnai"))
 image_df <- image_df %>% mutate(image_name = paste(image_name, channel, rep, sep = "_"))
+nrow(image_df)
 ```
 
 
@@ -114,9 +113,9 @@ image_ctcf
 
 # Plot the quantification results
 
-```{r fig.width=5, fig.height=4}
+```{r fig.height=4, fig.width=4}
 
-image_df %>% filter(channel == "C2", measurement_type == "background") %>% group_by(image_name, measurement_type) %>% summarise(Mean_Background = mean(Mean)) %>% dplyr::select(-measurement_type) %>% right_join(image_df, by = "image_name") %>% filter(measurement_type %in% c("worm", "intestine")) %>% mutate(CTCF = IntDen - (Area*Mean_Background)) %>% filter(CTCF > 1, Area > 300) %>%
+image_df %>% filter(channel == "C2", measurement_type == "background") %>% group_by(image_name, measurement_type) %>% summarise(Mean_Background = mean(Mean)) %>% dplyr::select(-measurement_type) %>% right_join(image_df, by = "image_name") %>% filter(measurement_type %in% c("worm", "intestine"), treatment %in% c("01_L4440rnai", "03_ELT2rnai")) %>% mutate(CTCF = IntDen - (Area*Mean_Background)) %>% filter(CTCF > 1, Area > 300) %>%
   ggplot(aes(treatment, CTCF/Area)) + 
   geom_boxplot(width = 0.5) +
   geom_jitter(width = 0.25, alpha = 0.5, shape = 16, aes(color = rep)) +
@@ -129,7 +128,7 @@ image_df %>% filter(channel == "C2", measurement_type == "background") %>% group
   # stat_compare_means(comparisons = list(c("L4440rnai", "ELT7rnai")), method = "t.test") +
   # stat_compare_means(comparisons = list(c("L4440rnai", "ELT2rnai")), method = "t.test") +
   # stat_compare_means(comparisons = list(c("L4440rnai", "ELT2ELT7rnai")), method = "t.test") +
-  scale_x_discrete(labels = c("L4440", "ELT-7", "ELT-2","ELT-2;\nELT-7"))+
+  scale_x_discrete(labels = c("L4440", "ELT-2"))+
   theme_classic() +
   theme(
     panel.border = element_rect(colour = "black", fill = NA, size = 1),
@@ -142,6 +141,16 @@ image_df %>% filter(channel == "C2", measurement_type == "background") %>% group
 
 # ggsave("./RWP32_CEBP1gfp_Quantification_Plot.pdf", width = 5, height = 4, useDingbats=FALSE)
 ```
+
+```{r}
+gfp_elt2 <- (image_ctcf %>% filter(treatment == "03_ELT2rnai") %>% rowwise() %>% mutate(normGFP = CTCF/Area))$normGFP
+gfp_L4440 <- (image_ctcf %>% filter(treatment == "01_L4440rnai") %>% rowwise() %>% mutate(normGFP = CTCF/Area))$normGFP
+
+t.test(gfp_elt2, gfp_L4440)$p.value
+
+image_ctcf %>% group_by(treatment) %>% summarise(n())
+```
+
 
 # TO DO
 # Measure fold change 
