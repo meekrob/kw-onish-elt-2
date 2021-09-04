@@ -675,11 +675,16 @@ Kmeans cluster ELT-2 directly bound genes
 # bound_only_class
 # bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
 # write.csv(x = bound_only_class, file = "./02_output/Bound_Genes_Class_Assignments.csv", quote = FALSE, row.names = FALSE)
-
+# bound_only_class <- read.csv(file = "./02_output/Bound_Genes_Class_Assignments.csv",header = TRUE, stringsAsFactors = FALSE)
+# bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+# write_csv(bound_only_class %>% mutate(class = case_when(class == "ClassA" ~ "Target Gene Class A1", 
+#                                               class == "ClassB" ~ "Target Gene Class A2", 
+#                                               class == "ClassC" ~ "Target Gene Class B", 
+#                                               class == "ClassD" ~ "Target Gene Class C")),
+#           file = "./02_output/ELT-2_Target_Gene_Class_Assignments.csv")
 # Read in Class assignments
-
-bound_only_class <- read.csv(file = "./02_output/Bound_Genes_Class_Assignments.csv",header = TRUE, stringsAsFactors = FALSE)
-bound_only_class$class <- factor(bound_only_class$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD"))
+bound_only_class <- read_csv(file = "./02_output/ELT-2_Target_Gene_Class_Assignments.csv")
+bound_only_class$class <- factor(bound_only_class$class, levels = c("Target Gene Class A1", "Target Gene Class A2", "Target Gene Class B", "Target Gene Class C"))
 head(bound_only_class)
 table(bound_only_class$class)
 nrow(bound_only_class)
@@ -806,7 +811,7 @@ HAboundTF_class <- Heatmap(
 ) + rowAnnotation(
     Class = bound_tf_class$class,
     col = list(Class = c(
-      "ClassA" = "red", "ClassB" = "orange", "ClassC" = "yellow", "ClassD" = "green"
+      "Target Gene Class A1" = "red", "Target Gene Class A2" = "orange", "Target Gene Class B" = "yellow", "Target Gene Class C" = "green"
     )),
     border = TRUE
   ) + rowAnnotation(Intestine = rownames(dynamic_counts_matrix_scaled_TFs_bound_names) %in% intestine_gene_list$Public_name, col = list(Intestine = c( "TRUE"= "black","FALSE"= "white")), border = TRUE)
@@ -823,15 +828,19 @@ if (do_plot == TRUE){
   )
   }
 ```
+# Table S7
+
 ```{r}
-paramart <- useMart("parasite_mart", dataset = "wbps_gene", host = "https://parasite.wormbase.org", port = 443)
-biomaRt::getBM(mart = paramart,attributes = c('wbps_gene_id','external_gene_id'), useCache = FALSE
-  )
+tableS6 <- bound_tf_class %>% left_join(read.csv("./01_input/TF3-0_namesonly.txt",
+           sep = "\t",
+           header = TRUE) %>% dplyr::select(-(X:X.3)), by = "WBGeneID") %>% dplyr::select(WBGeneID, Target.class = class, Sequence.name, Public.name = Public_name, DBD) %>% bind_cols(Intestine.specific = bound_tf_class$WBGeneID %in% intestine_gene_list$WBGeneID)
+table(tableS6$Intestine.specific)
+table(tableS6$Intestine.specific)/length(tableS6$Intestine.specific)
+# write_csv(tableS6, file = "./02_output/TableS7_targetgeneclass_TFs.csv")
 ```
 
 
 # Make output dataframe
-#TODO: USE BIOMART TO TRANSLATE WBGENEID
 ```{r}
 fig4df <- expression_L1_binding  %>% left_join(bound_only_class, by = "WBGeneID") %>% left_join(chip_annotation, by = "WBGeneID") %>%  dplyr::rename(bound_class = "class", dineen_set = "set")
 
@@ -910,7 +919,7 @@ colnames(dineen_ELT2_pearson_residuals) <-
 dineen_ELT2_pearson_residuals$Dineen_Class <-
   factor(
     dineen_ELT2_pearson_residuals$Dineen_Class,
-    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
+    levels = c("Target Gene Class C", "Target Gene Class B", "Target Gene Class A2", "Target Gene Class A1")
   )
 # set factor levels
 dineen_ELT2_pearson_residuals$ELT2_cluster <-
@@ -939,8 +948,15 @@ dineen_ELT2_pearson_residuals <- cbind(
   dineen_ELT2_pearson_residuals, 
   p.value = as.data.frame(2*pnorm(abs(tableformosaic.chisq$stdres), lower.tail = FALSE))$Freq,
   p.adjust = as.data.frame(tableformosaic.q)$Freq)
+```
 
-# write_csv(dineen_ELT2_pearson_residuals, file = "TableS5_elt2elt7_response_ELT2_occupancy.csv")
+# Make Table S5
+
+```{r}
+dineen_contingency <- dineen_ELT2_pearson_residuals %>% dplyr::select(Expression.cluster = Dineen_Class, Occupancy.cluster = ELT2_cluster, Genes.observed = Observed, Pearson.residual = Pearson_Residual, p.value, p.adjust)
+
+head(dineen_contingency)
+write_csv(dineen_contingency, file = "./02_output/TableS5_chi-square_targetgeneclass_vs_occupancy.csv")
 ```
 
 
@@ -975,6 +991,7 @@ dineen_bound_ELT2_mosiac
 ```
 
 
+
 ```{r fig.widt = 3, fig.height=3}
 if (do_plot == TRUE){
 ggsave(paste(plotdir,
@@ -1000,6 +1017,9 @@ ggsave(paste(plotdir,
 }
 ```
 
+
+
+
 # Pull DNA sequences for MEME motif analysis
 
 ```{r}
@@ -1021,7 +1041,7 @@ all_elt2_summit <-
     peak_width = summit_end - summit_start
   ) %>% filter(!is.na(seqnames))
 
-all_elt2_summit$class <- factor(all_elt2_summit$class, levels = c("ClassA", "ClassB", "ClassC", "ClassD", "no_class"))
+all_elt2_summit$class <- factor(all_elt2_summit$class, levels = c("Target Gene Class A1", "Target Gene Class A2", "Target Gene Class B", "Target Gene Class C", "no_class"))
 all_elt2_summit$class[is.na(all_elt2_summit$class)] <- "no_class"
 head(all_elt2_summit)
 ```
@@ -1066,20 +1086,20 @@ for(i in classnames){
   export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] == i]), filename)
 }
 # export all class A through D
-export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% classnames]), "./02_output/MEME-ChIP_fasta/ClassAthroughD_elt2_summits.fasta")
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% classnames]), "./02_output/MEME-ChIP_fasta/TargetGeneClassA1throughC_elt2_summits.fasta")
 # export all peaks with one class removed
 export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
-                                      c("ClassB","ClassC", "ClassD")]),
-       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassA_elt2_summits.fasta")
+                                      c("Target Gene Class A2","Target Gene Class B", "Target Gene Class C")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassA1_elt2_summits.fasta")
 export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
-                                      c("ClassA", "ClassC", "ClassD")]),
+                                      c("ClassA", "Target Gene Class B", "Target Gene Class C")]),
+       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassA2_elt2_summits.fasta")
+export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
+                                      c("ClassA", "Target Gene Class A2", "Target Gene Class C")]),
        "./02_output/MEME-ChIP_fasta/BoundDE_NoClassB_elt2_summits.fasta")
 export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
-                                      c("ClassA", "ClassB", "ClassD")]),
+                                      c("ClassA", "Target Gene Class A2", "Target Gene Class B")]),
        "./02_output/MEME-ChIP_fasta/BoundDE_NoClassC_elt2_summits.fasta")
-export(getSeq(Celegans, elt2_summit_GRange[elementMetadata(elt2_summit_GRange)[,"bound_class"] %in% 
-                                      c("ClassA", "ClassB", "ClassC")]),
-       "./02_output/MEME-ChIP_fasta/BoundDE_NoClassD_elt2_summits.fasta")
 
 ```
 
@@ -1168,7 +1188,6 @@ rowAnnotation(L1bound = elt2_L1_anno$elt2_detected_in_L1,
                        "Direct" = "green", "Indirect" = "black"
                      )))
 ```
-
 
 # Scratch space
 
