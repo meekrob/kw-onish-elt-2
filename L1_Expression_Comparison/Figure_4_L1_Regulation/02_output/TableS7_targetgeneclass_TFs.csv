@@ -1,0 +1,28 @@
+WBGeneID,Target.class,Sequence.name,Public.name,DBD,Intestine.specific
+WBGene00000793,Target Gene Class A1,Y41C4A.4,crh-1,bZIP,FALSE
+WBGene00003106,Target Gene Class A1,T27A1.6,mab-9,T-box,FALSE
+WBGene00003511,Target Gene Class C,F46G10.6,mxl-3,bHLH,TRUE
+WBGene00003607,Target Gene Class A2,F33D4.1,nhr-8,ZF - NHR,TRUE
+WBGene00003621,Target Gene Class A2,K06A1.4,nhr-22,ZF - NHR,TRUE
+WBGene00003648,Target Gene Class C,R11G11.2,nhr-58,ZF - NHR,TRUE
+WBGene00003678,Target Gene Class A1,K08A2.5,nhr-88,ZF - NHR,TRUE
+WBGene00003689,Target Gene Class A2,M02H5.1,nhr-99,ZF - NHR,TRUE
+WBGene00003698,Target Gene Class A1,F35E8.12,nhr-108,ZF - NHR,TRUE
+WBGene00003711,Target Gene Class A1,E02H9.8,nhr-121,ZF - NHR,TRUE
+WBGene00003727,Target Gene Class B,C56E10.4,nhr-137,ZF - NHR,TRUE
+WBGene00003845,Target Gene Class B,B0280.4,odd-1,ZF - C2H2 - 3 fingers,TRUE
+WBGene00004096,Target Gene Class B,F40F8.7,pqm-1,ZF - C2H2 - 3 fingers,TRUE
+WBGene00010215,Target Gene Class A2,F57G8.6,nhr-193,ZF - NHR,TRUE
+WBGene00012101,Target Gene Class B,T27F2.4,zip-10,bZIP,TRUE
+WBGene00013976,Target Gene Class A1,ZK455.6,nhr-33,ZF - NHR,TRUE
+WBGene00014193,Target Gene Class B,ZK1037.5,nhr-247,ZF - NHR,FALSE
+WBGene00016888,Target Gene Class C,C52E12.1,C52E12.1,ZF - C2H2 - 1 finger,TRUE
+WBGene00016997,Target Gene Class C,D1005.3,cebp-1,bZIP,FALSE
+WBGene00017651,Target Gene Class B,F21A9.2,F21A9.2,ZF - C2H2 - 2 fingers,TRUE
+WBGene00017687,Target Gene Class A2,F22A3.1,ets-4,WH - ETS,TRUE
+WBGene00018704,Target Gene Class B,F52E4.8,ztf-13,ZF - C2H2 - 2 fingers,TRUE
+WBGene00019327,Target Gene Class C,K02F3.4,zip-2,bZIP,TRUE
+WBGene00019344,Target Gene Class B,K02G10.1,dhhc-10,ZF - DHHC ,TRUE
+WBGene00019743,Target Gene Class C,M02H5.5,nhr-203,ZF - NHR,TRUE
+WBGene00021082,Target Gene Class B,W08E12.1,zip-11,bZIP,TRUE
+WBGene00022562,Target Gene Class A2,ZC204.12,ZC204.12,Unknown,TRUE

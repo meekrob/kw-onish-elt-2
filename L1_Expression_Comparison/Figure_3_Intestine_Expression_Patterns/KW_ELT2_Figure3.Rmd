@@ -1022,7 +1022,7 @@ ggsave(paste(plotdir,
 boeck_contingency <- cbind(boeck_pearson_residuals, p.value = as.data.frame(pnorm(abs(chisq.test(tab, simulate.p.value = TRUE)$stdres), lower.tail = FALSE))$Freq) %>% dplyr::select(Expression.cluster = hclusters, Occupancy.cluster = ELT2_cluster, Genes.observed = Observed, Pearson.residual = Pearson_Residual, p.value, p.adjust)
 
 head(boeck_contingency)
-write.csv(boeck_contingency, file = "./02_output/TableS4_chi-square_expression_vs_occupancy.csv", quote = FALSE, row.names = FALSE)
+# write.csv(boeck_contingency, file = "./02_output/TableS4_chi-square_expression_vs_occupancy.csv", quote = FALSE, row.names = FALSE)
 ```
 
 # Scratch space

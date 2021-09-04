@@ -59,7 +59,7 @@ go_df <- tea$fetch_dictionary("go")
 
 ```{r}
 
-bound_classes <- paste("Class", LETTERS[1:4], sep = "")
+bound_classes <- paste("Target Gene Class", c("A1", "A2", "B", "C"), sep = " ")
 my_tea_analysis <- function(input_df, tea_dict){
   tea_df <- data.frame()
   for (i in bound_classes){
@@ -147,20 +147,9 @@ genes_in_terms <- function(tea_dict, bound_tea_df){
 ```{r}
 bound_tissue_genes <- genes_in_terms(tea_dict = tissue_df, bound_tea_df = bound_tissue_df)
 head(bound_tissue_genes)
-write.csv(bound_tissue_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Tissue-Ontology_results.csv")
+# write_csv(bound_tissue_genes, file = "./02_output/TableS6_ELT2-Targetgeneclass-Ontology_results.csv")
 ```
 
-```{r}
-bound_go_genes <- genes_in_terms(tea_dict = go_df, bound_tea_df = bound_go_df)
-head(bound_go_genes)
-write.csv(bound_go_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Gene-Ontology_results.csv")
-```
-
-```{r}
-bound_phenotype_genes <- genes_in_terms(tea_dict = phenotype_df, bound_tea_df = bound_phenotype_df)
-head(bound_phenotype_genes)
-write.csv(bound_phenotype_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Phenotype-Ontology_results.csv")
-```
 
 # Phenotype ontology of ELT-2 bound and differentially expressed genes
 
@@ -179,6 +168,13 @@ myggsave(plot = bound_phenotype_plot,
          width = 5,
          plotdir = plotdir)
 }
+```
+
+Export the data
+```{r}
+bound_phenotype_genes <- genes_in_terms(tea_dict = phenotype_df, bound_tea_df = bound_phenotype_df)
+head(bound_phenotype_genes)
+# write.csv(bound_phenotype_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Phenotype-Ontology_results.csv")
 ```
 
 # Gene ontology of ELT-2 bound and differentially expressed genes
@@ -200,7 +196,13 @@ myggsave(plot = bound_go_plot,
 }
 ```
 
+export genes
 
+```{r}
+bound_go_genes <- genes_in_terms(tea_dict = go_df, bound_tea_df = bound_go_df)
+head(bound_go_genes)
+# write.csv(bound_go_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Gene-Ontology_results.csv")
+```
 
 # Fig 5A Enrichment of binding in each set
 
@@ -252,7 +254,6 @@ n <- 20470 - m
 n
 
 hyper_df_genome <- hyper_df %>% rowwise() %>% mutate(dhyper = dhyper(x = direct_total, m = m, n = n, k = set_total), expected = set_total*m/(m+n)) 
-hyper_df_genome %>% View()
 ```
 
 ```{r fig.width=4, fig.height=3}
@@ -375,15 +376,6 @@ myggsave(plot = elt2_tea_phenotype,
 }
 ```
 
-
-```{r}
-wTF3 <- read.delim(file = "../Figure_4_L1_Regulation/01_input/TF3-0_namesonly.txt", ) %>% dplyr::select(Sequence.name:DBD)
-wTF3
-
-elt2_peaks %>% inner_join(wTF3, by = "WBGeneID") %>% View()
-  group_by(cluster.description) %>% summarise(n = n())
-```
-
 # Tissue enrichment analysis of ELT-2 peaks by stage
 
 ```{r}
@@ -437,17 +429,17 @@ dineen_dev_pearson_residuals <-
   cbind(dineen_dev_pearson_residuals,
         as.data.frame(chisq.test(intdevmosaic, simulate.p.value = TRUE)$observed)$Freq)
 colnames(dineen_dev_pearson_residuals) <-
-  c("Dineen_Class", "ELT2_cluster", "Pearson_Residual", "Observed")
+  c("Dineen_Class", "Intestine_cluster", "Pearson_Residual", "Observed")
 # set factor levels
 dineen_dev_pearson_residuals$Dineen_Class <-
   factor(
     dineen_dev_pearson_residuals$Dineen_Class,
-    levels = c("ClassD", "ClassC", "ClassB", "ClassA")
+    levels = c("Target Gene Class C", "Target Gene Class B", "Target Gene Class A2", "Target Gene Class A1")
   )
 # set factor levels
-dineen_dev_pearson_residuals$ELT2_cluster <-
+dineen_dev_pearson_residuals$Intestine_cluster <-
   factor(
-    dineen_dev_pearson_residuals$ELT2_cluster,
+    dineen_dev_pearson_residuals$Intestine_cluster,
     levels = c(
       "Embryonic",
       "L1",
@@ -471,7 +463,10 @@ dineen_dev_pearson_residuals <- cbind(
   p.value = as.data.frame(2*pnorm(abs(intdevmosaic.chisq$stdres), lower.tail = FALSE))$Freq,
   p.adjust = as.data.frame(intdevmosaic.q)$Freq
   )
-# write_csv(dineen_dev_pearson_residuals, file = "./02_output/TableS6_elt2elt7_response_intestine_development.csv")
+
+dineen_dev_contingency <- dineen_dev_pearson_residuals %>% dplyr::select(Expression.cluster = Dineen_Class, Intestine.cluster = Intestine_cluster, Genes.observed = Observed, Pearson.residual = Pearson_Residual, p.value, p.adjust)
+
+write_csv(dineen_dev_contingency , file = "./02_output/TableS6_chi-square_targetgeneclass_intestinecluster.csv")
 ```
 
 
