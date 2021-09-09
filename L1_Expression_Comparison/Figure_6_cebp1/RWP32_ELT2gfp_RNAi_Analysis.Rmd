@@ -106,3 +106,7 @@ t.test(gfp_elt2, gfp_L4440)$p.value
 image_ctcf %>% group_by(treatment) %>% summarise(n())
 ```
 
+```{r}
+sessionInfo()
+```
+

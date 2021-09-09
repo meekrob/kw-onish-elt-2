@@ -542,7 +542,6 @@ var_mean_plot(boeck_count_mat, meancut = 0, varcut = 0, title = "time-resolved d
 
 # Integrate Time-resolved RNA TPM for intestine specific genes and ELT-2 single occupancy clusters
 
-
 ```{r}
 chip_rna_df <-  as.data.frame(boeck_count_mat) %>% rownames_to_column(var = "wbps_gene_id") %>%
   inner_join(intestine_gene_list,
@@ -561,6 +560,10 @@ chip_rna_matrix <- chip_rna_df %>% dplyr::select(emb_510min:YA) %>% as.matrix()
 rownames(chip_rna_matrix) <- chip_rna_df$WBGeneID
 head(chip_rna_matrix)
 var_mean_plot(chip_rna_matrix, meancut = 0, varcut = 0, title = "time-resolved intestine gene dcpm")
+```
+Export `chip_rna_df` for supp files
+```{r}
+# write_csv(chip_rna_df, file = "./02_output/FileS3_Intestine-specific_time-resolved_data.csv")
 ```
 
 # Are there intestine specific genes that are not ELT-2 bound?
@@ -911,7 +914,7 @@ Output time-resolved cluster and ELT-2
 ```{r}
 fig3df <- data.frame(intestine_dev_cluster = rna_cluster_names[cutree(hc, nclust)], WBGeneID = names(cutree(hc, nclust))) %>% dplyr::select(WBGeneID, intestine_dev_cluster)
 
-# write_csv(fig3df, path = "02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
+# write_csv(fig3df, file = "02_output/Fig3_Intestine_Development_Cluster_Assignments.csv")
 ```
 # Make mosaic dot plot
 
@@ -1242,5 +1245,7 @@ Heatmap(tpm_gut_scale, cluster_columns = TRUE, show_row_names = FALSE, km = 6)
 
 ```
 
-
+```{r}
+sessionInfo()
+```
 
