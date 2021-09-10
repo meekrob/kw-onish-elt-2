@@ -762,6 +762,14 @@ if (do_plot == TRUE){
   )
   }
 ```
+# Make outout of bound gene expression values
+
+```{r}
+dynamic_counts_matrix_unscaled_bound_only <- matrix_select(dynamic_counts_matrix, l1_bound_list$WBGeneID)
+write_csv(as.data.frame(dynamic_counts_matrix_unscaled_bound_only) %>% rownames_to_column(var = "WBGeneID"), 
+          file = "./02_output/Figure4_Dynamic_Counts_BoundOnly.csv")
+```
+
 Further subset this heatmap for transcription factors
 
 ```{r}
@@ -853,6 +861,8 @@ fig4df <- fig4df %>% inner_join(
   dplyr::select(WBGeneID, SYMBOL, elt2_detected_in_L1:Not_Bound)
 # write_csv(fig4df, file = "./02_output/Figure4_WBGeneID_Annotation_Dataframe.csv")
 ```
+
+
 
 # Identify single binding type genes for bound class genes
 
@@ -956,7 +966,7 @@ dineen_ELT2_pearson_residuals <- cbind(
 dineen_contingency <- dineen_ELT2_pearson_residuals %>% dplyr::select(Expression.cluster = Dineen_Class, Occupancy.cluster = ELT2_cluster, Genes.observed = Observed, Pearson.residual = Pearson_Residual, p.value, p.adjust)
 
 head(dineen_contingency)
-write_csv(dineen_contingency, file = "./02_output/TableS5_chi-square_targetgeneclass_vs_occupancy.csv")
+# write_csv(dineen_contingency, file = "./02_output/TableS5_chi-square_targetgeneclass_vs_occupancy.csv")
 ```
 
 

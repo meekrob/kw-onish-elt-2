@@ -38,7 +38,7 @@ elt2_peaks_merged <- elt2_peaks %>%
   left_join(figure4df, by = "WBGeneID") %>%
   dplyr::select(peak, WBGeneID, LE_1:L3_std, variance, start_position:fromOverlappingOrNearest, cluster.description, intestine_dev_cluster, target_gene_class = class)
 
-write.xlsx(elt2_peaks_merged, file = "../SuppFiles/FileS1_ELT2_ChIP-seq.xlsx")
+write.xlsx(elt2_peaks_merged, file = "../SuppFiles/FileS1_ELT2_ChIP-seq.xlsx", keepNA = TRUE, na.string = "NA")
 # Give better column names
 
 # FILE S2
@@ -53,13 +53,15 @@ fileS3 <- read_csv("./Figure_3_Intestine_Expression_Patterns/02_output/FileS3_In
   dplyr::select(WBGeneID, Sequence.name, Public_name:spencer_L2, ELT.occupancy = cluster.description,intestine_dev_cluster, emb_510min:YA) %>% 
   filter(!is.na(intestine_dev_cluster)) %>% arrange(WBGeneID)
 
-write.xlsx(fileS3, "../SuppFiles/FileS3_Intestine-specific_time-resolved_data.xlsx", overwrite = TRUE)
+write.xlsx(fileS3, "../SuppFiles/FileS3_Intestine-specific_time-resolved_RNA-seq.xlsx", overwrite = TRUE)
 
 # FILE S4
 
 fileS4 <- read_csv("./Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv") %>%
-  dplyr::select(TargetGeneClass = bound_class)
-write.xlsx(fileS4, "../SuppFiles/FileS4_TargetGeneClass.xlsx")
+  filter(!(is.na(bound_class))) %>%
+  dplyr::select(WBGeneID, Public_name = SYMBOL, TargetGeneClass = bound_class) %>% 
+  left_join(read_csv("./Figure_4_L1_Regulation/02_output/Figure4_Dynamic_Counts_BoundOnly.csv"), by = "WBGeneID")
+write.xlsx(fileS4, "../SuppFiles/FileS4_TargetGeneClass_RNA-seq.xlsx", keepNA = TRUE, na.string = "NA", overwrite = TRUE)
 
 # FILE S5
 fileS5 <- read_csv("./Figure_5/02_output/FileS5_ELT2-Targetgeneclass-Ontology_results.csv") %>% 
