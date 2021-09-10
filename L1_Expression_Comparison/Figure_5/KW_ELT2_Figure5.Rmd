@@ -147,7 +147,7 @@ genes_in_terms <- function(tea_dict, bound_tea_df){
 ```{r}
 bound_tissue_genes <- genes_in_terms(tea_dict = tissue_df, bound_tea_df = bound_tissue_df)
 head(bound_tissue_genes)
-# write_csv(bound_tissue_genes, file = "./02_output/TableS6_ELT2-Targetgeneclass-Ontology_results.csv")
+write_csv(bound_tissue_genes, file = "./02_output/FileS5_ELT2-Targetgeneclass-Ontology_results.csv")
 ```
 
 
@@ -174,7 +174,7 @@ Export the data
 ```{r}
 bound_phenotype_genes <- genes_in_terms(tea_dict = phenotype_df, bound_tea_df = bound_phenotype_df)
 head(bound_phenotype_genes)
-# write.csv(bound_phenotype_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Phenotype-Ontology_results.csv")
+# write.csv(bound_phenotype_genes, file = "./02_output/Figure5_ELT2-Bound-DE_Phenotype-Ontology_results.csv")
 ```
 
 # Gene ontology of ELT-2 bound and differentially expressed genes
@@ -201,12 +201,12 @@ export genes
 ```{r}
 bound_go_genes <- genes_in_terms(tea_dict = go_df, bound_tea_df = bound_go_df)
 head(bound_go_genes)
-# write.csv(bound_go_genes, file = "./02_output/Figre5_ELT2-Bound-DE_Gene-Ontology_results.csv")
+# write.csv(bound_go_genes, file = "./02_output/Figure5_ELT2-Bound-DE_Gene-Ontology_results.csv")
 ```
 
-# Fig 5A Enrichment of binding in each set
+# Figure S6 Enrichment of ELT-2 binding in each Dineen SET
 
-Use hypergeometric to determine if there is more ELT-2 binding in each set than expected by chance
+Use hypergeometric to determine if there is more ELT-2 binding in each set than expected by chance compared within all six SETS
 
 ```{r}
 hyper_df <- fig4df %>% group_by(dineen_set) %>% summarise(set_total = n()) %>% inner_join(
@@ -241,7 +241,7 @@ hyper_df_long %>%
   xlab("GATA Response Gene Sets") +
   labs(fill = "ELT-2 Binding")
 ```
-
+Use hypergeometric to determine if there is more ELT-2 binding in each Dineen SET than expected by chance compared to the whole genome
 
 ```{r}
 elt2_peaks <- readRDS(file = "../Figure_4_L1_Regulation/01_input/annotatedPeaks.rds")
@@ -405,6 +405,19 @@ chip_tea_df %>%
   theme_bw() +
   ggtitle("ELT-2 ChIP-seq Clusters Terms")
 ```
+Output for supplemental files with genes
+
+```{r}
+elt2_tea_genes <- bind_rows(tissue_df, phenotype_df, go_df) %>% 
+  filter(wbid %in% (elt2_peaks %>% filter(cluster.description %in% elt2_cluster_names))$WBGeneID) %>% pivot_longer(-wbid) %>% filter(value == 1, name %in% elt2_tea_df$Term) %>% 
+  right_join(elt2_peaks[c("WBGeneID")], by = c("wbid"= "WBGeneID")) %>% 
+  dplyr::select(-value) %>%
+  inner_join(elt2_tea_df , by = c("name" = "Term")) %>%
+  filter(cluster %in% elt2_cluster_names) %>%
+  arrange(analysis)
+head(elt2_tea_genes)
+# write_csv(elt2_tea_genes, file = "02_output/FileS6_ELT2_occupancy_ontology_results.csv")
+```
 
 
 # Fig 5B Measure association between ELT-2/ELT-7 response clusters to intestine development clusters
@@ -466,7 +479,7 @@ dineen_dev_pearson_residuals <- cbind(
 
 dineen_dev_contingency <- dineen_dev_pearson_residuals %>% dplyr::select(Expression.cluster = Dineen_Class, Intestine.cluster = Intestine_cluster, Genes.observed = Observed, Pearson.residual = Pearson_Residual, p.value, p.adjust)
 
-write_csv(dineen_dev_contingency , file = "./02_output/TableS6_chi-square_targetgeneclass_intestinecluster.csv")
+# write_csv(dineen_dev_contingency , file = "./02_output/TableS6_chi-square_targetgeneclass_intestinecluster.csv")
 ```
 
 
