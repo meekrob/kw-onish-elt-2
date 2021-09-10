@@ -42,35 +42,37 @@ write.xlsx(elt2_peaks_merged, file = "../SuppFiles/FileS1_ELT2_ChIP-seq.xlsx", k
 # Give better column names
 
 # FILE S2
+fileS2 <- read_csv("./Figure_5/02_output/FileS6_ELT2_occupancy_ontology_results.csv") %>% 
+  mutate(Ontology.type = case_when(analysis == "go_df" ~ "Gene Ontology", analysis == "phenotype_df" ~ "Phenotype Ontology", analysis == "tissue_df" ~ "Tissue Ontology")) %>%
+  dplyr::select(WBGeneID = wbid, Ontology.type, Ontology.name = name, Expected:Q.value, ELT2.occupancy = cluster)
 
-fileS2 <- read_csv("./Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Public_Intestine_RNA_Gene_List.csv")
-write.xlsx(fileS2, "../SuppFiles/FileS2_Intestine_Gene_List.xlsx")
+write.xlsx(fileS2, "../SuppFiles/FileS2_ELT2Occupancy_Ontology_Results.xlsx")
 
 # FILE S3
 
-fileS3 <- read_csv("./Figure_3_Intestine_Expression_Patterns/02_output/FileS3_Intestine-specific_time-resolved_data.csv") %>% 
+fileS3 <- read_csv("./Figure_3_Intestine_Expression_Patterns/02_output/Fig3_Public_Intestine_RNA_Gene_List.csv")
+write.xlsx(fileS3, "../SuppFiles/FileS3_Intestine_Gene_List.xlsx")
+
+# FILE S4
+
+fileS4 <- read_csv("./Figure_3_Intestine_Expression_Patterns/02_output/FileS3_Intestine-specific_time-resolved_data.csv") %>% 
   left_join(figure3df) %>%
   dplyr::select(WBGeneID, Sequence.name, Public_name:spencer_L2, ELT.occupancy = cluster.description,intestine_dev_cluster, emb_510min:YA) %>% 
   filter(!is.na(intestine_dev_cluster)) %>% arrange(WBGeneID)
 
-write.xlsx(fileS3, "../SuppFiles/FileS3_Intestine-specific_time-resolved_RNA-seq.xlsx", overwrite = TRUE)
+write.xlsx(fileS4, "../SuppFiles/FileS4_Intestine-specific_time-resolved_RNA-seq.xlsx", overwrite = TRUE)
 
-# FILE S4
+# FILE S5
 
-fileS4 <- read_csv("./Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv") %>%
+fileS5 <- read_csv("./Figure_4_L1_Regulation/02_output/Figure4_WBGeneID_Annotation_Dataframe.csv") %>%
   filter(!(is.na(bound_class))) %>%
   dplyr::select(WBGeneID, Public_name = SYMBOL, TargetGeneClass = bound_class) %>% 
   left_join(read_csv("./Figure_4_L1_Regulation/02_output/Figure4_Dynamic_Counts_BoundOnly.csv"), by = "WBGeneID")
-write.xlsx(fileS4, "../SuppFiles/FileS4_TargetGeneClass_RNA-seq.xlsx", keepNA = TRUE, na.string = "NA", overwrite = TRUE)
-
-# FILE S5
-fileS5 <- read_csv("./Figure_5/02_output/FileS5_ELT2-Targetgeneclass-Ontology_results.csv") %>% 
-  dplyr::select(WBGeneID = wbid, Public_name = SYMBOL, Ontology.name = name, Expected:class)
-write.xlsx(fileS5, "../SuppFiles/FileS5_TargetGeneClass_Ontology_Results.xlsx")
+write.xlsx(fileS5, "../SuppFiles/FileS5_TargetGeneClass_RNA-seq.xlsx", keepNA = TRUE, na.string = "NA", overwrite = TRUE)
 
 # FILE S6
-fileS6 <- read_csv("./Figure_5/02_output/FileS6_ELT2_occupancy_ontology_results.csv") %>% 
-  mutate(Ontology.type = case_when(analysis == "go_df" ~ "Gene Ontology", analysis == "phenotype_df" ~ "Phenotype Ontology", analysis == "tissue_df" ~ "Tissue Ontology")) %>%
-  dplyr::select(WBGeneID = wbid, Ontology.type, Ontology.name = name, Expected:Q.value, ELT2.occupancy = cluster)
-fileS6
-write.xlsx(fileS6, "../SuppFiles/FileS6_ELT2Occupancy_Ontology_Results.xlsx")
+fileS6 <- read_csv("./Figure_5/02_output/FileS5_ELT2-Targetgeneclass-Ontology_results.csv") %>% 
+  dplyr::select(WBGeneID = wbid, Public_name = SYMBOL, Ontology.name = name, Expected:class)
+write.xlsx(fileS6, "../SuppFiles/FileS6_TargetGeneClass_Ontology_Results.xlsx")
+
+
